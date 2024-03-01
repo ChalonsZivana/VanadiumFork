@@ -36,3 +36,15 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## concerning prisma
+
+when changing the prisma schema you have to do multiple things:
+
+- FOR JOIN support
+  - add   `refresh  refresh[]` to `pg`
+  - add `pg pg @relation(fields: [id_pg], references:[id_pg])` to `refresh`
+
+  - add   `auberge  auberge[]` to `pg`
+  - add `pg pg @relation(fields: [id_pg], references:[id_pg])` to `auberge`
+- change every `Decimal` to `Float`

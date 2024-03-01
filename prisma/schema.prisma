@@ -1,0 +1,225 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model auberge {
+  id          Int     @id @default(autoincrement())
+  id_pg       Int
+  type        String  @db.Text
+  bandars     String? @db.Text
+  fromage     String  @db.Text
+  commentaire String  @db.Text
+  telephone   String  @db.Text
+  status      Int
+
+  pg pg @relation(fields: [id_pg], references:[id_pg])
+}
+
+model boquettes {
+  id_boquette      Int     @id @default(autoincrement())
+  nom              String? @db.VarChar(50)
+  solde            Float@default(0.00) 
+  total_depense    Float@default(0.00) 
+  mot_de_passe     String? @db.VarChar(255)
+  sel              String? @db.VarChar(255)
+  ordre_apparition Int
+  partie_pg        Boolean
+  solde_a_debiter  String  @default("total") @db.VarChar(255)
+  nom_simple       String? @db.VarChar(20)
+  actif            Int     @default(1) @db.TinyInt
+}
+
+model bouls {
+  id    Int    @id @default(autoincrement())
+  nom   String @db.Text
+  id_pg Int
+}
+
+model categories {
+  id_categorie Int    @id @default(autoincrement())
+  id_boquette  Int
+  nom          String @db.Text
+}
+
+model config {
+  ID     Int    @id @default(autoincrement())
+  nom    String @db.Text
+  valeur String @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model consommations {
+  id_conso               Int       @id @default(autoincrement())
+  id_pg                  Int?
+  id_produit             Int?
+  id_boquette            Int?
+  id_conso_bis           Int?
+  date_conso             DateTime  @db.DateTime(0)
+  date_consommation_vrai DateTime? @db.DateTime(0)
+  quantite               Float?    @db.Float
+  id_fams_historique     Int?
+  libelle                String?   @db.VarChar(255)
+  credit                 Float?    @db.Float
+  debit                  Float?    @db.Float
+  solde_avant            Float?    @db.Float
+  solde_apres            Float?    @db.Float
+  type_solde             String    @default("total") @db.VarChar(255)
+  annule                 Boolean?
+}
+
+model fams {
+  nums  Int     @id
+  solde Float
+}
+
+model historique_fams {
+  id_transaction   Int       @id @default(autoincrement())
+  libelle          String    @db.Text
+  fams             Int
+  id_pg            Int?
+  solde_avant      Float     @db.Float
+  solde_apres      Float     @db.Float
+  credit           Float?    @db.Float
+  debit            Float?    @db.Float
+  date_transaction DateTime? @db.DateTime(0)
+  annule           Int?
+}
+
+model inscriptions {
+  id_inscription Int    @id @default(autoincrement())
+  nums           Int
+  tabagns        String @db.Text
+  proms          Int
+  mail           String @db.Text
+  nom            String @db.Text
+  prenom         String @db.Text
+  bucque         String @db.Text
+  commentaire    String @db.Text
+}
+
+model kve {
+  id         Int    @id @default(autoincrement())
+  name       String @db.Text
+  price      Float  @db.Float
+  prixachat  Float  @default(0) @db.Float
+  inventaire Int
+}
+
+model motdepasse {
+  id    Int    @id @default(autoincrement())
+  id_pg Int
+  mdp   String @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pg {
+  id_pg                      Int        @id @default(autoincrement())
+  nom                        String     @db.VarChar(35)
+  prenom                     String     @db.VarChar(35)
+  bucque                     String?    @db.VarChar(35)
+  nums                       Int
+  tabagns                    pg_tabagns
+  proms                      Int
+  boquette                   String?    @db.VarChar(255)
+  email                      String     @db.VarChar(200)
+  solde                      Float   @default(0.00) 
+  solde_liquide              Float   @default(0.00) 
+  sexe                       Boolean    @default(true)
+  dossier_photos             String?    @db.VarChar(30)
+  mot_de_passe               String     @default("91b1bb7c2d6d0ccbaa574c690930b317ad44ebb9") @db.VarChar(255)
+  sel                        String?    @db.VarChar(255)
+  actif                      Int?       @default(1) @db.SmallInt
+  droit                      Int        @default(0)
+  au_tabagns                 Boolean    @default(false)
+  badge                      BigInt?
+  dernier_rappel_mail_negats DateTime?  @db.DateTime(0)
+  dernier_palier_mail_negats Int        @default(0)
+  temps_negats               Int        @default(0)
+  info                       String?    @db.Text
+  refresh                    refresh[]
+  auberge                    auberge[]
+}
+
+model photos {
+  id_pg Int    @id @default(autoincrement())
+  nom   String @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model produits {
+  id_produit   Int    @id @default(autoincrement())
+  id_boquette  Int
+  id_categorie Int    @default(0)
+  nom          String @db.Text
+  prix         Float  @db.Float
+  inventaire   Int    @default(-999)
+  libreservice Int    @default(0)
+  qrcode       Int    @default(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model rechargements {
+  id_rechargement Int      @id @default(autoincrement())
+  id_pg           Int
+  keyLydia        String   @db.Text
+  status          Int      @default(0)
+  date            DateTime @db.DateTime(0)
+  montant         Float    @db.Float
+}
+
+model refresh {
+  id     Int @id @default(autoincrement())
+  id_pg  Int
+  nombre Int
+
+  pg pg @relation(fields: [id_pg], references: [id_pg])
+}
+
+model remboursement {
+  id             Int    @id @default(autoincrement())
+  id_pg          Int
+  description    String @db.Text
+  montant        Float  @db.Float
+  methode        String @db.Text
+  fichier        String @db.Text
+  actiontafferie String @db.Text
+}
+
+model remember {
+  id_pg Int    @id @default(autoincrement())
+  code  String @db.Text
+}
+
+model rhopseskve {
+  id        Int      @id @default(autoincrement())
+  pg        String   @db.Text
+  idproduit String   @db.Text
+  quantite  Int
+  date      DateTime @db.DateTime(0)
+  total     Float    @db.Float
+  status    Int?     @default(0)
+}
+
+model spotify {
+  id           Int    @id @default(autoincrement())
+  id_pg        Int
+  lien_musique String @db.Text
+  titre_auteur String @db.Text
+}
+
+enum pg_tabagns {
+  Ch
+  An
+  Ai
+  Cl
+  Li
+  Bo
+  Me
+  Ka
+}

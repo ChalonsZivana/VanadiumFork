@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'zagoth';
+  src: url(./lib/fonts/OldLondon.ttf);
+}
+

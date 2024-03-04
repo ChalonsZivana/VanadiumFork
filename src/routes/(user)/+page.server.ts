@@ -4,7 +4,6 @@ import type { PageServerLoad } from "./$types"
 
 
 export const load: PageServerLoad = async ({ locals }) => {
-  console.log('load')
   // manage refresh count
 	const refresh = await prisma.refresh.findFirst(
     {where:{id_pg:locals.session.data.user.pg.id_pg}}

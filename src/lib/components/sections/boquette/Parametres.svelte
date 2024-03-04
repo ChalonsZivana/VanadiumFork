@@ -6,7 +6,7 @@
 </script>
 
 <SectionCard title="Paramètres">
-  <div class="w-full">
+  <div class="w-full text-white">
     <p>Nom: {boquette?.nom}</p>
     <p>Identifiant: {boquette?.nom_simple}</p>
     <label>

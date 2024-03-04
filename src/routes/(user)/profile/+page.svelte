@@ -31,7 +31,7 @@
 
 
 <div class="flex flex-col h-full md:h-auto justify-center items-center">
-  <div class="pt-10 h-full flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
+  <div class="h-full flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
     <div class="w-80"><Profile user={data.session.user}/></div>
     
     <SectionCard title="Dossier Gifs">

@@ -15,7 +15,6 @@ export const load:PageServerLoad  = async ({locals})=>{
 
 export const actions = {
   change_password: async ({ request, locals }:RequestEvent) => {
-    console.log(locals.session.data.user.pg.id_pg)
     const data = await request.formData();
     const password = data.get('P')?.toString();
     const newPassword = data.get('NP')?.toString();

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import StatsChart from "$lib/components/miscellaneous/+StatsChart.svelte";
+  import StatsChart from "$lib/components/miscellaneous/StatsChart.svelte";
 import SectionCard from "$lib/components/section_card.svelte";
 
   export let data;

@@ -1,7 +1,7 @@
 import { createPool } from 'mysql2';
 import prisma from "$lib/prisma";
 import type { Top } from './db_structs';
-import type { categories, photos, produits } from '@prisma/client';
+import type { produits } from '@prisma/client';
 
 let pool = createPool({
   host:'127.0.0.1',
@@ -33,7 +33,7 @@ export async function getPhotosFolder(id_pg:number) {
 }
 
 export async function getProducts(id_boquette:number) {
-	return await prisma.produits.findMany({where:{id_boquette:id_boquette}}) as produits[];
+	return await prisma.produits.findMany({where:{id_boquette:id_boquette}, orderBy:{nom:'asc'}}) as produits[];
 }
 
 export async function getCategories(id_boquette:number) {

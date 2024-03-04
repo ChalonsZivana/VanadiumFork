@@ -11,7 +11,7 @@ export interface User {
 
 export type SessionData = {
 	user: User;
-	boquette: boquettes;
+	boquettes: boquettes[];
 };
 
 export const authenticateUser = async(event: RequestEvent):Promise<User|null> => {
@@ -38,18 +38,6 @@ export async function createUser(id_pg:number):Promise<User|null>{
 		fams:fams,
 	} as {pg:pg, fams:fams};//2507:Skou , 2479:Peynetre	
 }
-// export const setRememberToken =  async(id_pg:number) => {
-// 	const userToken = makeid(10);
-// 	const user = prisma.motdepasse.findFirst({where:{id_pg:id_pg}});
-// 	if(user == null){
-// 		const d = await prisma.motdepasse.upsert(
-// 			{
-// 				where: { id_p: 1 },
-// 				update: { mdp: userToken, id_pg:2 },
-// 				create: { mdp: userToken, id_pg:2 }
-// 			}
-// 		);
-// }
 
 export const logInUser = async(event: RequestEvent):Promise<User|null> => {
 		// get the user token from the cookie
@@ -78,11 +66,7 @@ export const hashPassword = (password:string) => {
 	return pswd.digest('hex');
 }
 
+export const tryBoquette = async(nom_simple:string) => {
+	const boqss = await prisma.boquettes.findFirst({where:{nom_simple:nom_simple},select:{nom_simple:true, mot_de_passe:true, id_boquette:true}})
 
-// export const logInUser = (id:string, password:string):User=> {
-//   return {
-//     email:'',
-//     nums:'9',
-//     droit:'USER'
-//   }
-// }
+}

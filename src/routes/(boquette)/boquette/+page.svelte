@@ -3,39 +3,27 @@
   import Rhopse from "$lib/components/sections/boquette/Rhopse.svelte";
   import Produits from "$lib/components/sections/boquette/Produits.svelte";
   import Parametres from "$lib/components/sections/boquette/Parametres.svelte";
-  import MyButton from "$lib/components/utils/MyButton.svelte";
   import CreerCategorieEtProduit from "$lib/components/sections/boquette/CreerCategorieEtProduit.svelte";
+  import GenererFeuilleRhopse from "$lib/components/miscellaneous/GenererFeuilleRhopse.svelte";
 
   export let data;
-
-  function getProducts(id_categorie:number){
-    return data.produits.filter(e=>e.id_categorie==id_categorie);
-  }
+  $: boquette = data.session.boquettes.find(e=>e.id_boquette == data.id_boquette) ?? data.session.boquettes[0];
 </script>
 
 
-<div class="flex flex-col justify-center items-center">
-  <div class="w-80 sm:w-8/12 flex flex-col gap-5">
-    <SectionCard title="Auberge">
+<div class="w-11/12 flex flex-col gap-5">
+  <SectionCard title={boquette.nom??''}>
+    <div class="w-full flex flex-col text-white">
       <p>-200</p>
-      <p>Identifiant: auberge</p>
-      <MyButton value="Générer feuille de rhopse"/>
-  
-      <div class="bg-white text-black rounded-md">
-        <input type="file" name="" id="">
-      </div>
-      <MyButton value="Importer feuille de rhopse"/>
-    </SectionCard>
-    <SectionCard 
-      title="Historique"
-      buttonHandle={()=> {}}
-      buttonText="voir l'historique">
-    </SectionCard>
+      <p>Identifiant: {boquette.nom_simple}</p>
+    </div>
+    <GenererFeuilleRhopse products={data.produits}/>
+  </SectionCard>
+  <SectionCard title="Historique"></SectionCard>
 
-    <Parametres boquette={data.boquette}></Parametres>
-    
-    <Rhopse pgs={data.pgs}></Rhopse>
-    <Produits categories={data.categories} produits={data.produits}></Produits>
-    <CreerCategorieEtProduit categories={data.categories}></CreerCategorieEtProduit>
-  </div>
+  <Parametres boquette={boquette}></Parametres>
+  
+  <Rhopse pgs={data.pgs}></Rhopse>
+  <Produits categories={data.categories} produits={data.produits}></Produits>
+  <CreerCategorieEtProduit categories={data.categories}></CreerCategorieEtProduit>
 </div>

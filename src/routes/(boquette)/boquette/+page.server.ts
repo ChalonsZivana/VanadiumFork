@@ -1,26 +1,25 @@
 
-import { getBoquette, getCategories, getProducts } from "$lib/server/db_connection";
-import type { RequestEvent } from "@sveltejs/kit";
+import { type RequestEvent, redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { PageServerLoad } from "./$types.js";
+import { getProducts, getCategories } from "$lib/server/db_connection.js";
 
 
-export const load:PageServerLoad = async ()=>{
-  const produits = await getProducts(3);
-  const categories = await getCategories(3);
-  const boquette = await getBoquette(3);
+export const load:PageServerLoad = async ({url, locals, parent})=>{
+  const data = await parent()
+  
+  if(isNaN(data.id_boquette)) throw redirect(303, '/login');
+
+  const produits = await getProducts(data.id_boquette);
+  const categories = await getCategories(data.id_boquette);
   
   const pgs = await prisma.pg.findMany({
     where:{proms:{gte:221}}, 
     select:{nums:true,proms:true, bucque:true}
   })
-  return {
-    pgs:pgs,
-    boquette:boquette,
-    produits:produits,
-    categories:categories,
-  };
+  return { pgs,produits,categories, session:locals.session.data };
 }
+
 
 export const actions = {
   create_category: async ({ cookies, request, url }:RequestEvent) => {

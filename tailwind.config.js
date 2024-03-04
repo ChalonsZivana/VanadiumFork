@@ -5,6 +5,9 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
+      borderWidth:{
+        '1':'1px'
+      },
       backgroundImage: {
         'main-bg': "url('/background.jpg')"
       },
@@ -12,13 +15,10 @@ export default {
         'zagoth':["Zagoth"]
       },
       keyframes: {
-        test: {
-          '0%':{ transform: 'translateY(0vh)'},
-          '100%':{ transform: 'translateY(50vh)'},
-        }
+     
       },
       animation: {
-        wiggle: 'test 1s ease-in-out forwards',
+        
       }
     },
   },

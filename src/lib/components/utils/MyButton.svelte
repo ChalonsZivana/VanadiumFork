@@ -3,8 +3,9 @@
 
   export let value: string;
   export let callback: MouseEventHandler<HTMLButtonElement>|null = null;
+  export let color:string = 'bg-blue-600';
 </script>
 
-<button class="bg-blue-600 w-fit p-2 rounded-lg" on:click={callback}>
+<button class="text-white {color} w-fit p-2 rounded-lg" on:click={callback}>
   {value}
 </button>

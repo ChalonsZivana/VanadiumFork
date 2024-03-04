@@ -29,5 +29,6 @@
           </a>
         {/each}
       </div>
+      <slot/>
   </div>
 </SectionCard>

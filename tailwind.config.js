@@ -15,10 +15,20 @@ export default {
         'zagoth':["Zagoth"]
       },
       keyframes: {
-     
+        "fade-in-out": {
+          '0%': { opacity: '0' },
+          '20%': { opacity: '1' },
+          '80%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        "scale-up": {
+          '0%': { scale: '0' },
+          '100%': { scale: '1' },
+        }
       },
       animation: {
-        
+        "fade-in": 'fade-in-out 10s forwards',
+        "scale-up": 'scale-up 0.5s forwards'
       }
     },
   },

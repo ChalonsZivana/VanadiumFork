@@ -32,7 +32,7 @@ export const actions = {
 					await locals.session.update((_) =>{ return {boquettes:update}});
 				}
 
-				redirect(303, "/boquette?id_boquette=" + a.id_boquette);
+				redirect(303,`/boquette-${a.id_boquette}`);
 			}
 			return fail(400, { uid, wrong: true });
 		} else if(uid.includes('ch')){			

@@ -1,6 +1,6 @@
 <script lang="ts">
   export let data;
-  import MyButton from '$lib/components/utils/MyButton.svelte';
+  import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type{categories, produits} from '@prisma/client';
   
   let proms:number|null=null;

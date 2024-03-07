@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SectionCard from "$lib/components/section_card.svelte"; 
+  import SectionCard from "$lib/components/SectionCard.svelte"; 
 </script>
 
 <div class="h-screen flex flex-col justify-around items-center">

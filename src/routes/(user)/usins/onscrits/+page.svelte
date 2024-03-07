@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SectionCard from "$lib/components/section_card.svelte";
-  import Button from '$lib/components/utils/MyButton.svelte';
+  import SectionCard from "$lib/components/SectionCard.svelte";
+  import Button from '$lib/components/miscellaneous/MyButton.svelte';
   const onscrits:{[index:string]:string} = {
     '89':"89;Gerard;Louis-Matthieu;17+72=89\n19+80=89"
   }

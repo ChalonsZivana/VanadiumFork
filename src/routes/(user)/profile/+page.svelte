@@ -1,8 +1,8 @@
 <script lang="ts">
   import Profile from "$lib/components/sections/Profile.svelte";
   import type { SessionData } from "$lib/server/auth";
-  import SectionCard from '$lib/components/section_card.svelte';
-  import MyButton from "$lib/components/utils/MyButton.svelte";
+  import SectionCard from '$lib/components/SectionCard.svelte';
+  import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
 
   export let data:{session:SessionData,photo:string, photosFolder:string};
   export let form;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import StatsChart from "$lib/components/miscellaneous/StatsChart.svelte";
-import SectionCard from "$lib/components/section_card.svelte";
+import SectionCard from "$lib/components/SectionCard.svelte";
 
   export let data;
   const extandeds = data.tops.map(_=>false);

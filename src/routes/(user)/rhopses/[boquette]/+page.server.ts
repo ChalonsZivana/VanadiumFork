@@ -1,4 +1,5 @@
 import { getCategories, getProducts } from "$lib/server/db_connection";
+import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 const boquettes = {
@@ -8,7 +9,7 @@ const boquettes = {
 
 
 export const load: PageServerLoad = async ({ params }) => {  
-  if(!(params.boquette in boquettes)) return {}
+  if(!(params.boquette in boquettes)) throw error(404)
   
   let boquette_id = (boquettes as any)[params.boquette] as number;
   let products = await getProducts(boquette_id);

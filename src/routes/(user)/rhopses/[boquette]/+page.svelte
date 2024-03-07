@@ -1,6 +1,5 @@
 <script lang="ts">
-  import MyButton from "$lib/components/utils/MyButton.svelte";
-  import SectionCard from "$lib/components/section_card.svelte";
+  import SectionCard from "$lib/components/SectionCard.svelte";
   export let data;
   
   let id_categorie:number|null = null;
@@ -21,10 +20,10 @@
       <SectionCard title="Catégories">
         <div class={choicesContainerClass}>
           {#each data.categories as cat}
-          <button class={buttonClass} on:click={()=>id_categorie=cat.id_categorie}>
-          {cat.nom}
-          </button>
-        {/each}
+            <button class={buttonClass} on:click={()=>id_categorie=cat.id_categorie}>
+            {cat.nom}
+            </button>
+          {/each}
         </div>
       </SectionCard>
     {/if}
@@ -48,9 +47,7 @@
     <!-- Validation -->
     {#if id_produit}
       <SectionCard 
-        title={`${data.user?.nums}Ch${data.user?.proms}`}
-        buttonText="RHOPSER"
-        buttonHandle={()=>{}}>
+        title={`${data.session.user?.pg.nums}Ch${data.session.user?.pg.proms}`}>
         {#each data.products as product}
           {#if product.id_produit == id_produit}
             {product.nom}   -   {product.prix}€

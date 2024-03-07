@@ -1,25 +1,16 @@
 
-import { type RequestEvent, redirect } from "@sveltejs/kit";
+import { type RequestEvent, redirect, error } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
-import type { PageServerLoad } from "./$types.js";
-import { getProducts, getCategories } from "$lib/server/db_connection.js";
+import type { LayoutServerLoad } from "./$types.js";
 
 
-export const load:PageServerLoad = async ({url, locals, parent})=>{
-  const data = await parent()
-  
-  if(isNaN(data.id_boquette)) throw redirect(303, '/login');
-
-  const produits = await getProducts(data.id_boquette);
-  const categories = await getCategories(data.id_boquette);
-  
+export const load:LayoutServerLoad = async ({locals, params})=>{
   const pgs = await prisma.pg.findMany({
     where:{proms:{gte:221}}, 
-    select:{nums:true,proms:true, bucque:true}
+    select:{nums:true,proms:true, bucque:true, id_pg:true}
   })
-  return { pgs,produits,categories, session:locals.session.data };
+  return { pgs };
 }
-
 
 export const actions = {
   create_category: async ({ cookies, request, url }:RequestEvent) => {

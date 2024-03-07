@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SectionCard from "$lib/components/section_card.svelte";
+  import SectionCard from "$lib/components/SectionCard.svelte";
   import Rhopse from "$lib/components/sections/boquette/Rhopse.svelte";
   import Produits from "$lib/components/sections/boquette/Produits.svelte";
   import Parametres from "$lib/components/sections/boquette/Parametres.svelte";
@@ -22,7 +22,7 @@
   <SectionCard title="Historique"></SectionCard>
 
   <Parametres boquette={boquette}></Parametres>
-  
+
   <Rhopse pgs={data.pgs}></Rhopse>
   <Produits categories={data.categories} produits={data.produits}></Produits>
   <CreerCategorieEtProduit categories={data.categories}></CreerCategorieEtProduit>

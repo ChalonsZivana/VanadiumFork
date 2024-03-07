@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import prisma from "$lib/prisma";
-import { getBoquette } from "$lib/server/db_connection";
+import { getTopNegats } from "$lib/server/db_connection";
 
 
 
@@ -9,11 +9,12 @@ const currentProms = [221,222,223]
 
 export const load:PageServerLoad = async ({locals})=>{
   return {
+    topNegats:await getTopNegats(null),
     fondsProms: await fondsProms(),
     negatsProms: await negatsProms(),
-    fondsBoquettes: await fondsBoquettes(),
-    boquettes:await prisma.boquettes.findMany({select:{nom:true,nom_simple:true,id_boquette:true}}),
-    pgs:await prisma.pg.findMany({select:{bucque:true, nums:true, proms:true, id_pg:true, solde:true},orderBy:{proms:'desc'}})
+    boquettes:await prisma.boquettes.findMany({select:{nom:true,nom_simple:true,id_boquette:true, solde:true}}),
+    pgs:await prisma.pg.findMany({select:{bucque:true, nums:true, proms:true, id_pg:true, solde:true},orderBy:{proms:'desc'}}),
+    fams:await prisma.fams.findMany()
   };
 }
 

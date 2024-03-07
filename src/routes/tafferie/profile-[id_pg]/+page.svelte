@@ -1,17 +1,14 @@
 <script lang="ts">
-  import SearchItemsTable from "$lib/components/miscellaneous/SearchItemsTable.svelte";
-import SectionCard from "$lib/components/section_card.svelte";
+  import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
+import SectionCard from "$lib/components/SectionCard.svelte";
 import Profile from "$lib/components/sections/Profile.svelte";
-  import MyButton from "$lib/components/utils/MyButton.svelte";
-    import ValidationDialog from "$lib/components/utils/ValidationDialog.svelte";
+  import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
+    import ValidationDialog from "$lib/components/miscellaneous/ValidationDialog.svelte";
+    import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
+    import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
+    import CustomDialog from "$lib/components/miscellaneous/CustomDialog.svelte";
 
   export let data;
-
-  let editPGHidden = true;
-  const showPGEdit = () => {
-    editInputText = initPGEdit();
-    editPGHidden = false;
-  }
 
   let dialog:HTMLDialogElement;
 
@@ -65,51 +62,46 @@ import Profile from "$lib/components/sections/Profile.svelte";
 
   <SectionCard title="Historique rhopses">
     <div class="w-full h-96 overflow-x-hidden no-scrollbar overflow-y-scroll">
-      <SearchItemsTable
+      <CustomTable
       title=''
-      headers={['Date','Libellé','Montant','Statut','Action']}>
+      headers={['Date','Libellé','Montant','']}>
       {#each data.consommations as cons}
-        <tr>
+        <tr class={cons.annule ? 'line-through':''}>
           <td>
             <p>{cons.date_conso.toLocaleDateString()}</p>
             <p>{cons.date_conso.toLocaleTimeString()}</p>
           </td>
-          <td>{cons.libelle}</td>
+          <td class="text-wrap">{cons.libelle}</td>
           <td>
-            <p class="text-red-500">Av: {cons.solde_avant}€</p>
-            <p class="text-sm font-bold">{cons.debit}€</p>
-            <p class="text-green-500">Ap: {cons.solde_apres}€</p>
+            <p class="text-nowrap">AP. {cons.solde_apres}€</p>
+            <MoneyColor red={cons.debit} myClass="text-sm font-bold"/>
+            <p>AV. {cons.solde_avant}€</p>
           </td>
-          <td>Actif</td>
-          <td><button class="bg-red-400 p-1 rounded-lg">annuler</button></td>
+          <td>
+            <AddRemoveConso bind:cons={cons}/>
+          </td>
         </tr>
       {/each}
-    </SearchItemsTable>
+    </CustomTable>
     </div>
   </SectionCard>
 </div>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:click|self={()=>dialog.close()} class=" duration-200 w-screen p-2 bg-white rounded-xl">
-    <p class="text-xl font-bold">Edition PG - {data.user.pg.nums}Ch{data.user.pg.proms}</p>
+<CustomDialog bind:dialog={dialog} title="Edition PG - {data.user.pg.nums}Ch{data.user.pg.proms}"
+  buttonText='Sauvegarder' callback={()=>{}}>
+  {#each editDataKeys as k}
+    <label class="w-full">
+      <p class="font-zagoth text-xl text-white">{k}</p>
+      <input bind:value={editInputText[k]} class="w-full p-1 h-8 border-gray-300 border-1 rounded-md" type="text">
+    </label>
+  {/each}
 
-    {#each editDataKeys as k}
-      <label class="w-full">
-        <p class="font-zagoth text-xl">{k}</p>
-        <input bind:value={editInputText[k]} class="w-full p-1 h-8 border-gray-300 border-1 rounded-md" type="text">
-      </label>
-    {/each}
+  <div class="flex flex-col text-white">
+    <label><input bind:checked={activCheck} type="checkbox">Compte actif</label>
+    <label><input type="checkbox">Délégué de proms (DDP)</label>
+  </div>
+</CustomDialog>
 
-    <div class="flex flex-col">
-      <label><input bind:checked={activCheck} type="checkbox">Compte actif</label>
-      <label><input type="checkbox">Délégué de proms (DDP)</label>
-    </div>
-
-    <div class="flex flex-col items-center mt-5 gap-1 w-full">
-      <MyButton value="Sauvergarder"/>
-      <MyButton value="annuler" callback={()=>dialog.close()} color="bg-red-600"/>
-    </div>
-</dialog>
 
 <ValidationDialog 
   title="Transfert de Fonds" 

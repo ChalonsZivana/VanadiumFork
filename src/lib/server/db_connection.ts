@@ -128,3 +128,14 @@ export const getTops = async ()=>{
 
   return tops;
 }
+
+export const getTopNegats = async (proms:number|null)=>{
+  return await prisma.pg.findMany(
+    {
+      where:proms?{proms:proms}:{},
+      select:{nums:true,proms:true,bucque:true,solde:true,id_pg:true},
+      orderBy:{solde:'asc'},
+      take:10
+    }
+  )
+}

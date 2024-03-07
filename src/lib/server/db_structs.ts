@@ -69,6 +69,8 @@ export interface Refresh {
   nombre:number;
 }
 
+
+
 export interface Top {
   name:string;
   leaderboard:{
@@ -79,11 +81,8 @@ export interface Top {
   }[]
 }
 
+
 export interface Bouls {
   nom:string;
   id_pg:string;
-}
-
-export interface Boquette {
-  
 }

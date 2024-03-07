@@ -1,7 +1,7 @@
 <script lang="ts">
   import ExcelJS from 'exceljs';
   import type {produits} from '@prisma/client';
-    import MyButton from '../utils/MyButton.svelte';
+    import MyButton from './MyButton.svelte';
 
   export let products:produits[];
   

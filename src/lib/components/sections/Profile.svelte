@@ -1,7 +1,7 @@
 <script lang="ts">
   export let user:User;
 
-  import SectionCard from "$lib/components/section_card.svelte";
+  import SectionCard from "$lib/components/SectionCard.svelte";
   import type { User } from "$lib/server/auth";
 
   export const title = 'Profil';

@@ -1,5 +1,5 @@
 <script>
-  import SectionCard from "../section_card.svelte";
+  import SectionCard from "../SectionCard.svelte";
 
 
   const negats = {

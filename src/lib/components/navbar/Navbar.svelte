@@ -4,7 +4,7 @@
   import TopNavbar from "./TopNavbar.svelte";
 
   export let session:SessionData;
-  export let id_boquette:number;
+  export let id_boquette:number | null;
 </script>
 
 

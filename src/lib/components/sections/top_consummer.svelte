@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SectionCard from "../section_card.svelte";
+  import SectionCard from "../SectionCard.svelte";
 
   let tops = {
     "Global":["Mars-L", "Skoü","Lapince"],

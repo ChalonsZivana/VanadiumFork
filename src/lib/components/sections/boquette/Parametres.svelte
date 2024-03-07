@@ -1,5 +1,5 @@
 <script lang="ts">
-    import SectionCard from "$lib/components/section_card.svelte";
+    import SectionCard from "$lib/components/SectionCard.svelte";
     import type { boquettes } from "@prisma/client";
 
     export let boquette:boquettes|null;

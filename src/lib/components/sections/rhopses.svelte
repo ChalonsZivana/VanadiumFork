@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SectionCard from "../section_card.svelte";
-    import MyButton from "../utils/MyButton.svelte";
+  import SectionCard from "../SectionCard.svelte";
+    import MyButton from "../miscellaneous/MyButton.svelte";
 
   function handle(){}
 </script>

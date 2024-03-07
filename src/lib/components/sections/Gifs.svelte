@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SectionCard from "../section_card.svelte";
+  import SectionCard from "../SectionCard.svelte";
 
   export let photo:string;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import SectionCard from "$lib/components/section_card.svelte";
-    import MyButton from "$lib/components/utils/MyButton.svelte";
+    import SectionCard from "$lib/components/SectionCard.svelte";
+    import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
     import type { categories} from "@prisma/client";
 
     export let categories:categories[];

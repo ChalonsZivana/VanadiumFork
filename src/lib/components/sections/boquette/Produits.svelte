@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SectionCard from "$lib/components/section_card.svelte";
+  import SectionCard from "$lib/components/SectionCard.svelte";
   import type { categories, produits } from "@prisma/client";
   
   export let categories:categories[];
@@ -23,5 +23,4 @@
       </div>
     {/each}
   </div>
-  
 </SectionCard>

@@ -2,8 +2,7 @@
   import type { SessionData } from "$lib/server/auth";
 
   export let session:SessionData;
-  export let id_boquette:number;  
-  console.log('hllo')
+  export let id_boquette:number | null;  
 </script>
 
 {#if session.boquettes}
@@ -12,7 +11,7 @@
     {#if boq.nom=="TAFerie"}
       <a class="{boq.id_boquette==id_boquette?'bg-green-700':'bg-red-700'} rounded-xl p-1" href={"/tafferie"}>{boq.nom}</a>
     {:else}
-      <a class="{boq.id_boquette==id_boquette?'bg-green-700':'bg-red-700'} rounded-xl p-1" href={"/boquette?id_boquette=" + boq.id_boquette}>{boq.nom}</a>
+      <a class="{boq.id_boquette==id_boquette?'bg-green-700':'bg-red-700'} rounded-xl p-1" href={`/boquette-${boq.id_boquette}`}>{boq.nom}</a>
     {/if}
   {/each}
   <a href="/login">

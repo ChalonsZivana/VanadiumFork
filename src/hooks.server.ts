@@ -15,7 +15,9 @@ export const handle = handleSession(
         if(event.locals.session.data.user == undefined) throw redirect(303,"/login");
         break;
       case event.route.id?.startsWith('/(boquette)'):
-        if(event.locals.session.data.boquettes == undefined) throw redirect(303,"/login");
+        if(event.locals.session.data.boquettes == undefined || !('id_boquette' in event.params)) throw redirect(303,"/login");
+        const id_boquette = parseInt(event.params['id_boquette']??'');
+        if(!event.locals.session.data.boquettes.map(e=>e.id_boquette).includes(id_boquette)) throw redirect(303,"/login");
         break;
       case event.route.id?.startsWith('/(fast access)'):
         break;

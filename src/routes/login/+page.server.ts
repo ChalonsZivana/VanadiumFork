@@ -32,7 +32,7 @@ export const actions = {
 					await locals.session.update((_) =>{ return {boquettes:update}});
 				}
 
-				redirect(303,`/boquette-${a.id_boquette}`);
+				throw redirect(303,`/boquette-${a.id_boquette}`);
 			}
 			return fail(400, { uid, wrong: true });
 		} else if(uid.includes('ch')){			
@@ -51,13 +51,27 @@ export const actions = {
 			if(user != null) {
 				await locals.session.update((e) =>{ return {user:user}});
 			}
-			redirect(303, "/");
+			throw redirect(303, "/");
 		} else {
 			return fail(400, {uid, wrong:true});
 		}
 
 	},
-	logout:async ({ locals }:RequestEvent) => {
-		await locals.session.destroy();
+	logout:async ({ locals, request }:RequestEvent) => {
+		const data = await request.formData();
+		
+		if(data.get('user')){
+			await locals.session.update(data => {
+				data.user = null;
+				return data;
+			})
+		} else if(data.get('boquette')){
+			const boq = parseInt(data.get('boquette')?.toString()??'');
+			await locals.session.update(data => {
+				data.boquettes = data.boquettes.filter(e=>e.id_boquette != boq)
+				return data;
+			})
+		}
+		throw redirect(303, '/');
 	}
 }

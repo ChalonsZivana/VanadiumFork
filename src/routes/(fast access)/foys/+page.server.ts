@@ -1,21 +1,19 @@
-import type { PageServerLoad } from "./$types";
-import prisma from "$lib/prisma";
-import { getCategories, getProducts } from "$lib/server/db_connection";
+import { Boquette } from "$lib/server/classes/Boquette";
+import { Database } from "$lib/server/classes/Database";
+import { fail } from "@sveltejs/kit";
 
-
-export const load:PageServerLoad = async ()=>{
+export const load = async ()=>{
   //7:foys  147:koenettrie
-  const getNums = async(i: number) => await prisma.pg.findMany({where:{proms:i}, select:{nums:true}});
-
+  const boq = await Boquette.new(7);
+  if(boq == null) throw fail(400, {  })
+  
   return { 
-    categories:await getCategories(7),
-    products:await getProducts(7),
+    categories:await boq.categories(),
+    products:await boq.produits(),
     proms:{
-      221:await getNums(221),
-      222:await getNums(222),
-      223:await getNums(223),
+      221:await Database.getNumsInProms(221),
+      222:await Database.getNumsInProms(222),
+      223:await Database.getNumsInProms(223),
     }
   };
-
-  
 }

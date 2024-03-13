@@ -10,5 +10,5 @@
 <div class="w-11/12 flex flex-col gap-5">
   <Profile user={data.session.user}/>
   <Gifs photo={data.photo}/>
-  <Negats/>
+  <Negats negats={data.negats}/>
 </div>

@@ -80,6 +80,5 @@ export function getSearch(searchText:string, dataToSort:DataToSort):SearchItemsM
       });
       break;
   }
-  console.log(searchItems)
   return searchItems;
 }

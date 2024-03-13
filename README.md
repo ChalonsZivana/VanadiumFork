@@ -48,3 +48,7 @@ when changing the prisma schema you have to do multiple things:
   - add   `auberge  auberge[]` to `pg`
   - add `pg pg @relation(fields: [id_pg], references:[id_pg])` to `auberge`
 - change every `Decimal` to `Float`
+
+
+SVG Repo
+https://www.svgrepo.com/collection/solar-linear-icons

@@ -17,7 +17,7 @@
   <slot/>
 
   <div class="flex justify-around mt-5 text-white text-lg">
-    <button on:click={callback} class="size-24 bg-blue-500 rounded-md">{buttonText}</button>
-    <button on:click={()=>dialog.close()} class="size-24 bg-red-500 rounded-md">annuler</button>
+    <button on:click={callback} class="size-28 bg-blue-500 rounded-md">{buttonText}</button>
+    <button on:click={()=>dialog.close()} class="size-28 bg-red-500 rounded-md">annuler</button>
   </div>
 </dialog>

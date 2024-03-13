@@ -4,11 +4,12 @@
     import type { categories} from "@prisma/client";
 
     export let categories:categories[];
+    export let id_boquette:number;
 
 const flexClass = "flex flex-col ";
 </script>
 <SectionCard title="Créer produit et catégorie">
-  <form method="post" action="?/create_category" class="flex flex-col gap-5 w-full">
+  <form method="post" action="/boquette-{id_boquette}?/create_category" class="flex flex-col gap-5 w-full">
     <div class="flex flex-col">
       <label class="font-zagoth text-white" for="nom_categorie">Nom catégorie</label>
       <input type="text" name="nom_categorie" id="nom_categorie">
@@ -17,7 +18,7 @@ const flexClass = "flex flex-col ";
     <MyButton value="Créer catégorie"/>
   </form>
 
-  <form method="post" action="?/create_product" class="flex flex-col gap-2">
+  <form method="post" action="/boquette-{id_boquette}?/create_product" class="flex flex-col gap-2">
     <div class={flexClass}>
       <label class="font-zagoth text-white" for="nom_produit">Nom produit</label>
       <input type="text" name="nom_produit" id="nom_produit">

@@ -1,11 +1,8 @@
-<script>
+<script lang='ts'>
   import SectionCard from "../SectionCard.svelte";
 
 
-  const negats = {
-    '222':-89,
-    '223':-111,
-  }
+  export let negats:{[key: number]:number};
 </script>
 
 <SectionCard title="Negat's">

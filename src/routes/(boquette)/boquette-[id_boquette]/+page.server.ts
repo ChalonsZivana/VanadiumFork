@@ -2,6 +2,7 @@
 import { type RequestEvent, redirect, error } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { LayoutServerLoad } from "./$types.js";
+import { Database } from "$lib/server/classes/Database.js";
 
 
 export const load:LayoutServerLoad = async ({locals, params})=>{
@@ -12,25 +13,19 @@ export const load:LayoutServerLoad = async ({locals, params})=>{
   return { pgs };
 }
 
+
+
 export const actions = {
-  create_category: async ({ cookies, request, url }:RequestEvent) => {
+  create_category: async ({ request, params }:RequestEvent) => {
+    
     const data = await request.formData();
     const nom = data.get('nom_categorie')?.toString();
     if(nom == null) return {success:false};
-    // Verifier que la catégorie n'existe pas dans la boquette
-    const verif = await prisma.categories.findFirst({
-      where:{id_boquette:3, nom:nom}
-    })
-    if(verif != null) return {already_exists:true}
-
-    await prisma.categories.create({
-      data: {
-        id_boquette:3,
-        nom:nom, 
-      }
-    })
-
-    return {}
+    
+    if(await Database.createCategorie({id_boquette:3, nom:nom}) == null){
+      return {already_exists:true};
+    }
+    return { success: true};
   },
   create_product: async ({ cookies, request, url }:RequestEvent) => {
     const data = await request.formData();
@@ -39,4 +34,3 @@ export const actions = {
 		const remember = data.get('remember')?.toString();
   },
 }
-

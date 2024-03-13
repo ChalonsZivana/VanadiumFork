@@ -1,8 +1,6 @@
-import type { PageServerLoad } from "./$types";
 import prisma from "$lib/prisma";
 
-
-export const load:PageServerLoad = async ()=>{
+export async function load() {
   const bouls = await prisma.bouls.findMany()
   return {
     bouls:bouls,

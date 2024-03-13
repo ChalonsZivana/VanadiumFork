@@ -28,21 +28,6 @@ export async function getFams(nums:number) {
   return prisma.fams.findFirst({where:{nums:nums}});
 }
 
-export async function getPhotosFolder(id_pg:number) {
-  return await prisma.photos.findFirst({where:{id_pg:id_pg}});
-}
-
-export async function getProducts(id_boquette:number) {
-	return await prisma.produits.findMany({where:{id_boquette:id_boquette}, orderBy:{nom:'asc'}}) as produits[];
-}
-
-export async function getCategories(id_boquette:number) {
-  return prisma.categories.findMany(
-    { where:{id_boquette:id_boquette}}
-  );
-}
-
-
 
 export const getUserPassword = async (nums:number,proms:number) => {
   return prisma.pg.findFirst({select:{id_pg:true, mot_de_passe:true}, where:{nums:nums,proms:proms}});

@@ -1,28 +1,19 @@
-import prisma from "$lib/prisma";
 import fs from 'fs';
 import type { PageServerLoad } from "./$types"
+import { Database } from "$lib/server/classes/Database";
+import { redirect } from "@sveltejs/kit";
+import { Pg } from "$lib/server/classes/PG";
 
 
 export const load: PageServerLoad = async ({ locals }) => {
-  // manage refresh count
-	const refresh = await prisma.refresh.findFirst(
-    {where:{id_pg:locals.session.data.user.pg.id_pg}}
-  );
-  
-  if(refresh != null){
-    await prisma.refresh.updateMany(
-      {where:{id_pg:locals.session.data.user.pg.id_pg}, data:{nombre:refresh?.nombre + 1}}
-    );
-  }
+  if(locals.session.data.user == null) throw redirect(300, "/login");
 
-  // charge le gif
-  let folder = "paysage";
-	if( locals.session.data.user != null){
-		const photo = await prisma.photos.findFirst({where:{id_pg:locals.session.data.user.pg.id_pg}});
-		folder = (locals.session.data.user.pg.solde >= 0) ? (photo?.nom??folder): 'moche'
-	}
+  const pg = new Pg(locals.session.data.user.pg);
+  await pg.incrementRefresh();
+
   return {
-    photo:getRandomPhoto(folder),
+    photo: getRandomPhoto(await pg.getPhotosFolder()),
+    negats:await Database.negatsProms([222,223])
   }
 }
 

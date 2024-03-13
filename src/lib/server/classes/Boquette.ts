@@ -21,7 +21,6 @@ export class Boquette extends HasMoney {
   }
 
   static async new(id_boquette:number):Promise<Boquette | null>{
-    if(isNaN(id_boquette)) return null;
     const boquette = await prisma.boquettes.findFirst({where:{id_boquette:id_boquette}});
     if(boquette != null) {
       return new Boquette(boquette)
@@ -29,14 +28,13 @@ export class Boquette extends HasMoney {
     return null;
   }
 
-  async produits(id_categorie:number) {
-    return prisma.produits.findMany({where:{id_categorie}});
+  async produits() {
+    return prisma.produits.findMany({orderBy:{nom:'asc'}});
   }
 
   async categories(){
-    return prisma.categories.findMany({where:{id_boquette:this.ID}});
+    return prisma.categories.findMany({where:{id_boquette:this.ID}, orderBy:{nom:'asc'}});
   }
-
 
   async produit(id_produit:number){
     return prisma.produits.findFirst({where:{id_produit}});
@@ -57,12 +55,12 @@ export class Boquette extends HasMoney {
         debit: produit.prix * d.quantite,
         type_solde:"total",
         solde_avant:pg.pg.solde,
-        solde_apres:pg.pg.solde + produit.prix * d.quantite,
+        solde_apres:pg.pg.solde - produit.prix * d.quantite,
         libelle:`Consommation: ${d.quantite} * ${produit.nom}`
       }
     });
     await this.addMoney(produit.prix * d.quantite);
-    await pg.addMoney(-1 * produit.prix * d.quantite);
+    await pg.removeMoney(produit.prix * d.quantite);
     return true;
   }
 

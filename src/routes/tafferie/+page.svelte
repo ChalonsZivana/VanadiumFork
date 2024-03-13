@@ -5,7 +5,6 @@
   import MoneyColor from '$lib/components/miscellaneous/MoneyColor.svelte';
   import Search from '$lib/components/search/Search.svelte';
   import { createDataToSort, type SelectTypes } from "$lib/components/search/search.js";
-  import type {boquettes} from '@prisma/client'
 
   export let data;
 

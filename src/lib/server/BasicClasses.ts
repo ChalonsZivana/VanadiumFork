@@ -39,4 +39,8 @@ export class HasMoney {
           break;
     }
   }
+
+  async removeMoney(money:number) {
+    await this.addMoney(money * -1);
+  }
 }

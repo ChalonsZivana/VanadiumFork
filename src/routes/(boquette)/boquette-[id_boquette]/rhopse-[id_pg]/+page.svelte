@@ -2,7 +2,7 @@
   import SectionCard from '$lib/components/SectionCard.svelte';
   import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
-
+  
   export let data;
   export let dialog:HTMLDialogElement;
 
@@ -17,15 +17,13 @@
       method:'POST',
       body:JSON.stringify(
         {
-          id_boquette:data.id_boquette.toString(),
+          id_boquette:data.id_boquette,
           id_pg:data.pg.id_pg,
-          produits:Object.fromEntries(
-            selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])
-          )
-          
+          produits:selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])
         }
       )
-    })
+    });
+    dialog.close();
   }
 
   function getProducts(id_categorie:number){

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Rhopse from "$lib/components/sections/boquette/Rhopse.svelte";
-  import Produits from "$lib/components/sections/boquette/Produits.svelte";
-  import CreerCategorieEtProduit from "$lib/components/sections/boquette/CreerCategorieEtProduit.svelte";
+  import Rhopse from "$lib/components/boquette/Rhopse.svelte";
+  import Produits from "$lib/components/boquette/Produits.svelte";
+  import CreerCategorieEtProduit from "$lib/components/boquette/CreerCategorieEtProduit.svelte";
   import GenererFeuilleRhopse from "$lib/components/miscellaneous/GenererFeuilleRhopse.svelte";
   import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
   import type { boquettes } from '@prisma/client'

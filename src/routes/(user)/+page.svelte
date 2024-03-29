@@ -1,14 +1,11 @@
 
 <script lang="ts">
   import Profile from "$lib/components/profiles/UserProfile.svelte";
-  import Gifs from "$lib/components/sections/Gifs.svelte";
-  import Negats from "$lib/components/sections/negats.svelte";
+  import Negats from "$lib/components/profiles/Negats.svelte";
   import SquareRightArrow from "$lib/components/svgs/square-right-arrow.svelte";
   import Top from "$lib/components/miscellaneous/Top.svelte";
   import SectionCard from "$lib/components/SectionCard.svelte";
-  import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
-  import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
-    import ConsoTable from "$lib/components/search/ConsoTable.svelte";
+  import ConsoTable from "$lib/components/search/ConsoTable.svelte";
   export let data;
 
   let scrollContainer:HTMLElement;
@@ -51,7 +48,9 @@
   <div class="flex flex-col items-center w-full gap-10">
     <section bind:this={section1} class="pb-2 w-11/12 flex flex-col gap-5">
       <Profile user={data.USER}/>
-      <Gifs photo={data.photo}/>
+      <SectionCard title="">
+        <img src={data.photo} alt={data.photo}>
+      </SectionCard>
       <Negats negats={data.negats}/>
     </section> 
     <section bind:this={section2} class="w-11/12 flex flex-col justify-start gap-2">

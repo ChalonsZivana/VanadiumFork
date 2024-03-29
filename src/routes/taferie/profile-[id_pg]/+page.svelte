@@ -7,7 +7,6 @@
   import CustomDialog from "$lib/components/miscellaneous/CustomDialog.svelte";
   import Settings from "$lib/components/svgs/settings.svelte";
   import Accept from "$lib/components/svgs/accept.svelte";
-  import EuroBill from "$lib/components/svgs/euro-bill.svelte";
   import { enhance } from "$app/forms";
     import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
 

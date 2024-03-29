@@ -1,4 +1,3 @@
-import type { RequestEvent } from "@sveltejs/kit"
 import { getFams, getUser } from "./db_connection";
 import type {pg, fams, boquettes} from "@prisma/client";
 import { createHash } from 'crypto';

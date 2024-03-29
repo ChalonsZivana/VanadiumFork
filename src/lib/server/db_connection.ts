@@ -1,7 +1,6 @@
 import { createPool } from 'mysql2';
 import prisma from "$lib/prisma";
 import type { Top } from './db_structs';
-import type { produits } from '@prisma/client';
 
 let pool = createPool({
   host:'127.0.0.1',
@@ -14,6 +13,7 @@ let pool = createPool({
 });
 
 const promisePool = pool.promise();
+
 
 export async function query(sql:string, values:any) {
   const [rows, fields] = await promisePool.query(sql, values);
@@ -52,9 +52,19 @@ export const getBoquette = async (id_boquette:number)=> {
   return prisma.boquettes.findFirst({where:{id_boquette:id_boquette}});
 }
 
-export const getTops = async ()=>{
-  const tops:Top[] = [];
 
+const TopsBoquettes = {
+  "Foys":7,
+  "Auberge":3,
+  "Strass Choco":1,
+  "Mousse":10,
+  "Copalerie":17,
+  "Cock's":4,
+  "Koenettrie":147,
+  "K've":2,
+}
+
+export const getTopRefresh = async () =>{
   const tr = await prisma.refresh.findMany({
     select: {
       nombre: true,
@@ -64,51 +74,57 @@ export const getTops = async ()=>{
     take: 10,
     }
   );
-  tops.push(
-    {
+  return {
       name:"Refresh",
       leaderboard:tr.map((e)=>{
         return {nombre:e.nombre,nums:e.pg.nums,proms:e.pg.proms,bucque:e.pg.bucque}
       })
-    }
-  )
-
-  const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 30);//TODO 30 -> 14
-
-  const boquettes = {
-    "Foys":7,
-    "Auberge":3,
-    "Strass Choco":1,
-    "Mousse":10,
-    "Copalerie":17,
-    "Cock's":4,
-    "Koenettrie":147,
-    "K've":2,
   }
+}
 
-  for(let [nom, id_boquette] of Object.entries(boquettes)){
-    const a = await prisma.consommations.groupBy(
+export const getTop = async (name:string, id_boquette:number|null):Promise<Top> => {
+  const twoWeeksAgo = new Date();
+  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 365);//TODO 30 -> 14
+
+  const a = await prisma.consommations.groupBy(
       {
-        by:['id_pg'],
-        where:{ id_pg:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, id_boquette:id_boquette },
-        orderBy: { _sum: { debit:'desc' } },
+        by:['from'],
+        where:id_boquette == null ? 
+          { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() } } :
+          { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, to:id_boquette },
+        orderBy: { _sum: { montant:'desc' } },
         take:10,
-        _sum: { debit:true }
+        _sum: { montant:true }
       }
     );
-    // create leaderboard
-    const leaderboard = [];
+  // create leaderboard
+  const leaderboard = [];
 
-    const ids_pg = a.map(e=>e.id_pg) as number[];
-    const pgs = await prisma.pg.findMany({where:{id_pg:{in:ids_pg}},select:{id_pg:true,nums:true, proms:true, bucque:true}});
-    for(let e of a){
-      const pg = pgs.find((i)=>i.id_pg == e.id_pg);
-      if(pg == undefined) continue;
-      leaderboard.push({nombre:null,nums:pg.nums,proms:pg.proms, bucque:pg.bucque})
-    }
+  const ids_pg = a.map(e=>e.from) as number[];
+  const pgs = await prisma.pg.findMany({where:{id_pg:{in:ids_pg}},select:{id_pg:true,nums:true, proms:true, bucque:true}});
+  for(let e of a){
+    const pg = pgs.find((i)=>i.id_pg == e.from);
+    if(pg == undefined) continue;
+    leaderboard.push({nombre:null,nums:pg.nums,proms:pg.proms, bucque:pg.bucque})
+  }
 
-    tops.push({ name:nom, leaderboard:leaderboard });
+  return { name, leaderboard }
+}
+
+export const getRandomTop = async () => {
+  const keys = Object.keys(TopsBoquettes) as (keyof typeof TopsBoquettes)[];
+  const randomIndex = Math.floor(Math.random() * keys.length);
+  const top = keys[randomIndex];
+  return getTop(top, TopsBoquettes[top]);
+}
+
+export const getTops = async ()=>{
+  const tops:Top[] = [
+    await getTopRefresh()
+  ];
+
+  for(let [nom, id_boquette] of Object.entries(TopsBoquettes)){
+    tops.push(await getTop(nom, id_boquette));
   }
 
   return tops;

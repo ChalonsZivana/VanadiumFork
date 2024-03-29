@@ -8,7 +8,7 @@ import {ZIVANA_MDP} from '$env/static/private'
 export const actions = {
   login: async ({ request, locals }:RequestEvent) => {
 		const data = await request.formData();
-		const uid = data.get('id')?.toString().toLowerCase();
+		const uid = data.get('id')?.toString();
 		const password = data.get('password')?.toString();
 
 		if(!uid || !password){
@@ -31,11 +31,15 @@ export const actions = {
 					update.push(a);
 					await locals.session.update((_) =>{ return {boquettes:update}});
 				}
+				if(a.id_boquette == 20) {
+					throw redirect(303,`/taferie`);
+				} else {
+					throw redirect(303,`/boquette-${a.id_boquette}`);
+				}
 
-				throw redirect(303,`/boquette-${a.id_boquette}`);
 			}
 			return fail(400, { uid, wrong: true });
-		} else if(uid.includes('ch')){			
+		} else if(uid.toLowerCase().includes('ch')){			
 			const [nums,proms] = uid.toLowerCase().split('ch') as string[];
 			const userPswd = await getUserPassword(parseInt(nums), parseInt(proms));
 			if (!userPswd) {

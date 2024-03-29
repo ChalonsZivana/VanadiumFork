@@ -3,6 +3,6 @@
     export let data;
 </script>
 
-<Navbar session={data.session} id_boquette={null}>
+<Navbar user={data.USER} boquettes={data.BOQUETTES} id_boquette={null}>
     <slot/>
 </Navbar>

@@ -24,11 +24,23 @@ export default {
         "scale-up": {
           '0%': { scale: '0' },
           '100%': { scale: '1' },
+        },
+        "shine": {
+          '0%': {
+            textShadow: 'none',
+          },
+          '50%': {
+            textShadow: '0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700, 0 0 40px #ffd700, 0 0 50px #ffd700, 0 0 60px #ffd700, 0 0 70px #ffd700, 0 0 80px #ffd700',
+          },
+          '100%': {
+            textShadow: 'none',
+          },
         }
       },
       animation: {
         "fade-in": 'fade-in-out 10s forwards',
-        "scale-up": 'scale-up 0.5s forwards'
+        "scale-up": 'scale-up 0.5s forwards',
+        "shine":"shine 2s infinite"
       }
     },
   },

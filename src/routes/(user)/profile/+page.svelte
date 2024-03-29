@@ -1,10 +1,10 @@
 <script lang="ts">
   import Profile from "$lib/components/sections/Profile.svelte";
-  import type { SessionData } from "$lib/server/auth";
+  import type { User } from "$lib/server/auth";
   import SectionCard from '$lib/components/SectionCard.svelte';
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
 
-  export let data:{session:SessionData,photo:string, photosFolder:string};
+  export let data:{USER:User,photo:string, photosFolder:string};
   export let form;
 
   
@@ -30,9 +30,9 @@
 </script>
 
 
-<div class="flex flex-col h-full md:h-auto justify-center items-center">
+<div class="mt-5 flex flex-col h-full md:h-auto justify-center items-center">
   <div class="h-full flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
-    <div class="w-80"><Profile user={data.session.user}/></div>
+    <div class="w-80"><Profile user={data.USER}/></div>
     
     <SectionCard title="Dossier Gifs">
       <select bind:value={currentFolder} class="text-black" on:change={sendChange}>

@@ -2,18 +2,33 @@
   export let data;
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type{categories, produits} from '@prisma/client';
+  import Reset from '$lib/components/svgs/reset.svelte';
   
   let proms:number|null=null;
   const listProms = Object.keys(data.proms).map(e=>parseInt(e)).sort((a,b)=>a-b);
   
   let nums:number|null=null;
   const listNums =()=> data.proms[proms as keyof typeof data.proms].map(e=>e.nums).sort((a,b)=>a-b);
-
+  const rhopse = () => {
+    fetch('?/rhopse',
+    {
+      method:"post",
+      body:JSON.stringify(
+        {
+          id_boquette:7,
+          id_pg:nums,
+          produits:[[product?.id_produit, 1]],
+        }
+      )
+    });
+    reset();
+  }
   let categorie:categories|null;
   $:categorie = null;
   let product:produits|null = null;
   $: getProducts = data.products.filter(e=>e.id_categorie==categorie?.id_categorie);
 
+  const reset = () => {nums=null;proms=null;product=null;categorie=null};
   const buttonClass = "bg-white h-14 text-black w-80 rounded-md";
   const choicesContainerClass = "mt-5 flex-grow w-full flex flex-col justify-center items-center gap-1"
   const coloredClass = "p-5 bg-fuchsia-500 text-4xl rounded-md"
@@ -28,7 +43,7 @@
     <p class="text-3xl font-zagoth mt-5">Choix Prom's</p>
     <div class="mt-5 flex-grow w-full flex justify-center items-center gap-5">
       {#each listProms as p}
-        <button on:click={()=>proms=p} class="h-28 aspect-square rounded-md bg-blue-700">{p}</button>
+        <button on:click={()=>proms=p} class="h-28 aspect-square rounded-md bg-red-700">{p}</button>
       {/each}
     </div>
   {/if}
@@ -38,7 +53,7 @@
     <p class="text-3xl font-zagoth mt-5">Choix Num's</p>
     <div class="mt-5 flex-grow w-full grid gap-1 grid-cols-10 grid-rows-[15]">
       {#each listNums() as n}
-        <button on:click={()=>nums=n} class="aspect-square rounded-md bg-blue-700">{n}</button>
+        <button on:click={()=>nums=n} class="aspect-square rounded-md bg-red-700">{n}</button>
       {/each}
     </div>
   {/if}
@@ -66,16 +81,18 @@
   {/if}
       
   <!-- Validation -->
-  {#if product}
+  {#if product != null}
   <div class={choicesContainerClass}>
     <div class="text-4xl flex flex-col justify-center items-center gap-5">
       <p>Veux-tu rhopser</p>
       <div class="flex justify-center items-center text-4xl">
-        <select bind:value={nums} class={coloredClass}>
-          {#each listNums() as n}
-            <option value="{n}">{n}</option>
-          {/each}
-        </select>        
+        {#key proms}
+          <select bind:value={nums} class={coloredClass}>
+            {#each listNums() as n}
+              <option value="{n}">{n}</option>
+            {/each}
+          </select>  
+        {/key}      
         <p class="mr-2 ml-2">ch</p>
         <select bind:value={proms} class={coloredClass}>
           {#each listProms as n}
@@ -96,13 +113,12 @@
         {/each}
       </select> 
       
-      <MyButton value="RHOPSER"></MyButton>
+      <MyButton value="RHOPSER" callback={rhopse}></MyButton>
     </div>
-    
       </div>
   {/if}
 
-  <button class="w-10" on:click={()=>{nums=null;proms=null;product=null;categorie=null;}}>
-    <img src="\svgs\reset-svgrepo-com.svg" alt="" srcset="">
+  <button class="w-14 mb-10" on:click={reset}>
+    <Reset/>
   </button>
 </div>

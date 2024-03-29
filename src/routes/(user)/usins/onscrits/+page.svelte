@@ -1,6 +1,7 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import Button from '$lib/components/miscellaneous/MyButton.svelte';
+    import CloseCircle from "$lib/components/svgs/close-circle.svelte";
   const onscrits:{[index:string]:string} = {
     '89':"89;Gerard;Louis-Matthieu;17+72=89\n19+80=89"
   }
@@ -37,10 +38,6 @@
     }
   }
 
-  function boutonFourchettage(){
-
-  }
-
   let hideOnscrit = true;
 
 </script>
@@ -59,7 +56,7 @@
     <div class="relative">
       <SectionCard title="{currentOnscrit.nums}ch..3">
         <button on:click={()=>currentOnscrit=null} class="absolute top-1 right-1 w-5">
-          <img src="/svgs/cross-circle-svgrepo-com.svg" alt="">
+          <CloseCircle/>
         </button>
 
         <div class="flex flex-col">

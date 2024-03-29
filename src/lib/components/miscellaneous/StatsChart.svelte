@@ -4,13 +4,13 @@
 
     export let consos: {
         id_boquette: number | null;
-        debit: number | null;
+        montant: number | null;
     }[];
     export let boquettes: {
         id_boquette: number;
         nom: string | null;
     }[];
-    const depensesTotales = consos.reduce((acc,transition) => acc + (transition.debit??0), 0);
+    const depensesTotales = consos.reduce((acc,transition) => acc + (transition.montant??0), 0);
 
     let chart:Chart<'pie'>;
 
@@ -26,7 +26,7 @@
     const chartData:ChartData<"pie"> = {
       labels:labels,
       datasets: [{
-        data: consos.map(e=>e.debit as number),
+        data: consos.map(e=>e.montant as number),
         backgroundColor: ['#ff5733', '#33ff57', '#3357ff', '#ff33a6', '#a633ff', '#ff9433', '#ffb333', '#33ffb3', '#33b3ff', '#b333ff', '#ff3333'],
         hoverBackgroundColor:['rgba(255,87,51,0.6)','rgba(51,255,87,0.6)','rgba(51,87,255,0.6)','rgba(255,51,166,0.6)','rgba(166,51,255,0.6)','rgba(255,148,51,0.6)','rgba(255,179,51,0.6)','rgba(51,255,179,0.6)','rgba(51,179,255,0.6)','rgba(179,51,255,0.6)','rgba(255,51,51,0.6)'],
         hoverOffset:10,

@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { MouseEventHandler } from "svelte/elements";
     import MyButton from "./MyButton.svelte";
+    import Warning from "../svgs/warning.svelte";
 
   	export let showModal:boolean; // boolean
     export let title:string;
@@ -18,18 +19,18 @@
 	bind:this={dialog}
 	on:close={() => (showModal = false)}
 	on:click|self={() => dialog.close()}
-  class="w-80 h-96 rounded-xl bg-yellow-200 text-black"
+  class="w-80 h-96 rounded-xl bg-red-200 text-black"
 >
 <div class="h-full flex flex-col">
   <div class="flex justify-between w-full h-16">
-    <img class="w-16" src="/svgs/warning.svg" alt="warning">
-    <img class="w-16" src="/svgs/warning.svg" alt="warning">
+    <Warning/>
+    <Warning/>
   </div>
   <div class="h-80 p-5 flex flex-col justify-between items-center">
     <p class="text-3xl text-center font-zagoth">{title}</p>
     <p class="font-bold text-3xl">Es-tu sûr ?</p>
     <p class="text-xl">{content}</p>
-
+    
     <div class="flex gap-10">
       <MyButton callback={callback} value="Accepter"/>
       <MyButton callback={()=>dialog.close()} value="Annuler" color="bg-red-500"/>

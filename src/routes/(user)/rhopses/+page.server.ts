@@ -1,25 +1,64 @@
-import { getCategories, getProducts } from "$lib/server/db_connection";
 import type { boquettes, categories, produits } from "@prisma/client";
 import type { PageServerLoad } from "./$types";
 import prisma from "$lib/prisma";
+import { z } from "zod";
+import { fail } from "@sveltejs/kit";
+import { Boquette } from "$lib/server/classes/Boquette";
+import { Taferie } from "$lib/server/classes/Taferie";
 
 
 const k = {'koenettrie':0,'foys':0}
-export type Boquette = {boquette:boquettes,categories:categories[],products:produits[]};
+export type RhopseBoquette = {boquette:{id_boquette:number, nom:string|null, nom_simple:string|null},categories:categories[],products:produits[]};
 type Boquettes = Record<keyof typeof k, Boquette>;
 
-
+const boquettesEnLibreService = [
+  1, //Strass Choco
+  7,//Foys
+  147,//Koenettrie
+];
 
 export const load: PageServerLoad = async () => {    
-  const t = [];
 
   //7:foys  147:koenettrie
-  const boqs = await prisma.boquettes.findMany({select:{id_boquette:true, nom:true, nom_simple:true}, where:{id_boquette:{in:[7,147]}}});
+  const boqs = await prisma.boquettes.findMany({
+    select:{id_boquette:true, nom:true, nom_simple:true}, 
+    where:{partie_pg:true, id_boquette:{in:boquettesEnLibreService}}
+  });
 
-  
-  for(let boq of boqs){
-    t.push([ boq.nom_simple,{boquette:boq ,categories:await getCategories(boq.id_boquette), products:await getProducts(boq.id_boquette) } ]);
+  let t:RhopseBoquette[] = [];
+  for(let b of boqs){
+    t.push(
+      {
+        boquette:b,
+        categories:await prisma.categories.findMany({where:{id_boquette:b.id_boquette}, orderBy:{nom:'asc'}}), 
+        products:await prisma.produits.findMany({where:{id_boquette:b.id_boquette}, orderBy:{nom:'asc'}}), 
+      } 
+    );
   }  
 
-  return { boquettes:Object.fromEntries(t) as Boquettes } 
+  return { boquettesLibreService:t } 
+}
+
+
+const RhopseSchema  = z.object({
+  'id_pg':z.number(),
+  'id_boquette':z.number(),
+  'produits':z.array(z.tuple([z.number(),z.number()])),
+})
+
+export const actions = {
+  'rhopse':async({request, locals})=>{
+    const t  = JSON.parse(await request.text());
+    const parse = RhopseSchema.safeParse(t);
+
+    if(!parse.success || !locals.session.data.user) return fail(400,{});
+    const data = parse.data;
+    if(!Boquette.exists(data.id_boquette)) return fail(400, {});
+    
+    const id_pg = locals.session.data.user.pg.id_pg;
+    const boq = new Boquette(data.id_boquette);
+    for(let [id_produit, quantite] of data.produits){
+      await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite});
+    }
+  }
 }

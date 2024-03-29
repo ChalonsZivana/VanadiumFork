@@ -12,8 +12,8 @@
   
 </script>
 
-<div class="h-screen w-screen flex justify-center items-center">
-  <div class="w-96">
+<div class="h-screen w-screen flex justify-center">
+  <div class="w-96 mt-24">
     <SectionCard title="Liste boul's">
       <div class="flex flex-col">
         <p class="text-2xl">Gestion boquette</p>

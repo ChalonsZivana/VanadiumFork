@@ -1,41 +1,28 @@
 <script lang="ts">
-  import type { consommations, historique_fams } from "@prisma/client";
+  import {enhance} from "$app/forms"
+  import AddSquare from "../svgs/add-square.svelte";
+  import MinusSquare from "../svgs/minus-square.svelte";
+  export let id:number;
+  export let annule:boolean|null|number;
 
-  export let cons:consommations|historique_fams;
-
-  const fetchUrl = 'id_conso' in cons ? 'consommations' : 'historique_fams';
-  
-  function addConso(){
-    fetch(`/api/${fetchUrl}`, {
-      method:'POST',
-      body:JSON.stringify({
-        action:'uncancel',
-        id:'id_conso' in cons ? cons.id_conso:cons.id_transaction,
-      })
-    });
-    cons.annule = null;
-  }
-
-  function removeConso(){
-    fetch(`/api/${fetchUrl}`, {
-      method:'POST',
-      body:JSON.stringify({
-        action:'cancel',
-        id:'id_conso' in cons ? cons.id_conso:cons.id_transaction,
-      })
-    });
-    cons.annule = true;
-  }
+  let myId = id;
 </script>
 
 
+<form method="post" use:enhance={
+  async ()=>{
+    return async({update})=> update({reset:false});
+  }
+}>
+  <input type="number" value={myId} name="id" class="hidden">
+  {#if annule == true || annule == 1}
+    <button formaction="?/uncancel"  class="p-1 rounded-lg w-12">
+      <AddSquare/>
+    </button>
+  {:else}
+    <button formaction="?/cancel"  class="p-1 rounded-lg w-12">
+      <MinusSquare/>
+    </button>
+  {/if}
+</form>
 
-{#if cons.annule}
-  <button on:click={addConso} class="p-1 rounded-lg w-12">
-    <img src="/svgs/add-square.svg" alt="" srcset="">
-  </button>
-{:else}
-  <button on:click={removeConso} class="p-1 rounded-lg w-12">
-    <img src="/svgs/minus-square.svg" alt="" srcset="">
-  </button>
-{/if}

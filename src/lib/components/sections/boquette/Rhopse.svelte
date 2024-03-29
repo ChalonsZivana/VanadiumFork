@@ -1,50 +1,50 @@
-<script lang="ts"> 
+<script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
+  import type { boquettes, pg } from '@prisma/client'
   import Search from "$lib/components/search/Search.svelte";
-  import { type SelectTypes, createDataToSort } from "$lib/components/search/search";
-  import { page } from '$app/stores';  
+  import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte"
+  import Special from "$lib/components/miscellaneous/Special.svelte"
+  import { createDataToSort } from "$lib/components/search/search.js";
+  import CloseCircle from "$lib/components/svgs/close-circle.svelte";
 
-  export let pgs:{nums:number,proms:number,bucque:string|null, id_pg:number}[];
+  export let pgs:Promise<Partial<pg>[]>;
+  export let boquette:boquettes;
 
-  const tableHeaders:{[K in SelectTypes]:string[]} = {
-    'Tout':[], 
-    'PG':['Num','Bucque',''],
-    'Fams':['Fams','Historique'],
-    'Boquette':['Id','Nom','Action']
-  }
-  let searchText:string='11';
-  const dataToSort = createDataToSort({
-      pgs:pgs,
-      fams:[],
-      boquettes:[]
+  let searchText = "";
+
+
+  const dataToSort = pgs.then((value)=>{
+    return createDataToSort({pgs:value, boquettes:[], fams:[]});
   });
 </script>
 
-<SectionCard title="Rhopse">
-  <div class="flex rounded-md overflow-clip w-11/12">
-
-  <input bind:value={searchText} class="p-2 w-full" type="text" placeholder="recherche: PG">
-  </div>
-  
-  <Search 
-    bind:searchText={searchText} 
-    selected="Tout"
-    dataToSort={dataToSort}
-    tableHeaders={tableHeaders}>
-    <svelte:fragment slot="PG" let:sI>
-      <th>{sI.pg.nums}Ch{sI.pg.proms}</th>
-      <td>{sI.pg.bucque}</td>
-      <td><a href="{$page.url.pathname}/rhopse-{sI.pg.id_pg}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Rhopse</a></td>
-    </svelte:fragment>
-  </Search>
-</SectionCard>
-
-<!-- <SearchPg pgs={pgs} tableTitles={['Nums','Bucque','Action']} title="Rhopse" bind:filteredResults={filteredResults}>
-  {#each filteredResults as pg}
-    <tr class="border-t-1">
-      <th>{pg.nums}</th>
-      <td>{pg.bucque}</td>
-      <td><a href="{$page.url.pathname}/rhopse-{pg.id_pg}/" class="p-2"><MyButton value="RHOPSER"/></a></td>
-    </tr>
-  {/each}
-</SearchPg> -->
+  <SectionCard title="Rhopse">
+    <div class="flex rounded-md w-full">
+      <input bind:value={searchText} class="text-black p-2 outline-none bg-red-100 w-full placeholder-gray-500" type="text" placeholder="recherche: {"PG"}">
+      <button on:click={()=>searchText=''} class="bg-red-100"><CloseCircle className="w-10"/></button>
+    </div>
+    {#await dataToSort}
+      Loading search section...
+    {:then dTS}
+      <Search
+      bind:searchText={searchText}
+      selected={"PG"}
+      dataToSort={dTS}>    
+    
+    
+      <svelte:fragment slot="PG" let:sIP>
+        <CustomTable title="PG" headers={["Nums", "Bucque", "Profil"]} elements={sIP}>
+          <tr slot="tbody" let:e>
+            <th class="p-2">
+              <Special special={[11,89,111].includes(e.pg.nums??-1)}>
+                {e.pg.nums}Ch{e.pg.proms}
+              </Special>
+            </th>
+            <td>{e.pg.bucque}</td>
+            <td><a href="/boquette-{boquette.id_boquette}/rhopse-{e.pg.id_pg}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Rhopse</a></td>
+          <tr/>
+        </CustomTable>
+      </svelte:fragment>
+    </Search>
+    {/await}
+  </SectionCard>

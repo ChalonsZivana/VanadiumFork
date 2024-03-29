@@ -7,8 +7,7 @@
     {
       method:"POST",
       body:id.toString()
-    }
-    )
+    });
   }
 </script>
 
@@ -21,8 +20,8 @@
       <div class="flex p-2 flex-col justify-center items-center text-white bg-red-950 w-11/12 gap-2">
         <p class="text-xl text-center">{music.titre_auteur}</p>
         <div class="flex gap-5">
-          <a href={music.lien_musique}>
-            <div class="bg-blue-600 w-fit p-2 rounded-lg">Accéder</div>
+          <a href={music.lien_musique} target="_blank">
+            <div class="bg-red-600 w-fit p-2 rounded-lg">Accéder</div>
           </a>
           
           <button on:click={()=>remove(music.id)} class="bg-red-600 w-fit p-2 rounded-lg">Supprimer</button>

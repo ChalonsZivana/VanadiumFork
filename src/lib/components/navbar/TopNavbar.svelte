@@ -1,8 +1,11 @@
 <script lang="ts">
-  import type { SessionData } from "$lib/server/auth";
-    import { onMount } from "svelte";
+  import type { User } from "$lib/server/auth";
+  import { onMount } from "svelte";
+  import BurgerMenu from "$lib/components/svgs/burger-menu.svelte";
+    import Profile from "../svgs/profile.svelte";
+    import Login from "../svgs/login.svelte";
 
-  export let session:SessionData;
+  export let user:User | null;
 
   let isOpen = false;
   const toggle = () => isOpen = !isOpen;
@@ -30,11 +33,15 @@
 <div class="navbar z-10">
   <div class="flex p-5 items-center justify-between w-full h-20 bg-red-950">
     <button on:click={toggle} class="w-10 h-10">
-      <img src="\svgs\burger-menu-svgrepo-com.svg" alt="" srcset="">
+      <BurgerMenu/>
     </button>
     <a href="/" class="font-zagoth text-white text-2xl">My Vanadium</a>
-    <a class="w-8 h-8" on:click={close} href={session.user?"/profile":"/login"}>
-      <img class="drag-none" src="\svgs\{session.user?'profile':'login'}.svg" alt="" srcset="">
+    <a class="w-8 h-8" on:click={close} href={user?"/profile":"/login"}>
+      {#if user}
+        <Profile/>
+      {:else}
+        <Login/>
+      {/if}
     </a>
   </div>
   <div class="{isOpen?'h-48':'h-0'} {isOpen?'scale-y-100':'scale-y-0'} duration-300 origin-top

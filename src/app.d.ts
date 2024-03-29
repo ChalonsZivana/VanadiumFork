@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { SessionData, User } from "$lib/server/auth";
+import type { SessionData } from "$lib/server/auth";
 import type { Session } from 'svelte-kit-cookie-session';
 
 
@@ -11,7 +11,6 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-	
 			session:Session<SessionData>
 		}
 		// interface PageData {}

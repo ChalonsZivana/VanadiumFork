@@ -14,9 +14,9 @@
   <div class="flex flex-col font-bold gap-2">
     {#each categories as categorie}
         <p class="text-2xl text-white">{categorie.nom}</p>
-        <div class="flex flex-col overflow-clip gap-[0.5px] bg-slate-300 rounded-md">
+        <div class="flex flex-col overflow-clip gap-[0.5px] bg-red-100 rounded-md text-black">
           {#each getProducts(categorie.id_categorie) as product}
-            <div class="bg-white p-1">
+            <div class="p-1">
               {product.nom}     ({product.prix}€)
             </div>
           {/each}

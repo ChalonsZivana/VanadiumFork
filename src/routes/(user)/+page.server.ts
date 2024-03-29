@@ -1,21 +1,29 @@
 import fs from 'fs';
-import type { PageServerLoad } from "./$types"
 import { Database } from "$lib/server/classes/Database";
 import { redirect } from "@sveltejs/kit";
 import { Pg } from "$lib/server/classes/PG";
+import { getRandomTop, getTop } from '$lib/server/db_connection.js';
+import prisma from '$lib/prisma.js';
+import { Taferie } from '$lib/server/classes/Taferie.js';
 
 
-export const load: PageServerLoad = async ({ locals }) => {
-  if(locals.session.data.user == null) throw redirect(300, "/login");
+export const load = async ({ locals }) => {
+  if(!locals.session.data.user) throw redirect(300, "/login");
 
-  const pg = new Pg(locals.session.data.user.pg);
+  const pg = new Pg(locals.session.data.user.pg.id_pg);
   await pg.incrementRefresh();
 
+  const topGlobal = getTop("Top Global", null);
+  const topDuJour = getRandomTop()
   return {
     photo: getRandomPhoto(await pg.getPhotosFolder()),
-    negats:await Database.negatsProms([222,223])
+    negats:await Database.negatsProms([222,223]),
+    topGlobal,
+    topDuJour,
+    consommations: Taferie.consommations('pg', pg.ID)
   }
 }
+
 
 function getRandomPhoto(folder:string){
 	const folderPath = './static/photos/' + folder;

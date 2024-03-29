@@ -2,7 +2,7 @@
   export let auto:number|null=null;
   export let green:number|null=null;
   export let red:number|null=null;
-  export let myClass:string='';
+  export let className:string='';
 
   if(auto){
     if(auto >= 0) green = auto
@@ -11,11 +11,11 @@
 </script>
 
 {#if green}
-  <p class='text-green-500 {myClass}'>
+  <p class='text-green-700 {className}'>
     <slot/>+{green}€
   </p>
 {:else if red}
-  <p class='text-red-500 {myClass}'>
-    <slot/>{red}€
+  <p class="text-red-700 {className}">
+    <slot/>-{Math.abs(red)}€
   </p>
 {/if}

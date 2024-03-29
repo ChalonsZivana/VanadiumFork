@@ -21,6 +21,8 @@ export function createDataToSort(data:{pgs:Partial<pg>[],boquettes:Partial<boque
 interface SearchPg extends Searchable {pg:Partial<pg>}
 function createPg(pg:Partial<pg>) {
   let txt = [`\\b${pg.nums}\\b`,`\\b${pg.proms}\\b`]
+  if(pg.nom) txt.push(regexify(simplifyBucque(pg.nom)))
+  if(pg.prenom) txt.push(regexify(simplifyBucque(pg.prenom)))
   if(pg.bucque) txt.push(regexify(simplifyBucque(pg.bucque.toLowerCase()))) //need to escapeRegex complex bucques
   return { regex:new RegExp(txt.join('|'), 'g'), pg:pg, } // creates this /\b89\b|\b223\b/\bLe'Me\b/
 }
@@ -57,10 +59,10 @@ export function getSearch(searchText:string, dataToSort:DataToSort):SearchItemsM
       searchItems.PG = dataToSort.SearchPgs.filter(e => {
         const t = [...sT.matchAll(e.regex)].map(e=>e[0]).filter(e=>e!='');
         return t.length >= l
-      });
+      }).sort((e,i) =>i.pg.proms! - e.pg.proms!);
       if(selected != 'Tout')break;
     case 'Fams':
-      if(searchText == '') {
+      if(searchText == '' && selected == 'Fams') {
         searchItems.Fams = dataToSort.SearchFams;
         break;
       }
@@ -70,7 +72,7 @@ export function getSearch(searchText:string, dataToSort:DataToSort):SearchItemsM
       });
       if(selected != 'Tout')break;
     case 'Boquette':
-      if(searchText == '') {
+      if(searchText == '' && selected == "Boquette") {
         searchItems.Boquette = dataToSort.SearchBoquettes;
         break;
       }

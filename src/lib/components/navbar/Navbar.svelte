@@ -1,17 +1,19 @@
 <script lang="ts">
-  import type { SessionData } from "$lib/server/auth";
+  import type { User } from "$lib/server/auth";
+    import type { boquettes } from "@prisma/client";
   import BottomNavbar from "./BottomNavbar.svelte";
   import TopNavbar from "./TopNavbar.svelte";
 
-  export let session:SessionData;
+  export let user:User | null;
+  export let boquettes:boquettes[];
   export let id_boquette:number | null;
 </script>
 
 
 <div class="h-screen flex flex-col">
-  <TopNavbar session={session}/>
-  <div class="flex h-full pt-2 justify-center overflow-y-scroll overflow-x-hidden">
+  <TopNavbar user={user}/>
+  <div class="flex flex-col items-center h-full w-full overflow-x-hidden">
     <slot/>
   </div>
-  <BottomNavbar session={session} id_boquette={id_boquette}/>
+  <BottomNavbar boquettes={boquettes} id_boquette={id_boquette}/>
 </div>

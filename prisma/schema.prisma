@@ -2,7 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -25,8 +24,8 @@ model auberge {
 model boquettes {
   id_boquette      Int     @id @default(autoincrement())
   nom              String? @db.VarChar(50)
-  solde            Float@default(0.00) 
-  total_depense    Float@default(0.00) 
+  solde            Float @default(0.00)
+  total_depense    Float @default(0.00)
   mot_de_passe     String? @db.VarChar(255)
   sel              String? @db.VarChar(255)
   ordre_apparition Int
@@ -34,6 +33,8 @@ model boquettes {
   solde_a_debiter  String  @default("total") @db.VarChar(255)
   nom_simple       String? @db.VarChar(20)
   actif            Int     @default(1) @db.TinyInt
+
+  consommations              consommations[] @relation(map:"consommation_pg")
 }
 
 model bouls {
@@ -55,7 +56,7 @@ model config {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model consommations {
+model consommations_old {
   id_conso               Int       @id @default(autoincrement())
   id_pg                  Int?
   id_produit             Int?
@@ -74,9 +75,32 @@ model consommations {
   annule                 Boolean?
 }
 
+model consommations {
+  id_conso    Int                    @id @default(autoincrement())
+  type        consommations_type
+  from        Int?
+  to          Int?              
+  id_produit  Int?
+  quantite    Int?
+  solde_avant Float                  @db.Float
+  solde_apres Float                  @db.Float
+  montant     Float                  @db.Float
+  libelle     String                 @db.VarChar(255)
+  date_conso  DateTime               @db.DateTime(0) @default(now())
+  annule      Boolean                @default(false)
+
+  from_pg        pg?                    @relation(fields: [from], references: [id_pg], map: "consommation_from_pg", name:"consommation_from_pg")
+  to_pg          pg?                    @relation(fields: [to], references: [id_pg], map: "consommation_to_pg", name:"consommation_to_pg")
+  
+  to_boquette      boquettes?       @relation(fields: [to], references: [id_boquette], map: "consommation_to_boq")
+  to_fams          fams?                @relation(fields: [to], references: [nums], map: "consommation_to_fams")
+}
+
 model fams {
   nums  Int     @id
   solde Float
+
+  consommations              consommations[] @relation(map: "consommation_fams")
 }
 
 model historique_fams {
@@ -129,8 +153,8 @@ model pg {
   proms                      Int
   boquette                   String?    @db.VarChar(255)
   email                      String     @db.VarChar(200)
-  solde                      Float   @default(0.00) 
-  solde_liquide              Float   @default(0.00) 
+  solde                      Float    @default(0.00)
+  solde_liquide              Float    @default(0.00)
   sexe                       Boolean    @default(true)
   dossier_photos             String?    @db.VarChar(30)
   mot_de_passe               String     @default("91b1bb7c2d6d0ccbaa574c690930b317ad44ebb9") @db.VarChar(255)
@@ -143,8 +167,11 @@ model pg {
   dernier_palier_mail_negats Int        @default(0)
   temps_negats               Int        @default(0)
   info                       String?    @db.Text
+
   refresh                    refresh[]
   auberge                    auberge[]
+  consommationsFromPg   consommations[] @relation("consommation_from_pg", map: "consommation_from_pg")
+  consommationsToPg     consommations[] @relation("consommation_to_pg", map: "consommation_to_pg")
 }
 
 model photos {
@@ -179,7 +206,7 @@ model refresh {
   id_pg  Int
   nombre Int
 
-  pg pg @relation(fields: [id_pg], references: [id_pg])
+  pg pg @relation(fields: [id_pg], references:[id_pg])
 }
 
 model remboursement {
@@ -189,7 +216,7 @@ model remboursement {
   montant        Float  @db.Float
   methode        String @db.Text
   fichier        String @db.Text
-  actiontafferie String @db.Text
+  actiontaferie String @db.Text
 }
 
 model remember {
@@ -213,6 +240,16 @@ model spotify {
   lien_musique String @db.Text
   titre_auteur String @db.Text
 }
+
+enum consommations_type {
+  pg_pg
+  pg_boq
+  ext_boq
+  pg_fams
+  ext_fams
+  pg_ext
+}
+
 
 enum pg_tabagns {
   Ch

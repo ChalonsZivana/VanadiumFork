@@ -12,7 +12,7 @@
       <label for="mdp" class="text-lg">Mot de passe</label>
       <input id="mdp" class="text-black rounded-md pl-2" type="password" name="password">
     </div>
-    <button class="bg-blue-600 p-2 w-fit">Connexion</button>
+    <button class="bg-red-600 p-2 w-fit">Connexion</button>
     </form>
     <div class="w-full flex flex-col mt-4">
       <a href="">Mot de passe oublié</a>

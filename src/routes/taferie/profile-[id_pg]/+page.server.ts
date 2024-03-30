@@ -12,9 +12,9 @@ export const load:PageServerLoad = async ({params})=>{
   if(user == null)throw error(404, 'User missing');
 
   const consommations = prisma.consommations.findMany({
-    where:{type:{in:["pg_boq","pg_ext","pg_fams","pg_pg"]},from:id_pg}, 
-    orderBy:{date_conso:'desc'
-  }});
+    where:{type:{in:["pg_ext", "pg_boq", "pg_fams", "pg_pg"]},from:id_pg}, 
+    orderBy:{date_conso:'desc'}
+  });
   return {
    user, consommations
   };

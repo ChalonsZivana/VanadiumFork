@@ -1,38 +1,35 @@
 
 import { error, fail } from "@sveltejs/kit";
-import prisma from "$lib/prisma";
-import type { PageServerLoad, RequestEvent } from "./$types.js";
-import { Prisma, consommations_type } from "@prisma/client";
+import type { PageServerLoad } from "./$types.js";
+import { consommations_type } from "@prisma/client";
 import { Taferie } from "$lib/server/classes/Taferie";
-import { consommations, consommationsSchema } from "$lib/components/search/fullsearch.js";
+import { consommationsSchema, consommationsSearch } from "$lib/components/search/fullsearch.js";
 
 
 export const load:PageServerLoad = async ({})=>{
-  let include:Prisma.consommationsInclude = {
-    from_pg:{select:{nums:true, proms:true}},
-    to_pg:{select:{nums:true,proms:true}},
-    to_fams:{select:{nums:true}},
-    to_boquette:{select:{nom:true}}
-  };
-  let consommations = await prisma.consommations.findMany({
-    take:100, orderBy:{date_conso:'desc'},include,
-  });
   return {
-    page:1,
-    consommations,
-    totalCons:await prisma.consommations.count()
+    search:await consommationsSearch(
+      null, 
+      { consoType:'',consoYear:null,sortDir:'desc',sortType:'date',nums:null,proms:null, page:1}
+    )
   };
 }
 
 export let actions = {
-  consommations:  async ({ request }:RequestEvent) => {
-    const d = JSON.parse(await request.text());
+  consommations:  async ({ request }) => {
+    const d = Object.fromEntries(await request.formData());
     const data = consommationsSchema.safeParse(d);
-    console.log(data)
-    if(!data.success) throw error(400);
-    if(data.data.consoType != null && !(data.data.consoType in consommations_type)) throw error(400);
 
-    return consommations(data.data.consoType as consommations_type | null, data.data);
+    if(!data.success) throw error(400);
+    console.log(data.data)
+    if(data.data.consoType != 'Tout' && !(data.data.consoType in consommations_type)) throw error(400);
+    const consoType = data.data.consoType as consommations_type | 'Tout';
+
+    return {
+      search:await consommationsSearch(
+        consoType == 'Tout' ? null : [{type:consoType}], data.data
+      )
+    }
   },
   cancel:async({request})=>{
     const data = await request.formData();

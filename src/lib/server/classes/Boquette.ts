@@ -83,7 +83,7 @@ export class Boquette extends HasMoney {
     const conso = await prisma.consommations.findFirst({where:{id_conso}})
     if(conso == null) return;
     switch(conso.type){
-      case "boq_ext":
+      case "ext_boq":
         if(conso.from != this.ID) return null;
         break;
       case "pg_boq":

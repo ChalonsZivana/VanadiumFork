@@ -1,7 +1,8 @@
-import { consommations, consommationsSchema } from '$lib/components/search/fullsearch.js';
+import { consommationsSearch, consommationsSchema } from '$lib/components/search/fullsearch.js';
 import prisma from '$lib/prisma.js';
 import { hashPassword } from '$lib/server/auth.js';
-import { Taferie } from '$lib/server/classes/Taferie';
+import { Boquette } from '$lib/server/classes/Boquette.js';
+import { Taferie } from '$lib/server/classes/Taferie.js';
 import { Prisma, consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -11,33 +12,41 @@ export async function load({params}){
   if(isNaN(id_boquette)) throw error(404);
   const boquette =await prisma.boquettes.findFirst({where:{id_boquette}});
   if(boquette == null) throw error(404);
-  const consommations = await prisma.consommations.findMany({
-    where:{OR:[
-      {type:"pg_boq", to:id_boquette},
-      {type:'boq_ext', from:id_boquette}
-    ]},
-    take:100,
-    orderBy:{date_conso:'desc'}
-  });
-  
+
   return {
-    totalCons:await prisma.consommations.count(),
     boquette,
-    consommations
+    produits:await prisma.produits.findMany({where:{id_boquette}}),
+    categories:await prisma.categories.findMany({where:{id_boquette}}),
+    search:await consommationsSearch(
+      [{type:'ext_boq', to:id_boquette},{type:'pg_boq', to:id_boquette}], 
+      { consoType:'',consoYear:null,sortDir:'desc',sortType:'date',nums:null,proms:null, page:1}
+    ),
   }
 }
 
 
 export let actions = {
-  consommations:  async ({ request, params }) => {
+  consommations:  async ({ request,params }) => {
+    const id_boquette = parseInt(params.id_boquette);
+    if(!id_boquette) throw error(400);
     const d = Object.fromEntries(await request.formData());
     const data = consommationsSchema.safeParse(d);
     if(!data.success) throw error(400);
 
-    if([null, 'pg_boq', 'boq_ext'].includes(data.data.consoType)){
-      return consommations(data.data.consoType as consommations_type | null, data.data);
+    if(!['Tout', 'pg_boq', 'ext_boq'].includes(data.data.consoType)) throw error(400);
+    const consoType = data.data.consoType as consommations_type | 'Tout';
+
+    return {
+      search:await consommationsSearch(
+        consoType == 'Tout' ? [{type:'ext_boq', to:id_boquette},{type:'pg_boq', to:id_boquette}]: [{type:consoType, to:id_boquette}], 
+        data.data
+      )
     }
-    throw error(400);
+  },
+  produits:async({params}) =>{
+    const id_boquette = parseInt(params.id_boquette);
+    if(isNaN(id_boquette)) throw error(404);
+    return await prisma.produits.findMany({where:{id_boquette}});
   },
   "editBoquette":async({request, params})=>{
     const id_boquette = parseInt(params.id_boquette);
@@ -61,20 +70,33 @@ export let actions = {
       data:createData
     })
   },
-  cancel:async({request})=>{
+  transfert:async ({request, params})=>{
     const data = await request.formData();
-    const id = parseInt(data.get("id")?.toString()??'');
-    if(isNaN(id)) return fail(400, {});
+    const montant = parseFloat(data.get("montant")?.toString()??'');
+    const libelle = data.get('libelle')?.toString() ?? '';
+    const id_boquette = parseInt(params.id_boquette);
+    if(isNaN(montant) || isNaN(id_boquette)) throw error(400);
 
-    await Taferie.cancelConsommation(id, true);
+    await Taferie.rhopse({type:"ext_boq", to:id_boquette, montant:-montant, libelle});
   },
-  uncancel:async({request})=>{
+  cancel:async({request, params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    if(isNaN(id_boquette)) throw error(400);
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
-    await Taferie.cancelConsommation(id, false);
-  }
+    await new Boquette(id_boquette).cancelConsommation(id_boquette, true);
+  },
+  uncancel:async({request, params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    if(isNaN(id_boquette)) throw error(400);
+    const data = await request.formData();
+    const id = parseInt(data.get("id")?.toString()??'');
+    if(isNaN(id)) return fail(400, {});
+
+    await new Boquette(id_boquette).cancelConsommation(id_boquette, false);
+  },
 }
 
 const EditBoquetteSchema  = z.object({

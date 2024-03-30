@@ -3,9 +3,6 @@ import prisma from "$lib/prisma";
 import type { LayoutServerLoad } from "./$types.js";
 import { Database } from "$lib/server/classes/Database.js";
 import { z } from "zod";
-import { consommations_type } from "@prisma/client";
-import { Boquette } from "$lib/server/classes/Boquette.js";
-import { consommations, consommationsSchema } from "$lib/components/search/fullsearch.js";
 import { Taferie } from "$lib/server/classes/Taferie.js";
 
 
@@ -26,36 +23,6 @@ export const load:LayoutServerLoad = async ({params})=>{
 
 
 export const actions = {
-  consommations:  async ({ request, params }) => {
-    const d = Object.fromEntries(await request.formData());
-    const data = consommationsSchema.safeParse(d);
-    console.log(d)
-
-    if(!data.success) throw error(400);
-
-    if([null, 'pg_boq', 'boq_ext'].includes(data.data.consoType)){
-      return consommations(data.data.consoType as consommations_type | null, data.data);
-    }
-    throw error(400);
-  },
-  cancel:async({request, params})=>{
-    const id_boquette = parseInt(params.id_boquette);
-    if(isNaN(id_boquette)) throw error(400);
-    const data = await request.formData();
-    const id = parseInt(data.get("id")?.toString()??'');
-    if(isNaN(id)) return fail(400, {});
-
-    await new Boquette(id_boquette).cancelConsommation(id_boquette, true);
-  },
-  uncancel:async({request, params})=>{
-    const id_boquette = parseInt(params.id_boquette);
-    if(isNaN(id_boquette)) throw error(400);
-    const data = await request.formData();
-    const id = parseInt(data.get("id")?.toString()??'');
-    if(isNaN(id)) return fail(400, {});
-
-    await new Boquette(id_boquette).cancelConsommation(id_boquette, false);
-  },
   create_category: async ({ request, params }) => {
     const id_boquette = parseInt(params.id_boquette);
     if(isNaN(id_boquette)) throw error(400);
@@ -75,6 +42,7 @@ export const actions = {
     console.log("")
   },
   import_rhopse:async({request, params}) => {
+    console.log('import')
     // Attention, la rhopse doit absolument être fait avant un quelconque changement de prix
     // En effet,les prix de la rhopse ne sont pas ceux de l'excel mais ceux du server
     const id_boquette = parseInt(params.id_boquette);

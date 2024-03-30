@@ -35,7 +35,7 @@
           <td>{e.libelle}</td>
           <td>
             <p>Av: {e.solde_avant}€</p>
-            <MoneyColor auto={e.montant} className="text-base font-bold"></MoneyColor>
+            <MoneyColor auto={-e.montant} className="text-base font-bold"></MoneyColor>
             <p>Ap: {e.solde_apres}€</p>
           </td>
           <td>

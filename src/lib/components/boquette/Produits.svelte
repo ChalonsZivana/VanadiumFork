@@ -1,6 +1,7 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { categories, produits } from "@prisma/client";
+    import CustomTable from "../miscellaneous/CustomTable.svelte";
   
   export let categories:categories[];
   export let produits:produits[];
@@ -11,16 +12,17 @@
 </script>
 
 <SectionCard title="Produits">
-  <div class="flex flex-col font-bold gap-2">
+  <div class="flex flex-col font-bold gap-2 w-full">
     {#each categories as categorie}
-        <p class="text-2xl text-white">{categorie.nom}</p>
-        <div class="flex flex-col overflow-clip gap-[0.5px] bg-red-100 rounded-md text-black">
-          {#each getProducts(categorie.id_categorie) as product}
-            <div class="p-1">
-              {product.nom}     ({product.prix}€)
-            </div>
-          {/each}
-        </div>
+        <CustomTable title={categorie.nom} elements={getProducts(categorie.id_categorie)} headers={['Produit','Prix']}>
+          <svelte:fragment slot="tbody" let:e>
+            <tr>
+              <td>{e.nom}</td>
+              <td>{e.prix}€</td>
+              <td></td>
+            </tr>
+          </svelte:fragment>
+        </CustomTable>
     {/each}
   </div>
 </SectionCard>

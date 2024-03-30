@@ -6,11 +6,10 @@
 
 
 <table class="bg-white w-full">
-  <caption class="bg-red-500 font-zagoth text-3xl tracking-widest">
+  <caption class="bg-red-900 text-2xl tracking-widest">
     {title}
   </caption>
   <thead class="w-full h-10 sticky top-0 text-sm text-white">
-  
     <tr class="bg-red-600">
       {#each headers as header}  <th class="">  
         {header}  </th>  

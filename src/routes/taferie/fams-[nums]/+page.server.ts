@@ -11,7 +11,7 @@ export const load:PageServerLoad = async ({params, url})=>{
   const fams = await prisma.fams.findFirst({where:{nums}})
   if(fams == null)throw error(404, 'Fams missing');
 
-  const historique_fams = await prisma.consommations.findMany({where:{type:{in:['fams_ext', 'pg_fams']},from:nums}, orderBy:{date_conso:'desc'}});
+  const historique_fams = await prisma.consommations.findMany({where:{type:{in:['ext_fams', 'pg_fams']},to:nums}, orderBy:{date_conso:'desc'}});
   return {
    fams, historique_fams
   };
@@ -25,7 +25,7 @@ export const actions = {
     const fams = parseInt(params.nums);
     if(isNaN(montant) || isNaN(fams)) throw error(400);
 
-    await Taferie.rhopse({type:"fams_ext", from:fams, montant:montant, libelle});
+    await Taferie.rhopse({type:"ext_fams", to:fams, montant:-montant, libelle});
   },
   "cancel":async({request})=>{
     const data = await request.formData();

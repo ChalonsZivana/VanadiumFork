@@ -7,12 +7,21 @@
   export let cancelOption:boolean;
   export let consommations:ConsommationsIncludeType[];
 
+  function getFrom(e:ConsommationsIncludeType){
+    if(e.type.startsWith('pg')){
+      return `${e.from_pg?.nums}Ch${e.from_pg?.proms}`;
+    }
+    return 'EXT';
+  }
+
   function getTo(e:ConsommationsIncludeType){
     switch(e.type){
+      case 'ext_boq':
       case 'pg_boq':
         return e.to_boquette?.nom;
       case 'pg_ext':
         return 'EXT';
+      case 'ext_fams':
       case 'pg_fams':
         return e.to_fams?.nums;
       case 'pg_pg':
@@ -32,7 +41,7 @@
             <p>{e.date_conso.toLocaleDateString()}</p>
             <p>{e.date_conso.toLocaleTimeString()}</p>
           </td>
-          <td>{e.from_pg?.nums}Ch{e.from_pg?.proms}</td><!-- From -->
+          <td>{getFrom(e)}</td><!-- From -->
           <td class="overflow-ellipsis">{getTo(e)}</td><!-- To -->
           <td>{e.libelle}</td><!-- Libellé -->
           <td><!-- Montant -->

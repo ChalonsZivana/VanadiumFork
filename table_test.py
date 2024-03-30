@@ -17,7 +17,7 @@ def transfertConso(id_conso):
     annule = [True,False][annule is None]
 
     if(id_pg == 0):
-        cT = "boq_ext"
+        cT = "ext_boq"
         _from = id_boquette
         _to = None
     if(id_pg is not None and id_boquette is not None and id_pg > 0):

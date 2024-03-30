@@ -4,12 +4,11 @@
 
   export let data;
 
-  export let form:{consommations:typeof data.consommations, page:number, totalCons:number};
+  export let form:{search:typeof data.search};
 
-  $: consomms =form ?  form.consommations : data.consommations;
-  $: page = form ? form.page : 1;
-  $: totalCons = form ? form.totalCons : data.totalCons;
-  $: nombrePages =Math.ceil(totalCons / 100);
+  let currData:typeof data.search;
+  $:currData = form ? form.search : data.search;  
+  $: nombrePages = Math.ceil(currData.totalCons / 100);
 
   let boquette:boquettes;
   type boqSettingsText = {'Nom':string,'Nom Simple':string,'Nouveau Mot de passe':string,'Confirmation mot de passe :':string};
@@ -34,10 +33,16 @@
   }
 </script>
 
-<FullSearch 
-  title="Historique" 
-  totalCons={totalCons}
-  nombrePages={nombrePages}
-  consommations={consomms}
-  page={page}
-  types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}/>
+<div class="w-11/12 mt-5">
+  {#await currData.consommations}
+    Chargement Historique Général
+  {:then consommations} 
+    <FullSearch 
+    title="< Historique Général >" 
+    totalCons={currData.totalCons}
+    nombrePages={nombrePages}
+    consommations={consommations}
+    page={currData.page}
+    types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}/>
+  {/await}
+</div>

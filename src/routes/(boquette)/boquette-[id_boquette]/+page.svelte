@@ -2,12 +2,13 @@
   import Rhopse from "$lib/components/boquette/Rhopse.svelte";
   import Produits from "$lib/components/boquette/Produits.svelte";
   import CreerCategorieEtProduit from "$lib/components/boquette/CreerCategorieEtProduit.svelte";
-  import GenererFeuilleRhopse from "$lib/components/miscellaneous/GenererFeuilleRhopse.svelte";
+  import Actions from "$lib/components/boquette/Actions.svelte";
   import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
   import type { boquettes } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
   import Settings from '$lib/components/svgs/settings.svelte';
   import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
+  import ToggleSectionCard from "$lib/components/ToggleSectionCard.svelte";
 
   export let data;
   let dialog:HTMLDialogElement;
@@ -48,16 +49,20 @@
       <Settings/>
     </button>
   </BoquetteProfile>
-  {#await data.pgs}
-    Chargement feuille de rhopse...
-  {:then pgs} 
-    <GenererFeuilleRhopse pgs={pgs} products={data.produits}/>
-  {/await}
+  <Actions boquette={boquette} categories={data.categories} products={data.produits}/>
   <Rhopse pgs={data.pgs} boquette={boquette}></Rhopse>
+  <div>
+    <ToggleSectionCard title="Actions" toggleClass="h-36">
+      <div class="flex flex-col gap-2 h-full items-center justify-center">
+        <button class="bg-red-700 p-2 flex justify-around items-center">
+          <a class="text-white text-2xl" href="boquette-{data.id_boquette}/consommations">consommations</a>
+        </button>
 
-
-  <Produits categories={data.categories} produits={data.produits}></Produits>
-  <CreerCategorieEtProduit categories={data.categories} id_boquette={data.id_boquette}></CreerCategorieEtProduit>
+      </div>
+    </ToggleSectionCard>
+  </div>
+  <Produits categories={data.categories} produits={data.produits}/>
+  <!-- <CreerCategorieEtProduit categories={data.categories} id_boquette={data.id_boquette}/> -->
 </div>
 
 

@@ -20,7 +20,12 @@ export const load = async ({ locals }) => {
     negats:await Database.negatsProms([222,223]),
     topGlobal,
     topDuJour,
-    consommations: Taferie.consommations('pg', pg.ID)
+    consommations: Taferie.consommations([
+      {type:'pg_boq', from:pg.ID},
+      {type:'pg_pg', from:pg.ID},
+      {type:'pg_fams', from:pg.ID},
+      {type:'pg_ext', from:pg.ID},
+    ])
   }
 }
 

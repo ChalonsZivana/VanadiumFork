@@ -1,14 +1,14 @@
 <script lang="ts">
   import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
   import SectionCard from "$lib/components/SectionCard.svelte";
-  import Profile from "$lib/components/sections/Profile.svelte";
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
   import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
   import CustomDialog from "$lib/components/miscellaneous/CustomDialog.svelte";
   import Settings from "$lib/components/svgs/settings.svelte";
   import Accept from "$lib/components/svgs/accept.svelte";
   import { enhance } from "$app/forms";
-    import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
+  import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
+  import UserProfile from "$lib/components/profiles/UserProfile.svelte";
 
   export let data;
 
@@ -38,7 +38,7 @@
 
 <div class="flex flex-col w-11/12 gap-2 pt-5">
   {#key data.user}
-  <Profile user={data.user} taferie={true}>
+  <UserProfile user={data.user} taferie={true}>
     <button on:click={()=>dialogSettings.showModal()} class="w-8 absolute top-3 right-3">
       <Settings/>
     </button>
@@ -57,7 +57,7 @@
 
       <GestionBrousouffs/>
     </div>
-  </Profile>
+  </UserProfile>
   {/key}
   
 

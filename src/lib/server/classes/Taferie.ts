@@ -64,10 +64,10 @@ export class Taferie {
 
     switch(conso.type){
       case "ext_boq":
-        new Boquette(conso.to!).removeMoney(conso.montant * factor);
+        new Boquette(conso.to!).addMoney(conso.montant * factor);
         break;
       case "ext_fams":
-        new Fams(conso.to!).removeMoney(conso.montant * factor);
+        new Fams(conso.to!).addMoney(conso.montant * factor);
         break;
       case "pg_ext":
         new Pg(conso.from!).removeMoney(conso.montant * factor);
@@ -156,51 +156,16 @@ export class Taferie {
     }
   }
 
-  static async consommations(type:'tout'|'pg'|'fams'|'boq', id:number){
-    let OR:({type:consommations_type,from:number}|{type:consommations_type,to:number}|{type:consommations_type})[] = [];
+  static async consommations(types:({type:consommations_type, from:number}|{type:consommations_type, to:number})[]){
     let include:Prisma.consommationsInclude = {
       from_pg:{select:{nums:true, proms:true}},
       to_pg:{select:{nums:true,proms:true}},
       to_fams:{select:{nums:true}},
       to_boquette:{select:{nom:true}}
     };
-    switch(type){
-      case "tout":
-        OR = [
-          {type:"pg_boq"},
-          {type:"pg_ext"},
-          {type:'pg_fams'},
-          {type:'pg_pg'},
-          {type:"ext_fams"},
-          {type:"pg_fams"},
-          {type:"ext_boq"},
-          {type:"pg_boq"},
-        ];
-        break;
-      case 'pg':
-        OR = [
-          {type:"pg_boq", from:id},
-          {type:"pg_ext", from:id},
-          {type:'pg_fams', from:id},
-          {type:'pg_pg', from:id}
-        ];
-        break;
-      case 'fams':
-        OR = [
-          {type:"ext_fams", to:id},
-          {type:"pg_fams", to:id},
-        ]
-        break;
-      case 'boq':
-        OR = [
-          {type:"ext_boq", to:id},
-          {type:"pg_boq", to:id},
-        ];
-        break;
-    }
 
     return prisma.consommations.findMany({
-      where:{OR},
+      where:types.length > 1 ? {OR:types} : types[0],
       include,
       orderBy:{date_conso:'desc'}
     })

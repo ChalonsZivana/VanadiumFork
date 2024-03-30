@@ -1,12 +1,10 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
     import type { consommations_type } from "@prisma/client";
     import SectionCard from "../SectionCard.svelte";
     import SquareRightArrow from "../svgs/square-right-arrow.svelte";
-    import { z } from "zod";
-    import type { consommationsSchema } from "./fullsearch";
     import ConsoTable from "./ConsoTable.svelte";
     import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
+    import { enhance } from "$app/forms";
     
     export let title:string;
     export let totalCons:number;
@@ -14,50 +12,38 @@
     export let nombrePages:number;
     export let consommations:ConsommationsIncludeType[];
     export let types: {[key: string]: keyof typeof consommations_type};
-
-    const data:z.infer<typeof consommationsSchema> = {
-      nums:null,
-      proms:null,
-      consoType:null,
-      consoYear:null,
-      page:page,
-      sortDir:"asc",
-      sortType:"date"
-    }
-    async function submit(){
-      await fetch("?/consommations", {
-        method:'post',
-        body:JSON.stringify(data)
-      });
-    }
 </script>
 
 <SectionCard title={title}>
-  <form on:submit|preventDefault={submit} class="flex flex-col gap-2">
+  <form use:enhance={
+    async ()=>{
+      return async({update})=> update({reset:false});
+    }
+  } action="?/consommations" method="post" class="flex flex-col gap-2">
     <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (100 par page)</p>
 
     <div class="text-black flex flex-col gap-2">
       <div class="flex gap-2">
         <label>
           <p class="text-white">Nums</p>
-          <input type="number" name="nums" value={data.nums}>
+          <input type="number" name="nums">
         </label>
         <label>
           <p class="text-white">Proms</p>
-          <input type="number" name="proms" value={data.proms}>
+          <input type="number" name="proms">
         </label>
       </div>
-      <select name="type" value={data.sortType}>
+      <select name="sortType" value="date">
         <option value="date">Date/Heure</option>
         <option value="montant">Montant</option>
       </select>
-      <select name="dir" value={data.sortDir}>
+      <select name="sortDir" value="desc">
         <option value="asc">Décroissant</option>
         <option value="desc">Croissant</option>
       </select>
       
-      <select name="conso_type" value={data.consoType}>
-        <option value={null}>Tout</option>
+      <select name="consoType" value="Tout">
+        <option value="Tout">Tout</option>
         {#each Object.entries(types) as [text, value]}
           <option value={value}>{text}</option>
         {/each}
@@ -65,7 +51,7 @@
       
       <label class="w-full">
         <p class="text-white">Année de la consommation (vide pour toutes) :</p>
-        <input name="year" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989" value={data.consoYear}>
+        <input name="consoYear" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989">
       </label>
       <button class="self-center w-14">
         <SquareRightArrow/>

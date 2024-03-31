@@ -3,7 +3,6 @@ import { handleSession,  } from 'svelte-kit-cookie-session';
 import {SESSION_TOKEN} from "$env/static/private";
 import { createUser } from "$lib/server/auth";
 import { Boquette } from "$lib/server/classes/Boquette";
-import type { boquettes } from "@prisma/client";
 
 
 export const handle = handleSession(

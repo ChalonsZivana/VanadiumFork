@@ -3,6 +3,7 @@ import { handleSession,  } from 'svelte-kit-cookie-session';
 import {SESSION_TOKEN} from "$env/static/private";
 import { createUser } from "$lib/server/auth";
 import { Boquette } from "$lib/server/classes/Boquette";
+import prisma from "$lib/prisma";
 
 
 export const handle = handleSession(
@@ -12,7 +13,6 @@ export const handle = handleSession(
     expires_in:"days"
   },
   async ({event, resolve})=>{
-
     if(event.route.id?.startsWith('/(user)')){
       // check the connexion of the user
       const user = event.locals.session.data.user;

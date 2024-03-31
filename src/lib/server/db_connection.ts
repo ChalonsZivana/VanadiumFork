@@ -1,12 +1,14 @@
 import { createPool } from 'mysql2';
 import prisma from "$lib/prisma";
 import type { Top } from './db_structs';
+import {DATABASE_URL} from '$env/static/private'
 
+const url = new URL(DATABASE_URL)
 let pool = createPool({
-  host:'127.0.0.1',
-  user:'root',
-  password:'password',
-  database:'vanadium',
+  host:url.host,
+  user:url.username,
+  password:url.password,
+  database:url.pathname.substring(1),
   connectionLimit:10,
   waitForConnections:true,
   queueLimit:0,

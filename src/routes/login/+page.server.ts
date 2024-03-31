@@ -53,13 +53,16 @@ export const actions = {
 			const user = await createUser(userPswd.id_pg);
 
 			if(user != null) {
-				await locals.session.update((e) =>{ return {user:user}});
+				await locals.session.update((e) =>{ 
+					e.user = user;
+					return e;
+				});
+				throw redirect(303, "/");
 			}
-			throw redirect(303, "/");
 		} else {
 			return fail(400, {uid, wrong:true});
 		}
-
+		return {};
 	},
 	logout:async ({ locals, request }:RequestEvent) => {
 		const data = await request.formData();
@@ -70,11 +73,11 @@ export const actions = {
 				return data;
 			})
 		} else if(data.get('boquette')){
-			const boq = parseInt(data.get('boquette')?.toString()??'');
+			const id_boquette = parseInt(data.get('boquette')?.toString()??'');
 			await locals.session.update(data => {
-				data.boquettes = data.boquettes.filter(e=>e.id_boquette != boq)
+				data.boquettes = data.boquettes.filter(e=>e.id_boquette != id_boquette)
 				return data;
-			})
+			});
 		}
 		throw redirect(303, '/');
 	}

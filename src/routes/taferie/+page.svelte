@@ -7,6 +7,7 @@
   import { createDataToSort, type SelectTypes } from "$lib/components/search/search.js";
   import ToggleSectionCard from '$lib/components/ToggleSectionCard.svelte';
   import Special from '$lib/components/miscellaneous/Special.svelte';
+    import Logout from '$lib/components/svgs/logout.svelte';
 
   export let data;
 
@@ -112,6 +113,12 @@
  
 
     <SectionCard title="Fonds | Negats">
+      <form method="POST" action="/login?/logout">
+        <input class="hidden" type="text" name="boquette" value={20}>
+        <button class="w-8 absolute top-3 left-3">
+          <Logout />
+        </button>
+      </form>
       <div class="flex gap-5 text-black">
         <div class="flex flex-col gap-2">
           <p class="text-white text-center">Sommes de tous les soldes des pg par proms</p>

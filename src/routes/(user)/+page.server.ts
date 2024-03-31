@@ -3,7 +3,6 @@ import { Database } from "$lib/server/classes/Database";
 import { redirect } from "@sveltejs/kit";
 import { Pg } from "$lib/server/classes/PG";
 import { getRandomTop, getTop } from '$lib/server/db_connection.js';
-import prisma from '$lib/prisma.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
 
 

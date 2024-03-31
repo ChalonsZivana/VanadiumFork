@@ -60,6 +60,12 @@
         <MyButton value="confirmer"/>
       </SectionCard>
     </form>
+
+    <div>
+      <SectionCard title="Ajouter boquette">
+        <a href="/login" class="bg-blue-600 p-2 rounded-md">Se connecter</a>
+      </SectionCard>
+    </div>
   </div>
 </div>
 

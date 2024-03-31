@@ -1,6 +1,5 @@
-import { error, fail } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types.js";
-import { Boquette } from "$lib/server/classes/Boquette";
 import prisma from "$lib/prisma.js";
 
 

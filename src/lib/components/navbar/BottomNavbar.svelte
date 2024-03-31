@@ -5,13 +5,13 @@
   export let id_boquette:number | null;  
 </script>
 
-{#if boquettes}
+{#if boquettes.length > 0}
 <div class="h-10 p-2 bg-red-950 text-white flex justify-center items-center gap-5">
   {#each boquettes as boq}
     {#if boq.nom=="TAFerie"}
-      <a class="{boq.id_boquette==id_boquette?'bg-red-700':'bg-red-700'} rounded-xl p-1" href={"/taferie"}>{boq.nom}</a>
+      <a class="{boq.id_boquette==id_boquette?'bg-green-700':'bg-red-700'} rounded-xl p-1" href={"/taferie"}>{boq.nom}</a>
     {:else}
-      <a class="{boq.id_boquette==id_boquette?'bg-red-700':'bg-red-700'} rounded-xl p-1" href={`/boquette-${boq.id_boquette}`}>{boq.nom}</a>
+      <a class="{boq.id_boquette==id_boquette?'bg-green-700':'bg-red-700'} rounded-xl p-1" href={`/boquette-${boq.id_boquette}`}>{boq.nom}</a>
     {/if}
   {/each}
   <a href="/login">

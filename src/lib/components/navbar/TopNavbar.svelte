@@ -2,8 +2,8 @@
   import type { User } from "$lib/server/auth";
   import { onMount } from "svelte";
   import BurgerMenu from "$lib/components/svgs/burger-menu.svelte";
-    import Profile from "../svgs/profile.svelte";
-    import Login from "../svgs/login.svelte";
+  import Profile from "../svgs/profile.svelte";
+  import Login from "../svgs/login.svelte";
 
   export let user:User | null;
 
@@ -44,7 +44,7 @@
       {/if}
     </a>
   </div>
-  <div class="{isOpen?'h-48':'h-0'} {isOpen?'scale-y-100':'scale-y-0'} duration-300 origin-top
+  <div class="{isOpen?'h-52':'h-0'} {isOpen?'scale-y-100':'scale-y-0'} duration-300 origin-top
             flex flex-col items-center gap-1 
             bg-red-950 text-white
             absolute top-20 w-full">

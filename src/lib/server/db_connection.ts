@@ -36,6 +36,7 @@ export const getBoquette = async (id_boquette:number)=> {
 
 const TopsBoquettes = {
   "Foys":7,
+  "Mam'serie":193,
   "Auberge":3,
   "Strass Choco":1,
   "Mousse":10,
@@ -71,8 +72,8 @@ export const getTop = async (name:string, id_boquette:number|null):Promise<Top> 
       {
         by:['from'],
         where:id_boquette == null ? 
-          { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() } } :
-          { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, to:id_boquette },
+          { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, from_pg:{solde:{gte:0}} } :
+          { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, from_pg:{solde:{gte:0}}, to:id_boquette },
         orderBy: { _sum: { montant:'desc' } },
         take:10,
         _sum: { montant:true }

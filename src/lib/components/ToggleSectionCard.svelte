@@ -7,7 +7,7 @@
   let show = false;
 </script>
 
-<button class="bg-red-900 w-full h-fit bg-opacity-100 p-2 rounded-md relative" on:click={()=>show = !show}>
+<button class="bg-red-900 w-full bg-opacity-100 p-2 rounded-md relative" on:click={()=>show = !show}>
   <div class="flex flex-col items-center text-white">
     <p class="font-zagoth text-3xl">{title}</p>
 

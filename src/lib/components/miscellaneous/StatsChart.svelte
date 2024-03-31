@@ -30,6 +30,7 @@
         backgroundColor: ['#ff5733', '#33ff57', '#3357ff', '#ff33a6', '#a633ff', '#ff9433', '#ffb333', '#33ffb3', '#33b3ff', '#b333ff', '#ff3333'],
         hoverBackgroundColor:['rgba(255,87,51,0.6)','rgba(51,255,87,0.6)','rgba(51,87,255,0.6)','rgba(255,51,166,0.6)','rgba(166,51,255,0.6)','rgba(255,148,51,0.6)','rgba(255,179,51,0.6)','rgba(51,255,179,0.6)','rgba(51,179,255,0.6)','rgba(179,51,255,0.6)','rgba(255,51,51,0.6)'],
         hoverOffset:10,
+        
       }]
     };
 
@@ -51,10 +52,17 @@
             position:'bottom',
             labels:{
               usePointStyle:true,
+              color:"#ffffff",
+              font:{
+                size:18
+              }
             }
           },
           tooltip: {
             enabled:true,
+            bodyFont:{
+              size:25
+            },
             callbacks: {
               label: (tooltipItem:TooltipItem<'pie'>) => {
                 const dataset = chartData.datasets[tooltipItem.datasetIndex];
@@ -63,6 +71,7 @@
                 if(value == null) return 'error';
                 return `${labels[tooltipItem.dataIndex]} ${value.toFixed(2)}€ - ${(100*value/depensesTotales).toFixed(2)}%`;
               },
+              
             },
           },
         }

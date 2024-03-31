@@ -4,14 +4,14 @@
   "start_url":"/",
   "icons":[
     {
-      "src": "logo.svg",
+      "src": "icon.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": ""
     }
   ],
   "scope":"/",
-  "display":"standalone",
+  "display":"minimal-ui",
   "background_color":"#3E4EB8",
   "theme_color":"#2F3BA2",
   "description":"Vanadium, don't you know what it is ??"

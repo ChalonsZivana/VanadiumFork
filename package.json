@@ -5,8 +5,8 @@
 	"scripts": {
 		"type-check": "tsc",
 		"dev": "vite dev",
-		"build": "npx prisma generate && vite preview --port 80 --host",
-		"preview": "vite preview",
+		"build": "npx prisma generate && vite build",
+		"preview": "vite preview --port 80 --host",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},

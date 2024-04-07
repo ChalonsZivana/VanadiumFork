@@ -3,7 +3,8 @@ import { error, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types.js";
 import { consommations_type } from "@prisma/client";
 import { Taferie } from "$lib/server/classes/Taferie";
-import { consommationsSchema, consommationsSearch } from "$lib/components/search/fullsearch.js";
+import { consommationsSearch } from "$lib/components/search/fullsearch.js";
+import { ConsommationsSchema } from "$lib/zodSchema.js";
 
 
 export const load:PageServerLoad = async ({})=>{
@@ -18,7 +19,7 @@ export const load:PageServerLoad = async ({})=>{
 export let actions = {
   consommations:  async ({ request }) => {
     const d = Object.fromEntries(await request.formData());
-    const data = consommationsSchema.safeParse(d);
+    const data = ConsommationsSchema.safeParse(d);
 
     if(!data.success) throw error(400);
     console.log(data.data)

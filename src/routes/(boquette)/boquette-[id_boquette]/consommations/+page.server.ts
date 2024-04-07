@@ -1,6 +1,7 @@
-import { consommationsSearch, consommationsSchema } from '$lib/components/search/fullsearch.js';
+import { consommationsSearch } from '$lib/components/search/fullsearch.js';
 import prisma from '$lib/prisma.js';
 import { Boquette } from '$lib/server/classes/Boquette.js';
+import { ConsommationsSchema } from '$lib/zodSchema.js';
 import type { consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 
@@ -28,7 +29,7 @@ export const actions = {
     const id_boquette = parseInt(params.id_boquette);
     if(!id_boquette) throw error(400);
     const d = Object.fromEntries(await request.formData());
-    const data = consommationsSchema.safeParse(d);
+    const data = ConsommationsSchema.safeParse(d);
     if(!data.success) throw error(400);
 
     if(!['Tout', 'pg_boq', 'ext_boq'].includes(data.data.consoType)) throw error(400);

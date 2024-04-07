@@ -6,7 +6,7 @@ import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
 import { LydiaDemandFrontSchema } from "$lib/zodSchema";
 
-export const load:PageServerLoad  = async ({locals, parent})=>{
+export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
   const a = await prisma.rechargements.findFirst({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
 

@@ -19,10 +19,7 @@ export const load:LayoutServerLoad = async ({params, setHeaders})=>{
     where:{actif:1}, 
     select:{nums:true,proms:true, bucque:true, id_pg:true, nom:true, prenom:true}
   })
-  return { 
-    pgs, 
-    totalCons:await prisma.consommations.count()  
-  };
+  return { pgs };
 }
 
 

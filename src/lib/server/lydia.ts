@@ -1,20 +1,8 @@
 import prisma from "$lib/prisma";
-import { z } from "zod";
+import { LydiaDemandResponseSchema, LydiaVerifyResponseSchema } from "$lib/zodSchema";
 import { Pg } from "./classes/PG";
 
-const lydiaDemandSchema  = z.object({
-  error: z.string(),
-  request_id: z.string(),
-  request_uuid: z.string(),
-  message: z.string(),
-  mobile_url: z.string()
-});
 
-const lydiaVerifySchema = z.object({
-  state: z.string(),
-  used_ease_of_payment: z.string(),
-  signature: z.string()
-})
 
 export class LydiaManager {
   static async createLydiaDemand(id_pg:number, varData: { montant: number, numero: string }, vendorKey: string) {
@@ -45,7 +33,7 @@ export class LydiaManager {
     });
 
     const retour = await response.json();
-    const lydiaData = lydiaDemandSchema.safeParse(retour);
+    const lydiaData = LydiaDemandResponseSchema.safeParse(retour);
     if(!lydiaData.success || lydiaData.data.error != "0") return {'error':'Mauvais numéro de téléphone'}
 
     await prisma.rechargements.create({
@@ -79,7 +67,7 @@ export class LydiaManager {
             body: data.toString()
         });
 
-        const lydiaData = lydiaVerifySchema.safeParse(await response.json());
+        const lydiaData = LydiaVerifyResponseSchema.safeParse(await response.json());
         if(!lydiaData.success || lydiaData.data.state == "0") return {'error':'En attente de payement...'}
 
         if(lydiaData.data.state == '1'){

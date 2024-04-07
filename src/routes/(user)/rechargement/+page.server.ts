@@ -1,10 +1,10 @@
-import { z } from "zod";
 import type { PageServerLoad } from "../$types";
 import { error } from "@sveltejs/kit";
 import { LydiaManager } from "$lib/server/lydia";
 import {LYDIA_VENDOR_KEY} from "$env/static/private";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
+import { LydiaDemandFrontSchema } from "$lib/zodSchema";
 
 export const load:PageServerLoad  = async ({locals, parent})=>{
   if(!locals.session.data.user) throw error(400);
@@ -13,15 +13,12 @@ export const load:PageServerLoad  = async ({locals, parent})=>{
   return { verify: a != null, date:a?.date };
 }
 
-const lydiaDemandSchema  = z.object({
-  tel:z.string(),
-  montant:z.string(),
-});
+
 
 export const actions = {
   createLydiaDemand: async ({request, locals}) =>{
     const a = await request.formData()
-    const data = lydiaDemandSchema.safeParse(Object.fromEntries(a));
+    const data = LydiaDemandFrontSchema.safeParse(Object.fromEntries(a));
     if(!data.success) throw error(400);
     const montant = parseFloat(data.data.montant);
     if(isNaN(montant) || montant <= 0 || locals.session.data.user == null) throw error(400);

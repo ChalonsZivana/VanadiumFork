@@ -3,7 +3,7 @@ import { getTop, getTops } from '$lib/server/db_connection'
 import prisma from "$lib/prisma";
 import { error } from "@sveltejs/kit";
 import { BOQUETTES_ALCOOL, BOQUETTES_NOURRITURES, BOQUETTES_TOPS } from "$lib/server/classes/Boquette";
-import { z } from "zod";
+import { StatisticsSchema } from "$lib/zodSchema";
 
 
 
@@ -29,13 +29,11 @@ export const load:PageServerLoad = async ({locals})=>{
   };
 }
 
-const statsSchema  = z.object({
-jours:z.number(), take:z.number(), id_boquette:z.number()
-})
+
 export const actions = {
   "stats":async({request})=>{
     const d = JSON.parse(await request.text());
-    const data = statsSchema.safeParse(d);
+    const data = StatisticsSchema.safeParse(d);
 
     if(!data.success) throw error(400);
     if(!Object.values(BOQUETTES_TOPS).includes(data.data.id_boquette)) throw error(400);

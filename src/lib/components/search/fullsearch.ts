@@ -1,26 +1,11 @@
 import prisma from "$lib/prisma";
 import type { ConsommationsIncludeType } from "$lib/server/classes/Taferie";
+import type { ConsommationsSchemaType } from "$lib/zodSchema";
 import { Prisma, consommations_type } from "@prisma/client";
-import { z } from "zod";
 
 
-export const consommationsSchema  = z.object({
-  page:z.string(),
-  nums: z.union([z.string(), z.null()]),
-  proms: z.union([z.string(), z.null()]),
-  sortType: z.enum(['date','montant']),
-  sortDir: z.enum(['asc', 'desc']),
-  consoType:z.string(),
-  consoYear:z.union([z.string(), z.null()]),
-}).transform(data => ({
-  ...data,
-  page: parseInt(data.page), // Convert page to integer
-  nums: data.nums !== null ? parseInt(data.nums) : null, // Convert nums to integer
-  proms: data.proms !== null ? parseInt(data.proms) : null, // Convert proms to integer
-  consoYear: data.consoYear !== null ? parseInt(data.consoYear) : null // Convert consoYear to integer
-}));
 
-export async function consommationsSearch(types:({type:consommations_type, from:number}|{type:consommations_type, to:number}|{type:consommations_type})[] | null,data:z.infer<typeof consommationsSchema>){
+export async function consommationsSearch(types:({type:consommations_type, from:number}|{type:consommations_type, to:number}|{type:consommations_type})[] | null,data:ConsommationsSchemaType){
   const whereDate:Prisma.consommationsWhereInput = data.consoYear ? {
     date_conso:{ 
       gte: new Date(`${data.consoYear}-01-01`),

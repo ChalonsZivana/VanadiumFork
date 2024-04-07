@@ -1,10 +1,10 @@
-import type { boquettes, categories, produits } from "@prisma/client";
+import type { categories, produits } from "@prisma/client";
 import type { PageServerLoad } from "./$types";
 import prisma from "$lib/prisma";
-import { z } from "zod";
 import { fail } from "@sveltejs/kit";
 import { Boquette } from "$lib/server/classes/Boquette";
 import { Taferie } from "$lib/server/classes/Taferie";
+import { RhopseSchema } from "$lib/zodSchema";
 
 
 const k = {'koenettrie':0,'foys':0}
@@ -38,13 +38,6 @@ export const load: PageServerLoad = async () => {
 
   return { boquettesLibreService:t } 
 }
-
-
-const RhopseSchema  = z.object({
-  'id_pg':z.number(),
-  'id_boquette':z.number(),
-  'produits':z.array(z.tuple([z.number(),z.number()])),
-})
 
 export const actions = {
   'rhopse':async({request, locals})=>{

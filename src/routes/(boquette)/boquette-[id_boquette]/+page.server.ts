@@ -1,15 +1,19 @@
 import { error } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { LayoutServerLoad } from "./$types.js";
-import { z } from "zod";
 import { Taferie } from "$lib/server/classes/Taferie.js";
 import type { Prisma } from "@prisma/client";
 import { hashPassword } from "$lib/server/auth.js";
+import { EditBoquetteSchema, ImportRhopseSchema } from "$lib/zodSchema.js";
 
 
-export const load:LayoutServerLoad = async ({params})=>{
+export const load:LayoutServerLoad = async ({params, setHeaders})=>{
   const id_boquette = parseInt(params.id_boquette);
   if(isNaN(id_boquette)) throw error(404);
+
+  setHeaders({
+    'cache-control':'max-age=3600'
+  });
   
   const pgs = prisma.pg.findMany({
     where:{actif:1}, 
@@ -43,7 +47,6 @@ export const actions = {
   //   console.log("")
   // },
   import_rhopse:async({request, params}) => {
-    console.log('import')
     // Attention, la rhopse doit absolument être fait avant un quelconque changement de prix
     // En effet,les prix de la rhopse ne sont pas ceux de l'excel mais ceux du server
     const id_boquette = parseInt(params.id_boquette);
@@ -85,25 +88,3 @@ export const actions = {
   },
 }
 
-const EditBoquetteSchema  = z.object({
-  Nom:z.string(),
-  Identifiant:z.string(),
-  "Nouveau mot de passe":z.string(),
-  "Confirmation nouveau mot de passe":z.string(),
-  "Partie PG": z.union([z.literal('on'), z.undefined()])
-})
-
-
-const CreateProductSchema  = z.object({
-  "nom_produit":z.string().min(1),
-  "prix_produit":z.number(),
-  "categorie_produit":z.string(),
-  "stock":z.number(),
-  "libre_service": z.union([z.literal('on'), z.undefined()])
-})
-
-const ImportRhopseSchema = z.array(
-  z.tuple([
-    z.string(),z.number(), z.number(),
-  ])
-);

@@ -2,8 +2,8 @@ import prisma from "$lib/prisma";
 import { Boquette } from "$lib/server/classes/Boquette";
 import { Database } from "$lib/server/classes/Database";
 import { Taferie } from "$lib/server/classes/Taferie";
+import { RhopseSchema } from "$lib/zodSchema.js";
 import { fail } from "@sveltejs/kit";
-import { z } from "zod";
 
 export const load = async ()=>{
   //7:foys  147:koenettrie
@@ -21,12 +21,6 @@ export const load = async ()=>{
     }
   };
 }
-
-const RhopseSchema  = z.object({
-  id_pg:z.number(),
-  id_boquette:z.number(),
-  produits:z.array(z.tuple([z.number(),z.number()])),
-})
 
 export const actions = {
   'rhopse':async({request})=>{

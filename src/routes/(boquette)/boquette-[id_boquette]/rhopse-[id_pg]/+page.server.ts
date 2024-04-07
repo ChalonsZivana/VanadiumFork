@@ -2,8 +2,8 @@ import { error, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { Pg } from "$lib/server/classes/PG";
 import { Boquette } from "$lib/server/classes/Boquette";
-import { z } from "zod";
 import { Taferie } from "$lib/server/classes/Taferie";
+import { RhopseSchema } from "$lib/zodSchema";
 
 export const load:PageServerLoad = async ({params})=>{
   const id_pg = parseInt(params.id_pg);
@@ -12,11 +12,7 @@ export const load:PageServerLoad = async ({params})=>{
   return {pg:await pg.pg()}
 }
 
-const RhopseSchema  = z.object({
-  id_pg:z.number(),
-  id_boquette:z.number(),
-  produits:z.array(z.tuple([z.number(),z.number()])),
-})
+
 
 export const actions = {
   'rhopse':async({request, params})=>{

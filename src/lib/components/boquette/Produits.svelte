@@ -1,7 +1,7 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { categories, produits } from "@prisma/client";
-    import CustomTable from "../miscellaneous/CustomTable.svelte";
+  import CustomTable from "../miscellaneous/CustomTable.svelte";
   
   export let categories:categories[];
   export let produits:produits[];
@@ -19,7 +19,6 @@
             <tr>
               <td>{e.nom}</td>
               <td>{e.prix}€</td>
-              <td></td>
             </tr>
           </svelte:fragment>
         </CustomTable>

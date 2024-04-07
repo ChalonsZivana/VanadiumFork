@@ -1,15 +1,14 @@
 <script lang="ts">
   import Rhopse from "$lib/components/boquette/Rhopse.svelte";
   import Produits from "$lib/components/boquette/Produits.svelte";
-  import CreerCategorieEtProduit from "$lib/components/boquette/CreerCategorieEtProduit.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
   import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
   import type { boquettes } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
   import Settings from '$lib/components/svgs/settings.svelte';
   import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
-  import ToggleSectionCard from "$lib/components/ToggleSectionCard.svelte";
-
+  import Bolt from "$lib/components/svgs/bolt.svelte";
+  
   export let data;
   let dialog:HTMLDialogElement;
 
@@ -26,6 +25,12 @@
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
 
+  let special:string|null = null;
+  $ : {
+    if(data.id_boquette == 7) special = `boquette-${data.id_boquette}/special/foys` // Foys
+    else if(data.id_boquette == 3) special = `boquette-${data.id_boquette}/special/auberge` // Auberge
+  }
+ 
   function initPGEdit(boq:boquettes):boqSettingsText {
     return {
     'Nom':boq.nom ?? '',
@@ -37,7 +42,7 @@
 </script>
 
 
-<div class="w-11/12 flex flex-col gap-5 mt-5">
+<div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
   <BoquetteProfile boquette={boquette}>
     <form method="POST" action="/login?/logout">
       <input class="hidden" type="text" name="boquette" value={data.id_boquette}>
@@ -45,24 +50,26 @@
         <Logout />
       </button>
     </form>
-    <button on:click={()=>dialog.showModal()} class="w-8 absolute top-3 right-3">
-      <Settings/>
-    </button>
+    <div class="flex absolute top-3 right-3 gap-2">
+      {#if special != null}
+        <a href={special} class="w-8">
+          <Bolt/>
+        </a>
+      {/if}
+      {#if boquette.id_boquette}
+        <button on:click={()=>dialog.showModal()} class="w-8">
+          <Settings/>
+        </button>
+      {/if}
+    </div>
+    
   </BoquetteProfile>
   <Actions boquette={boquette} categories={data.categories} products={data.produits}/>
   <Rhopse pgs={data.pgs} boquette={boquette}></Rhopse>
-  <div>
-    <ToggleSectionCard title="Actions" toggleClass="h-36">
-      <div class="flex flex-col gap-2 h-full items-center justify-center">
-        <button class="bg-red-700 p-2 flex justify-around items-center">
-          <a class="text-white text-2xl" href="boquette-{data.id_boquette}/consommations">consommations</a>
-        </button>
-
-      </div>
-    </ToggleSectionCard>
-  </div>
+  
   <Produits categories={data.categories} produits={data.produits}/>
-  <!-- <CreerCategorieEtProduit categories={data.categories} id_boquette={data.id_boquette}/> -->
+
+    <!-- <CreerCategorieEtProduit categories={data.categories} id_boquette={data.id_boquette}/> -->
 </div>
 
 

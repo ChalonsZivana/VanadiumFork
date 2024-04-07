@@ -3,8 +3,10 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"preinstall": "npx only-allow pnpm",
 		"type-check": "tsc",
 		"dev": "vite dev",
+		"dev_inspect": "NODE_OPTIONS=\"--inspect\" vide dev",
 		"build": "npx prisma generate && vite build",
 		"preview": "vite preview --port 80 --host",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -14,7 +16,6 @@
 		"@sveltejs/adapter-auto": "^3.1.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@types/exceljs": "^1.3.0",
 		"@types/node": "^20.11.20",
 		"@types/serviceworker": "^0.0.84",
 		"autoprefixer": "^10.4.17",
@@ -27,7 +28,8 @@
 		"tailwindcss": "^3.4.1",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
-		"vite": "^5.0.3"
+		"vite": "^5.0.3",
+		"vite-plugin-inspect": "^0.8.3"
 	},
 	"type": "module",
 	"prisma": {
@@ -39,13 +41,13 @@
 		"@types/mysql": "^2.15.25",
 		"chart.js": "^3.9.1",
 		"exceljs": "^4.4.0",
-		"fastest-levenshtein": "^1.0.16",
-		"lucia": "^3.0.1",
 		"mysql2": "^3.9.1",
 		"npx": "^10.2.2",
 		"oslo": "^1.1.3",
-		"reflect-metadata": "^0.2.1",
+		"reflect-metadata": "^0.2.2",
 		"svelte-kit-cookie-session": "^4.0.0",
+		"tailwindcss-gradients": "^3.0.0",
+		"vavite": "^4.1.1",
 		"zod": "^3.22.4"
 	}
 }

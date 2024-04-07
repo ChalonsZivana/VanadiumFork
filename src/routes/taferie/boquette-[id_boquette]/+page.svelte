@@ -58,7 +58,7 @@
 </div>
 
 
-<CustomDialog formAction="?/editBoquette" bind:dialog={dialogSettings} title="Edition Boquette - {data.boquette.nom}"
+<CustomDialog formAction="/boquette-{data.boquette.id_boquette}?/editBoquette" bind:dialog={dialogSettings} title="Edition Boquette - {data.boquette.nom}"
   buttonText='Sauvegarder' callback={()=>{}}>
   {#each Object.entries(boqEdits) as [nom, value]}
     <label class="w-full">

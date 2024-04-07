@@ -14,6 +14,7 @@ export const load = async ({ locals }) => {
 
   const topGlobal = getTop("Top Global", null);
   const topDuJour = getRandomTop()
+  debugger;
   return {
     photo: getRandomPhoto(await pg.getPhotosFolder()),
     negats:await Database.negatsProms([222,223]),

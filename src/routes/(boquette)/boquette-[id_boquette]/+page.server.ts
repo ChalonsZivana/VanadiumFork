@@ -1,9 +1,10 @@
-import { error, fail } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { LayoutServerLoad } from "./$types.js";
-import { Database } from "$lib/server/classes/Database.js";
 import { z } from "zod";
 import { Taferie } from "$lib/server/classes/Taferie.js";
+import type { Prisma } from "@prisma/client";
+import { hashPassword } from "$lib/server/auth.js";
 
 
 export const load:LayoutServerLoad = async ({params})=>{
@@ -23,24 +24,24 @@ export const load:LayoutServerLoad = async ({params})=>{
 
 
 export const actions = {
-  create_category: async ({ request, params }) => {
-    const id_boquette = parseInt(params.id_boquette);
-    if(isNaN(id_boquette)) throw error(400);
-    const data = await request.formData();
-    const nom = data.get('nom_categorie')?.toString();
-    if(nom == null) return {success:false};
+  // create_category: async ({ request, params }) => {
+  //   const id_boquette = parseInt(params.id_boquette);
+  //   if(isNaN(id_boquette)) throw error(400);
+  //   const data = await request.formData();
+  //   const nom = data.get('nom_categorie')?.toString();
+  //   if(nom == null) return {success:false};
     
-    if(await Database.createCategorie({id_boquette, nom:nom}) == null){
-      return {already_exists:true};
-    }
-    return { success: true};
-  },
-  create_product: async ({ request }) => {
-    const data = Object.fromEntries(await request.formData());
-    const d = CreateProductSchema.safeParse(data);
-    if(!d.success) return {wrong:true}//TODO
-    console.log("")
-  },
+  //   if(await Database.createCategorie({id_boquette, nom:nom}) == null){
+  //     return {already_exists:true};
+  //   }
+  //   return { success: true};
+  // },
+  // create_product: async ({ request }) => {
+  //   const data = Object.fromEntries(await request.formData());
+  //   const d = CreateProductSchema.safeParse(data);
+  //   if(!d.success) return {wrong:true}//TODO
+  //   console.log("")
+  // },
   import_rhopse:async({request, params}) => {
     console.log('import')
     // Attention, la rhopse doit absolument être fait avant un quelconque changement de prix
@@ -59,8 +60,39 @@ export const actions = {
         {type:'pg_boq', from:pgs[0].id_pg, to:id_boquette, id_produit, quantite}
       )
     }
-  }
+  },
+  editBoquette:async({request, params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    if(isNaN(id_boquette)) throw error(404);
+    const data = Object.fromEntries(await request.formData());
+    const d = EditBoquetteSchema.safeParse(data);
+    if(!d.success) return {success:false};
+
+    if(d.data['Nouveau mot de passe'] != d.data['Confirmation nouveau mot de passe']) return {different_passwords:true}
+    const createData:Prisma.boquettesUpdateInput = {
+      nom:d.data.Nom,
+      nom_simple:d.data.Identifiant,
+      partie_pg:d.data['Partie PG'] == 'on' ? true:false
+    }
+    if(d.data['Nouveau mot de passe']!=""){
+      createData.mot_de_passe = hashPassword(d.data['Nouveau mot de passe'])
+    }
+
+    await prisma.boquettes.update({
+      where:{id_boquette},
+      data:createData
+    })
+  },
 }
+
+const EditBoquetteSchema  = z.object({
+  Nom:z.string(),
+  Identifiant:z.string(),
+  "Nouveau mot de passe":z.string(),
+  "Confirmation nouveau mot de passe":z.string(),
+  "Partie PG": z.union([z.literal('on'), z.undefined()])
+})
+
 
 const CreateProductSchema  = z.object({
   "nom_produit":z.string().min(1),

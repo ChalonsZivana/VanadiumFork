@@ -5,8 +5,17 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
+      textShadow: {
+        sm: '0 1px 2px var(--tw-shadow-color)',
+        DEFAULT: '0 2px 4px var(--tw-shadow-color)',
+        lg: '0 8px 16px var(--tw-shadow-color)',
+      },
       borderWidth:{
         '1':'1px'
+      },
+      linearGradients: {
+        // Name of your custom gradient
+        'background-gradient': ['to bottom right', '#7E0200', '#000000'],
       },
       backgroundImage: {
         'main-bg': "url('/background.jpg')"
@@ -45,6 +54,7 @@ export default {
     },
   },
   plugins: [
+    require('tailwindcss-gradients'),
     function ({ addVariant }) {
       addVariant('child', '& > *');
       addVariant('child-hover', '& > *:hover');
@@ -59,7 +69,17 @@ export default {
 					'user-drag': 'none'
 				}
 			});
-		})
+		}),
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') }
+      )
+    }),
   ],
 }
 

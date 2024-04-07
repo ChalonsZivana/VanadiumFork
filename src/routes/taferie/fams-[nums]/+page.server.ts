@@ -3,9 +3,8 @@ import { error, fail } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { PageServerLoad } from "./$types";
 import { Taferie } from "$lib/server/classes/Taferie";
-import { Boquette } from "$lib/server/classes/Boquette";
 
-export const load:PageServerLoad = async ({params, url})=>{
+export const load:PageServerLoad = async ({params})=>{
   const nums = parseInt(params.nums);
   if(isNaN(nums))throw error(404, 'Fams missing');
   const fams = await prisma.fams.findFirst({where:{nums}})

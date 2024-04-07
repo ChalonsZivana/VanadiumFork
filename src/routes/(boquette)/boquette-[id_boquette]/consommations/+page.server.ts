@@ -1,7 +1,6 @@
 import { consommationsSearch, consommationsSchema } from '$lib/components/search/fullsearch.js';
 import prisma from '$lib/prisma.js';
 import { Boquette } from '$lib/server/classes/Boquette.js';
-import { Taferie } from '$lib/server/classes/Taferie.js';
 import type { consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 
@@ -13,6 +12,7 @@ export const load = async ({params})=>{
     where:{proms:{gte:221}}, 
     select:{nums:true,proms:true, bucque:true, id_pg:true}
   })
+  console.log((await pgs).length)
   return { 
     pgs,
     search:await consommationsSearch(

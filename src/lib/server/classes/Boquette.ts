@@ -1,8 +1,6 @@
 import { HasMoney } from "../BasicClasses";
 import prisma from "$lib/prisma";
-import { Pg } from "./PG";
 import type { boquettes } from "@prisma/client";
-import { error } from "console";
 import { Taferie } from "./Taferie";
 
 type typesCroutes = 
@@ -60,6 +58,29 @@ const BOQUETTES = {
   "K'dal fée d'hons": 194,
   Ritalerie: 195,
   'Fermière': 196
+}
+
+export const BOQUETTES_ALCOOL = {
+  "Strass Choco":BOQUETTES["Strass Choco"],
+  "Auberge":BOQUETTES["Auberge"],
+  "Mousse":BOQUETTES["Mousse"],
+  "ZMD":BOQUETTES["ZMD"],
+  "Koenettrie":BOQUETTES["Koenettrie"],
+}
+
+export const BOQUETTES_NOURRITURES = {
+  "K've":BOQUETTES["K've"],
+  "Cock's":BOQUETTES["Cock's"],
+  "Clac's":BOQUETTES["Clac's"],
+  "Copalerie":BOQUETTES["Copalerie"],
+  "Mam'serie":BOQUETTES["Mam'serie"],
+  "Ritalerie":BOQUETTES["Ritalerie"],
+  "Fermière":BOQUETTES["Fermière"],
+  //TODO: Breizhouzerie
+};
+
+export const BOQUETTES_TOPS = {
+  ...BOQUETTES_ALCOOL, ...BOQUETTES_NOURRITURES, "C'vis":BOQUETTES["C'vis"], "Z'boiss":BOQUETTES["Z'boiss"], 
 }
 
 export class Boquette extends HasMoney {

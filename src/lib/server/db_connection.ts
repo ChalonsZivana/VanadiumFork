@@ -64,9 +64,9 @@ export const getTopRefresh = async () =>{
   }
 }
 
-export const getTop = async (name:string, id_boquette:number|null):Promise<Top> => {
+export const getTop = async (name:string, id_boquette:number|null, d={jours:365,take:10}):Promise<Top> => {
   const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 365);//TODO 30 -> 14
+  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - d.jours);//TODO 30 -> 14
 
   const a = await prisma.consommations.groupBy(
       {
@@ -75,7 +75,7 @@ export const getTop = async (name:string, id_boquette:number|null):Promise<Top> 
           { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, from_pg:{solde:{gte:0}} } :
           { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, from_pg:{solde:{gte:0}}, to:id_boquette },
         orderBy: { _sum: { montant:'desc' } },
-        take:10,
+        take:d.take,
         _sum: { montant:true }
       }
     );

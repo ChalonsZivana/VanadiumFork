@@ -1,7 +1,10 @@
 import type { PageServerLoad } from "./$types";
-import { getTops } from '$lib/server/db_connection'
+import { getTop, getTops } from '$lib/server/db_connection'
 import prisma from "$lib/prisma";
 import { error } from "@sveltejs/kit";
+import { BOQUETTES_ALCOOL, BOQUETTES_NOURRITURES, BOQUETTES_TOPS } from "$lib/server/classes/Boquette";
+import { z } from "zod";
+
 
 
 export const load:PageServerLoad = async ({locals})=>{
@@ -10,16 +13,40 @@ export const load:PageServerLoad = async ({locals})=>{
   const a = await prisma.consommations.groupBy(
     {
       by:['to'],
-      where:{type:"pg_boq",from:locals.session.data.user.pg.id_pg},
+      where:{type:"pg_boq",from:locals.session.data.user.pg.id_pg, montant:{lt:0}, to:{in:Object.values(BOQUETTES_TOPS)}},
       _sum:{ montant:true }
     }
-  )
-  const consos = a.map(e=>{return{id_boquette:e.to, montant:e._sum.montant}});
+  );
+  const consos = a.map(e=>{return{id_boquette:e.to!, montant:e._sum.montant!}});
 
   return {
     tops,
     boquettes:await prisma.boquettes.findMany({select:{id_boquette:true, nom:true}}),
-    consos:consos
+    consos:consos,
+    boquettes_nourritures:BOQUETTES_NOURRITURES,
+    boquettes_alcool:BOQUETTES_ALCOOL,
+    boquettes_tops:BOQUETTES_TOPS,
   };
 }
 
+const statsSchema  = z.object({
+jours:z.number(), take:z.number(), id_boquette:z.number()
+})
+export const actions = {
+  "stats":async({request})=>{
+    const d = JSON.parse(await request.text());
+    const data = statsSchema.safeParse(d);
+
+    if(!data.success) throw error(400);
+    if(!Object.values(BOQUETTES_TOPS).includes(data.data.id_boquette)) throw error(400);
+
+
+    return { 
+      top:await getTop(
+        "t", 
+        data.data.id_boquette,
+        {jours:data.data.jours, take:data.data.take}
+      )
+    };
+  }
+}

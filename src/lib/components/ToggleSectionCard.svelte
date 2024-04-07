@@ -15,7 +15,7 @@
       <DoubleDownChevron className="w-8 opacity-50 {show ? "rotate-180":''}"/>
       <DoubleDownChevron className="w-8 opacity-50 {show ? "rotate-180":''}"/>
     </div>
-    <div class="{show ? `${toggleClass} scale-y-100`:'h-0 scale-y-0'} duration-300 origin-top">
+    <div class="{show ? `${toggleClass} scale-y-100`:'h-0 scale-y-0'} duration-300 origin-top w-full">
       <slot/>
     </div>
   </div>

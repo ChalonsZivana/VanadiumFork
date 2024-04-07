@@ -3,7 +3,7 @@
   import Produits from "$lib/components/boquette/Produits.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
   import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
-  import type { boquettes } from '@prisma/client'
+  import type { boquettes, pg } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
   import Settings from '$lib/components/svgs/settings.svelte';
   import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
@@ -39,6 +39,25 @@
     'Confirmation mot de passe :':""
     };
   }
+
+  const pgsPromise = async():Promise<Partial<pg>[]>=>{
+    const cachedData = localStorage.getItem('cachedPgs');
+    
+    if (cachedData != null && cachedData !== 'undefined' && cachedData.length != 0) {
+      // Load data from cache if available
+      console.log('loading cache')
+      return JSON.parse(cachedData);
+    } else {
+      console.log('fetching pgs')
+      // Fetch data from server if not available in cache
+      const response = await fetch(`/boquette-${boquette.id_boquette}/boquettePgs`, {method:"get"});
+      const { pgs: fetchedPgs } = await response.json();
+      console.log(fetchedPgs)
+      // Cache the data
+      localStorage.setItem('cachedPgs', JSON.stringify(fetchedPgs));
+      return fetchedPgs;
+    }
+  };
 </script>
 
 
@@ -65,7 +84,11 @@
     
   </BoquetteProfile>
   <Actions boquette={boquette} categories={data.categories} products={data.produits}/>
-  <Rhopse pgs={data.pgs} boquette={boquette}></Rhopse>
+  {#await pgsPromise()}
+    Chargement des Rhopses
+  {:then pgs} 
+    <Rhopse pgs={pgs} boquette={boquette}></Rhopse>
+  {/await}
   
   <Produits categories={data.categories} produits={data.produits}/>
 

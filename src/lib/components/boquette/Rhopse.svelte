@@ -7,15 +7,12 @@
   import { createDataToSort } from "$lib/components/search/search.js";
   import CloseCircle from "$lib/components/svgs/close-circle.svelte";
 
-  export let pgs:Promise<Partial<pg>[]>;
+  export let pgs:Partial<pg>[];
   export let boquette:boquettes;
 
   let searchText = "";
 
-
-  const dataToSort = pgs.then((value)=>{
-    return createDataToSort({pgs:value, boquettes:[], fams:[]});
-  });
+  const dataToSort = createDataToSort({pgs,boquettes:[],fams:[]});
 </script>
 
   <SectionCard title="Rhopse">
@@ -23,13 +20,10 @@
       <input bind:value={searchText} class="text-black p-2 outline-none bg-red-100 w-full placeholder-gray-500" type="text" placeholder="recherche: {"PG"}">
       <button on:click={()=>searchText=''} class="bg-red-100"><CloseCircle className="w-10"/></button>
     </div>
-    {#await dataToSort}
-      Loading search section...
-    {:then dTS}
       <Search
       bind:searchText={searchText}
       selected={"PG"}
-      dataToSort={dTS}>    
+      dataToSort={dataToSort}>    
     
     
       <svelte:fragment slot="PG" let:sIP>
@@ -46,5 +40,4 @@
         </CustomTable>
       </svelte:fragment>
     </Search>
-    {/await}
   </SectionCard>

@@ -39,8 +39,8 @@
           {#await data.consommations}
             Chargement top global...
           {:then consommations} 
-          <div class="w-full h-full overflow-x-hidden no-scrollbar overflow-y-scroll">
-            <ConsoTable consommations={consommations} cancelOption={false}/>
+            <div class="w-full h-full overflow-x-hidden no-scrollbar overflow-y-scroll">
+              <ConsoTable consommations={consommations} cancelOption={false}/>
             </div>
           {/await}
         </ToggleSectionCard>

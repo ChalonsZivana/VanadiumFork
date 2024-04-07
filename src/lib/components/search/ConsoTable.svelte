@@ -45,9 +45,9 @@
           <td class="overflow-ellipsis">{getTo(e)}</td><!-- To -->
           <td>{e.libelle}</td><!-- Libellé -->
           <td><!-- Montant -->
-            <p>AV. {e.solde_avant}€</p>
-            <MoneyColor red={e.montant} className="text-sm font-bold"/>
             <p>AP. {e.solde_apres}€</p>
+            <MoneyColor auto={e.montant} className="text-sm font-bold"/>
+            <p>AV. {e.solde_avant}€</p>
           </td>
           {#if cancelOption}
             <td>

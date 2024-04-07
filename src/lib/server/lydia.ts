@@ -1,6 +1,7 @@
 import prisma from "$lib/prisma";
 import { LydiaDemandResponseSchema, LydiaVerifyResponseSchema } from "$lib/zodSchema";
 import { Pg } from "./classes/PG";
+import { Taferie } from "./classes/Taferie";
 
 
 
@@ -72,7 +73,7 @@ export class LydiaManager {
 
         if(lydiaData.data.state == '1'){
           const d = await prisma.rechargements.update({where:{id_rechargement}, data:{status:1}});
-          new Pg(d.id_pg).addMoney(d.montant);
+          await Taferie.rhopse({type:'pg_ext', from:d.id_pg, libelle:"Rechargement Lydia", montant:d.montant});
           return {ok:`${d.montant}€ ont été ajouté à votre sole.`}
         } else {
           await prisma.rechargements.update({where:{id_rechargement}, data:{status:-1}});

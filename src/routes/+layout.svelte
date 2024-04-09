@@ -1,11 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import OneSignal from 'react-onesignal';
+  //import OneSignal from 'react-onesignal';
+  import OneSignal from '@nolanx/svelte-onesignal';
   onMount(()=>{
-    OneSignal.init({ appId: '8c47c8d7-2816-439b-8b07-59217c8431a6' }).then(()=>{
-      console.log('hey');
-      OneSignal.Slidedown.promptPush();
-    });
+    OneSignal.init({ appId: '8c47c8d7-2816-439b-8b07-59217c8431a6' });
   })
   
   import "../app.css";

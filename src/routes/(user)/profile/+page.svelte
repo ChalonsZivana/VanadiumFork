@@ -3,6 +3,7 @@
   import type { User } from "$lib/server/auth";
   import SectionCard from '$lib/components/SectionCard.svelte';
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
+  import OneSignal from '@nolanx/svelte-onesignal';
 
   export let data:{USER:User,photo:string, photosFolder:string};
   export let form;
@@ -64,6 +65,21 @@
     <div>
       <SectionCard title="Ajouter boquette">
         <a href="/login" class="bg-blue-600 p-2 rounded-md">Se connecter</a>
+      </SectionCard>
+      <SectionCard title="Notifications">
+        {#await OneSignal.isPushNotificationsEnabled()}
+          <p>Chargement des notifications...</p>
+        {:then r} 
+          {#if r}
+            <button on:click={()=>{
+              OneSignal.setSubscription(false);
+            }} class="bg-blue-600 p-2 rounded-md">se désabonner</button>
+          {:else}
+            <button on:click={()=>{
+              OneSignal.registerForPushNotifications({autoAccept:true})
+            }} class="bg-blue-600 p-2 rounded-md">s'abonner</button>
+          {/if}
+        {/await}
       </SectionCard>
     </div>
   </div>

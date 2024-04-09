@@ -19,17 +19,15 @@ const client = new OneSignal.DefaultApi(configuration);
 
 
 export async function sendPush(title:string, message:string){
+  
   const notification = new OneSignal.Notification();
   notification.app_id = ONESIGNAL_APP_ID;
-  notification.included_segments = ['All'];
-  notification.headings = {
-    fr: message
-  }
+  notification.included_segments = ['Subscribed Users'];
   notification.contents = {
-    fr: message
+    en: "Hello OneSignal!"
   };
-  
-  client.createNotification(notification).catch(
-    e => console.log(e)
-  );
+  console.log(client)
+  console.log('nice')
+  const {id} = await client.createNotification(notification);
+  console.log("Id:", id)
 }

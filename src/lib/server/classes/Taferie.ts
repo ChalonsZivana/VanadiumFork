@@ -154,7 +154,6 @@ export class Taferie {
         await new Fams(d.to).removeMoney(data.montant);
         break;
     }
-    console.log('ok')
     sendPush('Rhopse', `${libelle} - ${montant}`);
   }
 

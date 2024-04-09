@@ -1,6 +1,5 @@
 import prisma from "$lib/prisma";
 import { LydiaDemandResponseSchema, LydiaVerifyResponseSchema } from "$lib/zodSchema";
-import { Pg } from "./classes/PG";
 import { Taferie } from "./classes/Taferie";
 
 

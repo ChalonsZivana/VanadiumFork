@@ -41,7 +41,7 @@ export class Database {
   }
 
   static getNumsInProms(proms:number){
-    return prisma.pg.findMany({where:{proms}, select:{nums:true}})
+    return prisma.pg.findMany({where:{proms}, select:{nums:true, id_pg:true}})
   }
 
   static getAubergeOrders(){

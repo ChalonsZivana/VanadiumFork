@@ -2,12 +2,12 @@
   import SectionCard from '$lib/components/SectionCard.svelte';
   import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
-    import type { categories, pg, produits } from '@prisma/client';
-    import AddSquare from '../svgs/add-square.svelte';
-    import MinusSquare from '../svgs/minus-square.svelte';
-  
-  export let id_boquette:number;
+  import type { categories, pg, produits } from '@prisma/client';
+  import AddSquare from '../svgs/add-square.svelte';
+  import MinusSquare from '../svgs/minus-square.svelte';
 
+
+  export let rhopseUrl:string;
   export let pg:pg;
   export let produits:produits[];
   export let categories:categories[];
@@ -20,14 +20,12 @@
   $: products = getProducts(categorie.id_categorie)
   $: selectedProducts = produits.filter(e=>quantités[e.id_produit]>0)
 
-  function rhopser(){
-    fetch('?/rhopse',
+  async function rhopser(){    
+    await fetch(rhopseUrl,
     {
       method:'POST',
       body:JSON.stringify(
         {
-          id_boquette:id_boquette,
-          id_pg:pg.id_pg,
           produits:selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])
         }
       )
@@ -47,7 +45,7 @@
   }
 </script>
 
-<div class="h-full w-11/12">
+<div class="h-full w-full">
   <SectionCard title="Rhopse - {pg.nums}Ch{pg.proms}">
     {#if selectedProducts.length}
     <div class="w-full flex flex-col gap-2 text-black">
@@ -69,7 +67,7 @@
     </div>
     {/if}
     {#if categories.length > 1}
-      <select class="w-80  p-2 text-xl rounded-xl" bind:value={categorie}>
+      <select class="text-black w-full  p-2 text-xl rounded-xl" bind:value={categorie}>
         {#each categories as cat}
           <option class="text-xs w-1/2" value={cat}>{cat.nom}</option>
         {/each}
@@ -92,7 +90,7 @@
   </SectionCard>
 </div>
 
-<CustomDialog bind:dialog={dialog} formAction="?/rhopse" title="< Rhopser >" buttonText="Rhopser" callback={rhopser}>
+<CustomDialog callback={rhopser} bind:dialog={dialog} title="< Rhopser >" buttonText="Rhopser">
   <p class="font-zagoth text-3xl text-center text-white">{pg.nums}Ch{pg.proms}</p>
 
   <div class="rounded-3xl  overflow-clip mt-5">

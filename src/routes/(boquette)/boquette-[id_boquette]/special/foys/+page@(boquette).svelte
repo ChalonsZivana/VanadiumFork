@@ -7,16 +7,15 @@
   let proms:number|null=null;
   const listProms = Object.keys(data.proms).map(e=>parseInt(e)).sort((a,b)=>a-b);
   
-  let nums:number|null=null;
-  const listNums =()=> data.proms[proms as keyof typeof data.proms].map(e=>e.nums).sort((a,b)=>a-b);
+  let pg:{nums:number, id_pg:number}|null=null;
+  const listNums =()=> data.proms[proms as keyof typeof data.proms].sort((a,b)=>a.nums-b.nums);
   const rhopse = () => {
-    fetch('?/rhopse',
+    if(pg == null) return;
+    fetch(`/boquette-${data.id_boquette}/rhopse-${pg.id_pg}?/rhopse`,
     {
       method:"post",
       body:JSON.stringify(
         {
-          id_boquette:7,
-          id_pg:nums,
           produits:[[product?.id_produit, 1]],
         }
       )
@@ -28,7 +27,7 @@
   let product:produits|null = null;
   $: getProducts = data.products.filter(e=>e.id_categorie==categorie?.id_categorie);
 
-  const reset = () => {nums=null;proms=null;product=null;categorie=null};
+  const reset = () => {pg=null;proms=null;product=null;categorie=null};
   const buttonClass = "bg-white h-14 text-black w-80 rounded-md";
   const choicesContainerClass = "mt-5 flex-grow w-full flex flex-col justify-center items-center gap-1"
   const coloredClass = "p-5 bg-fuchsia-500 text-4xl rounded-md"
@@ -49,16 +48,16 @@
   {/if}
   
   
-  {#if proms && nums == undefined}
+  {#if proms && pg == undefined}
     <p class="text-3xl font-zagoth mt-5">Choix Num's</p>
     <div class="mt-5 flex-grow w-full grid gap-1 grid-cols-10 grid-rows-[15]">
       {#each listNums() as n}
-        <button on:click={()=>nums=n} class="aspect-square rounded-md bg-red-700">{n}</button>
+        <button on:click={()=>pg=n} class="aspect-square rounded-md bg-red-700">{n.nums}</button>
       {/each}
     </div>
   {/if}
 
-  {#if nums && categorie == null}
+  {#if pg && categorie == null}
     <p class="text-3xl font-zagoth mt-5">Choix Categorie</p>
     <div class={choicesContainerClass}>
       {#each data.categories as cat}
@@ -87,9 +86,9 @@
       <p>Veux-tu rhopser</p>
       <div class="flex justify-center items-center text-4xl">
         {#key proms}
-          <select bind:value={nums} class={coloredClass}>
+          <select bind:value={pg} class={coloredClass}>
             {#each listNums() as n}
-              <option value="{n}">{n}</option>
+              <option value="{n}">{n.nums}</option>
             {/each}
           </select>  
         {/key}      

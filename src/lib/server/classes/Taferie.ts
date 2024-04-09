@@ -1,4 +1,5 @@
 import prisma from "$lib/prisma";
+import { sendPush } from "../onesignal";
 import { Boquette } from "./Boquette";
 import { Fams } from "./Fams";
 import { Pg } from "./PG";
@@ -105,7 +106,6 @@ export class Taferie {
     } else {
       montant = d.montant;
     }
-
     const data = {
       type:d.type,
       from: "from" in d ? d.from : null,
@@ -154,6 +154,8 @@ export class Taferie {
         await new Fams(d.to).removeMoney(data.montant);
         break;
     }
+    console.log('ok')
+    sendPush('Rhopse', `${libelle} - ${montant}`);
   }
 
   static async consommations(types:({type:consommations_type, from:number}|{type:consommations_type, to:number})[]){

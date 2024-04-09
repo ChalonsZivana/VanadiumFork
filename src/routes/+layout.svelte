@@ -1,13 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import OneSignal from 'react-onesignal';
-  const appId = "8c47c8d7-2816-439b-8b07-59217c8431a6";
   onMount(()=>{
     OneSignal.init({ appId: '8c47c8d7-2816-439b-8b07-59217c8431a6' }).then(()=>{
       console.log('hey');
       OneSignal.Slidedown.promptPush();
     });
-
   })
   
   import "../app.css";

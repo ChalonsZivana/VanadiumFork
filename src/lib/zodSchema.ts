@@ -25,8 +25,6 @@ export const ImportRhopseSchema = z.array(
 );
 
 export const RhopseSchema  = z.object({
-  id_pg:z.number(),
-  id_boquette:z.number(),
   produits:z.array(z.tuple([z.number(),z.number()])),
 })
 

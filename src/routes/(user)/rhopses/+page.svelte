@@ -26,8 +26,8 @@
   </div>
   {#if boquette}
     {#key boquette}
-      <RhopseComponent 
-      categories={boquette.categories} produits={boquette.products} pg={data.USER.pg} id_boquette={boquette.boquette.id_boquette} bind:dialog={dialog}
+      <RhopseComponent rhopseUrl="rhopses?/rhopse"
+      categories={boquette.categories} produits={boquette.products} pg={data.USER.pg} bind:dialog={dialog}
       />
     {/key}
   {/if}

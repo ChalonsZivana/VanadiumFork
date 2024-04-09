@@ -10,12 +10,11 @@ export const handle = handleSession(
     secret:SESSION_TOKEN,
     expires:30,
     expires_in:"days",
-    init:()=>{
-      return {user:null, boquettes:[]};
-    }
   },
   async ({event, resolve})=>{
-    const routeId = event.route.id!
+    const routeId = event.route.id;
+    if(!routeId) throw error(404);
+
     if(routeId.startsWith("/login")) return resolve(event);
     
     if(routeId.startsWith('/(user)')){

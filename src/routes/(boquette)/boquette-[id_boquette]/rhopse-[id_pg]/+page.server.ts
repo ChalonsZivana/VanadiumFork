@@ -15,18 +15,22 @@ export const load = async ({params})=>{
 
 export const actions = {
   'rhopse':async({request, params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    if(!id_boquette) throw error(400);
+    const id_pg = parseInt(params.id_boquette);
+    if(!id_pg) throw error(400);
+
     const t = JSON.parse(await request.text());
     const parse = RhopseSchema.safeParse(t);
-
+    
     if(!parse.success) return fail(400,{});
     const data = parse.data;
-
-    const id_boquette = parseInt(params.id_boquette);
     if(!Boquette.exists(id_boquette)) return fail(400, {});
-    console.log(data.produits)
-    const boq = new Boquette(parseInt(params.id_boquette));
+    
+    const boq = new Boquette(id_boquette);
+    console.log(boq.ID)
     for(let [id_produit, quantite] of data.produits){
-      await Taferie.rhopse({type:"pg_boq",from:data.id_pg, to:boq.ID, id_produit, quantite});
+      await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite});
     }
   }
 }

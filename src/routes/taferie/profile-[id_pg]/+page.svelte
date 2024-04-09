@@ -98,7 +98,7 @@
 </div>
 
 <CustomDialog formAction="?/editPG" bind:dialog={dialogSettings} title="Edition PG - {data.user.pg.nums}Ch{data.user.pg.proms}"
-  buttonText='Sauvegarder' callback={()=>{}}>
+  buttonText='Sauvegarder'>
   {#each editDataKeys as k}
     <label class="w-full">
       <p class="font-zagoth text-xl text-white">{k}</p>

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { MouseEventHandler } from "svelte/elements";
+    import type { MouseEventHandler } from "svelte/elements";
 
   export let dialog:HTMLDialogElement;
   export let title:string;
-  export let formAction:string;
+  export let formAction:string | null = null;
+  export let callback:MouseEventHandler<HTMLButtonElement>|null = null;
   export let buttonText:string;
-  export let callback:MouseEventHandler<HTMLButtonElement>;
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -16,7 +16,11 @@
   <form action={formAction} method="post">
     <slot/>
     <div class="flex justify-around mt-5 text-white text-lg">
-      <button on:click={callback} class="size-28 bg-blue-500 rounded-md">{buttonText}</button>
+      {#if formAction != null}
+        <button class="size-28 bg-blue-500 rounded-md">{buttonText}</button>
+      {:else}
+        <button type="button" on:click={callback} class="size-28 bg-blue-500 rounded-md">{buttonText}</button>
+      {/if}
       <button type="button" on:click={()=>dialog.close()} class="size-28 bg-red-500 rounded-md">annuler</button>
     </div>
   </form>

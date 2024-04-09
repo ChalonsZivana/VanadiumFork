@@ -38,6 +38,7 @@
 	"dependencies": {
 		"@lucia-auth/adapter-prisma": "^4.0.0",
 		"@nolanx/svelte-onesignal": "^2.0.5",
+		"@onesignal/node-onesignal": "2.0.1-beta2",
 		"@prisma/client": "^5.9.1",
 		"@types/mysql": "^2.15.25",
 		"chart.js": "^3.9.1",

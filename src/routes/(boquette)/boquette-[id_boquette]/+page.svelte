@@ -97,7 +97,7 @@
 
 
 <CustomDialog formAction="?/editBoquette" bind:dialog={dialog} title="Edition Boquette - {boquette.nom}"
-  buttonText='Sauvegarder' callback={()=>{}}>
+  buttonText='Sauvegarder'>
   {#each editDataKeys as k}
     <label class="w-full">
       <p class="font-zagoth text-xl text-white">{k}</p>

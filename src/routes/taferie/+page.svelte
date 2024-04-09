@@ -119,8 +119,35 @@
           <Logout />
         </button>
       </form>
-      <div class="flex gap-5 text-black">
-        <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-center">
+          <p class="text-white text-center">Sommes de tous les soldes des pg par proms</p>
+        <p class="text-white text-center">Sommes de tous les negat's des pg par proms</p>
+        </div>
+          
+        <div class="flex gap-2 justify-center text-black">
+          <div class="flex flex-col p-2 bg-red-100 rounded-lg">
+            <p class="text-center font-bold">Fonds Proms</p>
+            {#each Object.entries(data.fondsProms) as [proms, solde]}
+              <div class="flex gap-3">
+                <p>{proms}:</p>
+                <MoneyColor auto={solde} className="ml-auto mr-0"/>
+              </div>  
+            {/each}
+          </div>
+          <div class="p-2  flex flex-col bg-red-100 rounded-lg">
+            <p class="text-center font-bold">Negats Proms</p>
+            {#each Object.entries(data.negatsProms) as [proms, solde]}
+              <div class="flex gap-3 ">
+                <p>{proms}:</p>
+                <MoneyColor auto={solde} className="ml-auto mr-0"/>
+              </div>  
+            {/each}
+          </div>
+        </div>
+      </div>
+      <!-- <div class="flex text-black w-full">
+        <div class="flex flex-col gap-2 w-1/2">
           <p class="text-white text-center">Sommes de tous les soldes des pg par proms</p>
           <div class="flex flex-col p-2 bg-red-100 rounded-lg text-xl">
             <p class="text-center font-bold">Fonds Proms</p>
@@ -132,7 +159,7 @@
             {/each}
           </div>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 w-1/2">
           <p class="text-white text-center">Sommes de tous les negat's des pg par proms</p>
           <div class="p-2  flex flex-col bg-red-100 text-xl rounded-lg">
             <p class="text-center font-bold">Negats Proms</p>
@@ -144,7 +171,7 @@
             {/each}
           </div>
         </div>
-      </div>
+      </div> -->
     </SectionCard>  
 
     <div>

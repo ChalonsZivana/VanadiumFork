@@ -2,10 +2,11 @@ import prisma from "$lib/prisma";
 import { hashPassword } from "$lib/server/auth";
 import type { PageServerLoad } from "../$types";
 import { type RequestEvent, fail } from "@sveltejs/kit";
+import { oneSignalClient, ONESIGNAL_APP_ID } from "$lib/server/onesignal";
 
 export const load:PageServerLoad  = async ({locals})=>{
   const photos = await prisma.photos.findFirst(
-    {where:{id_pg:locals.session.data.user.pg.id_pg}}
+    {where:{id_pg:locals.session.data.user?.pg.id_pg}}
   );
 
   return {
@@ -28,9 +29,17 @@ export const actions = {
       return fail(400, {different:true})
     }
     const encodedPassword = hashPassword(password);
-    if(encodedPassword !== locals.session.data.user.pg.mot_de_passe){
+    if(encodedPassword !== locals.session.data.user?.pg.mot_de_passe){
       return fail(400, {wrong:true});
     }
     await prisma.pg.update({where:{id_pg:locals.session.data.user.pg.id_pg}, data:{mot_de_passe:hashPassword(newPassword)}});
+  },
+  create_user: async({locals})=>{
+    console.log('create_user')
+    const pg = locals.session.data.user?.pg;
+    if(!pg) return {}
+    const r = await oneSignalClient.createUser(ONESIGNAL_APP_ID, {identity:{id_pg:pg.id_pg.toString()}});
+    //oneSignalClient.createSubscription(ONESIGNAL_APP_ID, 'id_pg', pg.id_pg.toString())
+    console.log(r)
   }
 }

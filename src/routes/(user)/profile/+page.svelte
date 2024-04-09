@@ -3,7 +3,7 @@
   import type { User } from "$lib/server/auth";
   import SectionCard from '$lib/components/SectionCard.svelte';
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
-  import OneSignal from '@nolanx/svelte-onesignal';
+  import { onMount } from "svelte";
 
   export let data:{USER:User,photo:string, photosFolder:string};
   export let form;
@@ -20,6 +20,7 @@
     "photos paysage":"paysage",
     "photos voitures":"voiture"
   }
+
   let currentFolder = data.photosFolder;
   const sendChange = ()=>{
     fetch('/profile',
@@ -28,6 +29,10 @@
       body:JSON.stringify(currentFolder),
     });
   }
+  // onMount(async ()=>{
+  //   console.log(OneSignal)
+  //   console.log(OneSignal.isPushNotificationsEnabled())
+  // })
 </script>
 
 
@@ -62,24 +67,26 @@
       </SectionCard>
     </form>
 
-    <div>
+    <div class="flex flex-col gap-5">
       <SectionCard title="Ajouter boquette">
         <a href="/login" class="bg-blue-600 p-2 rounded-md">Se connecter</a>
       </SectionCard>
       <SectionCard title="Notifications">
-        {#await OneSignal.isPushNotificationsEnabled()}
-          <p>Chargement des notifications...</p>
-        {:then r} 
-          {#if r}
+        <form method="post" action="?/create_user">
+          <button class="p-2 bg-blue-600">Create user</button>
+        </form>
+        <!-- {#if areNotifsAllowed != null}
+          {#if areNotifsAllowed}
             <button on:click={()=>{
-              OneSignal.setSubscription(false);
             }} class="bg-blue-600 p-2 rounded-md">se désabonner</button>
           {:else}
-            <button on:click={()=>{
-              OneSignal.registerForPushNotifications({autoAccept:true})
+            <button on:click={async()=>{
+              const r = await Notification.requestPermission()
+              areNotifsAllowed = r == 'granted'
+              OneSignal.setConsentGiven(true);
             }} class="bg-blue-600 p-2 rounded-md">s'abonner</button>
           {/if}
-        {/await}
+        {/if} -->
       </SectionCard>
     </div>
   </div>

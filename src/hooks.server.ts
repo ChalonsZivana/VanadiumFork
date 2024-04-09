@@ -27,7 +27,6 @@ export const handle = handleSession(
         });
         return resolve(event);
       }
-
       if(event.locals.session.data.boquettes != undefined && event.locals.session.data.boquettes.length != 0){
         const boq = event.locals.session.data.boquettes[0];
         if(boq.id_boquette == 20){

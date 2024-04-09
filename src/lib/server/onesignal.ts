@@ -1,6 +1,6 @@
 import OneSignal from "@onesignal/node-onesignal";
 
-const ONESIGNAL_APP_ID = '8c47c8d7-2816-439b-8b07-59217c8431a6';
+export const ONESIGNAL_APP_ID = '8c47c8d7-2816-439b-8b07-59217c8431a6';
 
 const app_key_provider = {
   getToken() {
@@ -14,7 +14,8 @@ const configuration = OneSignal.createConfiguration({
       }
   }
 });
-const client = new OneSignal.DefaultApi(configuration);
+
+export const oneSignalClient = new OneSignal.DefaultApi(configuration);
 
 
 
@@ -26,8 +27,8 @@ export async function sendPush(title:string, message:string){
   notification.contents = {
     en: "Hello OneSignal!"
   };
-  console.log(client)
+  console.log(oneSignalClient)
   console.log('nice')
-  const {id} = await client.createNotification(notification);
+  const {id} = await oneSignalClient.createNotification(notification);
   console.log("Id:", id)
 }

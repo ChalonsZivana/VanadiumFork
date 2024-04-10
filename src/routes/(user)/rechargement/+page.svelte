@@ -73,7 +73,7 @@
       </label>
       <label class="w-full text-xl">
         Libelle:
-        <input class="w-full text-black" type="number" name="libelle">
+        <input class="w-full text-black" type="text" name="libelle">
       </label>
       <div class="flex justify-center w-full">
         <button class="bg-blue-500 w-1/2 flex justify-center rounded-md">

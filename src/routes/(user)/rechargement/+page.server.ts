@@ -10,13 +10,18 @@ export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
   const a = await prisma.rechargements.findFirst({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
 
-  return { verify: a != null, date:a?.date };
+  const lydiazocque = await prisma.config.findMany({where:{nom:'lydiazocque'}});
+
+  return { verify: a != null, date:a?.date, lydiazocque:lydiazocque[0] };
 }
 
 
 
 export const actions = {
   createLydiaDemand: async ({request, locals}) =>{
+    const lydiazocque = await prisma.config.findMany({where:{nom:'lydiazocque'}});
+    if(lydiazocque[0].valeur == '1') throw error(400);
+
     const a = await request.formData()
     const data = LydiaDemandFrontSchema.safeParse(Object.fromEntries(a));
     if(!data.success) throw error(400);
@@ -31,12 +36,11 @@ export const actions = {
     const montant = parseFloat(a.get('montant')?.toString()??'');
     const libelle = a.get('libelle')?.toString()??'';
     if(isNaN(montant) || montant <= 0 || locals.session.data.user == null) throw error(400);
-
     await Taferie.rhopse({
       type:'pg_fams', 
-      from:locals.session.data.user.pg.nums,
+      from:locals.session.data.user.pg.id_pg,
       to:locals.session.data.user.fams.nums,
-      montant,
+      montant: -montant,
       libelle
     });
   },

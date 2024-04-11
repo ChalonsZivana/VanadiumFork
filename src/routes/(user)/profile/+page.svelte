@@ -3,7 +3,6 @@
   import type { User } from "$lib/server/auth";
   import SectionCard from '$lib/components/SectionCard.svelte';
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
-  import { onMount } from "svelte";
 
   export let data:{USER:User,photo:string, photosFolder:string};
   export let form;
@@ -36,20 +35,18 @@
 </script>
 
 
-<div class="mt-5 flex flex-col h-full md:h-auto justify-center items-center">
-  <div class="h-full flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
-    <div class="w-80"><Profile user={data.USER}/></div>
+  <div class="mt-5 h-full w-11/12 flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
+    <Profile user={data.USER}/>
     
     <SectionCard title="Dossier Gifs">
-      <select bind:value={currentFolder} class="text-black" on:change={sendChange}>
+      <select bind:value={currentFolder} class="text-black w-80 text-2xl" on:change={sendChange}>
         {#each Object.entries(dossiersGifs) as [nom, dossier]}
           <option value={dossier}>{nom}</option>
         {/each}
       </select>
     </SectionCard>
 
-    <form class="w-80" action="?/change_password" method="post">
-      
+    <form action="?/change_password" method="post">
       <SectionCard title="Changer de mot de passe">
         <input name="P" class='text-black rounded-md w-52' type="password" placeholder="Mot de passe">
         {#if form?.wrong}
@@ -90,7 +87,6 @@
       </SectionCard>
     </div>
   </div>
-</div>
 
 
 <!-- <div class="flex flex-col md:flex-row items-center gap-5 h-full"> 

@@ -1,37 +1,23 @@
-import { Prisma } from '@prisma/client';
 import type { RequestEvent } from './$types.js';
 import prisma from '$lib/prisma.js';
 import { fail } from '@sveltejs/kit';
+import { InscriptionSchema } from '$lib/zodSchema.js';
 
 export const actions = {
   inscription: async ({ request }:RequestEvent) => {
-    const data = await request.formData()
-    const email = data.get('email')?.toString()??'';
-    const nums = parseInt(data.get('nums')?.toString()??'');
-    const proms = parseInt(data.get('proms')?.toString()??'');
-    const prenom = data.get('prenom')?.toString()??'';
-    const nom = data.get('nom')?.toString()??'';
-    const solde = parseInt(data.get('solde')?.toString()??'');
-    console.log(email)
-    if(isNaN(nums) || isNaN(proms) || isNaN(solde) || prenom=='' || nom=='' || email==''){
-			return fail(400, { missing: true });
-    }
+    const d = Object.fromEntries(await request.formData())
+    const data = InscriptionSchema.safeParse(d);
+    if(!data.success) throw fail(400, data.error.format());
     
-    const user = await prisma.pg.findFirst({where:{nums, proms}})
-    if(user) return fail(400, {'already exists':true})
-
-    await prisma.pg.create({
+    const user = await prisma.pg.findFirst({where:{nums:data.data.nums, proms:data.data.proms}})
+    if(user) return fail(400, {'already exists':true, solde:data.data.solde, proms:data.data.proms})
+      await prisma.pg.create({
       data:{
-        email:email,
-        nums:nums,
-        prenom:prenom,
-        nom:nom,
-        proms:proms,
-        solde:solde,
+        ...data.data,
         tabagns:"Ch",
         bucque:"SQRT"
       }
     });
-    return { success:true }
+    return { success:true, solde:data.data.solde, proms:data.data.proms }
   }
 }

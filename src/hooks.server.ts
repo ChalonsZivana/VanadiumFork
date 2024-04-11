@@ -3,6 +3,7 @@ import { handleSession,  } from 'svelte-kit-cookie-session';
 import {SESSION_TOKEN} from "$env/static/private";
 import { createUser } from "$lib/server/auth";
 import { Boquette } from "$lib/server/classes/Boquette";
+import prisma from "$lib/prisma";
 
 
 export const handle = handleSession(
@@ -13,9 +14,19 @@ export const handle = handleSession(
   },
   async ({event, resolve})=>{
     const routeId = event.route.id;
+
     if(!routeId) throw error(404);
 
-    if(routeId.startsWith("/login")) return resolve(event);
+    if(routeId.startsWith("/login") || routeId.startsWith('/(unauthorized)')) return resolve(event);
+
+    const vanazocque = await prisma.config.findMany({where:{nom:'vanazocque'}});
+    if(vanazocque[0].valeur == '1' && !routeId.startsWith('/taferie')){
+      if(event.locals.session.data.boquettes?.map(e=>e.id_boquette).includes(20)) {
+        throw redirect(307, '/taferie')
+      }
+
+      throw redirect(307,'/vanazocque');
+    }
     
     if(routeId.startsWith('/(user)')){
       // check the connexion of the user
@@ -44,8 +55,8 @@ export const handle = handleSession(
     const boquettes = event.locals.session.data.boquettes;
 
     let id_boquette = 20;
-    if(event.route.id?.startsWith('/taferie')) {
-      if(!boquettes.map(e=>e.id_boquette).includes(id_boquette)) throw redirect(303,"/login");
+    if(routeId.startsWith('/taferie')) {
+      if(!boquettes.map(e=>e.id_boquette).includes(20)) throw redirect(303,"/login");
     }
 
     if(routeId.startsWith('/(boquette)')){
@@ -70,4 +81,3 @@ export const handle = handleSession(
     return resolve(event);
   }
 )
-

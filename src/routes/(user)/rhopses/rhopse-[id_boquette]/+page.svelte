@@ -1,0 +1,15 @@
+<script lang="ts">
+  import RhopseComponent from "$lib/components/miscellaneous/RhopseComponent.svelte";
+  import SectionCard from "$lib/components/SectionCard.svelte";
+
+  export let data;
+  export let dialog:HTMLDialogElement;
+
+</script>
+
+<div class="flex mt-20 w-11/12">
+
+      <RhopseComponent rhopseUrl="/rhopses/rhopse-{data.id_boquette}?/rhopse"
+      bind:categories={data.categories} bind:produits={data.products} bind:pg={data.USER.pg} bind:dialog={dialog}
+      />
+</div>

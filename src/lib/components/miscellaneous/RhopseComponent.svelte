@@ -6,7 +6,7 @@
   import AddSquare from '../svgs/add-square.svelte';
   import MinusSquare from '../svgs/minus-square.svelte';
 
-
+  export let id_boquette = '';
   export let rhopseUrl:string;
   export let pg:pg;
   export let produits:produits[];

@@ -55,6 +55,7 @@ export const actions = {
 			if(user != null) {
 				await locals.session.update((e) =>{ 
 					e.user = user;
+					e.boquettes = e.boquettes ?? []
 					return e;
 				});
 				throw redirect(303, "/");

@@ -6,7 +6,7 @@
 
 
 <table class="bg-white w-full">
-  <caption class="bg-red-900 text-2xl tracking-widest">
+  <caption class="bg-red-900 text-white text-2xl tracking-widest">
     {title}
   </caption>
   <thead class="w-full h-10 sticky top-0 text-sm text-white">

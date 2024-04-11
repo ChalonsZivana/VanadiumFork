@@ -27,8 +27,8 @@ export async function sendPush(title:string, message:string){
   notification.contents = {
     en: "Hello OneSignal!"
   };
-  console.log(oneSignalClient)
-  console.log('nice')
-  const {id} = await oneSignalClient.createNotification(notification);
-  console.log("Id:", id)
+  // console.log(oneSignalClient)
+  // console.log('nice')
+  // const {id} = await oneSignalClient.createNotification(notification);
+  // console.log("Id:", id)
 }

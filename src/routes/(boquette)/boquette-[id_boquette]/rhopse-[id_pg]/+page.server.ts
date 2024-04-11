@@ -28,7 +28,7 @@ export const actions = {
     if(!Boquette.exists(id_boquette)) return fail(400, {});
     
     const boq = new Boquette(id_boquette);
-    console.log(boq.ID)
+
     for(let [id_produit, quantite] of data.produits){
       await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite});
     }

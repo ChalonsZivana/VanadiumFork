@@ -96,6 +96,7 @@ export class Taferie {
 
   static async rhopse(d:pg_ext | ext_ | _to | pg_boq){
     let libelle = await getLibelle(d);
+
     if(libelle == null) return;
     let solde = await getSolde(d.type, 'from' in d ? d.from : d.to);
     let montant:number;
@@ -170,6 +171,10 @@ export class Taferie {
       include,
       orderBy:{date_conso:'desc'}
     })
+  }
+
+  static async deletePG(id_pg:number){
+    return prisma.pg.delete({where:{id_pg}})
   }
 }
 

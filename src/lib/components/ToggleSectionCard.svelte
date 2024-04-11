@@ -5,18 +5,24 @@
   export let title:string;
   export let toggleClass = "";
   let show = false;
+
+  function toggle(e:MouseEvent){
+    show = !show;
+  }
 </script>
 
-<button class="bg-red-900 w-full bg-opacity-100 p-2 rounded-md relative" on:click={()=>show = !show}>
+<div class="bg-red-900 w-full bg-opacity-100 p-2 rounded-md relative">
   <div class="flex flex-col items-center text-white">
-    <p class="font-zagoth text-3xl">{title}</p>
 
-    <div class="w-full absolute bottom-0 flex justify-between">
-      <DoubleDownChevron className="w-8 opacity-50 {show ? "rotate-180":''}"/>
-      <DoubleDownChevron className="w-8 opacity-50 {show ? "rotate-180":''}"/>
-    </div>
+    <button type="button" class="w-full flex justify-between" on:click={toggle}>
+      <DoubleDownChevron className="w-8 opacity-50 {show ? "":'rotate-180'}"/>
+      <p class="font-zagoth text-3xl">{title}</p>
+      <DoubleDownChevron className="w-8 opacity-50 {show ? "":'rotate-180'}"/>
+    </button>
+
+    
     <div class="{show ? `${toggleClass} scale-y-100`:'h-0 scale-y-0'} duration-300 origin-top w-full">
       <slot/>
     </div>
   </div>
-</button>
+</div>

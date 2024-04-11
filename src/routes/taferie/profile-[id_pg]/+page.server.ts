@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { createUser, updateUser } from "$lib/server/auth";
-import { error, fail } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
 import { Pg } from "$lib/server/classes/PG";
@@ -47,10 +47,20 @@ export const actions = {
   "fonds_ffams":async({params})=>{
     const id_pg = parseInt(params.id_pg); 
     if(isNaN(id_pg)) throw error(400);
+    
     const pg = await new Pg(id_pg).pg();
     const boq = new Boquette(pg.nums);
     if(pg == null) throw error(400);
 
     await Taferie.rhopse({type:'pg_fams', from:id_pg,to:boq.ID,montant:-pg.solde, libelle:"Fonds vers Fonds Fams"})
+  },
+  "delete":async({params})=>{
+    const id_pg = parseInt(params.id_pg); 
+    if(isNaN(id_pg)) throw error(400);
+    const pg = await new Pg(id_pg).pg();
+    if(pg.solde != 0) return {wrong:'Le solde doit être nul'}
+
+    await Taferie.deletePG(id_pg);
+    throw redirect(300, '/taferie')
   }
 }

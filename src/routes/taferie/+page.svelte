@@ -7,10 +7,11 @@
   import { createDataToSort, type SelectTypes } from "$lib/components/search/search.js";
   import ToggleSectionCard from '$lib/components/ToggleSectionCard.svelte';
   import Special from '$lib/components/miscellaneous/Special.svelte';
-    import Logout from '$lib/components/svgs/logout.svelte';
+  import Logout from '$lib/components/svgs/logout.svelte';
+  import ToggleButton from '$lib/components/miscellaneous/ToggleButton.svelte';
+  import { enhance } from '$app/forms';
 
   export let data;
-
   
   const tableHeaders:{[K in SelectTypes]:string[]} = {
     'Tout':[], 
@@ -125,64 +126,62 @@
         <p class="text-white text-center">Sommes de tous les negat's des pg par proms</p>
         </div>
           
-        <div class="flex gap-2 justify-center text-black">
-          <div class="flex flex-col p-2 bg-red-100 rounded-lg">
-            <p class="text-center font-bold">Fonds Proms</p>
-            {#each Object.entries(data.fondsProms) as [proms, solde]}
-              <div class="flex gap-3">
-                <p>{proms}:</p>
-                <MoneyColor auto={solde} className="ml-auto mr-0"/>
-              </div>  
-            {/each}
-          </div>
-          <div class="p-2  flex flex-col bg-red-100 rounded-lg">
-            <p class="text-center font-bold">Negats Proms</p>
-            {#each Object.entries(data.negatsProms) as [proms, solde]}
-              <div class="flex gap-3 ">
-                <p>{proms}:</p>
-                <MoneyColor auto={solde} className="ml-auto mr-0"/>
-              </div>  
-            {/each}
-          </div>
+        <div class="flex gap-5 justify-center text-black">
+          {#each [data.fondsProms, data.negatsProms] as fonds}
+            <div class="flex w-full flex-col p-2 bg-red-100 rounded-lg">
+              <p class="text-center font-bold">Fonds Proms</p>
+              {#each Object.entries(fonds) as [proms, solde]}
+                <div class="flex gap-3">
+                  <p>{proms}:</p>
+                  <MoneyColor auto={solde} className="ml-auto mr-0"/>
+                </div>  
+              {/each}
+            </div>
+          {/each}
         </div>
       </div>
-      <!-- <div class="flex text-black w-full">
-        <div class="flex flex-col gap-2 w-1/2">
-          <p class="text-white text-center">Sommes de tous les soldes des pg par proms</p>
-          <div class="flex flex-col p-2 bg-red-100 rounded-lg text-xl">
-            <p class="text-center font-bold">Fonds Proms</p>
-            {#each Object.entries(data.fondsProms) as [proms, solde]}
-              <div class="flex gap-3">
-                <p>{proms}:</p>
-                <MoneyColor auto={solde} className="ml-auto mr-0"/>
-              </div>  
-            {/each}
-          </div>
-        </div>
-        <div class="flex flex-col gap-2 w-1/2">
-          <p class="text-white text-center">Sommes de tous les negat's des pg par proms</p>
-          <div class="p-2  flex flex-col bg-red-100 text-xl rounded-lg">
-            <p class="text-center font-bold">Negats Proms</p>
-            {#each Object.entries(data.negatsProms) as [proms, solde]}
-              <div class="flex gap-3 ">
-                <p>{proms}:</p>
-                <MoneyColor auto={solde} className="ml-auto mr-0"/>
-              </div>  
-            {/each}
-          </div>
-        </div>
-      </div> -->
     </SectionCard>  
 
     <div>
-      <ToggleSectionCard title="Actions" toggleClass="h-36">
-        <div class="flex flex-col gap-2 h-full items-center justify-center">
-          <button class="bg-red-700 p-2 flex justify-around items-center">
+      <ToggleSectionCard title="Actions" toggleClass="h-72">
+        <div class="flex flex-col gap-2">
+          <button class="bg-red-700 p-2 flex h-fit justify-around items-center">
             <a class="text-white text-2xl" href="/taferie/consommations">consommations</a>
           </button>
-          <button class="bg-red-700 p-2 flex justify-around  items-center">
+          <button class="bg-red-700 p-2 flex h-fit justify-around  items-center">
             <a class="text-white text-2xl" href="/taferie/inscription">inscription</a>
           </button>
+            {#key data.config}
+              <form class="bg-red-700 p-2 flex flex-col gap-2 justify-start w-full" action="">
+                <p class="text-white text-2xl text-center">admin</p>
+                <form use:enhance on:change={(e)=>e.currentTarget.requestSubmit()} action="?/vanazocque" method="post">
+                  <ToggleButton name="vanazocque" isChecked={data.config.vanazocque?.valeur=='1'}/>
+                </form>
+                <form use:enhance on:change={(e)=>e.currentTarget.requestSubmit()}  action="?/lydiazocque" method="post">
+                  <ToggleButton name="lydiazocque" isChecked={data.config.lydiazocque?.valeur=='1'}/>
+                </form>
+              </form>
+            {/key}
+      </ToggleSectionCard>
+    </div>
+
+    <div>
+      <ToggleSectionCard title="Boquettes" toggleClass="h-96">
+        <div class="h-full overflow-y-scroll">
+          {#await data.boquettes}
+          Chargement des boquettes...
+          {:then boquettes} 
+          <CustomTable elements={boquettes} headers={['Boquette','Solde']} title=''>
+            <tr slot="tbody" let:e>
+              <th class="p-2">
+                {e.nom}
+              </th>
+              <td>{#key e}
+                  <MoneyColor auto={e.solde}/>
+              {/key}</td>
+            <tr/>
+          </CustomTable>
+          {/await}
         </div>
       </ToggleSectionCard>
     </div>

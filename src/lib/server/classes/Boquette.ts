@@ -11,7 +11,7 @@ type typesCroutes =
     "Croüte végé" |
     "Maxi Croüte végé";
 
-const BOQUETTES = {
+export const BOQUETTES = {
   Fams: -1,
   'Strass Choco': 1,
   "K've": 2,
@@ -58,6 +58,12 @@ const BOQUETTES = {
   "K'dal fée d'hons": 194,
   Ritalerie: 195,
   'Fermière': 196
+}
+
+export const BOQUETTES_LIBRE_SERVICE = {
+  "Foys":BOQUETTES["Foy's"],
+  "Koenettrie":BOQUETTES["Koenettrie"],
+  "Strass Choco":BOQUETTES["Strass Choco"]
 }
 
 export const BOQUETTES_ALCOOL = {

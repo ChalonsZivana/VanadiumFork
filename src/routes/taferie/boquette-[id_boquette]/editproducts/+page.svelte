@@ -19,6 +19,7 @@
 
   let productToEdit:typeof data.produits[0] | null = null;
   let id_categorie:null|number = null;
+  let toggleDeleteProduct = false;
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
@@ -85,6 +86,21 @@
         <p class="text-2xl font-zagoth text-white">Prix du produit:</p>
         <input class="pl-2 h-10 w-full" type="number" step="0.01" min="0" name="prix" value={productToEdit.prix}>
       </label>
+
+
+
+
+      <div class="mt-5 rounded-lg overflow-clip w-full text-white">
+        <button type="button" on:click={()=>toggleDeleteProduct=!toggleDeleteProduct} class="bg-red-700 font-zagoth text-2xl p-2 w-full">
+          Supprimer produit
+        </button>
+        <div class="flex text-white {toggleDeleteProduct?'h-10 scale-y-100':'h-0 scale-y-0'} origin-top duration-300">
+          <button formaction="?/deleteProduct" class="bg-green-600 w-full flex justify-center" on:click={()=>toggleDeleteProduct=false}>
+            <Accept className="w-10 p-1"/>
+          </button>
+        </div>
+      </div>
+      
     {/if}
   </div>
 </CustomDialog>

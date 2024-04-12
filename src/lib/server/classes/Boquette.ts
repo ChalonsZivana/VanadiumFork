@@ -131,6 +131,12 @@ export class Boquette extends HasMoney {
     })
   }
 
+  async deleteProduct(data:z.infer<typeof EditProductSchema>){
+    await prisma.produits.deleteMany({
+      where:{id_produit:data.id_produit, id_boquette:this.ID},
+    })
+  }
+
   async cancelConsommation(id_conso:number, cancel:boolean){
     const conso = await prisma.consommations.findFirst({where:{id_conso}})
     if(conso == null) return;

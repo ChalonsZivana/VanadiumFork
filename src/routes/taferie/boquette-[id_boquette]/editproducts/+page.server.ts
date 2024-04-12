@@ -37,4 +37,13 @@ export const actions = {
     const boq = new Boquette(id_boquette);
     boq.editProduct(data.data);
   },
+  deleteProduct:async({request, params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    
+    const d = Object.fromEntries(await request.formData());  
+    const data = EditProductSchema.safeParse(d);
+    if(!data.success) throw error(400);
+    const boq = new Boquette(id_boquette);
+    boq.deleteProduct(data.data);
+  },
 }

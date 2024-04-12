@@ -88,3 +88,29 @@ export const LydiaVerifyResponseSchema = z.object({
 export const StatisticsSchema  = z.object({
   jours:z.number(), take:z.number(), id_boquette:z.number()
 });
+
+
+export const AddProductSchema = z.object({
+  nom:z.string().min(1),
+  id_categorie:z.string(),
+  nom_categorie:z.string().min(1).optional(),
+  prix:z.string()
+}).transform(
+  data => ({
+    ...data,
+    id_categorie: parseInt(data.id_categorie),
+    prix:parseFloat(data.prix)
+  })
+).refine(data => {
+  if('nom_categorie' in data){
+    return !isNaN(data.prix)
+  } else {
+    return !isNaN(data.prix) && !isNaN(data.id_categorie)
+  }
+})
+
+export const EditProductSchema = z.object({
+  nom:z.string().min(1),
+  id_produit:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
+  prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0)
+});

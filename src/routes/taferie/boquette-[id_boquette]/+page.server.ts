@@ -18,7 +18,7 @@ export async function load({params}){
     categories:await prisma.categories.findMany({where:{id_boquette}}),
     search:await consommationsSearch(
       [{type:'ext_boq', to:id_boquette},{type:'pg_boq', to:id_boquette}], 
-      { consoType:'',consoYear:null,sortDir:'desc',sortType:'date',nums:null,proms:null, page:1}
+      { consoType:'',consoYear:NaN,sortDir:'desc',sortType:'date',nums:NaN,proms:NaN, page:1}
     ),
   }
 }

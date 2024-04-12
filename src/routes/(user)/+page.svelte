@@ -26,7 +26,7 @@
 
 <div class="{className} w-11/12 pt-5">
       <div class="{className} w-full md:grid md:grid-cols-2 md:grid-rows-2 md:items-start">
-        <Profile user={data.USER}/>
+        <Profile bind:user={data.USER}/>
 
         <div class="row-span-2 w-full">
           <SectionCard title="">

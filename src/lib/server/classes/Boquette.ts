@@ -2,6 +2,8 @@ import { HasMoney } from "../BasicClasses";
 import prisma from "$lib/prisma";
 import type { boquettes } from "@prisma/client";
 import { Taferie } from "./Taferie";
+import type { z } from "zod";
+import { AddProductSchema, EditProductSchema } from '$lib/zodSchema.js';
 
 type typesCroutes = 
     "1/2 Croüte" | 
@@ -104,6 +106,29 @@ export class Boquette extends HasMoney {
 
   async rhopseAuberge(data:{id_pg:number, type:string, bandars:string, fromage:string, commentaire:string, telephone:string,status:number}){
     await prisma.auberge.create({data});
+  }
+
+  async addProduct(data:z.infer<typeof AddProductSchema>){
+    if(data.nom_categorie){
+      const cat = await prisma.categories.create({
+        data:{nom:data.nom_categorie, id_boquette:this.ID}
+      })
+
+      await prisma.produits.create({
+        data:{nom:data.nom, id_categorie:cat.id_categorie, prix:data.prix, id_boquette:this.ID}
+      })
+    } else {
+      await prisma.produits.create({
+        data:{nom:data.nom, id_categorie:data.id_categorie, prix:data.prix, id_boquette:this.ID}
+      })
+    }
+  }
+
+  async editProduct(data:z.infer<typeof EditProductSchema>){
+    await prisma.produits.updateMany({
+      where:{id_produit:data.id_produit, id_boquette:this.ID},
+      data:{nom:data.nom, prix:data.prix}
+    })
   }
 
   async cancelConsommation(id_conso:number, cancel:boolean){

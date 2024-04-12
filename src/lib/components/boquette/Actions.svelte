@@ -4,16 +4,15 @@
   import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte"
   import SectionCard from "$lib/components/SectionCard.svelte"
   import ToggleSectionCard from '../ToggleSectionCard.svelte';
+    import MyButton from '../miscellaneous/MyButton.svelte';
 
   export let boquette:boquettes;
   export let products:produits[];
   export let categories:categories[];
-  export let taferie = false;
   
   let importErrors: [string, boolean][][] = [];
   
   let fileInputRhopse:HTMLInputElement;
-  let fileInputProduits:HTMLInputElement;
 
   async function download(workbook:ExcelJS.Workbook, nom:string){
     const buffer = await workbook.xlsx.writeBuffer();
@@ -147,101 +146,39 @@
         i += 1;
       }
     });
-    // const wsCategories = workbook.addWorksheet("Categories");
-    // wsProducts.getCell('1, 6').value = "Ne pas modifier l'ID Categories, pour lier "
-    
-    // wsProducts.getCell(1, 1).value = 'Produits';
-    // wsProducts.getCell(1, 2).value = 'Prix';
-    // for(let [i,prod] of products.entries()){
-    //   wsProducts.getCell(2 + i, 1).value = prod.nom;
-    //   wsProducts.getCell(2 + i, 2).value = prod.prix;
-    // }
-
-    // wsCategories.getCell(1, 1).value = 'Categories';
-    // wsCategories.getCell(1, 2).value = 'Id Categorie';
-    // for(let [i,cat] of categories.entries()){
-    //   wsCategories.getCell(2 + i, 1).value = cat.nom;
-    //   wsCategories.getCell(2 + i, 2).value = cat.id_categorie;
-    // }
-
     const date = new Date();
     const nom = `${boquette.nom_simple}-produits-${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}.xlsx`
     download(workbook, nom);
   }
-
-  async function importerProduits(){
-    console.log('importer produits')
-    const file = fileInputProduits.files?.item(0);
-    if(file == null) return;
-
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(await file.arrayBuffer());
-    const wsProducts = workbook.getWorksheet('Produits');
-    if(wsProducts == null) return;
-    let extractedProducts = (wsProducts.getSheetValues() as any[]).map((e,i) => [i+1, e[1], e[2], e[3]]);
-    extractedProducts = extractedProducts.filter(e => !e.every(i => i == ''));
-    extractedProducts.shift();
-    if(extractedProducts.length == 0) return;
-    extractedProducts = extractedProducts.map(e => {
-      const [ligne, produit, prix, id_produit] = e;
-      console.log(ligne, produit, prix, id_produit);
-      return []
-    });
-
-    const wsCategories = workbook.getWorksheet('Categories');
-    if(wsCategories == null) return;
-    let extractedCategories = (wsCategories.getSheetValues() as any[]).map((e,i) => [i+1, e[1], e[2]]);
-    extractedCategories = extractedCategories.filter(e => !e.every(i => i == ''));
-    extractedCategories.shift();
-    if(extractedCategories.length == 0) return;
-    extractedCategories = extractedCategories.map(e => {
-      const [categorie, id_categorie] = e;
-      console.log(categorie, id_categorie);
-      return [categorie, parseInt(id_categorie)]
-    });
-
-    importErrors = importErrors;
-    if(importErrors.length != 0) return;
-
-    fetch(`/boquette-${boquette.id_boquette}?/import_rhopse`, {
-      method:'post',
-      body:JSON.stringify({
-        produits: extractedProducts,
-        categories: extractedCategories
-      })
-    })
-  }
-
-  let buttonClassName = "bg-blue-600 p-2 relative flex justify-center items-center w-2/5 rounded-md"
 </script>
 
 
 <ToggleSectionCard title="Actions" toggleClass="h-48">
   <div class="flex flex-col gap-2 h-46 mt-5">
-    <div class="flex flex-wrap justify-around gap-5 h-full text-white">  
-      <button class={buttonClassName} on:click={generateExcel}>      
+    <div class="flex flex-wrap justify-around gap-5 h-full text-white
+    child:bg-blue-600 child:p-2 child:relative child:flex child:justify-center child:items-center child:w-2/5 child:rounded-md">  
+      <button on:click={generateExcel}>      
         <p>Générer feuille de rhopse</p>
       </button>
       
-      <label for="file_import" class={buttonClassName}>
+      <label for="file_import">
         <input on:input={importExcel} bind:this={fileInputRhopse} class="hidden" id="file_import" accept=".xlsx" type="file">
         <button on:click={()=>fileInputRhopse.click()}>      
           <p>Importer feuille de rhopse</p>
         </button>
       </label>
 
-      <button class={buttonClassName} on:click={exporterProduits}>      
+      
+
+      <button on:click={exporterProduits}>      
         <p>Exporter produits</p>
       </button>
 
-      {#if taferie}
-      <label for="file_import2" class={buttonClassName}>
-        <input on:input={importerProduits} bind:this={fileInputProduits} class="hidden" id="file_import2" accept=".xlsx" type="file">
-        <button on:click={()=>fileInputProduits.click()}>      
-          <p>Importer produits</p>
-        </button>
-      </label>
-      {/if} 
+      <button>
+        <a href="/boquette-{boquette.id_boquette}/consommations">consommations</a>
+      </button>
+
+      <slot/>
     </div>
   </div>
 

@@ -21,16 +21,6 @@
     'Nouveau mot de passe':"",
     'Confirmation nouveau mot de passe':''
   }
-
-  async function exportProducts(){
-    const a = await fetch('?/produits', {
-      method:'post',
-      body:""
-    })
-    const data = JSON.parse(await a.text());
-    const data2 =JSON.parse(data.data)
-    console.log(data2)
-  }
 </script>
 
 <div class="w-11/12 flex flex-col pt-5 gap-5">
@@ -42,7 +32,11 @@
     <GestionBrousouffs/>
   </BoquetteProfile>
 
-  <Actions boquette={data.boquette} categories={data.categories} products={data.produits} taferie={true}/>
+  <Actions boquette={data.boquette} categories={data.categories} products={data.produits}>
+    <button>
+      <a href="/taferie/boquette-{data.boquette.id_boquette}/editproducts">éditer produits</a>
+    </button>
+  </Actions>
   
   {#await currData.consommations}
     Chargement Historique Général

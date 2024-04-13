@@ -27,6 +27,11 @@ export default {
         'zagoth':["Zagoth"]
       },
       keyframes: {
+        "background-shine": {
+          '0%': { backgroundColor: 'white' }, // From white
+          '50%': { backgroundColor: '#FFFF8F' }, // To yellow
+          '100%': { backgroundColor: 'white' }, // Back to white
+        },
         "fade-in-out": {
           '0%': { opacity: '0' },
           '20%': { opacity: '1' },
@@ -52,7 +57,8 @@ export default {
       animation: {
         "fade-in": 'fade-in-out 10s forwards',
         "scale-up": 'scale-up 0.5s forwards',
-        "shine":"shine 2s infinite"
+        "shine":"shine 2s infinite",
+        "background-shine":"background-shine 1s"
       }
     },
   },

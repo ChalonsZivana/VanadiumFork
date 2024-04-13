@@ -157,7 +157,9 @@
   <div class="flex flex-col gap-2 h-46 mt-5">
     <div class="flex flex-wrap justify-around gap-5 h-full text-white
     child:bg-blue-600 child:p-2 child:relative child:flex child:justify-center child:items-center child:w-2/5 child:rounded-md">  
-      <button on:click={generateExcel}>      
+      
+    
+    <button on:click={generateExcel}>      
         <p>Générer feuille de rhopse</p>
       </button>
       
@@ -168,11 +170,9 @@
         </button>
       </label>
 
-      
-
-      <button on:click={exporterProduits}>      
+      <!-- <button on:click={exporterProduits}>      
         <p>Exporter produits</p>
-      </button>
+      </button> -->
 
       <button>
         <a href="/boquette-{boquette.id_boquette}/consommations">consommations</a>

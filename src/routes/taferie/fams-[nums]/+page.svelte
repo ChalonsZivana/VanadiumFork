@@ -4,8 +4,12 @@
   import MoneyColor from '$lib/components/miscellaneous/MoneyColor.svelte';
   import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
+    import Popup from "$lib/components/miscellaneous/Popup.svelte";
   export let data;
+  export let form:{success:boolean, message:string};
 </script>
+
+<Popup bind:form={form}/>
 
 <div class="flex flex-col w-11/12 gap-2 pt-5">
   {#key data.fams}

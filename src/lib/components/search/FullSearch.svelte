@@ -19,18 +19,18 @@
     async ()=>{
       return async({update})=> update({reset:false});
     }
-  } action="?/consommations" method="post" class="flex flex-col gap-2">
-    <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (100 par page)</p>
+  } action="?/consommations" method="post" class="w-full flex flex-col gap-2">
+  <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (100 par page)</p>
 
-    <div class="text-black flex flex-col gap-2">
+    <div class="text-black w-full flex flex-col gap-2">
       <div class="flex gap-2">
         <label>
           <p class="text-white">Nums</p>
-          <input type="number" name="nums">
+          <input class="w-32" type="number" name="nums">
         </label>
         <label>
           <p class="text-white">Proms</p>
-          <input type="number" name="proms">
+          <input class="w-32" type="number" name="proms">
         </label>
       </div>
       <select name="sortType" value="date">

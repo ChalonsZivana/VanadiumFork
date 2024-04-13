@@ -24,7 +24,7 @@ export const actions = {
     const fams = parseInt(params.nums);
     if(isNaN(montant) || isNaN(fams)) throw error(400);
 
-    await Taferie.rhopse({type:"ext_fams", to:fams, montant:-montant, libelle});
+    return await Taferie.rhopse({type:"ext_fams", to:fams, montant:-montant, libelle});
   },
   "cancel":async({request})=>{
     const data = await request.formData();

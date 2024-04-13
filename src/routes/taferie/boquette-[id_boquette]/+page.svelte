@@ -4,10 +4,11 @@
   import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
   import FullSearch from "$lib/components/search/FullSearch.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
-    import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
+  import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
+    import Popup from "$lib/components/miscellaneous/Popup.svelte";
 
   export let data;
-  export let form:{search:typeof data.search};
+  export let form:{search:typeof data.search, success:boolean, message:string};
   
   let dialogSettings:HTMLDialogElement;
 
@@ -22,6 +23,8 @@
     'Confirmation nouveau mot de passe':''
   }
 </script>
+
+<Popup bind:form={form}/>
 
 <div class="w-11/12 flex flex-col pt-5 gap-5">
   <BoquetteProfile boquette={data.boquette} taferie={true}>

@@ -29,13 +29,13 @@
   <p class="font-zagoth text-3xl text-center text-white">{title}</p>
   <form  bind:this={_form} on:submit={()=>dialog.close()} action={formAction} method="post">
     <slot/>
-    <div class="flex justify-around mt-5 text-white text-lg">
+    <div class="flex justify-around gap-5 mt-5 text-white text-lg">
       {#if formAction != null}
-        <button on:click={callback} class="size-28 bg-blue-500 rounded-md">{buttonText}</button>
+        <button on:click={callback} class="size-20 bg-blue-500 rounded-md">{buttonText}</button>
       {:else}
-        <button type="button" on:click={callback} class="size-28 bg-blue-500 rounded-md">{buttonText}</button>
+        <button type="button" on:click={callback} class="size-20 bg-blue-500 rounded-md">{buttonText}</button>
       {/if}
-      <button type="button" on:click={()=>dialog.close()} class="size-28 bg-red-500 rounded-md">annuler</button>
+      <button type="button" on:click={()=>dialog.close()} class="size-20 bg-red-500 rounded-md">annuler</button>
     </div>
   </form>
 </dialog>

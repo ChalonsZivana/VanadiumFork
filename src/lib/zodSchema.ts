@@ -112,6 +112,7 @@ export const AddProductSchema = z.object({
 })
 
 export const EditProductSchema = z.object({
+  id_categorie:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
   nom:z.string().min(1),
   id_produit:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
   prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0)

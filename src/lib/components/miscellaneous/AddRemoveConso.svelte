@@ -16,11 +16,11 @@
 }>
   <input type="number" value={myId} name="id" class="hidden">
   {#if annule == true || annule == 1}
-    <button formaction="?/uncancel"  class="p-1 rounded-lg w-12">
+    <button formaction="?/uncancel"  class="rounded-lg w-6">
       <AddSquare/>
     </button>
   {:else}
-    <button formaction="?/cancel"  class="p-1 rounded-lg w-12">
+    <button formaction="?/cancel"  class="rounded-lg w-6">
       <MinusSquare/>
     </button>
   {/if}

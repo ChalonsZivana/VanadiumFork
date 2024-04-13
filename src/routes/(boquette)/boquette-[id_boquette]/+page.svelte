@@ -67,7 +67,7 @@
 <div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
   <BoquetteProfile boquette={boquette}>
     <form method="POST" action="/login?/logout">
-      <input class="hidden" type="text" name="boquette" value={data.id_boquette}>
+      <input type="hidden" name="boquette" value={data.id_boquette}>
       <button class="w-8 absolute top-3 left-3">
         <Logout />
       </button>

@@ -115,7 +115,7 @@
 
     <SectionCard title="Fonds | Negats">
       <form method="POST" action="/login?/logout">
-        <input class="hidden" type="text" name="boquette" value={20}>
+        <input type="hidden" name="boquette" value={20}>
         <button class="w-8 absolute top-3 left-3">
           <Logout />
         </button>

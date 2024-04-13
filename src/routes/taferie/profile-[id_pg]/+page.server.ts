@@ -52,7 +52,12 @@ export const actions = {
     const boq = new Boquette(pg.nums);
     if(pg == null) throw error(400);
 
-    await Taferie.rhopse({type:'pg_fams', from:id_pg,to:boq.ID,montant:-pg.solde, libelle:"Fonds vers Fonds Fams"})
+    const r = await Taferie.rhopse({type:'pg_fams', from:id_pg,to:boq.ID,montant:-pg.solde, libelle:"Fonds vers Fonds Fams"})
+    if(r?.success){
+      return {success:true, message:"Fonds transférés"}
+    } else {
+      return r;
+    }
   },
   "delete":async({params})=>{
     const id_pg = parseInt(params.id_pg); 
@@ -61,6 +66,7 @@ export const actions = {
     if(pg.solde != 0) return {wrong:'Le solde doit être nul'}
 
     await Taferie.deletePG(id_pg);
+
     throw redirect(300, '/taferie')
   }
 }

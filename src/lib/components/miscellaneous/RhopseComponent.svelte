@@ -49,7 +49,7 @@
               </p>
               <div class="flex justify-center gap-1">
                 <button on:click={()=>increment(product.id_produit,-1)} class="w-10"><MinusSquare /></button>
-                <input on:change={()=>verifyPositivity(product.id_produit)} class="text-center rounded-lg w-20" type="number" min=0 bind:value={quantités[product.id_produit]}>
+                <input required on:change={()=>verifyPositivity(product.id_produit)} class="text-center rounded-lg w-20" type="number" min=0 bind:value={quantités[product.id_produit]}>
                 <button on:click={()=>increment(product.id_produit,1)} class="w-10"><AddSquare /></button>
               </div>
             </div>
@@ -73,7 +73,7 @@
           </p>
           <div class="flex justify-center gap-1 bg-red-100">
             <button on:click={()=>increment(product.id_produit,-1)} class="w-10"><MinusSquare /></button>
-            <input on:change={()=>verifyPositivity(product.id_produit)} class="text-center rounded-lg w-20" type="number" min=0 bind:value={quantités[product.id_produit]}>
+            <input required on:change={()=>verifyPositivity(product.id_produit)} class="text-center rounded-lg w-20" type="number" min=0 bind:value={quantités[product.id_produit]}>
             <button on:click={()=>increment(product.id_produit,1)} class="w-10"><AddSquare /></button>
           </div>
         </div>

@@ -14,7 +14,7 @@
     return async({update})=> update({reset:false});
   }
 }>
-  <input type="number" value={myId} name="id" class="hidden">
+  <input type="hidden" name="id" value={myId}>
   {#if annule == true || annule == 1}
     <button formaction="?/uncancel"  class="rounded-lg w-6">
       <AddSquare/>

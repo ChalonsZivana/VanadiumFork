@@ -9,8 +9,10 @@
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import UserProfile from "$lib/components/profiles/UserProfile.svelte";
+    import Popup from "$lib/components/miscellaneous/Popup.svelte";
 
   export let data;
+  export let form:{success:boolean, message:string}
 
   let dialogSettings:HTMLDialogElement;
 
@@ -35,6 +37,8 @@
   $:editInputCheck.Actif = activCheck ? 1 : 0;
   const editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[]
 </script>
+
+<Popup bind:form={form}/>
 
 <div class="flex flex-col w-11/12 gap-2 pt-5">
   {#key data.user}

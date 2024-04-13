@@ -13,11 +13,11 @@
     <form action="?/transfert" use:enhance method="post"  class="flex flex-col items-center mt-5 gap-2 w-full">
       <label class="full w-5/6">
         <p class="text-white font-zagoth text-2xl">Montant</p>
-        <input class="w-full p-1 rounded-lg text-black" type="number" step="0.01" name="montant" placeholder="positif ou négatif">
+        <input required class="w-full p-1 rounded-lg text-black" type="number" step="0.01" name="montant" placeholder="positif ou négatif">
       </label>
       <label class="w-5/6">
         <p class="text-white font-zagoth text-2xl">Libellé</p>
-        <input class="w-full p-1 rounded-lg text-black" type="text" name="libelle" placeholder="Y'a qu'la Fams 11 qui pine">
+        <input required class="w-full p-1 rounded-lg text-black" type="text" name="libelle" placeholder="Y'a qu'la Fams 11 qui pine">
       </label>
       <div class="flex justify-center w-full">
         <button class="bg-red-500 w-1/2 flex justify-center rounded-md" on:click={()=>show=false}>

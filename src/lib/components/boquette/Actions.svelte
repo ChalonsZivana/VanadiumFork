@@ -164,6 +164,7 @@
       </button>
       
       <label for="file_import">
+        
         <input on:input={importExcel} bind:this={fileInputRhopse} class="hidden" id="file_import" accept=".xlsx" type="file">
         <button on:click={()=>fileInputRhopse.click()}>      
           <p>Importer feuille de rhopse</p>

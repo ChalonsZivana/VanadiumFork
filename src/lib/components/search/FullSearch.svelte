@@ -26,11 +26,11 @@
       <div class="flex gap-2">
         <label>
           <p class="text-white">Nums</p>
-          <input class="w-32" type="number" name="nums">
+          <input required class="w-32" type="number" name="nums">
         </label>
         <label>
           <p class="text-white">Proms</p>
-          <input class="w-32" type="number" name="proms">
+          <input required class="w-32" type="number" name="proms">
         </label>
       </div>
       <select name="sortType" value="date">
@@ -51,14 +51,14 @@
       
       <label class="w-full">
         <p class="text-white">Année de la consommation (vide pour toutes) :</p>
-        <input name="consoYear" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989">
+        <input required name="consoYear" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989">
       </label>
       <button class="self-center w-14">
         <SquareRightArrow/>
       </button>
     </div>
 
-    <input bind:value={page} class="hidden" type="number" name="page">
+    <input type="hidden" name="page" bind:value={page}>
     <div class="flex gap-2 justify-center text-black">
       <button type="submit">
         {#if page > 1}

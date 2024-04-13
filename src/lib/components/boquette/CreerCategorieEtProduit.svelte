@@ -13,7 +13,7 @@
   <form method="post" use:enhance action="/boquette-{id_boquette}?/create_category" class="flex flex-col gap-5 w-full">
     <div class="flex flex-col">
       <label class="font-zagoth text-white" for="nom_categorie">Nom catégorie</label>
-      <input type="text" name="nom_categorie" id="nom_categorie" class="bg-red-100 text-black">
+      <input required type="text" name="nom_categorie" id="nom_categorie" class="bg-red-100 text-black">
     </div>
 
     <MyButton value="Créer catégorie"/>
@@ -39,10 +39,6 @@
       </select>
     </label>
 
-    <label class={flexClass}>
-      <p class="font-zagoth">Stock (laisser vide pour ne pas activer la gestion de stock)</p>
-      <input type="number" name="stock" class="bg-red-100 text-black">
-    </label>
     <label class="font-zagoth text-white">
       <input type="checkbox" name="libre_service" id="libre_service" class="bg-red-100 text-black">
       Libre service (Si cette option est activée et que la partie PG de la boquette est activée alors les Pg pourront se rhopser directement depuis leur espace)

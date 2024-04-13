@@ -53,7 +53,7 @@
     <a on:click={close} href={url}>{nom}</a>
   {/each}
   <form method="POST" action="/login?/logout">
-    <input class="hidden" type="text" name="user" value="user">
+    <input type="hidden" name="user" value="user">
     <button>Déconnexion</button>
   </form>
   </div>

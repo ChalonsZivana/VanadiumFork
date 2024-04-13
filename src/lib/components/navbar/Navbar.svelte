@@ -12,7 +12,7 @@
 
 <div class="h-screen flex flex-col">
   <TopNavbar user={user}/>
-  <div class="flex flex-col items-center h-full w-full overflow-x-hidden">
+  <div class="relative flex flex-col items-center h-full w-full overflow-x-hidden">
     <slot/>
   </div>
   <BottomNavbar boquettes={boquettes} id_boquette={id_boquette}/>

@@ -15,10 +15,6 @@ export const load:PageServerLoad = async ()=>{
     boquettes:prisma.boquettes.findMany({select:{nom:true,nom_simple:true,id_boquette:true, solde:true}}),
     pgs:prisma.pg.findMany({select:{bucque:true, nums:true, proms:true, id_pg:true, solde:true},orderBy:{proms:'desc'}}),
     fams:prisma.fams.findMany(),
-    config:{
-      lydiazocque:await prisma.config.findFirst({where:{nom:'lydiazocque'}}),
-      vanazocque:await prisma.config.findFirst({where:{nom:'vanazocque'}})
-    }
   };
 }
 

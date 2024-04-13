@@ -10,6 +10,7 @@
   import Logout from '$lib/components/svgs/logout.svelte';
   import ToggleButton from '$lib/components/miscellaneous/ToggleButton.svelte';
   import { enhance } from '$app/forms';
+    import Warning from '$lib/components/svgs/warning.svelte';
 
   export let data;
   

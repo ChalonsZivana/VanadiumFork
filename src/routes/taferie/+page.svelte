@@ -175,7 +175,9 @@
           <CustomTable elements={boquettes} headers={['Boquette','Solde']} title=''>
             <tr slot="tbody" let:e>
               <th class="p-2">
-                {e.nom}
+                <a class="h-full w-full" href="/taferie/boquette-{e.id_boquette}">
+                  {e.nom}
+                </a>
               </th>
               <td>{#key e}
                   <MoneyColor auto={e.solde}/>

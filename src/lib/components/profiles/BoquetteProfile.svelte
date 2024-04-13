@@ -1,9 +1,13 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { boquettes } from "@prisma/client";
+    import Settings from "../svgs/settings.svelte";
+    import EditBoquetteDialog from "../boquette/EditBoquetteDialog.svelte";
 
   export let boquette:boquettes;
   export let taferie = false;
+
+  let dialog:HTMLDialogElement;
 </script>
 
 <SectionCard 
@@ -14,7 +18,7 @@ title={boquette.nom??''}>
         <p>Nom: {boquette.nom}</p>
         <p>Identifiant: {boquette.nom_simple}</p>
         <label>
-          <input type="checkbox" value={boquette.partie_pg}/> Partie PG
+          <input disabled type="checkbox" checked={boquette.partie_pg}/> Partie PG
         </label>
       </div>
 
@@ -25,6 +29,12 @@ title={boquette.nom??''}>
         </button>
       </a>
   </div>
+    <button on:click={()=>dialog.showModal()} class="w-8 absolute top-3 right-3">
+      <Settings/>
+    </button>
     <slot/>
   </div>
 </SectionCard>
+
+
+<EditBoquetteDialog bind:boquette={boquette} bind:dialog={dialog}/>

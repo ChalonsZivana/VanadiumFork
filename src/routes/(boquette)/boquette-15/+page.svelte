@@ -1,23 +1,17 @@
 <script lang="ts">
-  export let data;
+  import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
+  import type { boquettes } from "@prisma/client";
 
-  const remove = (id:number)=>{
-    data.discale = data.discale.filter(e=>e.id != id)
-    fetch("/boquette-15",
-    {
-      method:"POST",
-      body:id.toString()
-    });
-  }
+  export let data;
+  let boquette:boquettes;
+  $:boquette = data.BOQUETTES.find(e=>e.id_boquette == data.id_boquette) ?? data.BOQUETTES[0];
 </script>
 
-<div class="flex flex-col w-screen">
-  <div class="h-28 flex flex-col justify-center items-center">
-    <p class="font-zagoth text-4xl text-white">Discale</p>
-  </div>
-  <div class="flex flex-col gap-5 justify-center items-center">
+<div class="w-11/12 mt-5 flex flex-col gap-5 justify-center items-center">
+  <BoquetteProfile boquette={boquette}/>
+
     {#each data.discale as music}
-      <div class="flex p-2 flex-col justify-center items-center text-white bg-red-950 w-11/12 gap-2">
+      <div class="flex p-2 flex-col justify-center items-center text-white bg-red-950 w-full gap-2">
         <p class="text-xl text-center">{music.titre_auteur}</p>
         <form method="post" action="?/delete" class="flex gap-5">
             <a href={music.lien_musique} target="_blank">
@@ -29,6 +23,5 @@
         </form>
       </div>
     {/each}
-  </div>
 </div>
 

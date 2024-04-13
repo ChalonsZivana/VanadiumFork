@@ -2,17 +2,14 @@
   import Rhopse from "$lib/components/boquette/Rhopse.svelte";
   import Produits from "$lib/components/boquette/Produits.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
-  import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
   import type { boquettes, pg } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
-  import Settings from '$lib/components/svgs/settings.svelte';
   import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
   import Bolt from "$lib/components/svgs/bolt.svelte";
-    import Popup from "$lib/components/miscellaneous/Popup.svelte";
+  import Popup from "$lib/components/miscellaneous/Popup.svelte";
   
   export let data;
-  export let form;
-  let dialog:HTMLDialogElement;
+  export let form:{success:boolean, message:string};
 
   let boquette:boquettes;
   type boqSettingsText = {'Nom':string,'Nom Simple':string,'Nouveau Mot de passe':string,'Confirmation mot de passe :':string};
@@ -78,11 +75,6 @@
           <Bolt/>
         </a>
       {/if}
-      {#if boquette.id_boquette}
-        <button on:click={()=>dialog.showModal()} class="w-8">
-          <Settings/>
-        </button>
-      {/if}
     </div>
     
   </BoquetteProfile>
@@ -99,16 +91,3 @@
 </div>
 
 
-<CustomDialog formAction="?/editBoquette" bind:dialog={dialog} title="Edition Boquette - {boquette.nom}"
-  buttonText='Sauvegarder'>
-  {#each editDataKeys as k}
-    <label class="w-full">
-      <p class="font-zagoth text-xl text-white">{k}</p>
-      <input bind:value={editInputText[k]} class="w-full p-1 h-8 border-gray-300 border-1 rounded-md" type="text">
-    </label>
-  {/each}
-
-  <div class="flex flex-col text-white">
-    <label><input bind:checked={editInputCheck['Partie PG']} type="checkbox">Partie PG</label>
-  </div>
-</CustomDialog>

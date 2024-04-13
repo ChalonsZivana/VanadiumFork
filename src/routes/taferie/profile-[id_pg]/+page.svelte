@@ -9,7 +9,7 @@
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import UserProfile from "$lib/components/profiles/UserProfile.svelte";
-    import Popup from "$lib/components/miscellaneous/Popup.svelte";
+  import Popup from "$lib/components/miscellaneous/Popup.svelte";
 
   export let data;
   export let form:{success:boolean, message:string}

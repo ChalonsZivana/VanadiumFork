@@ -4,6 +4,7 @@ import { fail } from "@sveltejs/kit";
 
 export const load:PageServerLoad = async ()=>{  
   return {
+    id_boquette:15,
     discale: await prisma.spotify.findMany({orderBy:{id:'desc'}})
   };
 }

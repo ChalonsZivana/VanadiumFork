@@ -3,7 +3,8 @@ import prisma from "$lib/prisma";
 import type { boquettes } from "@prisma/client";
 import { Taferie } from "./Taferie";
 import type { z } from "zod";
-import { AddProductSchema, EditProductSchema } from '$lib/zodSchema.js';
+import { AddProductSchema, EditBoquetteSchema, EditProductSchema } from '$lib/zodSchema.js';
+import { hashPassword } from "../auth";
 
 type typesCroutes = 
     "1/2 Croüte" | 
@@ -135,6 +136,21 @@ export class Boquette extends HasMoney {
     await prisma.produits.deleteMany({
       where:{id_produit:data.id_produit, id_boquette:this.ID},
     })
+  }
+
+  async editBoquette(data:z.infer<typeof EditBoquetteSchema>){
+    if(data.password == ''){
+      await prisma.boquettes.updateMany({
+        where:{id_boquette:this.ID},
+        data:{nom:data.nom, partie_pg:data.partie_pg, nom_simple:data.nom_simple}
+      })
+    } else {
+      const mot_de_passe = hashPassword(data.password)
+      await prisma.boquettes.updateMany({
+        where:{id_boquette:this.ID},
+        data:{nom:data.nom, mot_de_passe, partie_pg:data.partie_pg, nom_simple:data.nom_simple}
+      })
+    }
   }
 
   async cancelConsommation(id_conso:number, cancel:boolean){

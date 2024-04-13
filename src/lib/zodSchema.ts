@@ -2,12 +2,12 @@ import { z } from "zod";
 
 
 export const EditBoquetteSchema  = z.object({
-  Nom:z.string(),
-  Identifiant:z.string(),
-  "Nouveau mot de passe":z.string(),
-  "Confirmation nouveau mot de passe":z.string(),
-  "Partie PG": z.union([z.literal('on'), z.undefined()])
-})
+  nom:z.string().min(1),
+  nom_simple:z.string().min(1),
+  password:z.string(),
+  password_confirmation:z.string(),
+  partie_pg: z.string().optional().transform(e => e == 'on')
+}).refine(e => e.password == e.password_confirmation)
 
 
 export const CreateProductSchema  = z.object({

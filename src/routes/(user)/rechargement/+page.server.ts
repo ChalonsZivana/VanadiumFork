@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "../$types";
-import { error } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import { LydiaManager } from "$lib/server/lydia";
 import {LYDIA_VENDOR_KEY} from "$env/static/private";
 import prisma from "$lib/prisma";
@@ -19,16 +19,17 @@ export const load:PageServerLoad  = async ({locals})=>{
 
 export const actions = {
   createLydiaDemand: async ({request, locals}) =>{
+    if(locals.session.data.user == null) throw error(400);
+
     const lydiazocque = await prisma.config.findMany({where:{nom:'lydiazocque'}});
     if(lydiazocque[0].valeur == '1') throw error(400);
 
     const a = await request.formData()
     const data = LydiaDemandFrontSchema.safeParse(Object.fromEntries(a));
-    if(!data.success) throw error(400);
-    const montant = parseFloat(data.data.montant);
-    if(isNaN(montant) || montant <= 0 || locals.session.data.user == null) throw error(400);
-
-    const r = await LydiaManager.createLydiaDemand(locals.session.data.user.pg.id_pg, {montant, numero:data.data.tel}, LYDIA_VENDOR_KEY)
+    if(!data.success) return fail(400, {message:'An error occured'});
+    const r = await LydiaManager.createLydiaDemand(
+      locals.session.data.user.pg.id_pg, {montant:data.data.montant, numero:data.data.tel}, LYDIA_VENDOR_KEY
+    );
     return r;
   },
   rechargementFams: async ({request, locals}) =>{
@@ -36,7 +37,9 @@ export const actions = {
     const montant = parseFloat(a.get('montant')?.toString()??'');
     const libelle = a.get('libelle')?.toString()??'';
     if(isNaN(montant) || montant <= 0 || locals.session.data.user == null) throw error(400);
-    await Taferie.rhopse({
+    
+    
+    return await Taferie.rhopse({
       type:'pg_fams', 
       from:locals.session.data.user.pg.id_pg,
       to:locals.session.data.user.fams.nums,
@@ -44,7 +47,7 @@ export const actions = {
       libelle
     });
   },
-  verifyLydiaDemand: async({request, locals}) => {
+  verifyLydiaDemand: async({locals}) => {
     if(!locals.session.data.user) throw error(400);
     const a = await prisma.rechargements.findFirst({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
     if(a == null) throw error(400);

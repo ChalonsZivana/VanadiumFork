@@ -27,6 +27,7 @@ export const actions = {
     if(!data.success) throw error(400);
     const boq = new Boquette(id_boquette);
     boq.addProduct(data.data);
+    return {success:true}
   },
   editProduct:async({request, params})=>{
     const id_boquette = parseInt(params.id_boquette);

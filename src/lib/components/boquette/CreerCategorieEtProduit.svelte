@@ -22,17 +22,17 @@
   <form method="post" use:enhance action="/boquette-{id_boquette}?/create_product" class="flex flex-col gap-2">
     <label class={flexClass}>
       <p class="font-zagoth">Nom produit</p>
-      <input type="text" name="nom_produit" class="bg-red-100 text-black">
+      <input required type="text" name="nom_produit" class="bg-red-100 text-black">
     </label>
 
     <label class={flexClass}>
       <p class="font-zagoth">Prix produit</p>
-      <input type="number" name="prix_produit" class="bg-red-100 text-black">
+      <input required type="number" name="prix_produit" class="bg-red-100 text-black">
     </label>
 
     <label class={flexClass}>
       <p class="font-zagoth">Catégorie du produit</p>
-      <select name="categorie_produit" class="bg-red-100 text-black">
+      <select required name="categorie_produit" class="bg-red-100 text-black">
         {#each categories as cat}
           <option value={cat.id_categorie}>{cat.nom}</option>
         {/each}

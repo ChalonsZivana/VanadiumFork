@@ -8,8 +8,10 @@
   import Settings from '$lib/components/svgs/settings.svelte';
   import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
   import Bolt from "$lib/components/svgs/bolt.svelte";
+    import Popup from "$lib/components/miscellaneous/Popup.svelte";
   
   export let data;
+  export let form;
   let dialog:HTMLDialogElement;
 
   let boquette:boquettes;
@@ -60,6 +62,7 @@
   };
 </script>
 
+<Popup bind:form={form}/>
 
 <div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
   <BoquetteProfile boquette={boquette}>

@@ -25,7 +25,7 @@ export const ImportRhopseSchema = z.array(
 );
 
 export const RhopseSchema  = z.object({
-  produits:z.array(z.tuple([z.number(),z.number()])),
+  produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(),z.number()])).safeParse(e).success),
 })
 
 
@@ -76,7 +76,7 @@ export const LydiaDemandResponseSchema  = z.object({
 
 export const LydiaDemandFrontSchema  = z.object({
   tel:z.string(),
-  montant:z.string(),
+  montant:z.string().transform(e => parseFloat(e)).refine(e => !isNaN(e)),
 });
 
 export const LydiaVerifyResponseSchema = z.object({
@@ -86,7 +86,9 @@ export const LydiaVerifyResponseSchema = z.object({
 });
 
 export const StatisticsSchema  = z.object({
-  jours:z.number(), take:z.number(), id_boquette:z.number()
+  jours:z.string().transform(e=>parseInt(e)).refine(e => !isNaN(e)), 
+  take:z.string().transform(e=>parseInt(e)).refine(e => !isNaN(e)), 
+  id_boquette:z.string().transform(e=>parseInt(e)).refine(e => !isNaN(e))
 });
 
 

@@ -156,6 +156,7 @@ export class Taferie {
         break;
     }
     sendPush('Rhopse', `${libelle} - ${montant}`);
+    return {success:true, message:`Rhopse effectuée: ${data.libelle}`}
   }
 
   static async consommations(types:({type:consommations_type, from:number}|{type:consommations_type, to:number})[]){

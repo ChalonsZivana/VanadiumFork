@@ -5,8 +5,8 @@
   import type { categories, pg, produits } from '@prisma/client';
   import AddSquare from '../svgs/add-square.svelte';
   import MinusSquare from '../svgs/minus-square.svelte';
+  import type { SubmitFunction } from "@sveltejs/kit";
 
-  export let id_boquette = '';
   export let rhopseUrl:string;
   export let pg:pg;
   export let produits:produits[];
@@ -20,19 +20,6 @@
   $: products = getProducts(categorie.id_categorie)
   $: selectedProducts = produits.filter(e=>quantités[e.id_produit]>0)
 
-  async function rhopser(){    
-    await fetch(rhopseUrl,
-    {
-      method:'POST',
-      body:JSON.stringify(
-        {
-          produits:selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])
-        }
-      )
-    });
-    dialog.close();
-  }
-
   function getProducts(id_categorie:number){
     return produits.filter(e=>e.id_categorie==id_categorie);
   }
@@ -43,9 +30,14 @@
     quantités[id_produit] += qt;
     verifyPositivity(id_produit);
   }
+  const customEnhance:SubmitFunction<Record<string, unknown> | undefined, Record<string, unknown> | undefined> = ({formData}) => {
+    formData.set('produits', JSON.stringify(selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])))
+  }
 </script>
 
+
 <div class="h-full w-full">
+  <form action=""></form>
   <SectionCard title="Rhopse - {pg.nums}Ch{pg.proms}">
     {#if selectedProducts.length}
     <div class="w-full flex flex-col gap-2 text-black">
@@ -90,21 +82,21 @@
   </SectionCard>
 </div>
 
-<CustomDialog callback={rhopser} bind:dialog={dialog} title="< Rhopser >" buttonText="Rhopser">
+<CustomDialog customEnhance={customEnhance} bind:dialog={dialog} formAction={rhopseUrl} title="< Rhopser >" buttonText="Rhopser">
   <p class="font-zagoth text-3xl text-center text-white">{pg.nums}Ch{pg.proms}</p>
 
-  <div class="rounded-3xl  overflow-clip mt-5">
-    {#each selectedProducts as product, i}
-      <div class="animate-scale-up divide-y-2 divide-black ">
-        <div>
-          <p class="bg-gray-300 text-center font-bold">
-            {product.nom}     ({product.prix}€)
-          </p>
-          <div class="flex bg-slate-200 justify-center gap-1">
-            {quantités[product.id_produit]}
+    <div class="rounded-3xl  overflow-clip mt-5">
+      {#each selectedProducts as product, i}
+        <div class="animate-scale-up divide-y-2 divide-black ">
+          <div>
+            <p class="bg-gray-300 text-center font-bold">
+              {product.nom}     ({product.prix}€)
+            </p>
+            <div class="flex bg-slate-200 justify-center gap-1">
+              {quantités[product.id_produit]}
+            </div>
           </div>
         </div>
-      </div>
-    {/each}
-  </div>
+      {/each}
+    </div>
 </CustomDialog>

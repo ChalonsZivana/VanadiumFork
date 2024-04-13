@@ -30,15 +30,19 @@ export const actions = {
   'rhopse':async({request, locals, params})=>{
     const id_boquette = parseInt(params.id_boquette);
     if(isNaN(id_boquette) || !Object.values(BOQUETTES).includes(id_boquette)) throw error(404);
-    const t  = JSON.parse(await request.text());
+    const t  = Object.fromEntries(await request.formData());
     const parse = RhopseSchema.safeParse(t);
 
     if(!parse.success || !locals.session.data.user) return fail(400,{});
     const data = parse.data;
     
     const id_pg = locals.session.data.user.pg.id_pg;
+
+    const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = []
     for(let [id_produit, quantite] of data.produits){
-      await Taferie.rhopse({type:"pg_boq",from:id_pg, to:id_boquette, id_produit, quantite});
+      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:id_boquette, id_produit, quantite});
+      results.push(r);
     }
+    return results[0]
   }
 }

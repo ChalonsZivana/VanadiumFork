@@ -1,5 +1,6 @@
 import prisma from "$lib/prisma";
 import { LydiaDemandResponseSchema, LydiaVerifyResponseSchema } from "$lib/zodSchema";
+import { fail } from "@sveltejs/kit";
 import { Taferie } from "./classes/Taferie";
 
 
@@ -8,7 +9,7 @@ export class LydiaManager {
   static async createLydiaDemand(id_pg:number, varData: { montant: number, numero: string }, vendorKey: string) {
     const _min = 10;
     const _max = 100.89;
-    if (varData.montant < _min || varData.montant > _max) return {error:`Il faut un montant compris ${_min}€ et ${_max}€`}
+    if (varData.montant < _min || varData.montant > _max) return {success:false, message:`Il faut un montant compris ${_min}€ et ${_max}€`}
 
     const data = new URLSearchParams({
       amount: varData.montant.toString(),
@@ -44,11 +45,11 @@ export class LydiaManager {
         date:new Date()
       }
     });
-    return {ok: 'Demande envoyée, veuillez l\'accepter dans les 120s'};
+    return {success:true, message: 'Demande envoyée, veuillez l\'accepter dans les 120s'};
 
   } catch(error) {
     console.error('Error creating Lydia demand:', error);
-    return {'error': 'Error creating Lydia demand'};
+    return {success:false, message: 'Error creating Lydia demand'};
   }
   }
 
@@ -68,15 +69,15 @@ export class LydiaManager {
         });
 
         const lydiaData = LydiaVerifyResponseSchema.safeParse(await response.json());
-        if(!lydiaData.success || lydiaData.data.state == "0") return {'error':'En attente de payement...'}
+        if(!lydiaData.success || lydiaData.data.state == "0") return {success:false, message:'En attente de payement...'}
 
         if(lydiaData.data.state == '1'){
           const d = await prisma.rechargements.update({where:{id_rechargement}, data:{status:1}});
           await Taferie.rhopse({type:'pg_ext', from:d.id_pg, libelle:"Rechargement Lydia", montant:d.montant});
-          return {ok:`${d.montant}€ ont été ajouté à votre sole.`}
+          return {success:true, message:`${d.montant}€ ont été ajouté à votre sole.`}
         } else {
           await prisma.rechargements.update({where:{id_rechargement}, data:{status:-1}});
-          return {'error':'Vous avez refusé le payement.'}
+          return {success:false, message:'Vous avez refusé le payement.'}
         }
     } catch (error) {
         console.error('Error verifying Lydia demand:', error);

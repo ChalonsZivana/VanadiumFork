@@ -32,7 +32,7 @@ export const load:PageServerLoad = async ({locals})=>{
 
 export const actions = {
   "stats":async({request})=>{
-    const d = JSON.parse(await request.text());
+    const d = Object.fromEntries(await request.formData());
     const data = StatisticsSchema.safeParse(d);
 
     if(!data.success) throw error(400);

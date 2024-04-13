@@ -9,7 +9,7 @@
 
   function getFrom(e:ConsommationsIncludeType){
     if(e.type.startsWith('pg')){
-      return `${e.from_pg?.nums}Ch${e.from_pg?.proms}`;
+      return `${e.from_pg?.nums}\rch\r${e.from_pg?.proms}`;
     }
     return 'EXT';
   }
@@ -36,7 +36,7 @@
     <svelte:fragment slot="tbody" let:e>
       {@const [_from,_to] = e.type.toUpperCase().split('_')}
       {#key e}
-        <tr class="{e.annule?'line-through':''} decoration-2 divide-x-2">
+        <tr class="{e.annule?'line-through':''} text-xxs decoration-2 divide-x-2">
           <td><!-- Date -->
             <p>{e.date_conso.toLocaleDateString()}</p>
             <p>{e.date_conso.toLocaleTimeString()}</p>
@@ -46,7 +46,7 @@
           <td>{e.libelle}</td><!-- Libellé -->
           <td><!-- Montant -->
             <p>AP. {e.solde_apres}€</p>
-            <MoneyColor auto={e.montant} className="text-sm font-bold"/>
+            <MoneyColor auto={e.montant} className="text-xs font-bold"/>
             <p>AV. {e.solde_avant}€</p>
           </td>
           {#if cancelOption}

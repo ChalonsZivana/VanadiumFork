@@ -24,7 +24,7 @@
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
   <SectionCard title="Ajouter Produit">
-    <form use:enhance action="?/addProduct" method="post">
+    <form class="flex flex-col gap-5" use:enhance action="?/addProduct" method="post">
       <label>
         <p class="text-3xl font-zagoth">Nom</p>
         <input required class="w-80 text-xl pl-2 h-10 text-black" type="text" name="nom" id="">
@@ -46,7 +46,7 @@
         <input required class="w-80 text-xl pl-2 h-10 text-black" type="number" step="0.01" min="0" name="prix">
       </label>
       
-      <button class="p-2 rounded-md">
+      <button class="rounded-md bg-blue-600 self-center">
         <Accept className="size-10"/>
       </button>
     </form>

@@ -147,26 +147,15 @@ model pg {
   id_pg                      Int        @id @default(autoincrement())
   nom                        String     @db.VarChar(35)
   prenom                     String     @db.VarChar(35)
-  bucque                     String?    @db.VarChar(35)
+  bucque                     String    @db.VarChar(35)
   nums                       Int
   tabagns                    pg_tabagns
   proms                      Int
-  boquette                   String?    @db.VarChar(255)
   email                      String     @db.VarChar(200)
   solde                      Float    @default(0.00)
-  solde_liquide              Float    @default(0.00)
-  sexe                       Boolean    @default(true)
-  dossier_photos             String?    @db.VarChar(30)
   mot_de_passe               String     @default("91b1bb7c2d6d0ccbaa574c690930b317ad44ebb9") @db.VarChar(255)
-  sel                        String?    @db.VarChar(255)
-  actif                      Int?       @default(1) @db.SmallInt
-  droit                      Int        @default(0)
-  au_tabagns                 Boolean    @default(false)
-  badge                      BigInt?
-  dernier_rappel_mail_negats DateTime?  @db.DateTime(0)
-  dernier_palier_mail_negats Int        @default(0)
-  temps_negats               Int        @default(0)
-  info                       String?    @db.Text
+  actif                      Int       @default(1) @db.SmallInt
+  ddp                      Int        @default(0)
 
   refresh                    refresh[]
   auberge                    auberge[]

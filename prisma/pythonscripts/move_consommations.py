@@ -77,6 +77,7 @@ try:
           database='vanadium',
     )
     if connection.is_connected():
+        
         print("Connected to MySQL database")
         # Perform database operations here
         cursor = connection.cursor()

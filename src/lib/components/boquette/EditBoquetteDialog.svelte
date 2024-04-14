@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { boquettes } from "@prisma/client";
-    import CustomDialog from "../miscellaneous/CustomDialog.svelte";
+    import SubmitDialog from "../miscellaneous/SubmitDialog.svelte";
 
     export let boquette:boquettes;
     export let dialog:HTMLDialogElement;
 </script>
 
-<CustomDialog customEnhance={()=>{return ({update})=>update({reset:false})}} formAction="/boquette-{boquette.id_boquette}?/editBoquette" bind:dialog={dialog} title="Edition Boquette - {boquette.nom}"
+<SubmitDialog customEnhance={()=>{return ({update})=>update({reset:false})}} formAction="/boquette-{boquette.id_boquette}?/editBoquette" bind:dialog={dialog} title="Edition Boquette - {boquette.nom}"
   buttonText='Sauvegarder' >
   <label class="w-full">
     <p class="font-zagoth text-xl text-white">Nom</p>
@@ -33,4 +33,4 @@
       Partie PG
     </label>
   </div>
-</CustomDialog>
+</SubmitDialog>

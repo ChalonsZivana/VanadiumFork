@@ -3,7 +3,8 @@
   import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
   import Accept from "$lib/components/svgs/accept.svelte";
   import {enhance} from '$app/forms'
-  import CustomDialog from "$lib/components/miscellaneous/CustomDialog.svelte";
+  import SubmitDialog from "$lib/components/miscellaneous/SubmitDialog.svelte";
+  import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
 
   export let data;
   export let editDialog:HTMLDialogElement;
@@ -23,7 +24,6 @@
 
   let productToEdit:typeof data.produits[0] | null = null;
   let id_categorie:null|number = null;
-  let toggleDeleteProduct = false;
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
@@ -97,9 +97,11 @@
 
 <input type="hidden" name="" class="animate-background-shine">
 
-<CustomDialog customEnhance={()=>{return ({update})=>update({reset:false})}} callback={()=>toggleAnimate(productToEdit?.id_produit??0)} bind:dialog={editDialog} buttonText="Editer" formAction="?/editProduct" title="Edition Produit">
-  <div class="flex flex-col h-80 justify-around">
-    {#if productToEdit}
+
+<SubmitDialog customEnhance={()=>{return ({update})=>update({reset:false})}} onsubmit={()=>toggleAnimate(productToEdit?.id_produit??0)} bind:dialog={editDialog} buttonText="Editer" formAction="?/editProduct" title="Edition Produit">
+  {#if productToEdit}
+
+  <div class="flex flex-col h-96 justify-around">
       <input type="hidden" name="id_produit" value={productToEdit.id_produit}>
       <label>
         <p class="text-2xl font-zagoth text-white">Catégorie du produit:</p>
@@ -118,16 +120,8 @@
         <input class="pl-2 h-10 w-full" type="number" step="0.01" min="0" name="prix" value={productToEdit.prix}>
       </label>
 
-      <div class="mt-5 rounded-lg overflow-clip w-full text-white">
-        <button type="button" on:click={()=>toggleDeleteProduct=!toggleDeleteProduct} class="bg-red-700 font-zagoth text-2xl p-2 w-full">
-          Supprimer produit
-        </button>
-        <div class="flex text-white {toggleDeleteProduct?'h-10 scale-y-100':'h-0 scale-y-0'} origin-top duration-300">
-          <button formaction="?/deleteProduct" class="bg-green-600 w-full flex justify-center" on:click={()=>toggleDeleteProduct=false}>
-            <Accept className="w-10 p-1"/>
-          </button>
-        </div>
-      </div>
-    {/if}
+      <ValidationButton formaction="?/deleteProduct" text="Supprimer produit"/>
   </div>
-</CustomDialog>
+
+  {/if}
+</SubmitDialog>

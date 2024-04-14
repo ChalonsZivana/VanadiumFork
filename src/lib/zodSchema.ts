@@ -117,3 +117,7 @@ export const EditProductSchema = z.object({
   id_produit:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
   prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0)
 });
+
+export const DeleteProductSchema = z.object({
+  id_produit:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
+});

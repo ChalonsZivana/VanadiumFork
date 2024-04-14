@@ -1,6 +1,6 @@
 <script lang="ts">
   import SectionCard from '$lib/components/SectionCard.svelte';
-  import CustomDialog from '$lib/components/miscellaneous/CustomDialog.svelte';
+  import SubmitDialog from '$lib/components/miscellaneous/SubmitDialog.svelte';
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type { categories, pg, produits } from '@prisma/client';
   import AddSquare from '../svgs/add-square.svelte';
@@ -82,7 +82,7 @@
   </SectionCard>
 </div>
 
-<CustomDialog customEnhance={customEnhance} bind:dialog={dialog} formAction={rhopseUrl} title="< Rhopser >" buttonText="Rhopser">
+<SubmitDialog customEnhance={customEnhance} bind:dialog={dialog} formAction={rhopseUrl} title="< Rhopser >" buttonText="Rhopser">
   <p class="font-zagoth text-3xl text-center text-white">{pg.nums}Ch{pg.proms}</p>
 
     <div class="rounded-3xl  overflow-clip mt-5">
@@ -99,4 +99,4 @@
         </div>
       {/each}
     </div>
-</CustomDialog>
+</SubmitDialog>

@@ -3,13 +3,13 @@
   import SectionCard from "$lib/components/SectionCard.svelte";
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
   import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
-  import CustomDialog from "$lib/components/miscellaneous/CustomDialog.svelte";
+  import SubmitDialog from "$lib/components/miscellaneous/SubmitDialog.svelte";
   import Settings from "$lib/components/svgs/settings.svelte";
-  import Accept from "$lib/components/svgs/accept.svelte";
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import UserProfile from "$lib/components/profiles/UserProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
+  import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
 
   export let data;
   export let form:{success:boolean, message:string}
@@ -49,30 +49,14 @@
 
     <div class="w-11/12 self-center flex justify-center items-center flex-col">
       {#if data.user.pg.solde == 0}
-        <div class="mt-5 rounded-lg overflow-clip w-full">
-          <button on:click={()=>fondsToFamsValidation=!fondsToFamsValidation} class="bg-red-700 font-zagoth text-2xl p-2 w-full">
-            Supprimer PG
-          </button>
-          <form method="post" action="?/delete" use:enhance class="flex text-white {fondsToFamsValidation?'h-10 scale-y-100':'h-0 scale-y-0'} origin-top duration-300">
-            <button class="bg-green-600 w-full flex justify-center" on:click={()=>fondsToFamsValidation=false}>
-              <Accept className="w-10 p-1"/>
-            </button>
-          </form>
-        </div>
+        <form class="w-full" method="post" use:enhance>
+          <ValidationButton formaction="?/delete" text="Supprimer PG"/>
+        </form>
       {:else}
-        <div class="mt-5 rounded-lg overflow-clip w-full">
-          <button on:click={()=>fondsToFamsValidation=!fondsToFamsValidation} class="bg-red-700 font-zagoth text-2xl p-2 w-full">
-            Fonds ➔ Fonds Fams
-          </button>
-          <form method="post" action="?/fonds_ffams" use:enhance class="flex text-white {fondsToFamsValidation?'h-10 scale-y-100':'h-0 scale-y-0'} origin-top duration-300">
-            <button class="bg-green-600 w-full flex justify-center" on:click={()=>fondsToFamsValidation=false}>
-              <Accept className="w-10 p-1"/>
-            </button>
-          </form>
-        </div>
-      {/if}
-      
-
+        <form class="w-full" method="post" use:enhance>
+          <ValidationButton formaction="?/fonds_ffams" text="Fonds ➔ Fonds Fams"/>
+        </form>
+      {/if}      
       <GestionBrousouffs/>
     </div>
   </UserProfile>
@@ -115,7 +99,7 @@
   </SectionCard>
 </div>
 
-<CustomDialog formAction="?/editPG" bind:dialog={dialogSettings} title="Edition PG - {data.user.pg.nums}Ch{data.user.pg.proms}"
+<SubmitDialog formAction="?/editPG" bind:dialog={dialogSettings} title="Edition PG - {data.user.pg.nums}Ch{data.user.pg.proms}"
   buttonText='Sauvegarder'>
   {#each editDataKeys as k}
     <label class="w-full">
@@ -128,4 +112,4 @@
     <label><input bind:checked={activCheck} type="checkbox">Compte actif</label>
     <label><input type="checkbox">Délégué de proms (DDP)</label>
   </div>
-</CustomDialog>
+</SubmitDialog>

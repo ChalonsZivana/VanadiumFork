@@ -1,5 +1,5 @@
 <script lang="ts">
-  import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
+  import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import FullSearch from "$lib/components/search/FullSearch.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";

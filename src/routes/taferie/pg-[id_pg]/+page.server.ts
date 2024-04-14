@@ -1,16 +1,16 @@
-import type { PageServerLoad } from "./$types";
-import { createUser, updateUser } from "$lib/server/auth";
+import { createUser } from "$lib/server/auth";
 import { error, fail, redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
 import { Pg } from "$lib/server/classes/PG";
 import { Boquette } from "$lib/server/classes/Boquette";
+import { EditPgSchema } from "$lib/zodSchema.js";
 
-export const load:PageServerLoad = async ({params})=>{
+export const load = async ({params})=>{
   const id_pg = parseInt(params.id_pg);
   const user = await createUser(id_pg);
-  if(user == null)throw error(404, 'User missing');
-
+  if(user == null) throw error(404, 'User missing');
+  
   const consommations = prisma.consommations.findMany({
     where:{type:{in:["pg_ext", "pg_boq", "pg_fams", "pg_pg"]},from:id_pg}, 
     orderBy:{date_conso:'desc'}
@@ -21,7 +21,7 @@ export const load:PageServerLoad = async ({params})=>{
 }
 
 export const actions = {
-  "transfert":async ({request, params})=>{
+  transfert:async ({request, params})=>{
     const data = await request.formData();
     const montant = parseFloat(data.get("montant")?.toString()??'');
     const libelle = data.get('libelle')?.toString() ?? '';
@@ -30,21 +30,21 @@ export const actions = {
 
     await Taferie.rhopse({type:"pg_ext", from:id_pg, montant:montant, libelle});
   },
-  "cancel":async({request})=>{
+  cancel:async({request})=>{
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
     await Taferie.cancelConsommation(id, true);
   },
-  "uncancel":async({request})=>{
+  uncancel:async({request})=>{
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
     await Taferie.cancelConsommation(id, false);
   },
-  "fonds_ffams":async({params})=>{
+  fonds_ffams:async({params})=>{
     const id_pg = parseInt(params.id_pg); 
     if(isNaN(id_pg)) throw error(400);
     
@@ -59,7 +59,7 @@ export const actions = {
       return r;
     }
   },
-  "delete":async({params})=>{
+  delete:async({params})=>{
     const id_pg = parseInt(params.id_pg); 
     if(isNaN(id_pg)) throw error(400);
     const pg = await new Pg(id_pg).pg();
@@ -68,5 +68,15 @@ export const actions = {
     await Taferie.deletePG(id_pg);
 
     throw redirect(300, '/taferie')
+  },
+  editPg:async({request, params})=>{
+    const id_pg = parseInt(params.id_pg);
+    if(!id_pg) throw error(400);
+    const d = Object.fromEntries(await request.formData());
+    const data = EditPgSchema.safeParse(d);
+
+    if(!data.success) return fail(400, {success:false, message:"Something went wrong"})
+    
+    new Pg(id_pg).editPg(data.data);
   }
 }

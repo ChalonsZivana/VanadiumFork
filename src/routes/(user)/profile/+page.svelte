@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Profile from "$lib/components/profiles/UserProfile.svelte";
+  import Profile from "$lib/components/pg/UserProfile.svelte";
   import type { User } from "$lib/server/auth";
   import SectionCard from '$lib/components/SectionCard.svelte';
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";

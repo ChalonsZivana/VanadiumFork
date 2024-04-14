@@ -4,7 +4,7 @@
   import Actions from "$lib/components/boquette/Actions.svelte";
   import type { boquettes, pg } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
-  import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
+  import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Bolt from "$lib/components/svgs/bolt.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   

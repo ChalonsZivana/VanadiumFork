@@ -1,7 +1,7 @@
 
 <script lang="ts">
-  import Profile from "$lib/components/profiles/UserProfile.svelte";
-  import Negats from "$lib/components/profiles/Negats.svelte";
+  import Profile from "$lib/components/pg/UserProfile.svelte";
+  import Negats from "$lib/components/pg/Negats.svelte";
   import SquareRightArrow from "$lib/components/svgs/square-right-arrow.svelte";
   import Top from "$lib/components/miscellaneous/Leaderboard.svelte";
   import SectionCard from "$lib/components/SectionCard.svelte";
@@ -26,7 +26,9 @@
 
 <div class="{className} w-11/12 pt-5">
       <div class="{className} w-full md:grid md:grid-cols-2 md:grid-rows-2 md:items-start">
-        <Profile bind:user={data.USER}/>
+        <Profile bind:user={data.USER}>
+          
+        </Profile>
 
         <div class="row-span-2 w-full">
           <SectionCard title="">

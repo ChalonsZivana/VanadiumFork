@@ -1,5 +1,5 @@
 <script lang="ts">
-  import BoquetteProfile from "$lib/components/profiles/BoquetteProfile.svelte";
+  import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import type { boquettes } from "@prisma/client";
 
   export let data;

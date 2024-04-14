@@ -104,7 +104,7 @@
               <td>{#key e}
                   <MoneyColor auto={e.pg.solde}/>
               {/key}</td>
-              <td><a href="/taferie/profile-{e.pg.id_pg}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Panel</a></td>
+              <td><a href="/taferie/pg-{e.pg.id_pg}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Panel</a></td>
             <tr/>
           </CustomTable>
         </svelte:fragment>
@@ -208,7 +208,7 @@
           </th>
           <td>{e.bucque}</td>
           <td><MoneyColor auto={e.solde}/></td>
-          <td><a href="/taferie/profile-{e.id_pg}" class="bg-gray-400 p-1 rounded-md">Profil</a></td>
+          <td><a href="/taferie/pg-{e.id_pg}" class="bg-gray-400 p-1 rounded-md">Profil</a></td>
         </tr>
       </CustomTable>
       {/if}

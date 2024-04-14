@@ -1,8 +1,8 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { boquettes } from "@prisma/client";
-    import Settings from "../svgs/settings.svelte";
-    import EditBoquetteDialog from "../boquette/EditBoquetteDialog.svelte";
+  import Settings from "../svgs/settings.svelte";
+  import EditBoquetteDialog from "./EditBoquetteDialog.svelte";
 
   export let boquette:boquettes;
   export let taferie = false;

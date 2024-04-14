@@ -7,7 +7,7 @@
 </script>
 
 <SubmitDialog customEnhance={()=>{return ({update})=>update({reset:false})}} formAction="/boquette-{boquette.id_boquette}?/editBoquette" bind:dialog={dialog} title="Edition Boquette - {boquette.nom}"
-  buttonText='Sauvegarder' >
+  buttonText='Editer' >
   <label class="w-full">
     <p class="font-zagoth text-xl text-white">Nom</p>
     <input name="nom" value={boquette.nom} class="w-full p-1 h-8 border-gray-300 border-1 rounded-md" type="text">

@@ -47,6 +47,24 @@ export const InscriptionSchema = z.object({
   message: 'Invalid numbers',
 });
 
+export const EditPgSchema = z.object({
+  nom: z.string().min(1),
+  prenom: z.string().min(1),
+  bucque:z.string().min(1),
+  email: z.string().min(1),
+  nums: z.string().min(1),
+  //tabagns:z.string(),
+  proms: z.string(),
+}).transform((data) => ({
+  ...data,
+  nums: parseInt(data.nums),
+  proms: parseInt(data.proms),
+})).refine((data) => {
+  return !isNaN(data.nums) && !isNaN(data.proms);
+}, {
+  message: 'Invalid numbers',
+});
+
 
 export const ConsommationsSchema  = z.object({
   page:z.string(),

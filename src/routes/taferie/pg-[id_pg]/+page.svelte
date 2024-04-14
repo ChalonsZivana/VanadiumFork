@@ -7,16 +7,15 @@
   import Settings from "$lib/components/svgs/settings.svelte";
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
-  import UserProfile from "$lib/components/profiles/UserProfile.svelte";
+  import UserProfile from "$lib/components/pg/UserProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
+    import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
 
   export let data;
   export let form:{success:boolean, message:string}
 
   let dialogSettings:HTMLDialogElement;
-
-  let fondsToFamsValidation = false;
 
   function initPGEdit() {
     return {
@@ -99,17 +98,4 @@
   </SectionCard>
 </div>
 
-<SubmitDialog formAction="?/editPG" bind:dialog={dialogSettings} title="Edition PG - {data.user.pg.nums}Ch{data.user.pg.proms}"
-  buttonText='Sauvegarder'>
-  {#each editDataKeys as k}
-    <label class="w-full">
-      <p class="font-zagoth text-xl text-white">{k}</p>
-      <input bind:value={editInputText[k]} class="w-full p-1 h-8 border-gray-300 border-1 rounded-md" type="text">
-    </label>
-  {/each}
-
-  <div class="flex flex-col text-white">
-    <label><input bind:checked={activCheck} type="checkbox">Compte actif</label>
-    <label><input type="checkbox">Délégué de proms (DDP)</label>
-  </div>
-</SubmitDialog>
+<EditPgDialog bind:dialog={dialogSettings} pg={data.user.pg}/>

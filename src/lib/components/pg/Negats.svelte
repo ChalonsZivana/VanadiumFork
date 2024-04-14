@@ -1,7 +1,6 @@
 <script lang='ts'>
   import SectionCard from "../SectionCard.svelte";
 
-
   export let negats:{[key: number]:number};
 </script>
 

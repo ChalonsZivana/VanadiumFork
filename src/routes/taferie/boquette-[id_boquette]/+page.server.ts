@@ -2,7 +2,7 @@ import { consommationsSearch } from '$lib/components/search/fullsearch.js';
 import prisma from '$lib/prisma.js';
 import { Boquette } from '$lib/server/classes/Boquette.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
-import { ConsommationsSchema, EditBoquetteSchema } from '$lib/zodSchema.js';
+import { ConsommationsSchema } from '$lib/zodSchema.js';
 import { consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 

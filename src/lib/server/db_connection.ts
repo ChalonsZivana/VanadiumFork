@@ -1,12 +1,10 @@
 import prisma from "$lib/prisma";
+import { Fams } from "./classes/Fams";
 import type { Top } from './db_structs';
 
 export async function getFams(nums:number) {
-  if(nums > 50){
-    nums = Math.abs(100 - nums);
-  }
-  if(nums == 0) nums = 50;
-  return prisma.fams.findFirst({where:{nums:nums}});
+  const fams = new Fams(nums)
+  return prisma.fams.findFirst({where:{nums:fams.ID}});
 }
 
 

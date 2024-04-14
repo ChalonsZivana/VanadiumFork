@@ -8,6 +8,7 @@ export const load = async ({params})=>{
   const id_pg = parseInt(params.id_pg);
   if(isNaN(id_pg) || !Pg.exists(id_pg)) throw error(400);
   const pg = new Pg(parseInt(params.id_pg));
+
   return {pg:await pg.pg()}
 }
 

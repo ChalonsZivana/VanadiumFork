@@ -43,19 +43,32 @@
     const cachedData = localStorage.getItem('cachedPgs');
     
     if (cachedData != null && cachedData !== 'undefined' && cachedData.length != 0) {
-      // Load data from cache if available
       console.log('loading cache')
-      return JSON.parse(cachedData);
-    } else {
-      console.log('fetching pgs')
-      // Fetch data from server if not available in cache
-      const response = await fetch(`/boquette-${boquette.id_boquette}/boquettePgs`, {method:"get"});
-      const { pgs: fetchedPgs } = await response.json();
-      console.log(fetchedPgs)
-      // Cache the data
-      localStorage.setItem('cachedPgs', JSON.stringify(fetchedPgs));
-      return fetchedPgs;
-    }
+      const {value,expiry} = JSON.parse(cachedData) as {value:Partial<pg>[], expiry:number};
+
+        if(new Date().getTime() > expiry){
+        localStorage.removeItem('cachedPgs')
+      } else {
+        return value;
+      }
+    } 
+
+    console.log('fetching pgs')
+    const updateKey = localStorage.getItem('update_key');
+    const response = await fetch(`/boquette-${boquette.id_boquette}/boquettePgs?update_key=` + updateKey, {method:"get"});
+    const { pgs: fetchedPgs} = await response.json();
+
+    // Cache the data
+    const now = new Date();
+    localStorage.setItem('cachedPgs',
+      JSON.stringify(
+        {
+        'value':fetchedPgs,
+        'expiry': now.getTime() + 30 * 60 * 1000 // 30 minutes in milliseconds
+        }
+      )
+    );
+    return fetchedPgs;
   };
 </script>
 

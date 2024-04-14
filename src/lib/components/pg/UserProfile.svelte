@@ -35,9 +35,11 @@ title="Profil">
     </div>
     <slot/>
 </div>
-<a href="ddp" class="absolute top-3 right-3">
-  <div class="p-1 border-1 border-white rounded-xl">
-    DDP
-  </div>
-</a>
+{#if !taferie}
+  <a href="ddp" class="absolute top-3 right-3">
+    <div class="p-1 border-1 border-white rounded-xl">
+      DDP
+    </div>
+  </a>
+{/if}
 </SectionCard>

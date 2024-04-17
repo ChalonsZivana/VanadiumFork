@@ -7,7 +7,7 @@ export async function load({locals}){
   if(user.pg.ddp == 0) throw error(401)
   const proms = user.pg.proms;
   return {
-    pgs:await prisma.pg.findMany({where:{proms}, select:{nums:true, proms:true, bucque:true, solde:true,email:true}}),
+    pgs:await prisma.pg.findMany({where:{proms}, select:{nums:true, proms:true, bucque:true, solde:true,email:true}, orderBy:{nums:'asc'}}),
     proms
   }
 }

@@ -3,10 +3,17 @@
   import type { boquettes } from "@prisma/client";
   import Settings from "../svgs/settings.svelte";
   import EditBoquetteDialog from "./EditBoquetteDialog.svelte";
+  import Bolt from "../svgs/bolt.svelte";
 
   export let boquette:boquettes;
   export let taferie = false;
 
+  let specialRhopse:null|string;
+  $: {
+    if(boquette.id_boquette == 7) specialRhopse = `boquette-${boquette.id_boquette}/special/foys` // Foys
+    else if(boquette.id_boquette == 3) specialRhopse = `boquette-${boquette.id_boquette}/special/auberge` // Auberge
+    else specialRhopse = null;
+  }
   let dialog:HTMLDialogElement;
 </script>
 
@@ -29,9 +36,17 @@ title={boquette.nom??''}>
         </button>
       </a>
   </div>
-    <button on:click={()=>dialog.showModal()} class="w-8 absolute top-3 right-3">
-      <Settings/>
-    </button>
+      <div class="flex gap-3 absolute top-3 right-3">
+        {#if specialRhopse != null}
+          <a href={specialRhopse} class="w-8">
+            <Bolt/>
+          </a>
+        {/if}
+      <button on:click={()=>dialog.showModal()} class="w-8">
+        <Settings/>
+      </button>
+      </div>
+    
     <slot/>
   </div>
 </SectionCard>

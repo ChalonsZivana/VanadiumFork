@@ -23,13 +23,6 @@
     editInputCheck = {'Partie PG':boquette.partie_pg};     
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
-
-  let special:string|null = null;
-  $ : {
-    if(data.id_boquette == 7) special = `boquette-${data.id_boquette}/special/foys` // Foys
-    else if(data.id_boquette == 3) special = `boquette-${data.id_boquette}/special/auberge` // Auberge
-  }
- 
   function initPGEdit(boq:boquettes):boqSettingsText {
     return {
     'Nom':boq.nom ?? '',
@@ -82,14 +75,6 @@
         <Logout />
       </button>
     </form>
-    <div class="flex absolute top-3 right-3 gap-2">
-      {#if special != null}
-        <a href={special} class="w-8">
-          <Bolt/>
-        </a>
-      {/if}
-    </div>
-    
   </BoquetteProfile>
   <Actions boquette={boquette} categories={data.categories} products={data.produits}/>
   {#await pgsPromise()}

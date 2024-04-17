@@ -21,6 +21,7 @@ title="Profil">
     <Special special={[11,89,111].includes(user.pg.nums??-1)}>
       <p>Nums: {user.pg.nums}</p>
     </Special>
+    <p>Proms: {user.pg.proms}</p>
     <p>Email: {user.pg.email}</p>
 
     <div class="flex justify-around">
@@ -35,7 +36,7 @@ title="Profil">
     </div>
     <slot/>
 </div>
-{#if !taferie}
+{#if !taferie && user.pg.ddp == 1}
   <a href="ddp" class="absolute top-3 right-3">
     <div class="p-1 border-1 border-white rounded-xl">
       DDP

@@ -1,4 +1,4 @@
-import prisma from '$lib/prisma.js';
+import prisma from '$lib/prisma';
 import { BOQUETTES, Boquette } from '$lib/server/classes/Boquette.js';
 import { AddProductSchema, DeleteProductSchema, EditProductSchema } from '$lib/zodSchema.js';
 import { error } from '@sveltejs/kit';

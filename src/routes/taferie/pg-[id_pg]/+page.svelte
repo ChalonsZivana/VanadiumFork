@@ -3,14 +3,13 @@
   import SectionCard from "$lib/components/SectionCard.svelte";
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
   import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
-  import SubmitDialog from "$lib/components/miscellaneous/SubmitDialog.svelte";
   import Settings from "$lib/components/svgs/settings.svelte";
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import UserProfile from "$lib/components/pg/UserProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
-    import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
+  import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
 
   export let data;
   export let form:{success:boolean, message:string}
@@ -34,7 +33,6 @@
   } 
   let activCheck:boolean;
   $:editInputCheck.Actif = activCheck ? 1 : 0;
-  const editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[]
 </script>
 
 <Popup bind:form={form}/>
@@ -99,3 +97,4 @@
 </div>
 
 <EditPgDialog bind:dialog={dialogSettings} pg={data.user.pg}/>
+

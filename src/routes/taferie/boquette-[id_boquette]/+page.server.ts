@@ -1,5 +1,5 @@
 import { consommationsSearch } from '$lib/components/search/fullsearch.js';
-import prisma from '$lib/prisma.js';
+import prisma from '$lib/prisma';
 import { Boquette } from '$lib/server/classes/Boquette.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
 import { ConsommationsSchema } from '$lib/zodSchema.js';

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { pg_tabagns, type pg } from "@prisma/client";
+  import { type pg } from "@prisma/client";
   import SubmitDialog from "../miscellaneous/SubmitDialog.svelte";
 
   export let pg:pg;
@@ -31,9 +31,11 @@ buttonText='Editer' >
   <label class="w-full">
     <p class="font-zagoth text-xl text-white">TBK</p>
     <select disabled name="tabagns"  class="w-full p-1 h-8 border-gray-300 border-1 rounded-md">
-      {#each Object.keys(pg_tabagns) as tabagns}
+      <option value="Ch">Ch</option>
+      <!-- Erreur lors de l'import de pg_tabagns, de toute façon on est que de chalons -->
+      <!-- {#each Object.keys(pg_tabagns) as tabagns}
         <option value={tabagns}>{tabagns}</option>
-      {/each}
+      {/each} -->
     </select>
   </label>
   <label class="w-full">

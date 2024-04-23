@@ -11,7 +11,7 @@ export const load:PageServerLoad = async ({})=>{
   return {
     search:await consommationsSearch(
       null, 
-      { consoType:'',consoYear:null,sortDir:'desc',sortType:'date',nums:null,proms:null, page:1}
+      { consoType:'',consoYear:NaN,sortDir:'desc',sortType:'date',nums:NaN,proms:NaN, page:1}
     )
   };
 }

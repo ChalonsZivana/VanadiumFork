@@ -17,6 +17,7 @@
     {:then consommations} 
       <FullSearch 
       title="< Historique Général >" 
+      cancelOption={true}
       totalCons={currData.totalCons}
       nombrePages={nombrePages}
       consommations={consommations}

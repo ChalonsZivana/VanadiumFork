@@ -4,7 +4,7 @@
 
   export let title:string;
   export let toggleClass = "";
-  let show = false;
+  export let show = false;
 
   function toggle(e:MouseEvent){
     show = !show;

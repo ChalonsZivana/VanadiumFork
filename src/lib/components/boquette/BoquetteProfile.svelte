@@ -32,7 +32,7 @@ title={boquette.nom??''}>
       <a href="{taferie ?'':'/rechargement'}">
         <button class={`flex flex-col items-center rounded-md p-1 w-28 
           ${(boquette.solde>=0)?"bg-green-600 hover:bg-green-400":"bg-red-600 hover:bg-red-400"}`} >
-          <p>Profil</p><p>{boquette.solde}€</p>
+          <p>Fonds</p><p>{boquette.solde}€</p>
         </button>
       </a>
   </div>

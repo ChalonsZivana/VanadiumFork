@@ -36,8 +36,14 @@ export const handle = handleSession(
           d.user = await createUser(user.pg.id_pg);
           return d;
         });
+
+        if(routeId.startsWith('/(user)/ddp') && user.pg.ddp == 0){
+          throw error(401);
+        }
         return resolve(event);
       }
+
+      // if no user, redirect to boquette
       if(event.locals.session.data.boquettes != undefined && event.locals.session.data.boquettes.length != 0){
         const boq = event.locals.session.data.boquettes[0];
         if(boq.id_boquette == 20){

@@ -6,18 +6,20 @@ import { Prisma, consommations_type } from "@prisma/client";
 
 
 export async function consommationsSearch(types:({type:consommations_type, from:number}|{type:consommations_type, to:number}|{type:consommations_type})[] | null,data:ConsommationsSchemaType){
+  console.log(data)
   const whereDate:Prisma.consommationsWhereInput = data.consoYear ? {
     date_conso:{ 
       gte: new Date(`${data.consoYear}-01-01`),
       lt: new Date(`${data.consoYear+1}-01-01`)
     }
   } : {};
-  const whereNums:Prisma.consommationsWhereInput = data.nums ? {from_pg:{nums:data.nums}} : {};
-  const whereProms:Prisma.consommationsWhereInput = data.proms ? {from_pg:{proms:data.proms}} : {};
+  const whereNums:{nums:number}|{} = data.nums ? {nums:data.nums} : {};
+  const whereProms:{proms:number}|{} = data.proms ? {proms:data.proms} : {};
+  const wherePg:Prisma.consommationsWhereInput = {from_pg:{...whereNums, ...whereProms}}
 
   const whereType = types ? (types.length > 1 ? {OR:types} : types[0]) : {};
   
-  const where:Prisma.consommationsWhereInput = {...whereDate, ...whereNums, ...whereProms, ...whereType};
+  const where:Prisma.consommationsWhereInput = {...whereDate, ...wherePg, ...whereType};
 
   let orderBy:{date_conso:"asc" | "desc"}|{montant:"asc" | "desc"}|{montant:"asc" | "desc"};
   if(data.sortType == 'date') orderBy = {date_conso:data.sortDir}

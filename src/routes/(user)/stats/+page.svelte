@@ -5,6 +5,7 @@
   import ToggleSectionCard from "$lib/components/ToggleSectionCard.svelte";
   import Leaderboard from "$lib/components/miscellaneous/Leaderboard.svelte";
   import { enhance } from "$app/forms";
+  import { onMount } from "svelte";
 
   export let data;
   export let form:{top:Top};
@@ -12,22 +13,23 @@
   const depensesTotales = data.consos.reduce((acc,transition) => acc + (transition.montant??0), 0);
   const depensesMax = data.consos.reduce((max, current) => (current.montant??0) > (max.montant??0) ? current : max, data.consos[0]);
 
-  let top:Top;
   let totalNourriture=0;
   let totalAlcool=0;
-  data.consos.forEach((e)=>{
+  onMount(()=>{
+    data.consos.forEach((e)=>{
     if(Object.values(data.boquettes_nourritures).includes(e.id_boquette)){
       totalNourriture += e.montant;
     } else if(Object.values(data.boquettes_alcool).includes(e.id_boquette)){
       totalAlcool += e.montant;
     }
   })
+  })
+  
   const getBoqName = (id_boq:number|null) => data.boquettes.find(e=>e.id_boquette==id_boq)?.nom;
 </script>
 
-<div class="flex flex-col items-center gap-1 w-11/12 mb-5">
-  <p class="text-white"></p>
-
+<div class="flex flex-col items-center gap-1 w-11/12 mt-5 mb-5">
+{#if data.consos.length != 0}  
   <SectionCard title="Statistiques">
       <p>Total de {depensesTotales.toFixed(2)}€ dépensés</p>
     <StatsChart consos={data.consos} boquettes={data.boquettes}/>
@@ -46,7 +48,8 @@
       </ToggleSectionCard>
     {/each}
   {/await}
-  
+{/if}
+
   <SectionCard title="Statistiques Boquette">
     <form use:enhance={()=>{return ({update})=>{update({reset:false})}}} action="?/stats" method="post"  class="w-full flex flex-col text-2xl gap-5">
       <select required class="w-11/12 h-14 rounded-md text-black" name="id_boquette" placeholder="Boquette" value="0">

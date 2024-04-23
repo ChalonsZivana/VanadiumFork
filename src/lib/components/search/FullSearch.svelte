@@ -12,6 +12,7 @@
     export let nombrePages:number;
     export let consommations:ConsommationsIncludeType[];
     export let types: {[key: string]: keyof typeof consommations_type};
+    export let cancelOption:boolean;
 </script>
 
 <SectionCard title={title}>
@@ -24,14 +25,14 @@
 
     <div class="text-black w-full flex flex-col gap-2">
       <div class="flex gap-2">
-        <label>
-          <p class="text-white">Nums</p>
-          <input required class="w-32" type="number" name="nums">
-        </label>
-        <label>
-          <p class="text-white">Proms</p>
-          <input required class="w-32" type="number" name="proms">
-        </label>
+          <label>
+            <p class="text-white">Nums</p>
+            <slot name="nums"><input class="w-32" type="number" name="nums"></slot>
+          </label>
+          <label>
+            <p class="text-white">Proms</p>
+            <slot name="proms"><input class="w-32" type="number" name="proms"></slot>
+          </label>
       </div>
       <select name="sortType" value="date">
         <option value="date">Date/Heure</option>
@@ -51,7 +52,7 @@
       
       <label class="w-full">
         <p class="text-white">Année de la consommation (vide pour toutes) :</p>
-        <input required name="consoYear" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989">
+        <input name="consoYear" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989">
       </label>
       <button class="self-center w-14">
         <SquareRightArrow/>
@@ -74,6 +75,6 @@
     </div>
   </form>
   <div class="w-full h-96 overflow-x-hidden no-scrollbar overflow-y-scroll">
-    <ConsoTable consommations={consommations} cancelOption={true}/>
+    <ConsoTable consommations={consommations} cancelOption={cancelOption}/>
   </div>
 </SectionCard>

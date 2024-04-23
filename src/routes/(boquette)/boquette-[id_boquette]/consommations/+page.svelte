@@ -38,6 +38,7 @@
     Chargement Historique Général
   {:then consommations} 
     <FullSearch 
+    cancelOption={true}
     title="< Historique Général >" 
     totalCons={currData.totalCons}
     nombrePages={nombrePages}

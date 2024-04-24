@@ -73,7 +73,7 @@ export const ConsommationsSchema  = z.object({
   sortType: z.enum(['date','montant']),
   sortDir: z.enum(['asc', 'desc']),
   consoType:z.string(),
-  consoYear:z.string().transform(e => parseInt(e)).refine(e => e >= 2017 && e <= new Date().getFullYear()),
+  consoYear:z.string().transform(e => parseInt(e)).refine(e => isNaN(e) || (e >= 2017 && e <= new Date().getFullYear())),
 });
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>
 

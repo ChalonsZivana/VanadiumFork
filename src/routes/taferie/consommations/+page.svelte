@@ -11,7 +11,6 @@
 </script>
 
 <div class="w-11/12 pt-5">
-  {#key currData}
     {#await currData.consommations}
   Chargement Historique Général
     {:then consommations} 
@@ -32,5 +31,4 @@
         }
       }/>
     {/await}
-  {/key}
 </div>

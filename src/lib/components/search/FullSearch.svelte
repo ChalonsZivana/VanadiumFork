@@ -39,8 +39,8 @@
         <option value="montant">Montant</option>
       </select>
       <select name="sortDir" value="desc">
-        <option value="asc">Décroissant</option>
-        <option value="desc">Croissant</option>
+        <option value="desc">Décroissant</option>
+        <option value="asc">Croissant</option>
       </select>
       
       <select name="consoType" value="Tout">

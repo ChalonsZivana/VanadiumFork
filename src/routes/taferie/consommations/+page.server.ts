@@ -20,7 +20,7 @@ export let actions = {
   consommations:  async ({ request }) => {
     const d = Object.fromEntries(await request.formData());
     const data = ConsommationsSchema.safeParse(d);
-
+    
     if(!data.success) throw error(400);
 
     if(data.data.consoType != 'Tout' && !(data.data.consoType in consommations_type)) throw error(400);

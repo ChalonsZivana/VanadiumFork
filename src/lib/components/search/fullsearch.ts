@@ -30,7 +30,6 @@ export async function consommationsSearch(types:({type:consommations_type, from:
     to_boquette:{select:{nom:true}}
   };
   let consommations = await prisma.consommations.findMany({
-    
     where,
     take:100,
     skip:100*(data.page-1),

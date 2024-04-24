@@ -67,20 +67,14 @@ export const EditPgSchema = z.object({
 
 
 export const ConsommationsSchema  = z.object({
-  page:z.string(),
-  nums: z.string(),
-  proms: z.string(),
+  page:z.string().transform(e => parseInt(e)),
+  nums: z.string().transform(e => parseInt(e)),
+  proms: z.string().transform(e => parseInt(e)),
   sortType: z.enum(['date','montant']),
   sortDir: z.enum(['asc', 'desc']),
   consoType:z.string(),
-  consoYear:z.string(),
-}).transform(data => ({
-  ...data,
-  page: parseInt(data.page), // Convert page to integer
-  nums: parseInt(data.nums), // Convert nums to integer
-  proms: parseInt(data.proms), // Convert proms to integer
-  consoYear: parseInt(data.consoYear) // Convert consoYear to integer
-}));
+  consoYear:z.string().transform(e => parseInt(e)).refine(e => e >= 2017 && e <= new Date().getFullYear()),
+});
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>
 
 

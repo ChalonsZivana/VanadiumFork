@@ -16,6 +16,7 @@ export const load = async ({params})=>{
 
 export const actions = {
   'rhopse':async({request, params})=>{
+    console.log('rhopse')
     const id_boquette = parseInt(params.id_boquette);
     if(!id_boquette) throw error(400);
     const id_pg = parseInt(params.id_pg);
@@ -35,7 +36,6 @@ export const actions = {
       const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite});
       results.push(r)
     }
-    console.log(results)
     return results
   }
 }

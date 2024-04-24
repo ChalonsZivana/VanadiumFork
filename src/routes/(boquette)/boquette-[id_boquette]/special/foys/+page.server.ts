@@ -1,7 +1,5 @@
 import prisma from "$lib/prisma";
-import { Boquette } from "$lib/server/classes/Boquette";
 import { Database } from "$lib/server/classes/Database";
-import { fail } from "@sveltejs/kit";
 
 export const load = async ()=>{
   //7:foys  147:koenettrie

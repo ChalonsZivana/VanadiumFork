@@ -52,7 +52,7 @@
       
       <label class="w-full">
         <p class="text-white">Année de la consommation (vide pour toutes) :</p>
-        <input name="consoYear" class="w-full p-1 rounded-md" type="text" placeholder="Année: 1989">
+        <input name="consoYear" class="w-full p-1 rounded-md" type="number" min="2017" max={new Date().getFullYear()} placeholder="Année: 1989">
       </label>
       <button class="self-center w-14">
         <SquareRightArrow/>

@@ -37,7 +37,6 @@
 
 
 <div class="h-full w-full">
-  <form action=""></form>
   <SectionCard title="Rhopse - {pg.nums}Ch{pg.proms}">
     {#if selectedProducts.length}
     <div class="w-full flex flex-col gap-2 text-black">

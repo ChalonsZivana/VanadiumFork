@@ -34,17 +34,22 @@
 
   const pgsPromise = async():Promise<Partial<pg>[]>=>{
     const cachedData = localStorage.getItem('cachedPgs');
-    
-    if (cachedData != null && cachedData !== 'undefined' && cachedData.length != 0) {
-      console.log('loading cache')
-      const {value,expiry} = JSON.parse(cachedData) as {value:Partial<pg>[], expiry:number};
 
-        if(new Date().getTime() > expiry){
-        localStorage.removeItem('cachedPgs')
-      } else {
-        return value;
-      }
-    } 
+    try {
+      if (cachedData != null && cachedData !== 'undefined' && cachedData.length != 0) {
+        console.log('loading cache')
+        const {value,expiry} = JSON.parse(cachedData) as {value:Partial<pg>[], expiry:number};
+
+          if(new Date().getTime() > expiry){
+          localStorage.removeItem('cachedPgs')
+        } else {
+          return value;
+        }
+      } 
+    } catch{
+      console.log('error with localstorage')
+    }
+    
 
     console.log('fetching pgs')
     const updateKey = localStorage.getItem('update_key');

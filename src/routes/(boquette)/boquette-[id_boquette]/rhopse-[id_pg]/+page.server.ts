@@ -16,7 +16,6 @@ export const load = async ({params})=>{
 
 export const actions = {
   'rhopse':async({request, params})=>{
-    console.log('rhopse')
     const id_boquette = parseInt(params.id_boquette);
     if(!id_boquette) throw error(400);
     const id_pg = parseInt(params.id_pg);

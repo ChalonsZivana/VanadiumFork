@@ -1,16 +1,18 @@
 <script lang="ts">
-  export let data;
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type{categories, produits} from '@prisma/client';
   import Reset from '$lib/components/svgs/reset.svelte';
   import { enhance } from '$app/forms';
   import Popup from '$lib/components/miscellaneous/Popup.svelte';
+    import House from '$lib/components/svgs/house.svelte';
 
+  export let data;
   export let form:{success:boolean, message:string};
 
   let proms:number|null=null;
   const listProms = Object.keys(data.proms).map(e=>parseInt(e)).sort((a,b)=>a-b);
-  
+  $:boquette = data.BOQUETTES.find(e=>e.id_boquette == data.id_boquette) ?? data.BOQUETTES[0];
+
   let pg:{nums:number, id_pg:number}|null=null;
   const listNums =()=> data.proms[proms as keyof typeof data.proms].sort((a,b)=>a.nums-b.nums);
   let categorie:categories|null;
@@ -23,14 +25,18 @@
   const buttonClass = "bg-white h-14 text-black w-80 rounded-md";
   const choicesContainerClass = "mt-5 flex-grow w-full flex flex-col justify-center items-center gap-1"
   const coloredClass = "p-3 bg-fuchsia-500 text-4xl rounded-md"
-
+  console.log(data.id_boquette)
 </script>
 
 <Popup bind:form={form}/>
 
-<div class="h-full w-full flex flex-col justify-center items-center p-1 text-white">
+<a href="/boquette-{data.id_boquette}" class="absolute top-3 left-3 w-8">
+  <House/>
+</a>
+
+<div class="h-full w-full flex flex-col  items-center p-1 text-white">
   <div class=" flex justify-center items-center">
-    <p class="text-5xl font-zagoth mt-5">Rhopse Foy's</p>
+    <p class="text-5xl font-zagoth mt-5">Rhopse {boquette.nom}</p>
   </div>
   
   {#if proms == undefined}
@@ -44,7 +50,7 @@
   
   
   {#if proms && pg == undefined}
-    <p class="text-3xl font-zagoth mt-5">Choix Num's</p>
+    <!-- <p class="text-3xl font-zagoth mt-5">Choix Num's</p> -->
     <div class="mt-5 flex-grow w-full grid gap-1 grid-cols-10 grid-rows-[15]">
       {#each listNums() as n}
         <button on:click={()=>pg=n} class="aspect-square rounded-md bg-red-700">{n.nums}</button>

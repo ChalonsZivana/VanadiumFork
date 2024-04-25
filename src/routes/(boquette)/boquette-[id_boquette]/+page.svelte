@@ -5,7 +5,6 @@
   import type { boquettes, pg } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
-  import Bolt from "$lib/components/svgs/bolt.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   
   export let data;
@@ -73,7 +72,7 @@
 <Popup bind:form={form}/>
 
 <div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
-  <BoquetteProfile boquette={boquette}>
+  <BoquetteProfile {boquette}>
     <form method="POST" action="/login?/logout">
       <input type="hidden" name="boquette" value={data.id_boquette}>
       <button class="w-8 absolute top-3 left-3">
@@ -81,11 +80,11 @@
       </button>
     </form>
   </BoquetteProfile>
-  <Actions boquette={boquette} categories={data.categories} products={data.produits}/>
   {#await pgsPromise()}
     Chargement des Rhopses
   {:then pgs} 
-    <Rhopse pgs={pgs} boquette={boquette}></Rhopse>
+    <Actions {pgs} {boquette} categories={data.categories} products={data.produits}/>
+    <Rhopse {pgs} {boquette}></Rhopse>
   {/await}
   
   <Produits categories={data.categories} produits={data.produits}/>

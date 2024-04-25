@@ -6,7 +6,7 @@
   export let dialog:HTMLDialogElement;
   export let title:string;
   export let formAction:string | null = null;
-  export let buttonText:string;
+  export let buttonText:string = "texte manquant";
   export let onsubmit=()=>{};
   
   let _form:HTMLFormElement;
@@ -29,13 +29,13 @@
   <form  bind:this={_form} on:submit={()=>{dialog.close();onsubmit();}} action={formAction} method="post">
     <slot/>
 
-    <div class="flex justify-around gap-5 mt-5 text-white text-lg">
-      
+    <div class="flex justify-around gap-5 mt-5 text-white text-lg"> 
       <div class="flex justify-around gap-5 mt-5 text-white text-lg">
-        <button class="size-20 bg-blue-500 rounded-md">{buttonText}</button>
-        <button class="size-20 bg-red-500 rounded-md" type="button" on:click={()=>dialog.close()} >annuler</button>
+        <slot name="submitButton">
+          <button class="size-20 bg-blue-500 rounded-md">{buttonText}</button>
+        </slot>
+        <button class="size-20 bg-red-500 rounded-md" type="button" on:click={()=>dialog.close()}>annuler</button>
       </div>    
-    
     </div>
   </form>
 </dialog>

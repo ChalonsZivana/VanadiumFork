@@ -18,14 +18,13 @@ export const CreateProductSchema  = z.object({
   "libre_service": z.union([z.literal('on'), z.undefined()])
 })
 
-export const ImportRhopseSchema = z.array(
-  z.tuple([
-    z.string(),z.number(), z.number(),
-  ])
-);
 
 export const RhopseSchema  = z.object({
   produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(),z.number()])).safeParse(e).success),
+})
+
+export const ImportRhopseSchema  = z.object({
+  produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(), z.number(), z.number()])).safeParse(e).success),
 })
 
 

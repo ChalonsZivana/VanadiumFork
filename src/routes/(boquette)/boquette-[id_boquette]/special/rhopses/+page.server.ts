@@ -1,9 +1,10 @@
 import prisma from "$lib/prisma";
 import { Database } from "$lib/server/classes/Database";
+import { error } from "@sveltejs/kit";
 
-export const load = async ()=>{
-  //7:foys  147:koenettrie
-  const id_boquette = 7;
+export const load = async ({params})=>{
+  const id_boquette = parseInt(params.id_boquette);
+  if(isNaN(id_boquette)) throw error(404);
   
   return { 
     categories:await prisma.categories.findMany({where:{id_boquette}, orderBy:{nom:'asc'}}),

@@ -132,3 +132,8 @@ export const EditProductSchema = z.object({
 export const DeleteProductSchema = z.object({
   id_produit:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
 });
+
+export const DeleteCategorySchema = z.object({
+  id_categorie:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
+});
+

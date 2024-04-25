@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
     import Accept from "../svgs/accept.svelte";
 
     export let formaction:string;

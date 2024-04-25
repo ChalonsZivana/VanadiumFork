@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma';
 import { BOQUETTES, Boquette } from '$lib/server/classes/Boquette.js';
-import { AddProductSchema, DeleteProductSchema, EditProductSchema } from '$lib/zodSchema.js';
+import { AddProductSchema, DeleteCategorySchema, DeleteProductSchema, EditProductSchema } from '$lib/zodSchema.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({params}){
@@ -47,4 +47,13 @@ export const actions = {
     const boq = new Boquette(id_boquette);
     boq.deleteProduct(data.data);
   },
+  deleteCategory:async({request,params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    
+    const d = Object.fromEntries(await request.formData()); 
+    const data = DeleteCategorySchema.safeParse(d);
+    if(!data.success) throw error(400);
+    const boq = new Boquette(id_boquette);
+    boq.deleteCategory(data.data);
+  }
 }

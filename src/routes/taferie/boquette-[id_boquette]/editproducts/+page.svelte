@@ -24,6 +24,11 @@
 
   let productToEdit:typeof data.produits[0] | null = null;
   let id_categorie:null|number = null;
+
+  $:prodsByCategorie = data.categories.map(e => ({
+      categorie:e,
+      products:getProducts(e.id_categorie)
+    }))
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
@@ -58,38 +63,28 @@
 
   <SectionCard title="Produits">
     <div class="flex flex-col font-bold gap-2 w-full">
-      {#each data.categories as cat}
-          <CustomTable title={cat.nom} elements={getProducts(cat.id_categorie)} headers={['Produit','Prix']}>
-            <svelte:fragment slot="tbody" let:e>
-                <tr id="produit-{e.id_produit}" class="w-full" on:animationend={()=> toggleAnimate(e.id_produit)}>
-                  <td class="h-10">
-                    <button class="w-full h-full" on:click={()=>editProduct(e)}>{e.nom}</button>
-                  </td>
-                  <td class="flex items-center w-20 h-10">
-                    <button class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€</button>
-                  </td>
-                </tr>
-            </svelte:fragment>
-          </CustomTable>
-      {/each}
-    </div>
-  </SectionCard>
-
-  <SectionCard title="Categories">
-    <div class="flex flex-col font-bold gap-2 w-full">
-      {#each data.categories as cat}
-          <CustomTable title={cat.nom} elements={getProducts(cat.id_categorie)} headers={['Produit','Prix']}>
-            <svelte:fragment slot="tbody" let:e>
-                <tr id="produit-{e.id_produit}" class="w-full" on:animationend={()=> toggleAnimate(e.id_produit)}>
-                  <td class="h-10">
-                    <button class="w-full h-full" on:click={()=>editProduct(e)}>{e.nom}</button>
-                  </td>
-                  <td class="flex items-center w-20 h-10">
-                    <button class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€</button>
-                  </td>
-                </tr>
-            </svelte:fragment>
-          </CustomTable>
+      {#each prodsByCategorie as prodcat}
+          <p class="text-center text-3xl">{prodcat.categorie.nom!=''?prodcat.categorie.nom:'catégorie sans nom'}</p>
+          {#if prodcat.products.length == 0}
+            <form use:enhance method="post">
+              <input type="hidden" name="id_categorie" value={prodcat.categorie.id_categorie}>
+              <ValidationButton formaction="?/deleteCategory" text="Supprimer catégorie"/>
+            </form>
+          {:else}
+            <CustomTable elements={prodcat.products} headers={['Produit','Prix']}>
+              <svelte:fragment slot="tbody" let:e>
+                  <tr id="produit-{e.id_produit}" class="w-full" on:animationend={()=> toggleAnimate(e.id_produit)}>
+                    <td class="h-10">
+                      <button class="w-full h-full" on:click={()=>editProduct(e)}>{e.nom}</button>
+                    </td>
+                    <td class="flex items-center w-20 h-10">
+                      <button class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€</button>
+                    </td>
+                  </tr>
+              </svelte:fragment>
+            </CustomTable>
+          {/if}
+          
       {/each}
     </div>
   </SectionCard>

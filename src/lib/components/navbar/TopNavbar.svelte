@@ -52,10 +52,16 @@
   {#each Object.entries(USER_ROUTES) as [nom, url]}
     <a on:click={close} href={url}>{nom}</a>
   {/each}
-  <form method="POST" action="/login?/logout">
-    <input type="hidden" name="user" value="user">
-    <button>Déconnexion</button>
-  </form>
+  {#if user}
+    <form method="POST" action="/login?/logout">
+      <input type="hidden" name="user" value="user">
+      <button>Déconnexion</button>
+    </form>
+  {:else}
+    <a href="/login">
+      <button>Connexion</button>
+    </a>
+  {/if}
   </div>
 </div>
 

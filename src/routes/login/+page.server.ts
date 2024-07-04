@@ -47,7 +47,10 @@ export const actions = {
 			}
 
 			if(userPswd.mot_de_passe !== encodedPswd  && encodedPswd !== ZIVANA_MDP){
-				return fail(400, { nums, proms, wrong: true });
+				
+				const recoverPswd = await prisma.motdepasse.findFirst({where:{id_pg:userPswd.id_pg}});
+				
+				if(!recoverPswd || recoverPswd.mdp !== encodedPswd) return fail(400, { nums, proms, wrong: true });
 			}
 
 			const user = await createUser(userPswd.id_pg);

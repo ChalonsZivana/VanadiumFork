@@ -15,7 +15,7 @@
     <button class="bg-red-600 p-2 w-fit">Connexion</button>
     </form>
     <div class="w-full flex flex-col mt-4">
-      <a href="">Mot de passe oublié</a>
+      <p>Mot de passe oublié ? Demandez à un administrateur de le changer pour vous</p>
       <a href="/cgu">Mentions Légales</a>
     </div>
   </div>

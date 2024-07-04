@@ -8,8 +8,9 @@ export async function getFams(nums:number) {
 }
 
 
-export const getUserPassword = async (nums:number,proms:number) => {
-  return prisma.pg.findFirst({select:{id_pg:true, mot_de_passe:true}, where:{nums:nums,proms:proms}});
+export const getUserPassword = async (nums:number,proms:number) =>  {
+  const data = await prisma.pg.findFirst({select:{id_pg:true, mot_de_passe:true}, where:{nums:nums,proms:proms}});
+  return data
 }
 
 export const getUser = async (id_pg:number)=> {

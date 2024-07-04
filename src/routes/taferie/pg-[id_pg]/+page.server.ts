@@ -1,4 +1,4 @@
-import { createUser } from "$lib/server/auth";
+import { createUser, hashPassword } from "$lib/server/auth";
 import { error, fail, redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
@@ -78,5 +78,12 @@ export const actions = {
     if(!data.success) return fail(400, {success:false, message:"Something went wrong"})
     
     new Pg(id_pg).editPg(data.data);
+  },
+  change_password:async({params})=>{
+    const id_pg = parseInt(params.id_pg);
+    const mot_de_passe = Math.round(Math.random() * 100_000).toString()
+    await prisma.pg.update({where:{id_pg},  data:{mot_de_passe: hashPassword(mot_de_passe)}});
+
+    return {success:true, message:"Mot de passe modifié: " + mot_de_passe}
   }
 }

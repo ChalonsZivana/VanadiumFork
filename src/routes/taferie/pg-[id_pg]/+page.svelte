@@ -16,18 +16,6 @@
 
   let dialogSettings:HTMLDialogElement;
 
-  function initPGEdit() {
-    return {
-    'Prenom':data.user.pg.prenom,
-    'Nom':data.user.pg.nom,
-    'Bucque':data.user.pg.bucque,
-    'Adresse mail *':data.user.pg.email,
-    'Nums *':data.user.pg.nums,
-    'TBK':data.user.pg.tabagns,
-    'Proms *':data.user.pg.proms,
-    };
-  }
-  let editInputText = initPGEdit();
   const editInputCheck = {
     'Actif':data.user.pg.actif
   } 
@@ -55,6 +43,10 @@
         </form>
       {/if}      
       <GestionBrousouffs/>
+
+      <form class="w-full" method="post" use:enhance>
+        <ValidationButton formaction="?/change_password" text="Changer le mot de passe"/>
+      </form>
     </div>
   </UserProfile>
   {/key}

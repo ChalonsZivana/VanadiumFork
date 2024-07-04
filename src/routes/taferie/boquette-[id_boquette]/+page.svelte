@@ -21,7 +21,7 @@
     <GestionBrousouffs/>
   </BoquetteProfile>
 
-  <Actions boquette={data.boquette} categories={data.categories} products={data.produits}>
+  <Actions boquette={data.boquette} categories={data.categories} products={data.produits} pgs={null}>
     <button>
       <a href="/taferie/boquette-{data.boquette.id_boquette}/editproducts">éditer produits</a>
     </button>

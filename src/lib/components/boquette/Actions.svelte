@@ -8,7 +8,7 @@
   export let boquette:boquettes;
   export let products:produits[];
   export let categories:categories[];
-  export let pgs:Partial<pg>[];
+  export let pgs:Partial<pg>[] | null;
 </script>
 
 
@@ -17,7 +17,9 @@
     <div class="flex flex-wrap justify-around gap-5 h-full text-white">  
 
       <ExportFeuilleRhopses {products}/>
+      {#if pgs}
       <ImportFeuilleRhopses {pgs} id_boquette={boquette.id_boquette}/>
+      {/if}
       <ExporterProduits {boquette} {categories} {products}/>
       <button class="bg-blue-600 p-2 relative flex justify-center items-center w-2/5 rounded-md">
         <a href="/boquette-{boquette.id_boquette}/consommations">consommations</a>

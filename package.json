@@ -3,7 +3,6 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"preinstall": "npx only-allow pnpm",
 		"type-check": "tsc",
 		"dev": "vite dev",
 		"dev_inspect": "NODE_OPTIONS=\"--inspect\" vide dev",

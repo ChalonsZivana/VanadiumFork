@@ -1,4 +1,4 @@
-import { consommationsSearch } from '$lib/components/search/fullsearch.js';
+import { consommationsSearch } from '$lib/components/search/consommations/fullsearch';
 import prisma from '$lib/prisma.js';
 import { Boquette } from '$lib/server/classes/Boquette.js';
 import { ConsommationsSchema } from '$lib/zodSchema.js';

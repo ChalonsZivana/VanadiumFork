@@ -1,36 +1,27 @@
 
 import { error, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types.js";
-import { consommations_type } from "@prisma/client";
 import { Taferie } from "$lib/server/classes/Taferie";
-import { consommationsSearch } from "$lib/components/search/consommations/fullsearch";
-import { ConsommationsSchema } from "$lib/zodSchema.js";
+import { pgsSearch } from "$lib/components/search/pgs/fullsearch";
+import { PgSearchSchema } from "$lib/zodSchema.js";
 
 
 export const load:PageServerLoad = async ({})=>{
-  console.log('load')
   return {
-    search:await consommationsSearch(
-      null, 
-      { consoType:'',consoYear:NaN,sortDir:'desc',sortType:'date',nums:NaN,proms:NaN, page:1}
+    search:await pgsSearch(
+      { sortDir:'desc',sortType:'nums',proms:NaN, page:1}
     )
   };
 }
 
 export let actions = {
-  consommations:  async ({ request }) => {
+  pgs:  async ({ request }) => {
     const d = Object.fromEntries(await request.formData());
-    const data = ConsommationsSchema.safeParse(d);
+    const data = PgSearchSchema.safeParse(d);
     
     if(!data.success) throw error(400);
-
-    if(data.data.consoType != 'Tout' && !(data.data.consoType in consommations_type)) throw error(400);
-    const consoType = data.data.consoType as consommations_type | 'Tout';
-    console.log('hey')
     return {
-      search:await consommationsSearch(
-        consoType == 'Tout' ? null : [{type:consoType}], data.data
-      )
+      search:await pgsSearch(data.data)
     }
   },
   cancel:async({request})=>{

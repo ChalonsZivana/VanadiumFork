@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { consommations_type } from "@prisma/client";
-    import SectionCard from "../SectionCard.svelte";
-    import SquareRightArrow from "../svgs/square-right-arrow.svelte";
-    import ConsoTable from "./ConsoTable.svelte";
+    import SectionCard from "../../SectionCard.svelte";
+    import SquareRightArrow from "../../svgs/square-right-arrow.svelte";
+    import ConsoTable from "../ConsoTable.svelte";
     import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
     import { enhance } from "$app/forms";
     
@@ -21,7 +21,10 @@
       return async({update})=> update({reset:false});
     }
   } action="?/consommations" method="post" class="w-full flex flex-col gap-2">
-  <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (100 par page)</p>
+    <slot>
+
+    </slot>
+  <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (20 par page)</p>
 
     <div class="text-black w-full flex flex-col gap-2">
       <div class="flex gap-2">

@@ -149,6 +149,9 @@
           <button class="bg-red-700 p-2 flex h-fit justify-around items-center">
             <a class="text-white text-2xl" href="/taferie/consommations">consommations</a>
           </button>
+          <button class="bg-red-700 p-2 flex h-fit justify-around items-center">
+            <a class="text-white text-2xl" href="/taferie/pgs">PGs</a>
+          </button>
           <button class="bg-red-700 p-2 flex h-fit justify-around  items-center">
             <a class="text-white text-2xl" href="/taferie/inscription">inscription</a>
           </button>

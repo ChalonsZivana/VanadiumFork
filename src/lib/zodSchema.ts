@@ -76,6 +76,13 @@ export const ConsommationsSchema  = z.object({
 });
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>
 
+export const PgSearchSchema  = z.object({
+  page:z.string().transform(e => parseInt(e)),
+  proms: z.string().transform(e => parseInt(e)),
+  sortType: z.enum(['nums','solde']),
+  sortDir: z.enum(['asc', 'desc']),
+});
+export type PgSearchSchemaType = z.infer<typeof PgSearchSchema>
 
 export const LydiaDemandResponseSchema  = z.object({
   error: z.string(),

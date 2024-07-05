@@ -1,4 +1,4 @@
-import { consommationsSearch } from '$lib/components/search/fullsearch.js';
+import { consommationsSearch } from '$lib/components/search/consommations/fullsearch';
 import prisma from '$lib/prisma.js';
 import { ConsommationsSchema } from '$lib/zodSchema.js';
 import { consommations_type } from '@prisma/client';

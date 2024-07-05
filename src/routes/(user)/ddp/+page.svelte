@@ -3,8 +3,8 @@
   import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
   import Special from "$lib/components/miscellaneous/Special.svelte"
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte"
-  import FullSearch from "$lib/components/search/FullSearch.svelte";
-    import type { consommationsSearch } from "$lib/components/search/fullsearch.js";
+  import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
+    import type { consommationsSearch } from "$lib/components/search/consommations/fullsearch.js";
 
   
   export let data;

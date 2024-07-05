@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { boquettes } from '@prisma/client'
-  import FullSearch from "$lib/components/search/FullSearch.svelte";
+  import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
 
   export let data;
 

@@ -12,7 +12,7 @@
   import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
 
   export let data;
-  export let form:{success:boolean, message:string}
+  export let form:{success:boolean, message:string};
 
   let dialogSettings:HTMLDialogElement;
 

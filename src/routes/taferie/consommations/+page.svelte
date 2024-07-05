@@ -1,12 +1,12 @@
 <script lang="ts">
-  import FullSearch from "$lib/components/search/FullSearch.svelte";
+  import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
 
   export let data;
   export let form:{search:typeof data.search};
 
   let currData:typeof data.search;
   $:currData = form ? form.search : data.search;  
-  $: nombrePages = Math.ceil(currData.totalCons / 100);
+  $: nombrePages = Math.ceil(currData.totalCons / 20);
 
 </script>
 

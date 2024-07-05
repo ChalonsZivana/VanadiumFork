@@ -1,6 +1,6 @@
 import prisma from "$lib/prisma";
 import type { ConsommationsIncludeType } from "$lib/server/classes/Taferie";
-import type { ConsommationsSchemaType } from "$lib/zodSchema";
+import type { ConsommationsSchemaType, PgSearchSchemaType } from "$lib/zodSchema";
 import { Prisma, consommations_type } from "@prisma/client";
 
 
@@ -31,8 +31,8 @@ export async function consommationsSearch(types:({type:consommations_type, from:
   };
   let consommations = await prisma.consommations.findMany({
     where,
-    take:100,
-    skip:100*(data.page-1),
+    take:20,
+    skip:20*(data.page-1),
     orderBy,
     include,
   });

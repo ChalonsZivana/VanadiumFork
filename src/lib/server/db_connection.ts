@@ -25,7 +25,7 @@ export const getHistoriqueFams = async (nums:number) => {
   nums = Math.abs(100 - nums);
   if(nums == 0) nums = 50;
 
-  return prisma.historique_fams.findMany({where:{fams:nums}});
+  return prisma.consommations.findMany({where:{type:{in:['ext_fams', 'pg_fams']}}});
 }
 
 export const getBoquette = async (id_boquette:number)=> {

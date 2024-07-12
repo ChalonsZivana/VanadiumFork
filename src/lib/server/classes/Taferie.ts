@@ -107,7 +107,8 @@ export class Taferie {
     } else {
       montant = d.montant;
     }
-    const data = {
+
+    const data:Prisma.consommationsCreateArgs['data'] = {
       type:d.type,
       from: "from" in d ? d.from : null,
       to: "to" in d ? d.to : null,

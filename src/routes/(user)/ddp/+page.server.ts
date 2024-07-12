@@ -23,7 +23,7 @@ export let actions = {
 
     const d = Object.fromEntries(await request.formData());
     const data = ConsommationsSchema.safeParse(d);
-    console.log(data)
+
     if(!data.success || data.data.proms != user.pg.proms) throw error(400);
 
     if(data.data.consoType != 'Tout' && !(data.data.consoType in consommations_type)) throw error(400);

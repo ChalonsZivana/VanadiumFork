@@ -20,6 +20,7 @@ export const handle = handleSession(
     if(routeId.startsWith("/login") || routeId.startsWith('/(unauthorized)')) return resolve(event);
 
     const vanazocque = await prisma.config.findMany({where:{nom:'vanazocque'}});
+
     if(vanazocque[0].valeur == '1' && !routeId.startsWith('/taferie')){
       if(event.locals.session.data.boquettes?.map(e=>e.id_boquette).includes(20)) {
         throw redirect(307, '/taferie')

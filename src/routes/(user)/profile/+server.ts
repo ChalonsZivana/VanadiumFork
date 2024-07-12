@@ -1,7 +1,8 @@
 import prisma from "$lib/prisma";
-import type { RequestHandler } from "@sveltejs/kit"
+import { error, type RequestHandler } from "@sveltejs/kit"
 
 export const POST:RequestHandler = async({request,locals}) => {
+  if(locals.session.data.user == null) throw error(400);
   const folder = await request.json().catch();
   const dossiersGifs = {
     "gifs filles":"gif",

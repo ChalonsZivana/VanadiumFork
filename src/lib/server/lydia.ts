@@ -1,6 +1,5 @@
 import prisma from "$lib/prisma";
 import { LydiaDemandResponseSchema, LydiaVerifyResponseSchema } from "$lib/zodSchema";
-import { fail } from "@sveltejs/kit";
 import { Taferie } from "./classes/Taferie";
 
 
@@ -40,7 +39,7 @@ export class LydiaManager {
     await prisma.rechargements.create({
       data:{
         id_pg,
-        keyLydia:lydiaData.data.request_uuid,
+        keylydia:lydiaData.data.request_uuid,
         montant:varData.montant,
         date:new Date()
       }

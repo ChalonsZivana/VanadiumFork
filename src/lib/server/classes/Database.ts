@@ -47,8 +47,7 @@ export class Database {
   static getAubergeOrders(){
     return prisma.auberge.findMany({
       select: {
-        id: true, bandars:true, commentaire:true, id_pg:true,fromage:true,status:true,telephone:true,type:true,
-        pg: { select: {nums: true,proms: true } },
+        id: true, bandars:true, commentaire:true, pg:true,fromage:true,status:true,telephone:true,type:true,
       },
       orderBy: { id: 'desc' },
     });

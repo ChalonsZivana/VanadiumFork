@@ -51,7 +51,7 @@ export const actions = {
     if(!locals.session.data.user) throw error(400);
     const a = await prisma.rechargements.findFirst({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
     if(a == null) throw error(400);
-    const r = await LydiaManager.verifyLydiaDemand(a.id_rechargement, LYDIA_VENDOR_KEY, a.keyLydia);
+    const r = await LydiaManager.verifyLydiaDemand(a.id_rechargement, LYDIA_VENDOR_KEY, a.keylydia);
     return r;
   }
 }

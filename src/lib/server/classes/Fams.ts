@@ -13,21 +13,4 @@ export class Fams extends HasMoney{
   async fams(){
     return await prisma.fams.findFirst({where:{nums:this.ID}}) as fams;
   }
-
-  async rhopse(d:{libelle:string, montant:number}){
-    const f = await prisma.fams.findFirst({where:{nums:this.ID}});
-    if(!f) return null;
-
-    await prisma.historique_fams.create({
-      data:{
-        libelle:d.libelle,
-        credit:d.montant < 0 ? d.montant:null,
-        debit:d.montant >= 0 ? d.montant:null,
-        fams:this.ID,
-        solde_avant:f.solde,
-        solde_apres:f.solde + d.montant
-      }      
-    });
-    await prisma.fams.update({where:{nums:this.ID}, data:{solde:f.solde + d.montant}});
-  }
 }

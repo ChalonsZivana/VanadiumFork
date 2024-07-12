@@ -8,7 +8,6 @@ import { ConsommationsSchema } from "$lib/zodSchema.js";
 
 
 export const load:PageServerLoad = async ({})=>{
-  console.log('load')
   return {
     search:await consommationsSearch(
       null, 
@@ -26,7 +25,7 @@ export let actions = {
 
     if(data.data.consoType != 'Tout' && !(data.data.consoType in consommations_type)) throw error(400);
     const consoType = data.data.consoType as consommations_type | 'Tout';
-    console.log('hey')
+
     return {
       search:await consommationsSearch(
         consoType == 'Tout' ? null : [{type:consoType}], data.data

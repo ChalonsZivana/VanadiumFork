@@ -1,6 +1,6 @@
 import { HasMoney } from "../BasicClasses";
 import prisma from "$lib/prisma";
-import type { boquettes } from "@prisma/client";
+import type { boquettes, Prisma } from "@prisma/client";
 import { Taferie } from "./Taferie";
 import type { z } from "zod";
 import { AddProductSchema, DeleteCategorySchema, DeleteProductSchema, EditBoquetteSchema, EditProductSchema } from '$lib/zodSchema.js';
@@ -105,7 +105,7 @@ export class Boquette extends HasMoney {
     return await prisma.boquettes.findFirst({where:{id_boquette}}) != null;
   }
 
-  async rhopseAuberge(data:{id_pg:number, type:string, bandars:string, fromage:string, commentaire:string, telephone:string,status:number}){
+  async rhopseAuberge(data:Prisma.aubergeCreateArgs['data']){
     await prisma.auberge.create({data});
   }
 

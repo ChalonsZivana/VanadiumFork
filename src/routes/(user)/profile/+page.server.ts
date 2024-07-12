@@ -35,11 +35,9 @@ export const actions = {
     await prisma.pg.update({where:{id_pg:locals.session.data.user.pg.id_pg}, data:{mot_de_passe:hashPassword(newPassword)}});
   },
   create_user: async({locals})=>{
-    console.log('create_user')
     const pg = locals.session.data.user?.pg;
     if(!pg) return {}
     const r = await oneSignalClient.createUser(ONESIGNAL_APP_ID, {identity:{id_pg:pg.id_pg.toString()}});
     //oneSignalClient.createSubscription(ONESIGNAL_APP_ID, 'id_pg', pg.id_pg.toString())
-    console.log(r)
   }
 }

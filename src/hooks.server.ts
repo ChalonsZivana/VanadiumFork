@@ -38,7 +38,7 @@ export const handle = handleSession(
           return d;
         });
 
-        if(routeId.startsWith('/(user)/ddp') && user.pg.ddp == 0){
+        if(routeId.startsWith('/(user)/ddp') && user.pg.ddp == false){
           throw error(401);
         }
         return resolve(event);

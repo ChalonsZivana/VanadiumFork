@@ -179,7 +179,7 @@
 
       {#if form}
         <CustomTable headers={['Nums','Bucque','Solde']} elements={form.topNegats}>
-          <tr on:click={()=>location.href=`/taferie/id-${e.id_pg}`} slot="tbody" let:e class="cursor-pointer divide-x-2 divide-white">
+          <tr on:click={()=>location.href=`/taferie/pg-${e.id_pg}`} slot="tbody" let:e class="cursor-pointer divide-x-2 divide-white">
             <th class="p-2">
               <Special special={[11,89,111].includes(e.nums??-1)}>
                 {e.nums}Ch{e.proms}

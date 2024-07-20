@@ -1,3 +1,4 @@
+import { consommations_type } from "@prisma/client";
 import { z } from "zod";
 
 
@@ -65,13 +66,14 @@ export const EditPgSchema = z.object({
 });
 
 
+
 export const ConsommationsSchema  = z.object({
-  page:z.string().transform(e => parseInt(e)),
+  page:z.string().transform(e => parseInt(e)).refine(e => e >= 1),
   nums: z.string().transform(e => parseInt(e)),
   proms: z.string().transform(e => parseInt(e)),
   sortType: z.enum(['date','montant']),
   sortDir: z.enum(['asc', 'desc']),
-  consoType:z.string(),
+  consoType:z.string().refine(e => Object.values(consommations_type).includes(e as any) || e == 'Tout'),
   consoYear:z.string().transform(e => parseInt(e)).refine(e => isNaN(e) || (e >= 2017 && e <= new Date().getFullYear())),
 });
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>

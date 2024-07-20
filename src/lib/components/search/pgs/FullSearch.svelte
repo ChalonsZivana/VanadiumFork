@@ -11,8 +11,6 @@
     export let nombrePages:number;
     export let totalPgs:number;
     export let pgs:Partial<pg>[];
-
-    console.log(pgs)
 </script>
 
 <SectionCard title={title}>
@@ -57,7 +55,7 @@
       </button>
     </div>
   </form>
-  <div class="w-full h-96 overflow-x-hidden no-scrollbar overflow-y-scroll">
+  <div class="w-full h-[180] overflow-x-hidden no-scrollbar overflow-y-scroll">
     <CustomTable elements={pgs} headers={['Nums','Solde']} title={"PG"}>
       <svelte:fragment slot="tbody" let:e>
         {#key e}

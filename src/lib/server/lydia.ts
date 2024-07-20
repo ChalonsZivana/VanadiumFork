@@ -68,7 +68,7 @@ export class LydiaManager {
         });
 
         const lydiaData = LydiaVerifyResponseSchema.safeParse(await response.json());
-        console.log(lydiaData)
+
         if(!lydiaData.success || lydiaData.data.state == "0") return {success:false, message:'En attente de payement...'}
 
         if(lydiaData.data.state == '1'){

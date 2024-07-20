@@ -95,7 +95,6 @@ export class Taferie {
   }
 
   static async rhopse(d:pg_ext | ext_ | _to | pg_boq){
-    console.log('rhopse')
     let libelle = await getLibelle(d);
 
     if(libelle == null) return;
@@ -114,7 +113,6 @@ export class Taferie {
     }
     if(Math.abs(montant) > 100_000) return {success:false, message:`Montant trop élevé`}
 
-    console.log('what ??', montant)
     const data:Prisma.consommationsCreateArgs['data'] = {
       type:d.type,
       from: "from" in d ? d.from : null,

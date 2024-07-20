@@ -7,10 +7,10 @@
     import { enhance } from "$app/forms";
     
     export let title:string;
-    export let totalCons:number;
-    export let page:number;
-    export let nombrePages:number;
-    export let consommations:ConsommationsIncludeType[];
+    export let totalCons:number = NaN;
+    export let page:number = 1;
+    export let nombrePages:number =  NaN;
+    export let consommations:ConsommationsIncludeType[] = [];
     export let types: {[key: string]: keyof typeof consommations_type};
     export let cancelOption:boolean;
 </script>
@@ -24,7 +24,9 @@
     <slot>
 
     </slot>
-  <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (20 par page)</p>
+    {#if !isNaN(totalCons)}
+    <p class="text-white">Total de {totalCons} consommation(s) sur {nombrePages} page(s). (20 par page)</p>
+    {/if}
 
     <div class="text-black w-full flex flex-col gap-2">
       <div class="flex gap-2">

@@ -12,7 +12,6 @@
 
 
   onMount(()=>{
-    data.consommations.then((e)=>console.log(e))
   //   Notification.requestPermission().then((permission)=>{
   //   if(permission == 'granted'){
   //     new Notification("You are now subscribed to notifications !");

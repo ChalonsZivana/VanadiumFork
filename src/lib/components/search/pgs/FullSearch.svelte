@@ -11,6 +11,8 @@
     export let nombrePages:number;
     export let totalPgs:number;
     export let pgs:Partial<pg>[];
+
+    console.log(pgs)
 </script>
 
 <SectionCard title={title}>
@@ -59,12 +61,11 @@
     <CustomTable elements={pgs} headers={['Nums','Solde']} title={"PG"}>
       <svelte:fragment slot="tbody" let:e>
         {#key e}
-        <tr class="divide-x-2 divide-white ">
-          <td class="">{e.nums}Ch{e.proms}</td>
-          <td><MoneyColor auto={e.solde}/></td>
-        </tr>
+          <tr on:click={()=>location.href = `/taferie/pg-${e.id_pg}`} class="divide-x-2 cursor-pointer divide-white ">
+            <td class="">{e.nums}Ch{e.proms}</td>
+            <td><MoneyColor auto={e.solde}/></td>
+          </tr>
         {/key}
-        
       </svelte:fragment>
     </CustomTable>
   </div>

@@ -7,12 +7,11 @@
   let currData:typeof data.search;
   $: nombrePages = Math.ceil(currData.totalPgs / 20);
   $:currData = form ? form.search : data.search;  
-  
 </script>
 
 <div class="w-11/12 pt-5">
     {#await currData.pgs}
-  Chargement Historique Général
+  Chargement PGs
     {:then pgs} 
       <FullSearch 
       title="< PGs >"       

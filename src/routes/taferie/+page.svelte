@@ -10,15 +10,14 @@
   import Logout from '$lib/components/svgs/logout.svelte';
   import ToggleButton from '$lib/components/miscellaneous/ToggleButton.svelte';
   import { enhance } from '$app/forms';
-    import Warning from '$lib/components/svgs/warning.svelte';
 
   export let data;
   
   const tableHeaders:{[K in SelectTypes]:string[]} = {
     'Tout':[], 
-    'PG':['Num','Bucque','Solde','Profil'],
-    'Fams':['Fams','Solde','Historique'],
-    'Boquette':['Id','Nom','Solde','Action']
+    'PG':['Num','Bucque','Solde'],
+    'Fams':['Fams','Solde'],
+    'Boquette':['Id','Nom','Solde']
   }
   let selected:SelectTypes='Tout';
   let searchText:string='';
@@ -68,33 +67,31 @@
         dataToSort={dTS}>    
         <svelte:fragment slot="Boquette" let:sIB> 
           <CustomTable title="Boquette" headers={tableHeaders.Boquette} elements={sIB}>
-            <tr slot="tbody" let:e>
+            <tr on:click={()=>location.href=`/taferie/boquette-${e.boquette.id_boquette}`} slot="tbody" let:e class="cursor-pointer">
               <th class="p-2">{e.boquette.id_boquette}</th>
               <td>{e.boquette.nom}</td>
               <!-- there is an issue with moneycolor, need for reload when create, resolved with key -->
               <td>{#key e} 
                 <MoneyColor auto={e.boquette.solde}/>
               {/key}</td>
-              <td><a href="/taferie/boquette-{e.boquette.id_boquette}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Panel</a></td>
             </tr>
           </CustomTable>
         </svelte:fragment>
       
         <svelte:fragment slot="Fams" let:sIF>
           <CustomTable title="Fams" headers={tableHeaders.Fams} elements={sIF}>
-            <tr slot="tbody" let:e>
+            <tr on:click={()=>location.href=`/taferie/fams-${e.fams.nums}`} slot="tbody" let:e class="cursor-pointer">
               <th class="p-2">{e.fams.nums}</th>
               <td>{#key e}
                 <MoneyColor auto={e.fams.solde}/>
               {/key}</td>
-              <td><a href="/taferie/fams-{e.fams.nums}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Panel</a></td>
             </tr>
           </CustomTable>
         </svelte:fragment>
       
         <svelte:fragment slot="PG" let:sIP>
           <CustomTable title="PG" headers={tableHeaders.PG} elements={sIP}>
-            <tr slot="tbody" let:e>
+            <tr on:click={()=>location.href=`/taferie/pg-${e.pg.id_pg}`} slot="tbody" let:e class="cursor-pointer">
               <th class="p-2">
                 <Special special={[11,89,111].includes(e.pg.nums??-1)}>
                   {e.pg.nums}Ch{e.pg.proms}
@@ -104,7 +101,6 @@
               <td>{#key e}
                   <MoneyColor auto={e.pg.solde}/>
               {/key}</td>
-              <td><a href="/taferie/pg-{e.pg.id_pg}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Panel</a></td>
             <tr/>
           </CustomTable>
         </svelte:fragment>
@@ -176,7 +172,7 @@
           Chargement des boquettes...
           {:then boquettes} 
           <CustomTable elements={boquettes} headers={['Boquette','Solde']} title=''>
-            <tr slot="tbody" let:e>
+            <tr on:click={()=>location.href=`/taferie/boquette-${e.id_boquette}`} slot="tbody" let:e class="cursor-pointer">
               <th class="p-2">
                 <a class="h-full w-full" href="/taferie/boquette-{e.id_boquette}">
                   {e.nom}
@@ -202,8 +198,8 @@
       </form>
 
       {#if currentTopNegats}
-      <CustomTable headers={['Nums','Bucque','Solde','Action']} elements={currentTopNegats}>
-        <tr class="divide-x-2 divide-white" slot="tbody" let:e>
+      <CustomTable headers={['Nums','Bucque','Solde']} elements={currentTopNegats}>
+        <tr on:click={()=>location.href=`/taferie/id-${e.id_pg}`} slot="tbody" let:e class="cursor-pointer divide-x-2 divide-white">
           <th class="p-2">
             <Special special={[11,89,111].includes(e.nums??-1)}>
               {e.nums}Ch{e.proms}
@@ -211,7 +207,6 @@
           </th>
           <td>{e.bucque}</td>
           <td><MoneyColor auto={e.solde}/></td>
-          <td><a href="/taferie/pg-{e.id_pg}" class="bg-gray-400 p-1 rounded-md">Profil</a></td>
         </tr>
       </CustomTable>
       {/if}

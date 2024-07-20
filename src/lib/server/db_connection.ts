@@ -111,10 +111,10 @@ export const getTops = async ()=>{
   return tops;
 }
 
-export const getTopNegats = async (proms:number|null)=>{
+export const getTopNegats = async (proms:number)=>{
   return await prisma.pg.findMany(
     {
-      where:proms?{proms:proms}:{},
+      where:isNaN(proms)?{}:{proms:proms},
       select:{nums:true,proms:true,bucque:true,solde:true,id_pg:true},
       orderBy:{solde:'asc'},
       take:10

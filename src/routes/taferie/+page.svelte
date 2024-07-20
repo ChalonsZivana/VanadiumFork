@@ -10,8 +10,10 @@
   import Logout from '$lib/components/svgs/logout.svelte';
   import ToggleButton from '$lib/components/miscellaneous/ToggleButton.svelte';
   import { enhance } from '$app/forms';
+  import type { getTopNegats } from "$lib/server/db_connection";
 
   export let data;
+  export let form:{topNegats:Awaited<ReturnType<typeof getTopNegats>>}
   
   const tableHeaders:{[K in SelectTypes]:string[]} = {
     'Tout':[], 
@@ -24,28 +26,6 @@
   const dataToSort = Promise.all([data.pgs, data.fams, data.boquettes]).then((value)=>{
     return createDataToSort({pgs:value[0], fams:value[1], boquettes:value[2]});
   });
-
-  let topNegatsInput = '';
-  let currentTopNegats:Awaited<typeof data.topNegats>;
-  const topsNegats:{[key:number]:Awaited<typeof data.topNegats>} = {};
-  data.topNegats.then(e=>{
-    topsNegats[NaN] = e;
-    currentTopNegats = e;
-  });
-
-  async function changeTopNegatsProms(){
-    if(Object.keys(topsNegats).includes(topNegatsInput)){
-      return currentTopNegats = topsNegats[parseInt(topNegatsInput)];
-    }
-    const r = await fetch('/taferie?proms=' + topNegatsInput, {method:'GET'});
-    const topNegats = JSON.parse(await r.text()) as Awaited<typeof data.topNegats>;
-    if(topNegats.length){
-      topsNegats[topNegats[0].proms] = topNegats;
-      currentTopNegats = topNegats;
-    } else {
-      currentTopNegats = topsNegats[NaN];
-    }
-  }
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
@@ -189,26 +169,26 @@
     </div>
 
     <SectionCard title="TOP Négat's">
-      <form action="" class="w-full">
+      <form method="post" action="?/topnegats" class="w-full">
         <label class="w-full">
           <p class="font-zagoth text-white text-2xl">Proms</p>
-          <input bind:value={topNegatsInput} type="number" class="w-full bg-red-100 p-1 text-black">
+          <input name="proms" type="number" class="w-full bg-red-100 p-1 text-black">
         </label>
-        <MyButton value="Valider" callback={changeTopNegatsProms}/>
+        <MyButton value="Valider"/>
       </form>
 
-      {#if currentTopNegats}
-      <CustomTable headers={['Nums','Bucque','Solde']} elements={currentTopNegats}>
-        <tr on:click={()=>location.href=`/taferie/id-${e.id_pg}`} slot="tbody" let:e class="cursor-pointer divide-x-2 divide-white">
-          <th class="p-2">
-            <Special special={[11,89,111].includes(e.nums??-1)}>
-              {e.nums}Ch{e.proms}
-            </Special>
-          </th>
-          <td>{e.bucque}</td>
-          <td><MoneyColor auto={e.solde}/></td>
-        </tr>
-      </CustomTable>
+      {#if form}
+        <CustomTable headers={['Nums','Bucque','Solde']} elements={form.topNegats}>
+          <tr on:click={()=>location.href=`/taferie/id-${e.id_pg}`} slot="tbody" let:e class="cursor-pointer divide-x-2 divide-white">
+            <th class="p-2">
+              <Special special={[11,89,111].includes(e.nums??-1)}>
+                {e.nums}Ch{e.proms}
+              </Special>
+            </th>
+            <td>{e.bucque}</td>
+            <td><MoneyColor auto={e.solde}/></td>
+          </tr>
+        </CustomTable>
       {/if}
     </SectionCard>
 </div>

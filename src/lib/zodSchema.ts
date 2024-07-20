@@ -144,3 +144,6 @@ export const DeleteCategorySchema = z.object({
   id_categorie:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
 });
 
+export const topNegatsSchema = z.object({
+  proms:z.string().transform(e => parseInt(e)),
+});

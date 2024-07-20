@@ -36,7 +36,7 @@ title="Profil">
     </div>
     <slot/>
 </div>
-{#if !taferie && user.pg.ddp == 1}
+{#if !taferie && user.pg.ddp}
   <a href="ddp" class="absolute top-3 right-3">
     <div class="p-1 border-1 border-white rounded-xl">
       DDP

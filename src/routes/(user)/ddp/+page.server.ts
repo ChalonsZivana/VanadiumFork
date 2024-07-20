@@ -1,5 +1,6 @@
 import { consommationsSearch } from '$lib/components/search/consommations/fullsearch';
 import prisma from '$lib/prisma.js';
+import { Database } from '$lib/server/classes/Database.js';
 import { ConsommationsSchema } from '$lib/zodSchema.js';
 import { consommations_type } from '@prisma/client';
 import { error } from '@sveltejs/kit';
@@ -11,7 +12,8 @@ export async function load({locals}){
   const proms = user.pg.proms;
   return {
     pgs:await prisma.pg.findMany({where:{proms}, select:{nums:true, proms:true, bucque:true, solde:true,email:true}, orderBy:{nums:'asc'}}),
-    proms
+    proms,
+    negats:await Database.negatsProms([user.pg.proms])
   }
 }
 

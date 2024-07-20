@@ -1,5 +1,6 @@
 import prisma from "$lib/prisma";
 import { LydiaDemandResponseSchema, LydiaVerifyResponseSchema } from "$lib/zodSchema";
+import type { Prisma } from "@prisma/client";
 import { Taferie } from "./classes/Taferie";
 
 
@@ -36,14 +37,13 @@ export class LydiaManager {
     const lydiaData = LydiaDemandResponseSchema.safeParse(retour);
     if(!lydiaData.success || lydiaData.data.error != "0") return {'error':'Mauvais numéro de téléphone'}
 
-    await prisma.rechargements.create({
-      data:{
-        id_pg,
-        keylydia:lydiaData.data.request_uuid,
-        montant:varData.montant,
-        date:new Date()
-      }
-    });
+    const createData:Prisma.rechargementsCreateArgs['data']={
+      id_pg,
+      keylydia:lydiaData.data.request_uuid,
+      montant:varData.montant,
+      date:new Date(),
+    }
+    await prisma.rechargements.create({data:createData});
     return {success:true, message: 'Demande envoyée, veuillez l\'accepter dans les 120s'};
 
   } catch(error) {
@@ -68,6 +68,7 @@ export class LydiaManager {
         });
 
         const lydiaData = LydiaVerifyResponseSchema.safeParse(await response.json());
+        console.log(lydiaData)
         if(!lydiaData.success || lydiaData.data.state == "0") return {success:false, message:'En attente de payement...'}
 
         if(lydiaData.data.state == '1'){

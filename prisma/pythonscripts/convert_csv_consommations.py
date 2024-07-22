@@ -1,4 +1,4 @@
-path = r"C:\Users\lmgd\OneDrive\Bureau\consommations_202407151617.csv"
+path = r"C:\Users\lmgd\OneDrive\Bureau\consommations_202407221921.csv"
 output_path = r"C:\Users\lmgd\OneDrive\Bureau\consommations_out.csv"
 
 import csv
@@ -12,31 +12,32 @@ def transfertConso(conso):
     else:
         annule = True
 
-    if(id_pg == 0):
-        cT = "ext_boq"
-        _from = id_boquette
-        _to = None
-    if(id_pg is not None and id_boquette is not None and not(id_pg!='' and int(id_pg) <= 0)):
-        cT = "pg_boq"
-        _from = id_pg
-        _to = id_boquette
-    elif(id_pg is not None and id_conso_bis is not None): 
+    
+    
+    
+    if id_conso_bis != "":
         cT = "pg_pg"
         _from = id_pg
         _to = id_conso_bis
-    elif(id_boquette != None): 
-        cT = "ext_boq"
-        _from = None
-        _to = id_boquette
-    elif(id_pg is not None): 
-        cT = "pg_ext"
-        _from = id_pg
-        _to = None
+    elif id_pg == '' or id_pg == 0:
+        if id_boquette != '':
+            cT = "ext_boq"
+            _from = None
+            _to = id_boquette
+    else:
+        if id_boquette == '' or id_boquette == 20:
+            cT = "pg_ext"
+            _from = id_pg
+            _to = None
+        elif id_boquette != '':
+            cT = "pg_boq"
+            _from = id_pg
+            _to = id_boquette
     
     solde_avant = round(float(solde_avant), 2)
     solde_apres = round(float(solde_apres), 2)
     montant = round(solde_apres - solde_avant, 2)
-    if quantite != '' and float(quantite) > 10_000:
+    if (quantite != '' and float(quantite) > 10_000) or cT != 'ext_boq':
         return None
     try:
         return [cT, _from, _to, id_produit, quantite, solde_avant, solde_apres, montant, libelle,date_conso, annule]

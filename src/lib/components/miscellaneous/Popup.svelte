@@ -5,15 +5,16 @@
   let dialog:HTMLDialogElement;
 
   $:{
-    if(form){
+    if(form && 'message' in form){
+      console.log(form)
       dialog.show()
     }
   }
 </script>
 
 <dialog bind:this={dialog} 
-  on:animationend={()=>dialog.close()}
-  class="z-50 fixed w-11/12 bottom-14 bg-yellow-200 p-3 overflow-clip rounded-xl open:animate-fade-in">
+on:animationend={()=>dialog.close()}
+class="z-50 fixed w-11/12 bottom-14 bg-yellow-200 p-3 overflow-clip rounded-xl open:animate-fade-in">
   {#if form}
     {#if Array.isArray(form)}
     {#each form as f}
@@ -26,6 +27,6 @@
         {form.message}
       </p>
     {/if}
-    
   {/if}
-  </dialog>
+</dialog>
+

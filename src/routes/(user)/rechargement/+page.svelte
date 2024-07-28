@@ -10,6 +10,7 @@
   
   const originDate = (data.date ?? new Date()).getTime();
   let timeout:number|null = null;
+  let phoneNumber:string;
   onMount(()=>{
     if(data.verify){
       let a = setInterval(()=>{        
@@ -20,6 +21,8 @@
         }
       },1000)
     }
+
+    phoneNumber = localStorage.getItem('phoneNumber') ?? "";
   });
 </script>
 
@@ -30,14 +33,14 @@
     <SectionCard title="Rechargement Lydia">
       {#if data.lydiazocque.valeur == "0"}
 
-        <form use:enhance action="?/createLydiaDemand" method="post" class="flex flex-col gap-5">
+        <form on:submit={()=>localStorage.setItem('phoneNumber',phoneNumber)} use:enhance action="?/createLydiaDemand" method="post" class="flex flex-col gap-5">
           <p class="p-5 w-full rounded-md bg-red-100 text-yellow-900">
             Rentrez votre numéro de téléphone (associé à votre compte Lydia), si celui-ci n'est pas relié alors vous recevrez un SMS pour pouvoir payer en ligne. Sinon, acceptez le paiement sur la plateforme Lydia.
           </p>
           <div class="w-full text-xl gap-5 flex flex-col">
             <label class="w-full">
               Numéro de téléphone Lydia:
-              <input required class="w-full text-black" type="tel" name="tel" value="0768969314">
+              <input required class="w-full text-black" type="tel" name="tel" bind:value={phoneNumber}>
             </label>
             <label class="w-full">
               Montant (minimum 15€):

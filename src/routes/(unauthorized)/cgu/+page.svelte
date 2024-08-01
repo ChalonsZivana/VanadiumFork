@@ -8,7 +8,7 @@
       <strong>Créateurs</strong>  : 63ch222<br /> 
       <strong>Inspiré du travail </strong> : Dartix 23Ch208, Scripter's 40Ch210, Kirik's 67Ch211, Er'Z't'S 16Ch212, Baïbeur 121Ch212, Quicky 3Ch213, Franklin 58Ch213 et Fantal 92Ch214<br>
       <strong>Webmaster</strong> : L'association des élèves de l'ENSAM de Châlons – <a class="underline text-blue-500" href="mailto:info.ch@gadz.org">info.ch@gadz.org</a><br /> 
-      <strong>Hébergeur</strong> : Hostinger<br /> 
+      <strong>Hébergeur</strong> : Railway<br /> 
       </p>
 
     <h2 class="text-lg"><strong>2. Conditions générales d’utilisation du site et des services proposés.</strong></h2> 

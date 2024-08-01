@@ -35,6 +35,7 @@
               </Special>
             </th>
             <td>{e.pg.bucque}</td>
+            
             <td><a href="/boquette-{boquette.id_boquette}/rhopse-{e.pg.id_pg}" class="bg-gray-500 p-1 text-gray-300 rounded-lg">Rhopse</a></td>
           <tr/>
         </CustomTable>

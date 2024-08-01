@@ -15,6 +15,7 @@ export class Pg extends HasMoney{
 
   async pg(){
     return await prisma.pg.findFirst({where:{id_pg:this.ID}}) as pg;
+    
   }
 
   async incrementRefresh(){

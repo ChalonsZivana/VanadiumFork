@@ -1,9 +1,9 @@
-import { getFams, getUser } from "./db_connection";
+import { getFams, getPG } from "./db_connection";
 import type {pg, fams, boquettes} from "@prisma/client";
 import { createHash } from 'crypto';
 
 export interface User {
-  pg:pg,
+  pg:pg & {can_buy:boolean},
 	fams:fams,
 }
 
@@ -13,15 +13,15 @@ export type SessionData = {
 };
 
 export async function createUser(id_pg:number):Promise<User|null>{
-	const user = await getUser(id_pg);
-	if(user == null) return null;
-	const fams = await getFams(user.nums);
+	const pg = await getPG(id_pg);
+	if(pg == null) return null;
+	const fams = await getFams(pg.nums);
 	if(fams == null) return null;
 
 	return {
-		pg:user, 
-		fams:fams,
-	} as {pg:pg, fams:fams};//2507:Skou , 2479:Peynetre	
+		pg, 
+		fams,
+	} as {pg:pg & {can_buy:boolean}, fams:fams};//2507:Skou , 2479:Peynetre	
 }
 
 export async function updateUser(locals:App.Locals){
@@ -37,3 +37,4 @@ export const hashPassword = (password:string) => {
 	pswd.update(password);
 	return pswd.digest('hex');
 }
+

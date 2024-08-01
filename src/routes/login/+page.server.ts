@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { redirect,fail } from '@sveltejs/kit';
-import { getBoquette, getUserPassword } from '$lib/server/db_connection.js';
+import { getBoquette, getPGPassword } from '$lib/server/db_connection.js';
 import prisma from '$lib/prisma.js';
 import { createUser, hashPassword } from '$lib/server/auth.js';
 import {ZIVANA_MDP} from '$env/static/private'
@@ -40,7 +40,7 @@ export const actions = {
 			return fail(400, { uid, wrong: true });
 		} else if(uid.toLowerCase().includes('ch')){			
 			const [nums,proms] = uid.toLowerCase().split('ch') as string[];
-			const userPswd = await getUserPassword(parseInt(nums), parseInt(proms));
+			const userPswd = await getPGPassword(parseInt(nums), parseInt(proms));
 			if (!userPswd) {
 				return fail(400, { nums, proms, missing: true });
 			}

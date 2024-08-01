@@ -5,7 +5,7 @@
   let dialog:HTMLDialogElement;
 
   $:{
-    if(form && 'message' in form){
+    if(dialog && form){
       console.log(form)
       dialog.show()
     }

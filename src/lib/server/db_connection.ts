@@ -1,5 +1,7 @@
 import prisma from "$lib/prisma";
+import type { pg } from "@prisma/client";
 import { Fams } from "./classes/Fams";
+import { Pg } from "./classes/PG";
 import type { Top } from './db_structs';
 
 export async function getFams(nums:number) {
@@ -8,17 +10,16 @@ export async function getFams(nums:number) {
 }
 
 
-export const getUserPassword = async (nums:number,proms:number) =>  {
+export const getPGPassword = async (nums:number,proms:number) =>  {
   const data = await prisma.pg.findFirst({select:{id_pg:true, mot_de_passe:true}, where:{nums:nums,proms:proms}});
   return data
 }
 
-export const getUser = async (id_pg:number)=> {
+export const getPG = async (id_pg:number) => {
   if(id_pg == -1){
     return null;
   }
-  // MAIN INFO ABOUT PG
-  return prisma.pg.findFirst({where:{id_pg:id_pg}});
+  return prisma.pg.findFirst({where:{id_pg}});
 }
 
 export const getHistoriqueFams = async (nums:number) => {
@@ -29,7 +30,13 @@ export const getHistoriqueFams = async (nums:number) => {
 }
 
 export const getBoquette = async (id_boquette:number)=> {
-  return prisma.boquettes.findFirst({where:{id_boquette:id_boquette}});
+  return prisma.boquettes.findFirst({where:{id_boquette}});
+}
+
+function isMoreThanAWeekOld(date: Date): boolean {
+  const now = new Date();
+  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  return date < oneWeekAgo;
 }
 
 

@@ -20,7 +20,7 @@
     'Actif':data.user.pg.actif
   } 
   let activCheck:boolean;
-  $:editInputCheck.Actif = activCheck ? 1 : 0;
+  $:editInputCheck.Actif = activCheck;
 </script>
 
 <Popup bind:form={form}/>

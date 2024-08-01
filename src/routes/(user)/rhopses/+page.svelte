@@ -6,6 +6,7 @@
 
 
 <div class="flex mt-20 w-11/12">  
+  {#if data.USER.pg.can_buy}
   <SectionCard title="Rhopses">
     <div class="p-3 rounded-md bg-amber-100">
       <p class="text-black">Tu peux te rhopser ici sur certains produits du Tabagn's !</p>
@@ -18,4 +19,11 @@
       {/each}
     </div>
   </SectionCard>
+  {:else}
+  <SectionCard title="Rhopses">
+    <div class="p-3 rounded-md bg-amber-100">
+      <p class="text-black">Tu es en negats depuis trop longtemps !</p>
+    </div>
+  </SectionCard>
+  {/if}
 </div>

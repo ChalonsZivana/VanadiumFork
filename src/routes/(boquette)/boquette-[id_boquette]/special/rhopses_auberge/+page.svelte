@@ -8,9 +8,11 @@
   }
   let toggle = 0;
 </script>
+//TODO rhopses auberge
 
-<div class="flex flex-col h-full">
-  <div class="h-28 flex flex-col justify-center items-center">
+<div class="flex flex-col h-full">ù
+  <p class="text-white">NON FONCTIONNEL</p>
+  <!-- <div class="h-28 flex flex-col justify-center items-center">
     <p class="font-zagoth text-4xl text-white">Grosseure et bourrelet</p>
   </div>
   <div class="w-full h-full flex flex-col text-white justify-center items-center gap-5">
@@ -100,5 +102,5 @@
       </div>
       </SectionCard>
     </button>
-  </div>
+  </div> -->
 </div>

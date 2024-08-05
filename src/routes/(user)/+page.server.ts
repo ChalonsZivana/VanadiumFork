@@ -5,7 +5,7 @@ import { redirect } from "@sveltejs/kit";
 export const load = async ({ locals }) => {
   if(!locals.session.data.user) throw redirect(300, "/login");
 
-  redirect(300, "/test");
+  throw redirect(300, "/test");
 
   // const pg = new Pg(locals.session.data.user.pg.id_pg);
   // await pg.incrementRefresh();

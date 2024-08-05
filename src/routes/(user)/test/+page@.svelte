@@ -66,54 +66,54 @@
 </script>
 
 <div class="h-screen overflow-hidden bg-black">
-  <div class="absolute w-full top-0 left-0 h-32">
-    <div class="absolute flex w-full justify-end p-2 top-2 z-10">
-      <div class="rounded-full flex {isBoquettesMenu?'bg-[#262626]':''}">
-        
-        <div class="flex flex-col duration-300 {isBoquettesMenu ? 'h-full scale-x-100':'h-0 scale-x-0'}">
-          {#each data.BOQUETTES as boquette}
-          <a href="/boquette-{boquette.id_boquette}" class="size-16 p-3 duration-300">
-            <svelte:component this={boquettesIcons[boquette.id_boquette]}/>
-
-          </a>
-          {/each}
-
-        </div>
-        <button on:click={()=>isBoquettesMenu = !isBoquettesMenu} class="size-16  rounded-full">
-          <House/>
-        </button>
-      </div>
+  <div class="absolute flex w-full justify-end p-2 top-2 z-10">
+    <div class="rounded-full flex {isBoquettesMenu?'bg-[#262626]':''}">
       
+      <div class="flex flex-col duration-300 {isBoquettesMenu ? 'h-full scale-x-100':'h-0 scale-x-0'}">
+        {#each data.BOQUETTES as boquette}
+        <a href="/boquette-{boquette.id_boquette}" class="size-16 p-3 duration-300">
+          <svelte:component this={boquettesIcons[boquette.id_boquette]}/>
+
+        </a>
+        {/each}
+
+      </div>
+      <button on:click={()=>isBoquettesMenu = !isBoquettesMenu} class="size-16  rounded-full">
+        <House/>
+      </button>
     </div>
   </div>
-  <div class="h-16">
-  </div>
-<div class="h-full w-full flex flex-col gap-10  p-8 duration-500 {section != 0 ? '-translate-y-full':'translate-y-000' }">
+
+
+<!-- section 1 -->
+<div class="h-full w-full flex flex-col divide-y-1 divide-white gap-5  p-8 duration-500 {section != 0 ? '-translate-y-full':'translate-y-000' }">
+  <div class="flex flex-col gap-10">
+    <p class="text-white text-xl font-bold text-start">Bienvenue sur Vanadium</p>
+    <div class="aspect-video w-full relative bg-gradient-to-t text-white p-2 from-red-600 to-red-500 self-center rounded-3xl">
+
+      <p class="absolute font-zagoth opacity-50 bottom-auto right-2 text-9xl">{num}</p>
   
-  <p class="text-white text-2xl font-bold text-start">Bienvenue sur Vanadium</p>
-
-      <div class="aspect-video w-full relative bg-gradient-to-t text-white p-2 from-red-600 to-red-500 self-center rounded-3xl">
-    <p class="absolute font-zagoth opacity-50 bottom-auto right-2 text-9xl">{num}</p>
-
-    <div class="p-4">
-      <p>Prénom: {data.USER.pg.prenom}</p>
-      <p>Nom: {data.USER.pg.nom}</p>
-      <p>Bucque: {data.USER.pg.bucque}</p>
-    
-      <!-- <Special special={[11,89,111].includes(data.USER.pg.nums??-1)}>
-        <p>Nums: {data.USER.pg.nums}</p>
-      </Special> -->
-      <p>Proms: {data.USER.pg.proms}</p>
-      <p>Email: {data.USER.pg.email}</p>
+      <div class="p-4">
+        <p>Prénom: {data.USER.pg.prenom}</p>
+        <p>Nom: {data.USER.pg.nom}</p>
+        <p>Bucque: {data.USER.pg.bucque}</p>
+      
+        <!-- <Special special={[11,89,111].includes(data.USER.pg.nums??-1)}>
+          <p>Nums: {data.USER.pg.nums}</p>
+        </Special> -->
+        <p>Proms: {data.USER.pg.proms}</p>
+        <p>Email: {data.USER.pg.email}</p>
+      </div>
     </div>
   </div>
 
-  <div class="w-full border-t-1 border-white"></div>
+  
 
   <div class="flex flex-col w-full gap-5 text-white self-center">
     <!-- Fonds -->
+     <div></div>
     
-    <div class="bg-[#262626] w-full h-20 rounded-3xl p-4 gap-4 flex justify-start items-center">
+    <div class="bg-[#262626] w-full rounded-3xl p-2 gap-4 flex justify-start items-center">
       <div class="size-10">
         <EuroCoin/>
       </div>
@@ -131,7 +131,7 @@
   
     <!-- Negat's -->
   
-    <div class="bg-[#262626] w-full rounded-3xl p-4 gap-4 flex justify-start items-center">
+    <div class="bg-[#262626] w-full rounded-3xl p-2 gap-4 flex justify-start items-center">
       <div class="size-10">
         <EuroCoin/>
       </div>
@@ -153,7 +153,7 @@
    
     
     <div class="flex gap-2 w-full flex-wrap">
-      <button on:click={()=>section=2} class="bg-[#262626] active:bg-gray-500 flex-1 h-20 rounded-3xl p-4 gap-4 flex justify-start items-center">
+      <button on:click={()=>section=2} class="bg-[#262626] active:bg-gray-500 flex-1 h-20 rounded-3xl p-2 gap-4 flex justify-start items-center">
         <div class="size-8">
           <Stats/>
         </div>
@@ -161,7 +161,7 @@
           <p class="font-bold text-sm">Stats</p>
         </div>
       </button>
-      <button on:click={()=>section = 1} class="bg-[#262626] active:bg-gray-500 flex-1 h-20 rounded-3xl p-4 gap-4 flex justify-start items-center">
+      <button on:click={()=>section = 1} class="bg-[#262626] active:bg-gray-500 flex-1 h-20 rounded-3xl p-2 gap-4 flex justify-start items-center">
         <div class="size-8">
           <Consommations/>
         </div>
@@ -238,10 +238,10 @@
 </div>
 
 <div class="absolute left-0 z-50 w-full bg-black bottom-0 pl-0 pr-0">
-  <div class="grid grid-cols-5 place-items-center h-20">
+  <div class="grid grid-cols-5 place-items-center h-16">
     {#each sections as item}
       <a href={item.href}>
-        <button on:click={()=>select(item.id)} class="p-2 {selected==item.id ? 'size-20 -translate-y-8  origin-bottom duration-300 bg-red-600 rounded-full':'size-16'}">
+        <button on:click={()=>select(item.id)} class="p-2 {selected==item.id ? 'size-16 -translate-y-4  origin-bottom duration-300 bg-red-600 rounded-full':'size-14'}">
           <svelte:component this={item.component}/>
         </button>
       </a>

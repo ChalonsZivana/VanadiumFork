@@ -1,32 +1,30 @@
 import fs from 'fs';
-import { Database } from "$lib/server/classes/Database";
 import { redirect } from "@sveltejs/kit";
-import { Pg } from "$lib/server/classes/PG";
-import { getRandomTop, getTop } from '$lib/server/db_connection.js';
-import { Taferie } from '$lib/server/classes/Taferie.js';
 
 
 export const load = async ({ locals }) => {
   if(!locals.session.data.user) throw redirect(300, "/login");
 
-  const pg = new Pg(locals.session.data.user.pg.id_pg);
-  await pg.incrementRefresh();
+  redirect(300, "/test");
 
-  const topGlobal = getTop("Top Global", null);
-  const topDuJour = getRandomTop()
+  // const pg = new Pg(locals.session.data.user.pg.id_pg);
+  // await pg.incrementRefresh();
 
-  return {
-    photo: getRandomPhoto(await pg.getPhotosFolder()),
-    negats:await Database.negatsProms([222,223]),
-    topGlobal,
-    topDuJour,
-    consommations: Taferie.consommations([
-      {type:'pg_boq', from:pg.ID},
-      {type:'pg_pg', from:pg.ID},
-      {type:'pg_fams', from:pg.ID},
-      {type:'pg_ext', from:pg.ID},
-    ])
-  }
+  // const topGlobal = getTop("Top Global", null);
+  // const topDuJour = getRandomTop()
+
+  // return {
+  //   photo: getRandomPhoto(await pg.getPhotosFolder()),
+  //   negats:await Database.negatsProms([222,223]),
+  //   topGlobal,
+  //   topDuJour,
+  //   consommations: Taferie.consommations([
+  //     {type:'pg_boq', from:pg.ID},
+  //     {type:'pg_pg', from:pg.ID},
+  //     {type:'pg_fams', from:pg.ID},
+  //     {type:'pg_ext', from:pg.ID},
+  //   ])
+  // }
 }
 
 

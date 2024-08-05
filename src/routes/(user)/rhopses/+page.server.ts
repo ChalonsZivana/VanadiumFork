@@ -1,4 +1,3 @@
-import type { categories, produits } from "@prisma/client";
 import type { PageServerLoad } from "./$types";
 import prisma from "$lib/prisma";
 import { BOQUETTES_LIBRE_SERVICE } from "$lib/server/classes/Boquette";

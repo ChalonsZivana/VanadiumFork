@@ -3,6 +3,7 @@
   import type { User } from "$lib/server/auth";
   import SectionCard from '$lib/components/SectionCard.svelte';
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
+    import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
 
   export let data:{USER:User,photo:string, photosFolder:string};
   export let form;
@@ -36,7 +37,12 @@
 
 
   <div class="mt-5 h-full w-11/12 flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
-    <Profile user={data.USER}/>
+    <Profile user={data.USER}>
+      <form method="post">
+          <input type="hidden" name="user" value="user">
+        <ValidationButton text="Se déconnecter" formaction="/login?/logout"/>
+      </form>
+    </Profile>
     
     <SectionCard title="Dossier Gifs">
       <select bind:value={currentFolder} class="text-black w-80 text-2xl" on:change={sendChange}>
@@ -87,15 +93,3 @@
       </SectionCard>
     </div>
   </div>
-
-
-<!-- <div class="flex flex-col md:flex-row items-center gap-5 h-full"> 
-  <div class="h-20"></div>
-
-  <div class="w-5/6">
-    <Profile></Profile>
-  </div>
-  <div class="w-5/6">
-    <PasswordChange></PasswordChange>
-  </div>
-</div> -->

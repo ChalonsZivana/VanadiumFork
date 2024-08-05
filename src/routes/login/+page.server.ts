@@ -65,7 +65,7 @@ export const actions = {
 	},
 	logout:async ({ locals, request }:RequestEvent) => {
 		const data = await request.formData();
-		
+
 		if(data.get('user')){
 			await locals.session.update(data => {
 				data.user = null;

@@ -1,7 +1,8 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import Button from '$lib/components/miscellaneous/MyButton.svelte';
-    import CloseCircle from "$lib/components/svgs/close-circle.svelte";
+  import CloseCircle from "$lib/components/svgs/close-circle.svelte";
+  
   const onscrits:{[index:string]:string} = {
     '89':"89;Gerard;Louis-Matthieu;17+72=89\n19+80=89"
   }
@@ -71,5 +72,5 @@
     </div>
   {/if}
 
-  
+
 </div>

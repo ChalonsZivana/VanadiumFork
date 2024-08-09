@@ -5,6 +5,7 @@ import type { Session } from 'svelte-kit-cookie-session';
 
 
 import "reflect-metadata";
+import 'unplugin-icons/types/svelte'
 // for information about these interfaces
 
 declare global {

@@ -35,8 +35,8 @@
   // })
 </script>
 
-
-  <div class="mt-5 h-full w-11/12 flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
+<div class="size-full flex justify-center items-center">
+  <div class="mt-5 h-full w-80 flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
     <Profile user={data.USER}>
       <form method="post">
           <input type="hidden" name="user" value="user">
@@ -93,3 +93,4 @@
       </SectionCard>
     </div>
   </div>
+</div>

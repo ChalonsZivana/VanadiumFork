@@ -4,19 +4,10 @@
   import QuestionPerson from '$lib/components/svgs/question-person.svelte';
 </script>
 
-<div class="h-screen flex flex-col items-center gap-10">
+<div class="flex flex-col items-center gap-10">
   <p class="text-white font-zagoth text-6xl">Usin's</p>
-  <div class="aspect-square w-full grid gap-5 grid-rows-2 grid-cols-2 items-center justify-items-center ">
+  <div class="aspect-square w-full grid gap-5 grid-rows-3 items-center justify-items-center ">
     
-    <div class="size-52">
-      <SectionCard title='Ma journée'>
-        <div class="flex flex-col justify-center">
-          <p>Matin:</p>
-          <p>Roten's:</p>
-          <p>Soir:</p>
-        </div>
-      </SectionCard>
-    </div>
     
     <div class="size-52">
       <SectionCard title='Ordre du jour'>

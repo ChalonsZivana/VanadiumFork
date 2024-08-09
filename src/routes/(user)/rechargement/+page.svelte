@@ -3,6 +3,7 @@
   import SectionCard from '$lib/components/SectionCard.svelte'
   import Popup from '$lib/components/miscellaneous/Popup.svelte';
   import EuroBill from '$lib/components/svgs/euro-bill.svelte';
+    import Icon from '@iconify/svelte';
   import { onMount } from 'svelte';
 
   export let data;
@@ -28,73 +29,85 @@
 
 <Popup bind:form={form}/>
 
-<div class="w-11/12 h-full mt-5 flex flex-col gap-5">
+<div class="w-full h-full flex flex-col items-center gap-5">
   {#if !data.verify}
-    <SectionCard title="Rechargement Lydia">
-      {#if data.lydiazocque.valeur == "0"}
-
-        <form on:submit={()=>localStorage.setItem('phoneNumber',phoneNumber)} use:enhance action="?/createLydiaDemand" method="post" class="flex flex-col gap-5">
-          <p class="p-5 w-full rounded-md bg-red-100 text-yellow-900">
-            Rentrez votre numéro de téléphone (associé à votre compte Lydia), si celui-ci n'est pas relié alors vous recevrez un SMS pour pouvoir payer en ligne. Sinon, acceptez le paiement sur la plateforme Lydia.
-          </p>
-          <div class="w-full text-xl gap-5 flex flex-col">
-            <label class="w-full">
-              Numéro de téléphone Lydia:
-              <input required class="w-full text-black" type="tel" name="tel" bind:value={phoneNumber}>
-            </label>
-            <label class="w-full">
-              Montant (minimum 15€):
-              <input required class="w-full text-black" min="15" type="number" name="montant">
-            </label>
-          </div>
-
-          <div class="flex justify-center w-full">
-            <button class="bg-blue-500 w-1/2 flex justify-center rounded-md">
-              <EuroBill className="w-14 p-1"/>
-            </button>
-          </div>
-        </form>
-      {:else}
-        <p>Les rechargements Lydia sont zocqués.</p>
-      {/if}
-    </SectionCard>
-  
-  
-  {:else}
-      <SectionCard title="Vérification Rechargement">
-        <div class="flex flex-col gap-10">
-          <p class="text-white text-xl text-center">Une demande de rechargement a été effectuée, appuyez sur le bouton.</p>
-          <div class="w-full flex flex-col gap-5 items-center">
-            <p class="text-xl">Temps restant: <span class="font-bold">
-              {#if timeout != null}
-                {timeout}
-              {/if}
-            </span></p>
-            <form use:enhance action="?/verifyLydiaDemand" method="post">
-              <button class="p-2 bg-green-600 text-xl">Vérifier le rechargement</button>
-            </form>
-          </div>
+    <form class="card w-80 p-4 variant-filled-surface flex flex-col gap-4"  on:submit={()=>localStorage.setItem('phoneNumber',phoneNumber)} use:enhance action="?/createLydiaDemand" method="post">
+      <p class="card-header text-3xl font-zagoth text-center">
+        Rechargement Lydia
+      </p>
+      
+      <section class="flex flex-col gap-4 items-center">
+        <div class="card variant-filled-warning p-2">
+          <p>Rentrez votre numéro de téléphone (associé à votre compte Lydia), si celui-ci n'est pas relié alors vous recevrez un SMS pour pouvoir payer en ligne. Sinon, acceptez le paiement sur la plateforme Lydia.</p>
         </div>
-      </SectionCard>
-  {/if}
+        <label>
+          <span>Numéro de téléphone Lydia</span>
+          <input required class="input" type="number" name="tel">
+        </label>
+        <label>
+          <span>Montant (minimum 15€)</span>
+          <input required class="input" type="tel" name="montant" min="15">
+        </label>
+      </section>
 
-  <SectionCard title="Rechargement Fam's">
-    <form use:enhance action="?/rechargementFams" method="post" class="flex w-full flex-col gap-5">
-      <label class="w-full text-xl">
-        Montant:
-        <input required class="w-full text-black" type="number" step="0.01" min="0" max={data.USER.pg.solde} name="montant" placeholder="À partir de ton compte.">
-      </label>
-      <label class="w-full text-xl">
-        Libelle:
-        <input required class="w-full text-black" type="text" name="libelle">
-      </label>
-      <div class="flex justify-center w-full">
-        <button class="bg-blue-500 w-1/2 flex justify-center rounded-md">
-          <EuroBill className="w-14 p-1"/>
+      <div class="card-footer flex justify-center">
+        <button class="btn variant-filled-tertiary w-32 text-3xl">
+          <Icon icon="mdi:payment"/>
         </button>
       </div>
     </form>
-  </SectionCard>
+
+
+  {:else}
+    <form class="card w-80 p-4 variant-filled-surface flex flex-col gap-4"  on:submit={()=>localStorage.setItem('phoneNumber',phoneNumber)} use:enhance action="?/verifyLydiaDemand" method="post">
+      <p class="card-header text-3xl font-zagoth text-center">
+        Vérification Rechargement
+      </p>
+      
+      <section class="flex flex-col gap-4 items-center">
+        <div class="card variant-filled-warning p-2">
+          <p class="text-center">Une demande de rechargement a été effectuée, appuyez sur le bouton.</p>
+        </div>
+        <p class="text-xl">Temps restant: <span class="font-bold">
+          {#if timeout != null}
+            {timeout}
+          {/if}
+        </span></p>
+      </section>
+
+      <div class="card-footer flex justify-center">
+        <button class="btn variant-filled-tertiary text-xl">
+          Vérifier le rechargement
+        </button>
+      </div>
+    </form>
+  {/if}
+
+  <form class="card w-80 p-4 variant-filled-surface flex flex-col gap-4">
+    <p class="card-header text-3xl font-zagoth text-center">
+      Rechargement Fam's
+    </p>
+    
+    <section class="flex flex-col gap-4 items-center">
+      <div class="card variant-filled-warning p-2">
+        <p>L'argent sera déduit de votre compte Vanadium.</p>
+      </div>
+      <label class="w-full">
+        <span>Montant (minimum 15€)</span>
+        <input required class="input" type="number" min="15"  name="montant">
+      </label>
+      <label class="w-full">
+        <span>Libelle</span>
+        <input class="input" required type="text"  name="libelle">
+      </label>
+    </section>
+
+    <div class="card-footer flex justify-center">
+      <button class="btn variant-filled-tertiary w-32 text-3xl">
+        <Icon icon="mdi:payment"/>
+      </button>
+    </div>
+  </form>
 </div>
 
 

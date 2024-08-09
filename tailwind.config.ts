@@ -1,9 +1,13 @@
-/** @type {import('tailwindcss').Config} */
-const plugin = require('tailwindcss/plugin');
+import { join } from 'path'
+import type { Config } from 'tailwindcss'
+import { skeleton } from '@skeletonlabs/tw-plugin'
+import { myCustomTheme } from './src/theme'
+import plugin from 'tailwindcss/plugin'
 
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-  theme: {
+	darkMode: 'class',
+	content: ['./src/**/*.{html,js,svelte,ts}', join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')],
+	theme: {
     extend: {
       fontSize:{
         'xxs':'0.6rem'
@@ -62,7 +66,14 @@ export default {
       }
     },
   },
-  plugins: [
+	plugins: [
+		skeleton({
+			themes: {
+				custom: [
+					myCustomTheme
+				],
+			},
+		}),
     require('tailwindcss-gradients'),
     function ({ addVariant }) {
       addVariant('child', '& > *');
@@ -89,6 +100,5 @@ export default {
         { values: theme('textShadow') }
       )
     }),
-  ],
-}
-
+	],
+} satisfies Config;

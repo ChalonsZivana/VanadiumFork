@@ -5,14 +5,18 @@
 </script>
 
 
-<div class="bg-red-900 w-full h-fit bg-opacity-100 p-2 rounded-md relative">
-  <div class="flex flex-col items-center gap-5 text-white">
-    <p class="font-zagoth text-3xl">
+<div class="card relative p-4 variant-filled-surface bg-gradient-to-t from-primary-500 to-primary-400">
+  <div class="card-header">
+    <p class="text-center h1 font-zagoth">
       <Special special={title=="Fams 11"}>
         {title}
       </Special>
     </p>
-      <slot/>
   </div>
+
+  <section class="flex flex-col justify-center items-center">
+    <slot/>
+  </section>
 </div>
+
 

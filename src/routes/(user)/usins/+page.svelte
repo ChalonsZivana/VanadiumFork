@@ -6,18 +6,16 @@
 
 <div class="flex flex-col items-center gap-10">
   <p class="text-white font-zagoth text-6xl">Usin's</p>
-  <div class="aspect-square w-full grid gap-5 grid-rows-3 items-center justify-items-center ">
+  <div class="aspect-square w-full flex flex-col gap-5 items-center justify-items-center ">
     
     
-    <div class="size-52">
+    <div class="w-80 aspect-square">
       <SectionCard title='Ordre du jour'>
         <p>Introduction du mot shymen, début de la période ayat</p>
       </SectionCard>
     </div>
     
-    
-  
-    <div class="size-52">
+    <div class="flex gap-4">
       <a href="/usins/onscrits">
         <SectionCard title='.onscrits'>
           <div class="w-24">
@@ -26,15 +24,14 @@
           
         </SectionCard>
       </a>
-    </div>
-    <div class="size-52">
-      <a href="/usins/planning">
+
+      <!-- <a class="" href="/usins/planning">
         <SectionCard title='Planning'>
           <div class="w-24">
             <Planning/>
           </div>
         </SectionCard>
-      </a>
+      </a> -->
     </div>
   </div>
 </div>

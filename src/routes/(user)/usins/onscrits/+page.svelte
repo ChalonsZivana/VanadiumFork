@@ -39,7 +39,7 @@
 <div class="h-full flex flex-col items-center justify-center">
   <div class="h-40 flex justify-center items-center">
     <form method="post" use:enhance action="?/get_onscrit" class="text-4xl flex flex-col items-center">
-      <input required type="number" class="input  w-32 text-center" name="nums" min="1" max="150">
+      <input required type="number" placeholder="nums du .onscrit" class="input p-2 w-80 text-center" name="nums" min="1" max="150">
       <button class="btn-icon text-4xl">
         <Icon icon="mdi:search"/>
       </button>
@@ -66,7 +66,7 @@
                       <tr>
                         <td>{data.date}</td>
 
-                        <td><textarea on:input={(e)=>updateComment(index, e.currentTarget.value)} class="textarea" rows="5" value={data.comments}/></td>
+                        <td><textarea on:input={(e)=>updateComment(index, e.currentTarget.value)} class="textarea p-1" rows="5" value={data.comments}/></td>
                       </tr>
                     {/each}
                 </tbody>

@@ -5,7 +5,7 @@
 </script>
 
 
-<div class="flex mt-20 w-11/12">  
+<div class="flex justify-center mt-20 w-full">  
   {#if data.USER.pg.can_buy}
   <SectionCard title="Rhopses">
     <div class="p-3 rounded-md bg-amber-100">

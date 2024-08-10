@@ -2,7 +2,6 @@
   import StatsChart from "$lib/components/miscellaneous/StatsChart.svelte";
   import type {Top} from "$lib/server/db_structs.js"
   import SectionCard from "$lib/components/SectionCard.svelte";
-  import ToggleSectionCard from "$lib/components/ToggleSectionCard.svelte";
   import Leaderboard from "$lib/components/miscellaneous/Leaderboard.svelte";
   import { enhance } from "$app/forms";
   import { onMount } from "svelte";

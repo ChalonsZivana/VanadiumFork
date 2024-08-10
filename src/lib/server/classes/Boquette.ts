@@ -37,6 +37,7 @@ export const BOQUETTES = {
   "Plat's": 19,
   TAFerie: 20,
   Mash: 21,
+  "Ser'C":23,
   IET: 38,
   Infalerie: 111,
   "Dem's": 135,
@@ -87,7 +88,6 @@ export const BOQUETTES_NOURRITURES = {
   "Fermière":BOQUETTES["Fermière"],
   //TODO: Breizhouzerie
 };
-
 export const BOQUETTES_TOPS = {
   ...BOQUETTES_ALCOOL, ...BOQUETTES_NOURRITURES, "C'vis":BOQUETTES["C'vis"], "Z'boiss":BOQUETTES["Z'boiss"], 
 }

@@ -1,7 +1,7 @@
 <div class="h-full text-white flex flex-col items-center gap-10">
   <p class="mt-10 font-zagoth text-3xl">Vanadium Chalon's</p>
   
-  <div>
+  <div class="flex flex-col items-center">
     <form method="post" name="login" action="?/login" class="flex flex-col gap-10">
     
     <div class="flex flex-col font-zagoth w-80">
@@ -14,7 +14,7 @@
     </div>
     <button class="bg-red-600 p-2 w-fit">Connexion</button>
     </form>
-    <div class="w-full flex flex-col mt-4">
+    <div class="flex flex-col mt-4 w-80">
       <p>Mot de passe oublié ? Demandez à un administrateur de le changer pour vous</p>
       <a href="/cgu">Mentions Légales</a>
     </div>

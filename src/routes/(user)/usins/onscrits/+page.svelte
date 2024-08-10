@@ -2,8 +2,9 @@
   import Icon from "@iconify/svelte"
   import type {suivi_onscrits} from '@prisma/client'
   import {enhance} from '$app/forms'
-  export let form:{onscrit:suivi_onscrits};
 
+  export let form:{onscrit:suivi_onscrits};
+  export let data;
 
   let dialog:HTMLDialogElement;
 
@@ -47,7 +48,7 @@
   </div>
   {#if onscrit}
     <div class="flex flex-col justify-center gap-8 items-center flex-grow pb-4">
-        <div class="card w-96 flex flex-col">
+        <div class="card w-80 flex flex-col">
           <div class="card-header">
             <p class="text-center h1">        {onscrit.nums}        </p>
           </div>
@@ -74,10 +75,14 @@
             </div>
           </section>
         </div>
+        <!-- 23 == Boquette Ser'C -->
+        {#if data.BOQUETTES.find(e => e.id_boquette == 23) !== undefined}
+          <button class="btn-icon variant-filled-primary" on:click={()=>dialog.showModal()}>
+            <Icon icon="mdi:add-bold"/>
+          </button>
+        {/if}
 
-        <button class="btn-icon variant-filled-primary" on:click={()=>dialog.showModal()}>
-          <Icon icon="mdi:add-bold"/>
-        </button>
+        
       </div>
   {/if}
 

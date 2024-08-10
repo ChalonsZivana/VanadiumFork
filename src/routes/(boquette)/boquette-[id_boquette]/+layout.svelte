@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Navbar from "$lib/components/navbar/Navbar.svelte";
+  import AppLayout from '$lib/components/AppLayout.svelte';
   export let data;
 </script>
 
-<Navbar user={data.USER} boquettes={data.BOQUETTES} id_boquette={data.id_boquette}>
+<AppLayout bind:USER={data.USER} bind:BOQUETTES={data.BOQUETTES} url={null}>
   <slot/>
-</Navbar>
+</AppLayout>

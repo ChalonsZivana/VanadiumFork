@@ -1,10 +1,11 @@
-<script>
-    import Navbar from "$lib/components/navbar/Navbar.svelte";
+<script lang="ts">
+    import AppLayout from '$lib/components/AppLayout.svelte';
     import Warning from "$lib/components/svgs/warning.svelte";
-    export let data;    
+
+    export let data;
 </script>
 
-<Navbar user={data.USER} boquettes={data.BOQUETTES} id_boquette={20}>
+<AppLayout bind:USER={data.USER} bind:BOQUETTES={data.BOQUETTES} url={null}>
     {#if data.config.vanazocque?.valeur=="1"}
         <div class="w-full sticky top-0 z-50 bg-yellow-200 flex items-center justify-between">
             <Warning className="size-16"/>
@@ -13,4 +14,4 @@
         </div>
     {/if}
     <slot/>
-</Navbar>
+</AppLayout>

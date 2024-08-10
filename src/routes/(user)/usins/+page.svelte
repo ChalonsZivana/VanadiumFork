@@ -1,6 +1,5 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte"; 
-  import Planning from '$lib/components/svgs/planning.svelte';
   import QuestionPerson from '$lib/components/svgs/question-person.svelte';
 </script>
 

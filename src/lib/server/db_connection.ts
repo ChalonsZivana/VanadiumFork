@@ -108,7 +108,7 @@ export const getRandomTop = async () => {
 
 export const getTops = async ()=>{
   const tops:Top[] = [
-    await getTopRefresh()
+    // await getTopRefresh()
   ];
 
   for(let [nom, id_boquette] of Object.entries(TopsBoquettes)){

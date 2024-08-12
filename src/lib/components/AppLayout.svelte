@@ -25,6 +25,9 @@
     };
 
     let showBoquettes = false;
+    $:{
+      console.log(showBoquettes)
+    }
     const sections =  [
         {icon:"mdi:event-note", href:'/rhopses'},
         {icon:"mdi:bar-chart", href:'/stats'},
@@ -48,9 +51,22 @@
     195:"mdi:pizza",
     197:"mdi:salt"
   }
+
+  let boquettes_panel:HTMLElement;
+
+  function handleClick(e:Event){
+    const target = e.target as HTMLElement
+    console.log(target)
+    if(showBoquettes && !boquettes_panel.contains(target)){
+      showBoquettes = false;
+    }
+    
+  }
 </script>
 
-<div class="relative w-screen h-screen flex flex-col justify-between">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+<div on:click={handleClick} class="relative w-screen h-screen flex flex-col justify-between">
   <AppBar background="" border="" gridColumns="grid-cols-3" slotTrail="place-content-end text-4xl">
 		<svelte:fragment slot="lead">
       <span class="flex items-end gap-4">
@@ -61,7 +77,7 @@
             </a>
           {/each}
         {:else}
-        <div class:card={showBoquettes} class:variant-filled-surface={showBoquettes} class="absolute z-10 p-1 left-2 top-2 card flex flex-col items-center gap-4 ">
+        <div bind:this={boquettes_panel} class:card={showBoquettes} class:variant-filled-surface={showBoquettes} class="boquettes_panel absolute z-10 p-1 left-2 top-2 card flex flex-col items-center gap-4 ">
           <button on:click={()=>showBoquettes = !showBoquettes} class="btn-icon text-4xl">
             <Icon icon="mdi:arrow-down-box" />
           </button>

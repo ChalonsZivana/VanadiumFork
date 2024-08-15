@@ -21,7 +21,7 @@ model auberge {
 
 model suivi_onscrits {
   nums Int @id @default(autoincrement())
-  data String?
+  data Json @default("{}")
 }
 
 model boquettes {
@@ -121,10 +121,10 @@ model photos {
 model produits {
   id_produit   Int    @id @default(autoincrement())
   id_boquette  Int
-  id_categorie Int    @default(0)
+  id_categorie Int 
   nom          String 
   prix         Float  
-  libreservice Int    @default(0)
+  libreservice Boolean    @default(false)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

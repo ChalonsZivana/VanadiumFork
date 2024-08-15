@@ -31,7 +31,7 @@ export let actions = {
     const d = Object.fromEntries(await request.formData());
     const data = ConsommationsSchema.safeParse(d);
     if(!data.success) throw error(400);
-    console.log(data)
+
     if(!['Tout', 'pg_boq', 'ext_boq'].includes(data.data.consoType)) throw error(400);
     const consoType = data.data.consoType as consommations_type | 'Tout';
 

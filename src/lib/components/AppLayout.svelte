@@ -25,9 +25,7 @@
     };
 
     let showBoquettes = false;
-    $:{
-      console.log(showBoquettes)
-    }
+    
     const sections =  [
         {icon:"mdi:event-note", href:'/rhopses'},
         {icon:"mdi:bar-chart", href:'/stats'},
@@ -56,7 +54,6 @@
 
   function handleClick(e:Event){
     const target = e.target as HTMLElement
-    console.log(target)
     if(showBoquettes && !boquettes_panel.contains(target)){
       showBoquettes = false;
     }

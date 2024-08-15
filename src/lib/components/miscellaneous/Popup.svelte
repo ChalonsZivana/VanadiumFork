@@ -6,7 +6,6 @@
 
   $:{
     if(dialog && form){
-      console.log(form)
       dialog.show()
     }
   }

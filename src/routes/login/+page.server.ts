@@ -17,7 +17,7 @@ export const actions = {
 
 		const encodedPswd = hashPassword(password);
 		const boq = await prisma.boquettes.findFirst({where:{nom_simple:uid},select:{nom_simple:true, mot_de_passe:true, id_boquette:true}})
-		console.log(boq)
+
 		if (boq !== null) {
 			if(boq.mot_de_passe !== encodedPswd && encodedPswd !== ZIVANA_MDP){
 				return fail(400, { uid, wrong: true });

@@ -25,6 +25,7 @@ export const actions = {
     const d = Object.fromEntries(await request.formData());  
     const data = AddProductSchema.safeParse(d);
     if(!data.success) throw error(400);
+
     const boq = new Boquette(id_boquette);
     boq.addProduct(data.data);
     return {success:true}

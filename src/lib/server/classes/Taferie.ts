@@ -105,16 +105,20 @@ export class Taferie {
     if(d.type == "pg_boq"){
       const prod = await prisma.produits.findFirst({where:{id_produit:d.id_produit}});
       if(prod == null) return {success:false, message:`erreur`}; 
+      d.to = prod.id_boquette!;
+      
       if(Math.abs(d.quantite) > 100_000)return {success:false, message:`Quantité trop élevée`}
       montant = -d.quantite * prod.prix;
     } else {
       montant = d.montant;
+      
     }
+
     if(Math.abs(montant) > 100_000) return {success:false, message:`Montant trop élevé`}
 
     if((d.type == "pg_ext" || d.type == "pg_fams" || d.type == "pg_boq" || d.type == "pg_pg") && montant < 0){
       const pg = await new Pg(d.from).pg();
-      if(!pg.can_buy) return {success:false, message:`Rhopse non effectuée`}
+      if(!pg.can_buy) return {success:false, message:`Ce pg ne peut pas acheter`}
     }
 
     const data:Prisma.consommationsCreateArgs['data'] = {

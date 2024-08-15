@@ -61,7 +61,8 @@ export const BOQUETTES = {
   "Mam'serie": 193,
   "K'dal fée d'hons": 194,
   Ritalerie: 195,
-  'Fermière': 196
+  'Fermière': 196,
+  'Satan':666
 }
 
 export const BOQUETTES_LIBRE_SERVICE = {
@@ -113,15 +114,16 @@ export class Boquette extends HasMoney {
     if(data.nom_categorie){
       const cat = await prisma.categories.create({
         data:{nom:data.nom_categorie, id_boquette:this.ID}
-      })
+      });
 
       await prisma.produits.create({
         data:{nom:data.nom, id_categorie:cat.id_categorie, prix:data.prix, id_boquette:this.ID}
-      })
+      });
     } else {
+      
       await prisma.produits.create({
         data:{nom:data.nom, id_categorie:data.id_categorie, prix:data.prix, id_boquette:this.ID}
-      })
+      });
     }
   }
 
@@ -161,6 +163,7 @@ export class Boquette extends HasMoney {
 
   async cancelConsommation(id_conso:number, cancel:boolean){
     const conso = await prisma.consommations.findFirst({where:{id_conso}})
+
     if(conso == null) return;
     switch(conso.type){
       case "ext_boq":
@@ -172,7 +175,6 @@ export class Boquette extends HasMoney {
       default:
         return null;
     }
-
     return Taferie.cancelConsommation(id_conso, cancel);
   }
 }

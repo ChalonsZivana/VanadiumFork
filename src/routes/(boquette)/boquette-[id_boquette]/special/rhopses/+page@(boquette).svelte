@@ -25,7 +25,6 @@
   const buttonClass = "bg-white h-14 text-black w-80 rounded-md";
   const choicesContainerClass = "mt-5 flex-grow w-full flex flex-col justify-center items-center gap-1"
   const coloredClass = "p-3 bg-fuchsia-500 text-4xl rounded-md"
-  console.log(data.id_boquette)
 </script>
 
 <Popup bind:form={form}/>

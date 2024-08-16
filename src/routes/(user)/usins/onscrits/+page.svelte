@@ -8,10 +8,15 @@
 
   let dialog:HTMLDialogElement;
 
-  
 
-  let onscrit:{nums:number, data:{date:string, comments:string}[]} | null;
-  $: onscrit = form ? {nums:form.onscrit.nums,data:JSON.parse(form.onscrit.data ?? '[]')} : null;
+  let onscrit:{nums:number, data:{[key: string]: { comments: string; f: number[];}}};
+  $: {
+    if(form && form.onscrit){
+      console.log(form.onscrit.data)
+      onscrit = {nums:form.onscrit.nums,data:form.onscrit.data as {[key: string]: { comments: string; f: number[];}}};
+      console.log(onscrit)
+    }
+  }
   let new_comment:string = "";
 
   let tableContainer:HTMLDivElement;
@@ -48,6 +53,14 @@
   </div>
   {#if onscrit}
     <div class="flex flex-col justify-center gap-8 items-center flex-grow pb-4">
+      
+      <form use:enhance action="?/fourchette" method="post">
+        <input type="hidden" name="nums" value={onscrit.nums}>
+        <button class="btn variant-filled-primary text-xl">
+          <span> <Icon icon="mdi:silverware-fork" />   </span>
+           <span>fourchetté</span>
+        </button>
+      </form>
         <div class="card w-80 flex flex-col">
           <div class="card-header">
             <p class="text-center h1">        {onscrit.nums}        </p>
@@ -60,12 +73,13 @@
                   <tr>
                     <th>Date</th>
                     <th>Commentaire</th>
+                    <th>Fourchettage</th>
                   </tr>
                 </thead>
                 <tbody>
-                    {#each onscrit.data as data, index}
+                    {#each Object.entries(onscrit.data)  as [date, data], index}
                       <tr>
-                        <td>{data.date}</td>
+                        <td>{date}</td>
 
                         <td><textarea on:input={(e)=>updateComment(index, e.currentTarget.value)} class="textarea p-1" rows="5" value={data.comments}/></td>
                       </tr>
@@ -96,13 +110,16 @@
   {#if onscrit}
     <form on:submit={()=>dialog.close()} method="post" use:enhance={({formData})=>{
       if(new_comment != ''){
-        onscrit.data = [...onscrit.data, {
-          date:new Date().toLocaleDateString('fr-FR'),
-          comments:new_comment,
-        }]
+        const date = new Date().toLocaleDateString('fr-FR')
+        onscrit.data = {...onscrit.data, 
+          date: {
+            comments:new_comment, 
+            f:[]
+          }
+        }
       }
       
-      new_comment = ''
+      new_comment = '';
       formData.set('data', JSON.stringify(onscrit.data))
       setTimeout(scrollToBottom, 300);
       return ({})=>{};

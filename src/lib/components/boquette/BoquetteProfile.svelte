@@ -23,9 +23,9 @@ title={boquette.nom??''}>
       <div class="w-1/2 justify-self-start">
         <p>Nom: {boquette.nom}</p>
         <p>Identifiant: {boquette.nom_simple}</p>
-        <label>
+        <!-- <label>
           <input disabled type="checkbox" checked={boquette.partie_pg}/> Partie PG
-        </label>
+        </label> -->
       </div>
 
       <a href="{taferie ?'':'/rechargement'}">

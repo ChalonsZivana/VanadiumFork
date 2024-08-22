@@ -7,7 +7,7 @@ export const load: PageServerLoad = async () => {
   //7:foys  147:koenettrie
   const boquettes = await prisma.boquettes.findMany({
     select:{id_boquette:true, nom:true, nom_simple:true}, 
-    where:{partie_pg:true, id_boquette:{in:Object.values(BOQUETTES_LIBRE_SERVICE)}}
+    where:{ id_boquette:{in:Object.values(BOQUETTES_LIBRE_SERVICE)}}
   });
 
   return { boquettes } 

@@ -14,7 +14,7 @@ export const load = async ({params}) => {
   //7:foys  147:koenettrie
   const boquettes = await prisma.boquettes.findMany({
     select:{id_boquette:true, nom:true, nom_simple:true}, 
-    where:{partie_pg:true, id_boquette}
+    where:{id_boquette}
   });
 
   if(boquettes.length == 0) throw error(400);

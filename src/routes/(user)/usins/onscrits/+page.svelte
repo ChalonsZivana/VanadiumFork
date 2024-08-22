@@ -6,18 +6,31 @@
   export let form:{onscrit:suivi_onscrits};
   export let data;
 
-  let dialog:HTMLDialogElement;
-
 
   let onscrit:{nums:number, data:{[key: string]: { comments: string; f: number[];}}};
+  let data_modified:typeof onscrit.data;
+  let data_temoin:typeof onscrit.data;
   $: {
-    if(form && form.onscrit){
-      console.log(form.onscrit.data)
+    if(form && form.onscrit){    
+      console.log('update')  
       onscrit = {nums:form.onscrit.nums,data:form.onscrit.data as {[key: string]: { comments: string; f: number[];}}};
-      console.log(onscrit)
     }
   }
-  let new_comment:string = "";
+
+  $:{
+    if(onscrit && onscrit.data){
+      console.log('update2')  
+
+      data_modified = JSON.parse(JSON.stringify(onscrit.data))
+      data_temoin = JSON.parse(JSON.stringify(onscrit.data))
+
+      const date = new Date().toLocaleDateString('fr-FR')
+      if(!(date in data_modified)){
+        data_modified[date] = {comments:'', f:[]}
+      }
+    }
+  }
+  
 
   let tableContainer:HTMLDivElement;
 
@@ -30,14 +43,26 @@
     }
   }
 
-  function updateComment(index: number, newComment: string) {
+  function updateComment(index: string, newComment: string) {
     if(!onscrit) return
-    onscrit.data[index].comments = newComment
+    data_modified[index].comments = newComment
   }
   $:{
     if(tableContainer){
       scrollToBottom();
     }
+  }
+
+  function compareContents(){
+    let new_data:typeof onscrit.data = {}
+    for(let [key, value] of Object.entries(onscrit.data)){
+      console.log(data_temoin[key], value)
+      if(key in data_temoin && data_temoin[key].comments == value.comments){
+        continue
+      }
+      new_data[key] = value;
+    }
+    return new_data;
   }
 </script>
 
@@ -77,11 +102,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                    {#each Object.entries(onscrit.data)  as [date, data], index}
+                    {#each Object.entries(data_modified)  as [date, data]}
                       <tr>
                         <td>{date}</td>
 
-                        <td><textarea on:input={(e)=>updateComment(index, e.currentTarget.value)} class="textarea p-1" rows="5" value={data.comments}/></td>
+                        <td><textarea on:input={(e)=>updateComment(date, e.currentTarget.value)} class="textarea p-1" rows="5" value={data.comments??''}/></td>
+                        <td><p>{data.f}</p></td>
                       </tr>
                     {/each}
                 </tbody>
@@ -91,48 +117,19 @@
         </div>
         <!-- 23 == Boquette Ser'C -->
         {#if data.BOQUETTES.find(e => e.id_boquette == 23) !== undefined}
-          <button class="btn-icon variant-filled-primary" on:click={()=>dialog.showModal()}>
-            <Icon icon="mdi:add-bold"/>
-          </button>
+            <form method="post" action="?/set_onscrit" use:enhance={({formData})=>{
+              const new_data = compareContents();
+              console.log(new_data)
+              formData.set('data', JSON.stringify(new_data))
+              setTimeout(scrollToBottom, 300);
+              return ({})=>{};
+            }}>
+            <input type="hidden" value={onscrit.nums} name="nums">
+              <button class="btn-icon variant-filled-primary">
+                <Icon icon="mdi:content-save"/>
+              </button>
+            </form>
         {/if}
-
-        
       </div>
   {/if}
-
-
 </div>
-
-
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<dialog class="card w-11/12 h-96" bind:this={dialog} on:click|self={() => dialog.close()}>
-  {#if onscrit}
-    <form on:submit={()=>dialog.close()} method="post" use:enhance={({formData})=>{
-      if(new_comment != ''){
-        const date = new Date().toLocaleDateString('fr-FR')
-        onscrit.data = {...onscrit.data, 
-          date: {
-            comments:new_comment, 
-            f:[]
-          }
-        }
-      }
-      
-      new_comment = '';
-      formData.set('data', JSON.stringify(onscrit.data))
-      setTimeout(scrollToBottom, 300);
-      return ({})=>{};
-    }} action="?/set_onscrit" class="card size-full p-2 flex flex-col justify-between  gap-4 variant-filled-surface">  
-      <div class="card-header flex justify-center text-xl">Nouveau commentaire</div>
-      <input type="hidden" name="nums" value={onscrit.nums}>
-      <textarea class="textarea" rows="5" bind:value={new_comment} name="data" placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit." />
-      
-      <div class="card-footer flex justify-center">
-        <button class="btn-icon text-3xl">
-          <Icon icon="mdi:content-save" />
-        </button>
-      </div>
-    </form>
-  {/if}
-</dialog>

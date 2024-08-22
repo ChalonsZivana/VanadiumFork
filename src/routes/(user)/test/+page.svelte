@@ -37,7 +37,7 @@
 			{#if tabSet === 0}
 				<div class="size-full flex flex-col justify-around items-center">
 						<!-- Profile card -->
-					<div class="card aspect-video w-11/12 max-w-80 p-4  bg-gradient-to-t from-primary-500 to-primary-400">
+					<div class="card relative aspect-video w-11/12 max-w-80 p-4  bg-gradient-to-t from-primary-500 to-primary-400">
 						<section class="p-4 relative">
 							<div class="flex flex-col">
 								<span>Prénom: {data.USER.pg.prenom}</span>
@@ -51,6 +51,14 @@
 								<span>{data.USER.pg.nums}</span>
 							</div>
 						</section>
+
+						{#if data.USER.pg.ddp}
+							<a href="ddp" class="absolute w-10 top-3 right-3">
+								<div class="p-1 border-1 border-white rounded-xl">
+									DDP
+								</div>
+							</a>
+						{/if}
 					</div>
 					
 			

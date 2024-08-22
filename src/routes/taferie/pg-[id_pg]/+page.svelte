@@ -3,18 +3,15 @@
   import SectionCard from "$lib/components/SectionCard.svelte";
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
   import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
-  import Settings from "$lib/components/svgs/settings.svelte";
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import UserProfile from "$lib/components/pg/UserProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
-  import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
 
   export let data;
   export let form:{success:boolean, message:string};
 
-  let dialogSettings:HTMLDialogElement;
 
   const editInputCheck = {
     'Actif':data.user.pg.actif
@@ -28,9 +25,7 @@
 <div class="flex flex-col w-11/12 gap-2 pt-5">
   {#key data.user}
   <UserProfile user={data.user} taferie={true}>
-    <button on:click={()=>dialogSettings.showModal()} class="w-8 absolute top-3 right-3">
-      <Settings/>
-    </button>
+    
 
     <div class="w-11/12 self-center flex justify-center items-center flex-col">
       {#if data.user.pg.solde == 0}
@@ -88,5 +83,4 @@
   </SectionCard>
 </div>
 
-<EditPgDialog bind:dialog={dialogSettings} pg={data.user.pg}/>
 

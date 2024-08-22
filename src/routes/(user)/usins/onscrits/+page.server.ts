@@ -33,7 +33,9 @@ export const actions = {
       WHERE nums = ${result.data.nums}
       `;
 
-    return {}
+    return {
+      onscrit: await prisma.suivi_onscrits.findFirst({where:{nums:result.data.nums}})
+    }
   },
   get_onscrit:async ({request})=>{
     const data = Object.fromEntries(await request.formData());
@@ -59,6 +61,9 @@ export const actions = {
         zod.object({date:zod.string(), comments:zod.string()})
       ).safeParse(e).success)
     }).safeParse(data);
+    console.log(data)
+    console.log(result.data)
+    if(result.data == null) throw error(400, "invalid data");
 
     await prisma.$executeRaw`
       UPDATE suivi_onscrits
@@ -70,7 +75,7 @@ export const actions = {
 
     await prisma.suivi_onscrits.update({where:{nums:result.data.nums}, data:{data:JSON.stringify(result.data.data)}});
     return {
-      success:true
+      onscrit: await prisma.suivi_onscrits.findFirst({where:{nums:result.data.nums}})
     }
   },
 

@@ -1,14 +1,20 @@
 <script lang="ts">
   export let user:User;
+  import Settings from "$lib/components/svgs/settings.svelte";
 
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { User } from "$lib/server/auth";
     import Special from "../miscellaneous/Special.svelte";
+    import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
 
   export const title = 'Profil';
   export let taferie = false;
 
+  let dialogSettings:HTMLDialogElement;
+
   const soldes = {"Fonds":user.pg?.solde, "Fonds Fams":user?.fams?.solde}
+
+  $:console.log(user.pg.ddp);
 </script>
 
 <SectionCard 
@@ -35,12 +41,24 @@ title="Profil">
       {/each}
     </div>
     <slot/>
-</div>
-{#if !taferie && user.pg.ddp}
-  <a href="ddp" class="absolute top-3 right-3">
-    <div class="p-1 border-1 border-white rounded-xl">
-      DDP
+    <div class="absolute top-3 right-3 flex gap-4">
+      {#if user.pg.ddp}
+        <a href="ddp" class:pointer-events-none={taferie}>
+          <div class="p-1 border-1 border-white rounded-xl">
+            DDP
+          </div>
+        </a>
+      {/if}
+      {#if taferie}
+        <button on:click={()=>dialogSettings.showModal()} class="w-8">
+          <Settings/>
+        </button>      
+      {/if}
     </div>
-  </a>
-{/if}
+   
+</div>
+
 </SectionCard>
+
+
+<EditPgDialog bind:dialog={dialogSettings} pg={user.pg}/>

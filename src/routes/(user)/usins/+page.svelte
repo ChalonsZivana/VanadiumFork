@@ -44,15 +44,6 @@
       </SectionCard>
     </div>
 
-    <div>
-      <SectionCard title='Mon fourchettage'>
-        <div class="w-24">
-          <Icon icon="mdi:silverware-fork" />          <QuestionPerson/>
-        </div>
-        
-      </SectionCard>
-    </div>
-    
     <div class="flex gap-4">
       <a href="/usins/onscrits">
         <SectionCard title='.onscrits'>

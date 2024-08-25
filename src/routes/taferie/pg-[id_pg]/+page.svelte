@@ -28,7 +28,7 @@
     
 
     <div class="w-11/12 self-center flex justify-center items-center flex-col">
-      {#if data.user.pg.solde == 0}
+      {#if data.user.pg.solde == 0 && data.user.pg.ddp == false}
         <form class="w-full" method="post" use:enhance>
           <ValidationButton formaction="?/delete" text="Supprimer PG"/>
         </form>

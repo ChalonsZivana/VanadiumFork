@@ -41,9 +41,9 @@ title={boquette.nom??''}>
             <Bolt/>
           </a>
         {/if}
-      <button on:click={()=>dialog.showModal()} class="w-8">
-        <Settings/>
-      </button>
+        <button on:click={()=>dialog.showModal()} class="w-8">
+          <Settings/>
+        </button>
       </div>
     
     <slot/>

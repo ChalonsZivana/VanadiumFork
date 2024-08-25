@@ -28,15 +28,15 @@
     
 
     <div class="w-11/12 self-center flex justify-center items-center flex-col">
-      {#if data.user.pg.solde == 0 && data.user.pg.ddp == false}
-        <form class="w-full" method="post" use:enhance>
-          <ValidationButton formaction="?/delete" text="Supprimer PG"/>
-        </form>
-      {:else}
+      {#if data.user.pg.solde != 0}
         <form class="w-full" method="post" use:enhance>
           <ValidationButton formaction="?/fonds_ffams" text="Fonds ➔ Fonds Fams"/>
         </form>
-      {/if}      
+      {:else if data.user.pg.ddp == false}
+        <form class="w-full" method="post" use:enhance>
+          <ValidationButton formaction="?/delete" text="Supprimer PG"/>
+        </form>
+      {/if}
       <GestionBrousouffs/>
 
       <form class="w-full" method="post" use:enhance>

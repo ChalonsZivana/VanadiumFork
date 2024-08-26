@@ -8,14 +8,6 @@ export const load = async ({params})=>{
 
   let categories = await prisma.categories.findMany({where:{id_boquette:id_boquette}, orderBy:{nom:'asc'}});
   let produits = await prisma.produits.findMany({where:{id_boquette:id_boquette}, orderBy:{nom:'asc'}});
-
-  if(id_boquette == BOQUETTES["Foy's"]){
-    const produits_2 = await prisma.produits.findMany({where:{id_boquette:BOQUETTES['Satan']}, orderBy:{nom:'asc'}});
-    produits = [...produits, ...produits_2];
-
-    const categories_2 = await prisma.categories.findMany({where:{id_boquette:BOQUETTES['Satan']}, orderBy:{nom:'asc'}});
-    categories = [...categories, ...categories_2];
-  }
   
   return { 
     produits,categories, id_boquette 

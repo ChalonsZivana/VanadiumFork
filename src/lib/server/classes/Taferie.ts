@@ -1,6 +1,6 @@
 import prisma from "$lib/prisma";
 import { sendPush } from "../onesignal";
-import { Boquette } from "./Boquette";
+import { Boquette, BOQUETTES } from "./Boquette";
 import { Fams } from "./Fams";
 import { Pg } from "./PG";
 import { consommations_type, type consommations, Prisma } from "@prisma/client";
@@ -75,8 +75,17 @@ export class Taferie {
         break;
       
       case "pg_boq":
-        new Pg(conso.from!).removeMoney(conso.montant * factor);
-        new Boquette(conso.to!).addMoney(conso.montant * factor);
+        if(conso.to == BOQUETTES["Foy's"]){
+          let [hard, soft] = Math.abs(conso.montant).toFixed(3).split('.').map(e => Math.sign(conso.montant) * parseInt(e) / 100);
+          
+          await new Boquette(BOQUETTES["Foy's"]).addMoney(soft * factor);
+          await new Boquette(BOQUETTES["Satan"]).addMoney(hard * factor);
+          console.log(hard, soft)
+          new Pg(conso.from!).removeMoney((soft + hard) * factor);
+        }  else {
+          new Boquette(conso.to!).addMoney(conso.montant * factor);
+          new Pg(conso.from!).removeMoney(conso.montant * factor);
+        }
         break;
       case "pg_fams":
         new Pg(conso.from!).removeMoney(conso.montant * factor);
@@ -111,7 +120,6 @@ export class Taferie {
       montant = -d.quantite * prod.prix;
     } else {
       montant = d.montant;
-      
     }
 
     if(Math.abs(montant) > 100_000) return {success:false, message:`Montant trop élevé`}
@@ -158,8 +166,19 @@ export class Taferie {
         await new Fams(d.to).removeMoney(data.montant);
         break;
       case "pg_boq":
-        await new Pg(d.from).addMoney(data.montant);
-        await new Boquette(d.to).removeMoney(data.montant);
+        // specific foys
+        if(d.to == BOQUETTES["Foy's"]){
+          let [hard, soft] = Math.abs(montant).toFixed(3).split('.').map(e => Math.sign(montant) * parseInt(e) / 100);
+          console.log(hard, soft)
+
+          await new Boquette(BOQUETTES["Foy's"]).removeMoney(soft);
+          await new Boquette(BOQUETTES["Satan"]).removeMoney(hard);
+          await new Pg(d.from).addMoney(soft + hard);
+        }  else {
+          await new Boquette(d.to).removeMoney(data.montant);
+          await new Pg(d.from).addMoney(data.montant);
+        }
+
         break;
       case "pg_ext":
         await new Pg(d.from).addMoney(data.montant);

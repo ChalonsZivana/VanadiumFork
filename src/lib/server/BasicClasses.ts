@@ -15,7 +15,7 @@ export class HasMoney {
     this.ID = id;
   }
 
-  // addMoney: positive or negative
+
   async addMoney(money:number) {
     switch(this.T){
       case "boquettes":

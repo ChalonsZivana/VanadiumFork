@@ -36,12 +36,12 @@ export class Database {
     await prisma.categories.create({data});
   }
 
-  static async createProduit(data:{id_boquette:number, id_categorie:number, nom:string, prix:number, libreservice:number}){
+  static async createProduit(data:{id_boquette:number, id_categorie:number, nom:string, prix:number}){
     await prisma.produits.create({data});
   }
 
   static getNumsInProms(proms:number){
-    return prisma.pg.findMany({where:{proms}, select:{nums:true, id_pg:true}})
+    return prisma.pg.findMany({where:{proms}, select:{nums:true, id_pg:true, can_buy:true}})
   }
 
   static getAubergeOrders(){

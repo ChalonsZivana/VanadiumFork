@@ -52,7 +52,11 @@
     <!-- <p class="text-3xl font-zagoth mt-5">Choix Num's</p> -->
     <div class="mt-5 flex-grow w-full grid gap-1 grid-cols-10 grid-rows-[15]">
       {#each listNums() as n}
+      {#if n.can_buy}
         <button on:click={()=>pg=n} class="aspect-square rounded-md bg-red-700">{n.nums}</button>
+      {:else}
+        <div class="aspect-square rounded-md bg-gray-700 flex justify-center items-center">{n.nums}</div>
+      {/if}
       {/each}
     </div>
   {/if}

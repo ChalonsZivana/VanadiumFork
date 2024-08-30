@@ -21,10 +21,12 @@
   $: getProducts = data.products.filter(e=>e.id_categorie==categorie?.id_categorie);
 
 
-  const reset = () => {pg=null;proms=null;product=null;categorie=null};
+  const reset = () => {pg=null;proms=null;product=null;categorie=null,isLoading=false};
   const buttonClass = "bg-white h-14 text-black w-80 rounded-md";
   const choicesContainerClass = "mt-5 flex-grow w-full flex flex-col justify-center items-center gap-1"
-  const coloredClass = "p-3 bg-fuchsia-500 text-4xl rounded-md"
+  const coloredClass = "p-3 bg-fuchsia-500 text-4xl rounded-md";
+
+  let isLoading = false
 </script>
 
 <Popup bind:form={form}/>
@@ -89,7 +91,7 @@
     formData.set('produits', JSON.stringify([[product?.id_produit,1]]))
     return ({})=>{reset()}
   }
-} method="post" action={`/boquette-${data.id_boquette}/rhopse-${pg?.id_pg}?/rhopse`}>
+} on:submit={()=>isLoading = true} method="post" action={`/boquette-${data.id_boquette}/rhopse-${pg?.id_pg}?/rhopse`}>
   <!-- Validation -->
   {#if product}
   <div hidden={product==null} class={choicesContainerClass}>
@@ -122,7 +124,7 @@
           <option value="{n}">{n.nom}</option>
         {/each}
       </select> 
-        <MyButton value="RHOPSER"></MyButton>
+        <MyButton bind:isLoading={isLoading} value="RHOPSER"></MyButton>
     </div>
       </div>
   {/if}

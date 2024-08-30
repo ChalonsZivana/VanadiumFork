@@ -19,5 +19,4 @@
     <p>{data.pg.nums}{data.pg.tabagns}{data.pg.proms} n'a plus le droit d'acheter</p>
   </div>
   {/if}
-  
 </div>

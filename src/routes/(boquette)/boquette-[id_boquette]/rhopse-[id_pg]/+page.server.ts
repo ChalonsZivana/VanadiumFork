@@ -26,7 +26,7 @@ export const actions = {
     
     if(!parse.success) return fail(400,{});
     const data = parse.data;
-    console.log(data)
+
     if(!Boquette.exists(id_boquette)) return fail(400, {});
     
     const boq = new Boquette(id_boquette);

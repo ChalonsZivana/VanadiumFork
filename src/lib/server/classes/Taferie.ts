@@ -82,7 +82,7 @@ export class Taferie {
           
           await new Boquette(BOQUETTES["Foy's"]).addMoney(soft * factor);
           await new Boquette(BOQUETTES["Satan"]).addMoney(hard * factor);
-          console.log(hard, soft)
+
           new Pg(conso.from!).removeMoney((soft + hard) * factor);
         }  else {
           new Boquette(conso.to!).addMoney(conso.montant * factor);
@@ -171,7 +171,6 @@ export class Taferie {
         // specific foys
         if(d.to == BOQUETTES["Foy's"]){
           let [hard, soft] = Math.abs(montant).toFixed(3).split('.').map(e => Math.sign(montant) * parseInt(e) / 100);
-          console.log(hard, soft)
 
           await new Boquette(BOQUETTES["Foy's"]).removeMoney(soft);
           await new Boquette(BOQUETTES["Satan"]).removeMoney(hard);

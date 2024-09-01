@@ -13,8 +13,6 @@
   let dialogSettings:HTMLDialogElement;
 
   const soldes = {"Fonds":user.pg?.solde, "Fonds Fams":user?.fams?.solde}
-
-  $:console.log(user.pg.ddp);
 </script>
 
 <SectionCard 

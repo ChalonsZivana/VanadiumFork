@@ -26,13 +26,14 @@ export const actions = {
     
     if(!parse.success) return fail(400,{});
     const data = parse.data;
+    console.log(data)
     if(!Boquette.exists(id_boquette)) return fail(400, {});
     
     const boq = new Boquette(id_boquette);
 
     const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = []
     for(let [id_produit, quantite] of data.produits){
-      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite});
+      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite, rhopse_ancien:data.rhopse_ancien??null});
       results.push(r)
     }
     return results

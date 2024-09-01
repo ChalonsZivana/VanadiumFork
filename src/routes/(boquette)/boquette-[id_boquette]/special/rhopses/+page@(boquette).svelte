@@ -13,12 +13,13 @@
   const listProms = Object.keys(data.proms).map(e=>parseInt(e)).sort((a,b)=>a-b);
   $:boquette = data.BOQUETTES.find(e=>e.id_boquette == data.id_boquette) ?? data.BOQUETTES[0];
 
-  let pg:{nums:number, id_pg:number}|null=null;
+  let pg:{nums:number, id_pg:number, anciens_autorises:string[]}|null=null;
   const listNums =()=> data.proms[proms as keyof typeof data.proms].sort((a,b)=>a.nums-b.nums);
   let categorie:categories|null;
   $:categorie = null;
   let product:produits|null = null;
   $: getProducts = data.products.filter(e=>e.id_categorie==categorie?.id_categorie);
+  let rhopse_ancien:string|null = null;
 
 
   const reset = () => {pg=null;proms=null;product=null;categorie=null,isLoading=false};
@@ -123,6 +124,13 @@
         {#each data.categories as n}
           <option value="{n}">{n.nom}</option>
         {/each}
+      </select> 
+      <select bind:value={rhopse_ancien} name="rhopse_ancien" class="{coloredClass} w-80 text-center">
+        {#if pg != null}
+        {#each pg.anciens_autorises as n}
+          <option value="{n}">{n}</option>
+        {/each}
+        {/if}
       </select> 
         <MyButton bind:isLoading={isLoading} value="RHOPSER"></MyButton>
     </div>

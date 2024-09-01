@@ -24,6 +24,7 @@ interface pg_boq extends Pick<consommations, "type" | "from" | "to" | "id_produi
   to:number;
   quantite:number;
   id_produit:number;
+  rhopse_ancien:string|null;
 }
 
 async function getSolde(type:consommations_type, id:number){
@@ -50,7 +51,8 @@ async function getLibelle(d:ext_ | pg_ext | _to | pg_boq){
     case "pg_boq":
       const prod = await prisma.produits.findFirst({where:{id_produit:d.id_produit}});
       if(prod == null) return null;
-      return `Consommation: ${d.quantite} * ${prod.nom}`;
+      
+      return `Consommation: ${d.quantite} * ${prod.nom}` + (d.rhopse_ancien ? ` (${d.rhopse_ancien})`:'');
     default:
       return d.libelle;
   }

@@ -22,6 +22,7 @@ export const CreateProductSchema  = z.object({
 
 export const RhopseSchema  = z.object({
   produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(),z.number()])).safeParse(e).success),
+  rhopse_ancien:z.optional(z.union([z.null(), z.string()]))
 })
 
 export const ImportRhopseSchema  = z.object({

@@ -10,8 +10,7 @@
 
   let specialRhopse:null|string;
   $: {
-    if(boquette.id_boquette == 3) specialRhopse = `boquette-${boquette.id_boquette}/special/rhopses_auberge` // Auberge
-    else specialRhopse = `boquette-${boquette.id_boquette}/special/rhopses` // Foys
+    specialRhopse = `boquette-${boquette.id_boquette}/special/rhopses`;
   }
   let dialog:HTMLDialogElement;
 </script>

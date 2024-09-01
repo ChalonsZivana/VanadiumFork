@@ -14,7 +14,7 @@
     </p>
   </div>
 
-  <section class="flex flex-col justify-center items-center">
+  <section class="flex flex-col justify-center items-center gap-4">
     <slot/>
   </section>
 </div>

@@ -106,6 +106,7 @@ model pg {
   ddp                      Boolean        @default(false)
   temps_negats            DateTime?        @default(now())
   can_buy                 Boolean         @default(true)
+  anciens_autorises       String[]          @default([]) 
 
   refresh                    refresh[]
   consommationsFromPg   consommations[] @relation("consommation_from_pg", map: "consommation_from_pg")

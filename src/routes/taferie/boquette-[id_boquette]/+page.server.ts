@@ -63,7 +63,7 @@ export let actions = {
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
-    await new Boquette(id_boquette).cancelConsommation(id_boquette, true);
+    await new Boquette(id_boquette).cancelConsommation(id, true);
   },
   uncancel:async({request, params})=>{
     const id_boquette = parseInt(params.id_boquette);
@@ -72,7 +72,7 @@ export let actions = {
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
-    await new Boquette(id_boquette).cancelConsommation(id_boquette, false);
+    await new Boquette(id_boquette).cancelConsommation(id, false);
   },
   
 }

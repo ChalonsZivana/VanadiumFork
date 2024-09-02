@@ -35,6 +35,7 @@ export let actions = {
   cancel:async({request})=>{
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
+    console.log(id)
     if(isNaN(id)) return fail(400, {});
 
     await Taferie.cancelConsommation(id, true);

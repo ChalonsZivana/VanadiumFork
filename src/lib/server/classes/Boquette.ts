@@ -165,11 +165,11 @@ export class Boquette extends HasMoney {
 
   async cancelConsommation(id_conso:number, cancel:boolean){
     const conso = await prisma.consommations.findFirst({where:{id_conso}})
-
     if(conso == null) return;
+    
     switch(conso.type){
       case "ext_boq":
-        if(conso.from != this.ID) return null;
+        if(conso.to != this.ID) return null;
         break;
       case "pg_boq":
         if(conso.to != this.ID) return null;
@@ -177,6 +177,7 @@ export class Boquette extends HasMoney {
       default:
         return null;
     }
+
     return Taferie.cancelConsommation(id_conso, cancel);
   }
 }

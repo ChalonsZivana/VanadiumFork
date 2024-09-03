@@ -41,6 +41,10 @@
           <p class="font-zagoth text-white">Nom :</p>
           <input type="text" name="nom" class="w-full rounded-md p-1">
         </label>
+        <label class="w-11/12">
+          <p class="font-zagoth text-white">Bucque :</p>
+          <input type="text" name="bucque" class="w-full rounded-md p-1">
+        </label>
       </div>
       
       

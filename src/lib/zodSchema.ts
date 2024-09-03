@@ -37,6 +37,7 @@ export const InscriptionSchema = z.object({
   prenom: z.string(),
   nom: z.string(),
   solde: z.string(),
+  bucque:z.string(),
 }).transform((data) => ({
   ...data,
   nums: parseInt(data.nums),

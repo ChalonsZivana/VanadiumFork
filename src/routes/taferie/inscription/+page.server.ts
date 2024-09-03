@@ -10,12 +10,12 @@ export const actions = {
     if(!data.success) throw fail(400, data.error.format());
     
     const user = await prisma.pg.findFirst({where:{nums:data.data.nums, proms:data.data.proms}})
-    if(user) return fail(400, {'already exists':true, solde:data.data.solde, proms:data.data.proms})
-      await prisma.pg.create({
+    if(user) return fail(400, {'already exists':true, solde:data.data.solde, proms:data.data.proms});
+    
+    await prisma.pg.create({
       data:{
         ...data.data,
         tabagns:"Ch",
-        bucque:"SQRT"
       }
     });
     return { success:true, solde:data.data.solde, proms:data.data.proms }

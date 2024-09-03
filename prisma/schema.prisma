@@ -97,7 +97,7 @@ model pg {
   prenom                     String     
   bucque                     String?
   nums                       Int
-  tabagns                    pg_tabagns
+  tabagns                    tabagns
   proms                      Int
   email                      String     
   solde                      Float    @default(0.00)
@@ -177,7 +177,7 @@ enum consommations_type {
 }
 
 
-enum pg_tabagns {
+enum tabagns {
   Ch
   An
   Ai

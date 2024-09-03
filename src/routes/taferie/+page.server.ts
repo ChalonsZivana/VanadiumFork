@@ -15,7 +15,7 @@ export const load:PageServerLoad = async ()=>{
     fondsProms: await Database.fondsProms(currentProms),
     negatsProms: await Database.negatsProms(currentProms),
     boquettes:prisma.boquettes.findMany({select:{nom:true,nom_simple:true,id_boquette:true, solde:true}}),
-    pgs:prisma.pg.findMany({select:{bucque:true, nums:true, proms:true, id_pg:true, solde:true},orderBy:{proms:'desc'}}),
+    pgs:prisma.pg.findMany({select:{bucque:true, nums:true, proms:true, id_pg:true, solde:true, nom:true, prenom:true},orderBy:{proms:'desc'}}),
     fams:prisma.fams.findMany(),
   };
 }

@@ -20,9 +20,9 @@ export function createDataToSort(data:{pgs:Partial<pg>[],boquettes:Partial<boque
 
 interface SearchPg extends Searchable {pg:Partial<pg>}
 function createPg(pg:Partial<pg>) {
-  let txt = [`\\b${pg.nums}\\b`,`\\b${pg.proms}\\b`]
-  if(pg.nom) txt.push(regexify(simplifyBucque(pg.nom)))
-  if(pg.prenom) txt.push(regexify(simplifyBucque(pg.prenom)))
+  let txt =[]// [`\\b${pg.nums}\\b`,`\\b${pg.proms}\\b`]
+  if(pg.nom) txt.push(regexify(simplifyBucque(pg.nom.toLowerCase())))
+  if(pg.prenom) txt.push(regexify(simplifyBucque(pg.prenom.toLowerCase())))
   if(pg.bucque) txt.push(regexify(simplifyBucque(pg.bucque.toLowerCase()))) //need to escapeRegex complex bucques
   return { regex:new RegExp(txt.join('|'), 'g'), pg:pg, } // creates this /\b89\b|\b223\b/\bLe'Me\b/
 }
@@ -48,18 +48,29 @@ export type SearchItemsMap = { [K in SelectTypes]:
 
 let selected:SelectTypes='Tout';
 
-export function getSearch(searchText:string, dataToSort:DataToSort):SearchItemsMap{
+export function getSearch(searchText:string, searchNums:number, searchProms:number, dataToSort:DataToSort):SearchItemsMap{
   let searchItems:SearchItemsMap = {PG:[], Fams:[], Boquette:[], Tout:[]};
   const sT = searchText.toLowerCase().trimEnd();
   const l = sT.split(' ').length;
+  if(searchText == '' && isNaN(searchNums) && isNaN(searchProms)) return searchItems;
 
   switch(selected){
     case 'Tout':
     case 'PG':
       searchItems.PG = dataToSort.SearchPgs.filter(e => {
-        const t = [...sT.matchAll(e.regex)].map(e=>e[0]).filter(e=>e!='');
-        return t.length >= l
+        if(!isNaN(searchNums) && searchNums !== e.pg.nums) return false
+        if(!isNaN(searchProms) && searchProms !== e.pg.proms) return false
+        
+        if(searchText !== ''){
+          const prenomMatch = sT.match(new RegExp(regexify(simplifyBucque(e.pg.prenom!.toLowerCase())), 'g'))?.filter(e=>e!='')
+          const nomMatch = sT.match(new RegExp(regexify(simplifyBucque(e.pg.nom!.toLowerCase())), 'g'))?.filter(e=>e!='')
+          if((prenomMatch == null  || prenomMatch?.length == 0)  && (nomMatch == null  || nomMatch?.length == 0)){
+            return false
+          }
+        }
+        return true
       }).sort((e,i) =>i.pg.proms! - e.pg.proms!);
+
       if(selected != 'Tout')break;
     case 'Fams':
       if(searchText == '' && selected == 'Fams') {
@@ -81,6 +92,9 @@ export function getSearch(searchText:string, dataToSort:DataToSort):SearchItemsM
         return t.length >= l
       });
       break;
+
   }
+  searchItems.Tout = [...searchItems.PG, ...searchItems.Boquette, ...searchItems.Fams] as any;
+
   return searchItems;
 }

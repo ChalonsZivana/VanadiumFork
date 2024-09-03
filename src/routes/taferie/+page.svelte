@@ -17,12 +17,14 @@
   
   const tableHeaders:{[K in SelectTypes]:string[]} = {
     'Tout':[], 
-    'PG':['Num','Bucque','Solde'],
+    'PG':['Num','Bucque','Nom','Solde'],
     'Fams':['Fams','Solde'],
     'Boquette':['Id','Nom','Solde']
   }
   let selected:SelectTypes='Tout';
   let searchText:string='';
+  let searchNums:number=NaN;
+  let searchProms:number=NaN;
   const dataToSort = Promise.all([data.pgs, data.fams, data.boquettes]).then((value)=>{
     return createDataToSort({pgs:value[0], fams:value[1], boquettes:value[2]});
   });
@@ -30,18 +32,22 @@
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
   <div class="flex rounded-md w-full">
-    <select bind:value={selected} class="p-2 bg-red-100">
+    <select bind:value={selected} class="p-2 bg-red-100 border-2 border-black">
       {#each Object.keys(tableHeaders) as t}
         <option value={t}>{t}</option>
       {/each}
     </select>
-    <input bind:value={searchText} class="p-2 outline-none bg-red-100 w-full placeholder-gray-500" type="text" placeholder="recherche: {selected}">
+    <input bind:value={searchText} class="p-2 outline-none bg-red-100 w-full border-2 border-black placeholder-gray-500" type="text" placeholder="texte: {selected}">
+    <input bind:value={searchNums} class="p-1 outline-none text-black text-xs bg-red-100 w-11 border-2 border-black placeholder-gray-500" type="number" placeholder="nums">
+    <input bind:value={searchProms} class="p-1 outline-none text-black text-xs bg-red-100 w-11 border-2 border-black placeholder-gray-500" type="number" placeholder="proms">
   </div>
   {#await dataToSort}
     Chargement...
   {:then dTS} 
     <div class="w-full">
       <Search 
+        bind:searchProms={searchProms}
+        bind:searchNums={searchNums}
         bind:searchText={searchText} 
         bind:selected={selected} 
         dataToSort={dTS}>    
@@ -78,6 +84,7 @@
                 </Special>
               </th>
               <td>{e.pg.bucque}</td>
+              <td>{e.pg.nom} {e.pg.prenom}</td>
               <td>{#key e}
                   <MoneyColor auto={e.pg.solde}/>
               {/key}</td>

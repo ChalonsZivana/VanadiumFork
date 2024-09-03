@@ -11,17 +11,23 @@
   export let boquette:boquettes;
 
   let searchText = "";
+  let searchNums = NaN;
+  let searchProms = NaN;
 
   const dataToSort = createDataToSort({pgs,boquettes:[],fams:[]});
 </script>
 
   <SectionCard title="Rhopse">
-    <div class="flex rounded-md w-full">
-      <input bind:value={searchText} class="text-black p-2 outline-none bg-red-100 w-full placeholder-gray-500" type="text" placeholder="recherche: {"PG"}">
-      <button on:click={()=>searchText=''} class="bg-red-100"><CloseCircle className="w-10"/></button>
+    <div class="flex rounded-md w-full justify-center divide-x-2 divide-red-600">
+      <input bind:value={searchNums} class="p-1 outline-none text-black text-xs bg-red-100 w-1/2 placeholder-gray-500" type="number" placeholder="nums">
+      <input bind:value={searchProms} class="p-1 outline-none text-black text-xs bg-red-100 w-1/2  placeholder-gray-500" type="number" placeholder="proms">
+      <!-- <button on:click={()=>searchText=''} class="bg-red-100"><CloseCircle className="w-10"/></button> -->
     </div>
       <Search
-      bind:searchText={searchText}
+      searchText={""}
+      bind:searchNums={searchNums}
+      bind:searchProms={searchProms}
+
       selected={"PG"}
       dataToSort={dataToSort}>    
     

@@ -33,7 +33,7 @@
 
   const pgsPromise = async():Promise<Partial<pg>[]>=>{
     const cachedData = localStorage.getItem('cachedPgs');
-
+    console.log(cachedData);
     try {
       if (cachedData != null && cachedData !== 'undefined' && cachedData.length != 0) {
         console.log('loading cache')
@@ -82,7 +82,7 @@
   </BoquetteProfile>
   {#await pgsPromise()}
     Chargement des Rhopses
-  {:then pgs} 
+  {:then pgs}
     <Actions {pgs} {boquette} categories={data.categories} products={data.produits}/>
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}

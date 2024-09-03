@@ -26,7 +26,8 @@ export const actions = {
         from:id_pg,
         to:id_boquette,
         id_produit:id_produit,
-        quantite:quantite
+        quantite:quantite,
+        rhopse_ancien:null,
       })
     }
     

@@ -6,6 +6,8 @@
   import Logout from '$lib/components/svgs/logout.svelte';
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
+  import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
+    import Icon from "@iconify/svelte";
   
   export let data;
   export let form:{success:boolean, message:string};
@@ -83,6 +85,26 @@
   {#await pgsPromise()}
     Chargement des Rhopses
   {:then pgs}
+  <div class="btn-group self-center w-fit variant-filled-secondary divide-gray-400">
+    <button>
+      <Icon icon="fluent-mdl2:generate"/>
+    </button>
+    <button>
+      <Icon icon="mdi:import"/>
+    </button>
+    <button>
+      <Icon icon="mdi:export-variant"/>
+    </button>
+    <button>
+      <Icon icon="mdi:edit"/>
+    </button>
+    <button>
+      <Icon icon="mdi:event-note"/>
+    </button>
+  </div>
+    <div class="card variant-filled-secondary">
+
+    </div>
     <Actions {pgs} {boquette} categories={data.categories} products={data.produits}/>
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}

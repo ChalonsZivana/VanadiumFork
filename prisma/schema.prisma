@@ -21,7 +21,8 @@ model auberge {
 
 model suivi_onscrits {
   nums Int @id @default(autoincrement())
-  data Json @default("{}")
+  comments Json @default("{}")
+  fourchettages Json @default("{}")
 }
 
 model boquettes {

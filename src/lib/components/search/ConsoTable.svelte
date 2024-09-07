@@ -30,6 +30,17 @@
   }
   let headers = ['Date','De','Vers','Libellé','Montant'];
   if(cancelOption) headers.push('')
+
+  function transformMontant(montant:number){
+    const a = montant.toFixed(3)
+    let [hard, soft] = a.split('.').map(parseInt)
+    if(montant < 0){
+      hard -= 1;
+      soft -= 1;
+    }
+
+    return hard + soft;
+  }
 </script>
 
   <CustomTable elements={consommations} headers={headers}>
@@ -46,7 +57,14 @@
           <td>{e.libelle}</td><!-- Libellé -->
           <td><!-- Montant -->
             <p>AP. {e.solde_apres}€</p>
-            <MoneyColor auto={e.montant} className="text-xs font-bold"/>
+
+            <!-- Foys -->
+            {#if e.type=='pg_boq' && e.to==7} 
+              <MoneyColor auto={transformMontant(e.montant)} className="text-xs font-bold"/>
+            {:else}
+              <MoneyColor auto={e.montant} className="text-xs font-bold"/>
+            {/if}
+            
             <p>AV. {e.solde_avant}€</p>
           </td>
           {#if cancelOption}

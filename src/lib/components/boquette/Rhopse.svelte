@@ -5,12 +5,10 @@
   import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte"
   import Special from "$lib/components/miscellaneous/Special.svelte"
   import { createDataToSort } from "$lib/components/search/search.js";
-  import CloseCircle from "$lib/components/svgs/close-circle.svelte";
 
   export let pgs:Partial<pg>[];
   export let boquette:boquettes;
 
-  let searchText = "";
   let searchNums = NaN;
   let searchProms = NaN;
 

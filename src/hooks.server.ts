@@ -41,10 +41,6 @@ export const handle = handleSession(
         if(routeId.startsWith('/(user)/ddp') && user.pg.ddp == false){
           throw error(401);
         }
-        //TODO: to change
-        if(routeId == '/(user)'){
-          throw redirect(303, "/test");
-        }
         return resolve(event);
       }
 

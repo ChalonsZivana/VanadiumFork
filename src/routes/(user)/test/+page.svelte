@@ -2,6 +2,9 @@
 	import { TabGroup, Tab, Table } from "@skeletonlabs/skeleton";
 	import Icon from "@iconify/svelte"
   import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
+    import SectionCard from "$lib/components/SectionCard.svelte";
+		import Top from "$lib/components/miscellaneous/Leaderboard.svelte";
+    import SquareRightArrow from "$lib/components/svgs/square-right-arrow.svelte";
 
 	export let data;
 	
@@ -158,7 +161,33 @@
 				</div>
 
 			{:else if tabSet === 2}
-				(tab panel 3 contents)
+			<div class="size-full flex flex-col items-center w-80 gap-4">
+				<Tab  bind:group={tabSet} name="tab_main" value={0}>
+					<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+						<span><Icon icon="mdi:bar-chart" /></span>
+						<span>Statistics</span>
+					</div>
+				</Tab>
+
+				<SectionCard title="Top Global">
+					{#await data.topGlobal}
+						Chargement top global...
+					{:then top} 
+						<Top top={top}/>
+					{/await}
+				</SectionCard>
+				{#await data.topDuJour}
+					Chargement top global...
+				{:then top} 
+					<SectionCard title={top.name}>
+						<Top top={top}/>
+						<a href="/stats">
+							<Icon class="w-10 text-3xl absolute top-2 right-2" icon="mdi:arrow-right-bold-box"/>
+						</a>
+					</SectionCard>
+				{/await}
+			</div>
+			
 			{/if}
 		</svelte:fragment>
 	</TabGroup>

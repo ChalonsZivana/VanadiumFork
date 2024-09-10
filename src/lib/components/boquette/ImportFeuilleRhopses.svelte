@@ -4,6 +4,7 @@
   import CustomTable from '../miscellaneous/CustomTable.svelte';
   import ToggleSectionCard from '../ToggleSectionCard.svelte';
     import type { pg } from '@prisma/client';
+    import Icon from '@iconify/svelte';
 
   export let id_boquette:number;
   export let pgs:Partial<pg>[];
@@ -67,10 +68,10 @@
 </script>
 
 
-<label for="file_import" class="bg-blue-600 p-2 relative flex justify-center items-center w-2/5 rounded-md">
+<label for="file_import">
   <input on:change={()=>importExcel().then(()=>dialog.showModal())} bind:this={fileInputRhopse} class="hidden" id="file_import" accept=".xlsx" type="file">
   <button type="button" on:click={()=>fileInputRhopse.click()}>      
-    <p>Importer feuille de rhopse</p>
+    <Icon icon="mdi:import"/>
   </button>
 </label>
 

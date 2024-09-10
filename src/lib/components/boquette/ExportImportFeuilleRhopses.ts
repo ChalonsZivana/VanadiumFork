@@ -17,7 +17,7 @@ export async function download(workbook:ExcelJS.Workbook, nom:string){
   document.body.removeChild(a);
 }
 
-async function generateExcel(products:produits[]) {
+export async function generateExcel(products:produits[]) {
   const workbook = new ExcelJS.Workbook();
   const wsRhopses =  workbook.addWorksheet("Rhopses");
   const wsProducts = workbook.addWorksheet("Produits", {state:"hidden"});
@@ -75,7 +75,7 @@ async function generateExcel(products:produits[]) {
 }
 
 
-async function exporterProduits(boquette:boquettes,products:produits[], categories:categories[]){
+export async function exporterProduits(boquette:boquettes,products:produits[], categories:categories[]){
   const workbook = new ExcelJS.Workbook();
   const wsProducts = workbook.addWorksheet("Produits");
   let i = 1;
@@ -96,7 +96,7 @@ async function exporterProduits(boquette:boquettes,products:produits[], categori
 }
 
 
-const importExcel = async (file:File, pgs:Partial<pg>[]) => {
+export const importExcel = async (file:File, pgs:Partial<pg>[]) => {
   let errors:{fileError:string|null, rhopsesError:[string, boolean][][]} = {
     fileError:null,
     rhopsesError:[]

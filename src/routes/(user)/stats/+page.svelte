@@ -12,12 +12,12 @@
   export let form:{top:Top};
 
   const depensesTotales = data.consos.reduce((acc,transition) => acc + (transition.montant??0), 0);
-  const depensesMax = data.consos.reduce((max, current) => (current.montant??0) > (max.montant??0) ? current : max, data.consos[0]);
-
+  const depensesMax = data.consos.reduce((max, current) => (current.montant??0) < (max.montant??0) ? current : max, data.consos[0]);
   let totalNourriture=0;
   let totalAlcool=0;
   onMount(()=>{
     data.consos.forEach((e)=>{
+      console.log(e.id_boquette)
     if(Object.values(data.boquettes_nourritures).includes(e.id_boquette)){
       totalNourriture += e.montant;
     } else if(Object.values(data.boquettes_alcool).includes(e.id_boquette)){
@@ -35,14 +35,14 @@
     <div class="card-header "><p class="font-zagoth h1 text-center">Statistiques</p></div>
 
     <section class="flex flex-col items-center p-2">
-      <p>Total de {depensesTotales.toFixed(2)}€ dépensés</p>
+      <p>Total de {Math.abs(depensesTotales).toFixed(2)}€ dépensés</p>
       <StatsChart consos={data.consos} boquettes={data.boquettes}/>
     </section>
   </div>
 
 
   <div class="w-80">
-    <SectionCard title="Ton top conso est sur la boquette {getBoqName(depensesMax.id_boquette)} avec un total de {depensesMax.montant?.toFixed(2)}€."/>
+    <SectionCard title="Ton top conso est sur la boquette {getBoqName(depensesMax.id_boquette)} avec un total de {Math.abs(depensesMax.montant).toFixed(2)}€."/>
   </div>
 
   <div class="w-80">

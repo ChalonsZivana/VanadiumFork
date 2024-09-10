@@ -80,7 +80,7 @@ export const getTop = async (name:string, id_boquette:number|null, d={jours:365,
         where:id_boquette == null ? 
           { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, from_pg:{solde:{gte:0}} } :
           { type:"pg_boq", from:{ gt:0 }, date_conso:{ gte:twoWeeksAgo.toISOString() }, from_pg:{solde:{gte:0}}, to:id_boquette },
-        orderBy: { _sum: { montant:'desc' } },
+        orderBy: { _sum: { montant:'asc' } },
         take:d.take,
         _sum: { montant:true }
       }

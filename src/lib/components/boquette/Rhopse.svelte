@@ -14,7 +14,6 @@
 
   const dataToSort = createDataToSort({pgs,boquettes:[],fams:[]});
 </script>
-
   <SectionCard title="Rhopse">
     <div class="flex rounded-md w-full justify-center divide-x-2 divide-red-600">
       <input bind:value={searchNums} class="p-1 outline-none text-black text-xs bg-red-100 w-1/2 placeholder-gray-500" type="number" placeholder="nums">

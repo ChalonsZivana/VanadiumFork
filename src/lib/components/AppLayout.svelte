@@ -29,11 +29,11 @@
     const sections =  [
         {icon:"mdi:event-note", href:'/rhopses'},
         {icon:"mdi:bar-chart", href:'/stats'},
-        {icon:"custom:LogalSoce", href:'/test'},
+        {icon:"custom:LogalSoce", href:''},
         {icon:"mdi:anvil", href:'/usins'},
         {icon:"mdi:payment", href:'/rechargement'},
     ];
-
+    
     const boquettesIcons: BoquetteIconMap = {
     1:"mdi:food-croissant",
     2:"mdi:beer-outline",

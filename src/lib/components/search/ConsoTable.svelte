@@ -4,12 +4,17 @@
   import AddRemoveConso from '../miscellaneous/AddRemoveConso.svelte';
   import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
 
+  export let fromOption:boolean;
   export let cancelOption:boolean;
   export let consommations:ConsommationsIncludeType[];
 
   function getFrom(e:ConsommationsIncludeType){
     if(e.type.startsWith('pg')){
-      return `${e.from_pg?.nums}\rch\r${e.from_pg?.proms}`;
+      if(e.from_pg){
+        return `${e.from_pg.nums}\nch\n${e.from_pg.proms}`;
+       } else {
+        return '∅'
+       }
     }
     return 'EXT';
   }
@@ -32,47 +37,61 @@
   if(cancelOption) headers.push('')
 
   function transformMontant(montant:number){
-    const a = montant.toFixed(3)
-    let [hard, soft] = a.split('.').map(parseInt)
-    if(montant < 0){
-      hard -= 1;
-      soft -= 1;
-    }
+    const [hard, soft] = montant.toFixed(3).split('.').map(parseInt);
 
-    return hard + soft;
+    return Math.sign(montant) * (hard + soft);
   }
 </script>
 
-  <CustomTable elements={consommations} headers={headers}>
-    <svelte:fragment slot="tbody" let:e>
-      {@const [_from,_to] = e.type.toUpperCase().split('_')}
-      {#key e}
-        <tr class="{e.annule?'line-through':''} text-xxs decoration-2 divide-x-2">
-          <td><!-- Date -->
-            <p>{e.date_conso.toLocaleDateString()}</p>
-            <p>{e.date_conso.toLocaleTimeString()}</p>
-          </td>
-          <td>{getFrom(e)}</td><!-- From -->
-          <td class="overflow-ellipsis">{getTo(e)}</td><!-- To -->
-          <td>{e.libelle}</td><!-- Libellé -->
-          <td><!-- Montant -->
-            <p>AP. {e.solde_apres}€</p>
-
-            <!-- Foys -->
-            {#if e.type=='pg_boq' && e.to==7} 
-              <MoneyColor auto={transformMontant(e.montant)} className="text-xs font-bold"/>
-            {:else}
-              <MoneyColor auto={e.montant} className="text-xs font-bold"/>
+<!-- Responsive Container (recommended) -->
+<div class="table-container w-full flex-grow mb-20">
+  <!-- Native Table Element -->
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th class="text-xs">Date</th>
+        {#if fromOption}
+          <th class="text-xs">De</th>
+        {/if}
+        <th class="text-xs">Vers</th>
+        <th class="text-xs">Libelle</th>
+        <th class="text-xs">Montant</th>
+        {#if cancelOption}
+          <th></th>
+        {/if}
+      </tr>
+    </thead>
+    <tbody>
+      {#each consommations as conso}
+          {@const date = conso.date_conso.toLocaleString().split(' ')}
+          <tr class="{conso.annule?'line-through':''} decoration-2 divide-x-2">
+            <td><span class="text-xxs">{date[0]}<br>{date[1]}</span></td>
+            {#if fromOption}
+              <td><span class="text-xxs whitespace-pre-wrap">{getFrom(conso)}</span></td>
             {/if}
-            
-            <p>AV. {e.solde_avant}€</p>
-          </td>
-          {#if cancelOption}
+            <td><div class="w-6 text-wrap text-xxs">{getTo(conso)}</div></td>
             <td>
-              <AddRemoveConso id={e.id_conso} annule={e.annule}/>
+              <div class="w-16 text-wrap text-xxs">{conso.libelle}</div>
+            </td>
+            <td><!-- Montant -->
+              <p class=" text-xxs">AP. {conso.solde_apres.toFixed(2)}€</p>
+  
+              <!-- Foys -->
+              {#if conso.type=='pg_boq' && conso.to==7} 
+                <MoneyColor auto={transformMontant(conso.montant)} className="text-xs font-bold text-xxs"/>
+              {:else}
+                <MoneyColor auto={conso.montant} className="text-xs font-bold text-xxs"/>
+              {/if}
+              
+              <p class=" text-xxs">AV. {conso.solde_avant.toFixed(2)}€</p>
+            </td>
+            {#if cancelOption}
+            <td>
+              <AddRemoveConso id={conso.id_conso} annule={conso.annule}/>
             </td>
           {/if}
-        </tr>
-      {/key}
-    </svelte:fragment>
-  </CustomTable>
+          </tr>
+        {/each}
+    </tbody>
+  </table>
+</div>

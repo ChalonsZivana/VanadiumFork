@@ -74,6 +74,7 @@ export default {
 				],
 			},
 		}),
+    require('tailwindcss-3d'),
     require('tailwindcss-gradients'),
     function ({ addVariant }) {
       addVariant('child', '& > *');
@@ -87,7 +88,7 @@ export default {
 					'-moz-user-drag': 'none',
 					'-o-user-drag': 'none',
 					'user-drag': 'none'
-				}
+				},
 			});
 		}),
     plugin(function ({ matchUtilities, theme }) {

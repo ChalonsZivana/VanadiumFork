@@ -5,6 +5,7 @@ import { Taferie } from "$lib/server/classes/Taferie";
 import { Pg } from "$lib/server/classes/PG";
 import { Boquette } from "$lib/server/classes/Boquette";
 import { EditPgSchema } from "$lib/zodSchema.js";
+import { Fams } from "$lib/server/classes/Fams.js";
 
 export const load = async ({params})=>{
   const id_pg = parseInt(params.id_pg);
@@ -49,10 +50,10 @@ export const actions = {
     if(isNaN(id_pg)) throw error(400);
     
     const pg = await new Pg(id_pg).pg();
-    const boq = new Boquette(pg.nums);
+    const fams = new Fams(pg.nums);
     if(pg == null) throw error(400);
 
-    const r = await Taferie.rhopse({type:'pg_fams', from:id_pg,to:boq.ID,montant:-pg.solde, libelle:"Fonds vers Fonds Fams"})
+    const r = await Taferie.rhopse({type:'pg_fams', from:id_pg,to:fams.ID,montant:-pg.solde, libelle:"Fonds vers Fonds Fams"})
     if(r?.success){
       return {success:true, message:"Fonds transférés"}
     } else {

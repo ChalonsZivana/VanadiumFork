@@ -7,6 +7,8 @@ export class Fams extends HasMoney{
     nums = nums % 100;
     if(nums > 50) nums = 100 - nums;
     if(nums == 0) nums = 50;
+    // bifam's
+    if(nums == 9) nums = 8;
     super("fams",nums);
   }
 

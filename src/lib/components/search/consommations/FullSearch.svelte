@@ -12,6 +12,7 @@
     export let nombrePages:number =  NaN;
     export let consommations:ConsommationsIncludeType[] = [];
     export let types: {[key: string]: keyof typeof consommations_type};
+    export let fromOption:boolean;
     export let cancelOption:boolean;
 </script>
 
@@ -80,6 +81,6 @@
     </div>
   </form>
   <div class="w-full h-96 overflow-x-hidden no-scrollbar overflow-y-scroll">
-    <ConsoTable consommations={consommations} cancelOption={cancelOption}/>
+    <ConsoTable {fromOption} consommations={consommations} cancelOption={cancelOption}/>
   </div>
 </SectionCard>

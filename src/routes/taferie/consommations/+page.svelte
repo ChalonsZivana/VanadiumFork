@@ -8,6 +8,7 @@
 <div class="w-11/12 pt-5">
   {#if form}
     <FullSearch 
+    fromOption={true}
     title="< Historique Général >" 
     cancelOption={true}
     totalCons={form.search.totalCons}
@@ -26,6 +27,7 @@
   {:else}
   <FullSearch 
     title="< Historique Général >" 
+    fromOption={true}
     cancelOption={true}
     types={
       {"PG → Boquette":"pg_boq", 

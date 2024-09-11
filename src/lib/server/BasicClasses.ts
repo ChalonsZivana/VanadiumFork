@@ -26,7 +26,7 @@ export class HasMoney {
         
         break;
       case "pg":
-        await prisma.pg.update({
+        await prisma.pg.updateMany({
           where:{id_pg:this.ID},
           data:{solde:{increment:money}}
         });

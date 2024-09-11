@@ -1,69 +1,58 @@
 <script lang="ts">
-	import { TabGroup, Tab, Table } from "@skeletonlabs/skeleton";
+	import { TabGroup, Tab } from "@skeletonlabs/skeleton";
 	import Icon from "@iconify/svelte"
-  import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
-    import SectionCard from "$lib/components/SectionCard.svelte";
-		import Top from "$lib/components/miscellaneous/Leaderboard.svelte";
-    import SquareRightArrow from "$lib/components/svgs/square-right-arrow.svelte";
+  import SectionCard from "$lib/components/SectionCard.svelte";
+	import Top from "$lib/components/miscellaneous/Leaderboard.svelte";
+  import ConsoTable from "$lib/components/search/ConsoTable.svelte";
 
 	export let data;
 	
 	const negats = Object.entries(data.negats);
 
 	let tabSet: number = 0;
-	function getFrom(e:ConsommationsIncludeType){
-    if(e.type.startsWith('pg')){
-      return `${e.from_pg?.nums}\rch\r${e.from_pg?.proms}`;
-    }
-    return 'EXT';
-  }
-
-  function getTo(e:ConsommationsIncludeType){
-    switch(e.type){
-      case 'ext_boq':
-      case 'pg_boq':
-        return e.to_boquette?.nom;
-      case 'pg_ext':
-        return 'EXT';
-      case 'ext_fams':
-      case 'pg_fams':
-        return e.to_fams?.nums;
-      case 'pg_pg':
-        return 'PG';
-    }
-  }
+	let flipped = true;
 </script>
 
 <div class="h-full flex flex-col">
 	<TabGroup class="size-full" regionPanel="size-full">
 		<svelte:fragment slot="panel">
 			{#if tabSet === 0}
-				<div class="size-full flex flex-col justify-around items-center">
-						<!-- Profile card -->
-					<div class="card relative aspect-video w-11/12 max-w-80 p-4  bg-gradient-to-t from-primary-500 to-primary-400">
-						<section class="p-4 relative">
-							<div class="flex flex-col">
-								<span>Prénom: {data.USER.pg.prenom}</span>
-								<span>Nom: {data.USER.pg.nom}</span>
-								<span>Bucque: {data.USER.pg.bucque}</span>
-								<span>Proms: {data.USER.pg.proms}</span>
-								<span>Email: {data.USER.pg.email}</span>
-							</div>
 			
-							<div class="absolute font-zagoth opacity-50 right-0 top-0 text-9xl h-full flex justify-center items-center">
-								<span>{data.USER.pg.nums}</span>
-							</div>
-						</section>
 
-						{#if data.USER.pg.ddp}
-							<a href="ddp" class="absolute w-10 top-3 right-3">
-								<div class="p-1 border-1 border-white rounded-xl">
-									DDP
+			
+				<div class="size-full flex flex-col justify-around items-center">
+					<button class="perspective-1000 w-80 aspect-video max-w-80" on:click={() => flipped = !flipped}>
+						<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
+								<!-- Front face -->
+								<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
+									<section class="p-4 relative">
+										<div class="flex flex-col items-start">
+											<span>Prénom: {data.USER.pg.prenom}</span>
+											<span>Nom: {data.USER.pg.nom}</span>
+											<span>Bucque: {data.USER.pg.bucque}</span>
+											<span>Proms: {data.USER.pg.proms}</span>
+											<span>Email: {data.USER.pg.email}</span>
+										</div>
+						
+										<div class="absolute font-zagoth opacity-50 right-0 top-0 text-9xl h-full flex justify-center items-center">
+											<span>{data.USER.pg.nums}</span>
+										</div>
+									</section>
+		
+									{#if data.USER.pg.ddp}
+										<a href="ddp" class="absolute w-10 top-3 right-3">
+											<div class="p-1 border-1 border-white rounded-xl">
+												DDP
+											</div>
+										</a>
+									{/if}
 								</div>
-							</a>
-						{/if}
-					</div>
-					
+								<!-- Back face -->
+								<div class="absolute card p-1 w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
+									<img class="h-full w-full object-cover" src={data.photo} alt="Veterinarian checking a dog's teeth">
+							</div>					
+						</div>
+				</button>
 			
 					<div class="gap-10 flex flex-col w-80">
 						<!-- Fonds -->
@@ -126,38 +115,14 @@
 							<span>Consos</span>
 						</div>
 					</Tab>
-						<!-- Responsive Container (recommended) -->
-						<div class="table-container w-11/12 flex-grow mb-20">
-							<!-- Native Table Element -->
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th class="text-xs">Date</th>
-										<th class="text-xs">Vers</th>
-										<th class="text-xs">Libelle</th>
-										<th class="text-xs">Montant</th>
-									</tr>
-								</thead>
-								<tbody>
-									{#await data.consommations}
-										...
-									{:then consommations} 
-										{#each consommations as conso}
-											{@const date = conso.date_conso.toLocaleString().split(' ')}
-											<tr>
-												<td><span class="text-xs">{date[0]}<br>{date[1]}</span></td>
-												<td><span class="text-xs table-cell-fit">{getTo(conso)}</span></td>
-												<td>
-													<div class="w-20 text-wrap">{conso.libelle}</div>
-												</td>
-												<td><span class="text-xs">{conso.montant}</span></td>
-											</tr>
-										{/each}
-									{/await}
-									
-								</tbody>
-							</table>
-						</div>
+
+					{#await data.consommations}
+						<p>test</p>
+					{:then consommations} 
+					<ConsoTable fromOption={false} cancelOption={false} {consommations}/>
+
+					{/await}
+						
 				</div>
 
 			{:else if tabSet === 2}

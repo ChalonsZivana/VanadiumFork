@@ -14,9 +14,11 @@ export const load = async ({ locals }) => {
 
   const topGlobal = getTop("Top Global", null);
   const topDuJour = getRandomTop()
+  const photosFolder = await pg.getPhotosFolder();
+
 
   return {
-    photo: getRandomPhoto(await pg.getPhotosFolder()),
+    photos:Array(10).fill(0).map((_)=>getRandomPhoto(photosFolder)),
     negats:await Database.negatsProms([222,223]),
     topGlobal,
     topDuJour,
@@ -35,6 +37,6 @@ function getRandomPhoto(folder:string){
 
 	const files = fs.readdirSync(folderPath);
 	const randomFile = files[Math.floor(Math.random() * files.length)];
-	
-	return `/photos/${folder}/${randomFile}`;
+
+  return `/photos/${folder}/${randomFile}`;
 }

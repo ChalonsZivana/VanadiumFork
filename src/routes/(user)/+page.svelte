@@ -11,17 +11,29 @@
 
 	let tabSet: number = 0;
 	let flipped = true;
+	let photosIndex = 0;
+
+	function flip(){
+		if(!flipped && photosIndex < data.photos.length){
+			photosIndex += 1;
+		}
+		if(photosIndex == data.photos.length){
+			window.location.reload();
+		} else {
+			flipped = !flipped;
+		}
+	}
 </script>
 
 <div class="h-full flex flex-col">
 	<TabGroup class="size-full" regionPanel="size-full">
 		<svelte:fragment slot="panel">
 			{#if tabSet === 0}
-			
+			 
 
 			
 				<div class="size-full flex flex-col justify-around items-center">
-					<button class="perspective-1000 w-80 aspect-video max-w-80" on:click={() => flipped = !flipped}>
+					<button class="perspective-1000 w-80 aspect-video max-w-80" on:click={flip}>
 						<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
 								<!-- Front face -->
 								<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
@@ -49,7 +61,7 @@
 								</div>
 								<!-- Back face -->
 								<div class="absolute card p-1 w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
-									<img class="h-full w-full object-cover" src={data.photo} alt="Veterinarian checking a dog's teeth">
+									<img class="h-full w-full object-cover" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
 							</div>					
 						</div>
 				</button>

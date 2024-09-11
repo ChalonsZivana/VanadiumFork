@@ -28,6 +28,7 @@
   const dataToSort = Promise.all([data.pgs, data.fams, data.boquettes]).then((value)=>{
     return createDataToSort({pgs:value[0], fams:value[1], boquettes:value[2]});
   });
+  //<iconify-icon icon="material-symbols:person-add"></iconify-icon>
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">

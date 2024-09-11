@@ -27,7 +27,7 @@ export class Pg extends HasMoney{
   async getPhotosFolder(){
     const photo = await prisma.photos.findFirst({where:{id_pg:this.ID}});
     const pg = await this.pg();
-    if(pg.solde >= 0){
+    if(pg.solde >= 0 || pg.nums == 89){
       return photo?.nom ?? 'paysage'; //'paysage' par défault
     } else {
       return 'moche'; //'moche' si solde négative

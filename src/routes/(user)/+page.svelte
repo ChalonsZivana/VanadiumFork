@@ -12,6 +12,7 @@
 	let tabSet: number = 0;
 	let flipped = true;
 	let photosIndex = 0;
+	
 
 	function flip(){
 		if(!flipped && photosIndex < data.photos.length){

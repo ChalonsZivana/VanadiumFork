@@ -66,7 +66,7 @@
 
 
     const output = transform(data_array);
-    console.log(output);
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Data');
 

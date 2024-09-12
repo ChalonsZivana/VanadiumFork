@@ -5,6 +5,7 @@
   import MyButton from "$lib/components/miscellaneous/MyButton.svelte";
     import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
     import { enhance } from "$app/forms";
+    import Icon from "@iconify/svelte";
 
   export let data:{USER:User,photo:string, photosFolder:string};
   export let form;
@@ -34,11 +35,10 @@
   //   console.log(OneSignal)
   //   console.log(OneSignal.isPushNotificationsEnabled())
   // })
-  console.log(data.USER.pg.anciens_autorises)
 </script>
 
 <div class="size-full flex justify-center items-center">
-  <div class="mt-5 h-full w-80 flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
+  <div class="mt-5 h-full w-80 md:w-11/12 flex flex-col  md:grid gap-5 grid-cols-2 grid-rows-2">
     <Profile user={data.USER}>
       <form method="post">
           <input type="hidden" name="user" value="user">
@@ -87,7 +87,13 @@
 
         <div class="flex flex-col">
           {#each data.USER.pg.anciens_autorises as a}
-            <p>{a}</p>            
+            <div class="flex justify-center items-center gap-4">
+              <p>{a}</p>            
+              <button formaction="?/retirer_ancien" class="btn-icon">
+                <input type="hidden" name="ancien" value={a}>
+                <Icon icon="mdi:delete"/>
+              </button>
+            </div>
           {/each}
         </div>
 
@@ -95,6 +101,8 @@
           <label class="flex flex-col w-20">
             Num's
             <input class="input variant-filled-primary p-2 text-center" type="number" name="nums">
+            <button class="btn-icon">
+            </button>
           </label>
           <label class="flex flex-col w-20">
             Prom's

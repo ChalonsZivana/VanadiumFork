@@ -52,5 +52,33 @@ export const actions = {
     if(!result.success) throw error(400);
 
     await prisma.pg.update({data:{anciens_autorises:{push:`${result.data.nums}ch${result.data.proms}`}}, where:{id_pg:locals.session.data.user?.pg.id_pg}})
-  }
+  },
+  retirer_ancien: async ({ locals, request }) => {
+    const data = Object.fromEntries(await request.formData());
+    const result = z.object(
+      {
+        ancien: z.string(),
+      }).safeParse(data);
+  
+    if (!result.success) throw error(400);
+
+
+    // Fetch the current anciens_autorises array
+    const pg = await prisma.pg.findUnique({
+      where: { id_pg: locals.session.data.user?.pg.id_pg },
+      select: { anciens_autorises: true }
+    });
+  
+    if (!pg) throw error(404, 'PG not found');
+      
+    // Filter the anciens_autorises array to remove the specified entry
+    const updatedAnciens = pg.anciens_autorises.filter(item => item !== result.data.ancien);
+  
+    // Update the array in the database
+    await prisma.pg.update({
+      where: { id_pg: locals.session.data.user?.pg.id_pg },
+      data: { anciens_autorises: updatedAnciens }
+    });
+  },
+  
 }

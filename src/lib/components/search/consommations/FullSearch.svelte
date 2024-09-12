@@ -5,6 +5,7 @@
     import ConsoTable from "../ConsoTable.svelte";
     import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
     import { enhance } from "$app/forms";
+    import Icon from "@iconify/svelte";
     
     export let title:string;
     export let totalCons:number = NaN;
@@ -19,7 +20,8 @@
 <SectionCard title={title}>
   <form use:enhance={
     async ()=>{
-      return async({update})=> update({reset:false});
+      consommations = [];
+      return async({update}) => update({reset:false});
     }
   } action="?/consommations" method="post" class="w-full flex flex-col gap-2">
     <slot>
@@ -81,6 +83,14 @@
     </div>
   </form>
   <div class="w-full h-96 overflow-x-hidden no-scrollbar overflow-y-scroll">
+    {#if consommations.length == 0}
+      <div class="w-full flex justify-center">
+        <Icon class="text-8xl" icon="line-md:loading-loop"/>
+      </div>
+    {:else}
     <ConsoTable {fromOption} consommations={consommations} cancelOption={cancelOption}/>
+
+    {/if}
+    
   </div>
 </SectionCard>

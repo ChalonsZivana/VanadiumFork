@@ -17,7 +17,6 @@
   let totalAlcool=0;
   onMount(()=>{
     data.consos.forEach((e)=>{
-      console.log(e.id_boquette)
     if(Object.values(data.boquettes_nourritures).includes(e.id_boquette)){
       totalNourriture += e.montant;
     } else if(Object.values(data.boquettes_alcool).includes(e.id_boquette)){

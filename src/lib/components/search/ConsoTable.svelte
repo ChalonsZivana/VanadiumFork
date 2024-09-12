@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CustomTable from '$lib/components/miscellaneous/CustomTable.svelte';
   import MoneyColor from '../miscellaneous/MoneyColor.svelte';
   import AddRemoveConso from '../miscellaneous/AddRemoveConso.svelte';
   import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
@@ -61,7 +60,7 @@
         {/if}
       </tr>
     </thead>
-    <tbody>
+    <tbody class="divide-y-2 divide-white">
       {#each consommations as conso}
           {@const date = conso.date_conso.toLocaleString().split(' ')}
           <tr class="{conso.annule?'line-through':''} decoration-2 divide-x-2">
@@ -86,7 +85,7 @@
               <p class=" text-xxs">AV. {conso.solde_avant.toFixed(2)}€</p>
             </td>
             {#if cancelOption}
-            <td>
+            <td class="flex justify-center items-center">
               <AddRemoveConso id={conso.id_conso} annule={conso.annule}/>
             </td>
           {/if}

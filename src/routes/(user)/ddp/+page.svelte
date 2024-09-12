@@ -17,7 +17,7 @@
 
 
   function copyEmail(email:string){
-    navigator.clipboard.writeText(email).then((_)=>console.log('hey'))
+    navigator.clipboard.writeText(email);
   }
 </script>
 
@@ -58,6 +58,7 @@
     Chargement Historique Général
   {:then consommations} 
     <FullSearch 
+    fromOption={true}
     cancelOption={false}
     title="< Historique Général >" 
     totalCons={currData?.totalCons ?? 0}

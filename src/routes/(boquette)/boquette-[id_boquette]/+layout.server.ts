@@ -1,5 +1,4 @@
 import prisma from '$lib/prisma.js';
-import { BOQUETTES } from '$lib/server/classes/Boquette.js';
 import { error } from '@sveltejs/kit';
 
 export const load = async ({params})=>{

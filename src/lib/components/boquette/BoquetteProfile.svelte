@@ -15,8 +15,7 @@
   let dialog:HTMLDialogElement;
 </script>
 
-<SectionCard 
-title={boquette.nom??''}>
+<SectionCard title={boquette.nom??''}>
   <div class="flex flex-col w-full">
     <div class="text-white w-full flex justify-center items-center">    
       <div class="w-1/2 justify-self-start">

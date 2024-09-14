@@ -1,5 +1,5 @@
 import { consommations_type } from "@prisma/client";
-import { z } from "zod";
+import { number, z } from "zod";
 
 
 export const EditBoquetteSchema  = z.object({
@@ -150,4 +150,11 @@ export const DeleteCategorySchema = z.object({
 
 export const topNegatsSchema = z.object({
   proms:z.string().transform(e => parseInt(e)),
+});
+
+export const EnvoiBrouzoufsSchema = z.object({
+  nums:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e) && e>0),
+  proms:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e) && e>220),
+  montant:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e) && e>0),
+  libelle:z.string()
 });

@@ -1,4 +1,4 @@
-import prisma from "$lib/prisma";
+import type { Prisma } from "@prisma/client";
 
 // Process
 // Ajouter argent quelque part
@@ -10,37 +10,33 @@ type Tables = "boquettes" | "pg"| "fams";
 export class HasMoney {
   T:Tables;
   ID:number;
-  constructor(t:Tables, id:number){
+  constructor(t:Tables, id:number, ){
     this.T = t;
     this.ID = id;
   }
 
 
-  async addMoney(money:number) {
+  async addMoney(money:number, p:Prisma.TransactionClient) {
     switch(this.T){
       case "boquettes":
-        await prisma.boquettes.update({
+        return await p.boquettes.update({
           where:{id_boquette:this.ID},
-          data:{solde:{increment:money}}
+          data:{solde:{increment:money}},
         });
-        
-        break;
       case "pg":
-        await prisma.pg.updateMany({
+        return await p.pg.update({
           where:{id_pg:this.ID},
           data:{solde:{increment:money}}
         });
-        break;
       case "fams":
-          await prisma.fams.update({
+          return await p.fams.update({
             where:{nums:this.ID},
             data:{solde:{increment:money}}
           });
-          break;
     }
   }
 
-  async removeMoney(money:number) {
-    await this.addMoney(money * -1);
+  async removeMoney(money:number, p:Prisma.TransactionClient) {
+    return await this.addMoney(money * -1, p);
   }
 }

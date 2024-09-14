@@ -83,7 +83,7 @@
     </form>
   {/if}
 
-  <form class="card w-80 p-4 variant-filled-surface flex flex-col gap-4">
+  <form method="post" action="?/rechargementFams" class="card w-80 p-4 variant-filled-surface flex flex-col gap-4">
     <p class="card-header text-3xl font-zagoth text-center">
       Rechargement Fam's
     </p>
@@ -102,11 +102,64 @@
       </label>
     </section>
 
-    <div class="card-footer flex justify-center">
-      <button class="btn variant-filled-tertiary w-32 text-3xl">
-        <Icon icon="mdi:payment"/>
-      </button>
-    </div>
+    {#if data.USER.pg.can_buy}
+      <div class="card-footer flex justify-center">
+        <button class="btn variant-filled-tertiary w-32 text-3xl">
+          <Icon icon="mdi:payment"/>
+        </button>
+      </div>
+    {:else}
+      <div class="card-footer flex justify-center ">
+        <div class="btn break-words text-wrap w-full variant-filled-warning">
+          Tu es trop en negats ou depuis trop longtemps.
+        </div>
+      </div>
+    {/if}
+  </form>
+
+  <form method="post" action="?/envoiBrousoufs" class="card w-80 p-4 variant-filled-surface flex flex-col gap-4">
+    <p class="card-header text-3xl font-zagoth text-center">
+      Envoi de Brousoufs
+    </p>
+    
+    <section class="flex flex-col gap-4 items-center">
+      <div class="card variant-filled-warning p-2">
+        <p>L'argent sera déduit de votre compte Vanadium.</p>
+      </div>
+      <div class="flex">
+        <label class="w-full">
+          <span>Nums</span>
+          <input required class="input p-1 text-center" type="number" min="1"  name="nums">
+        </label>
+        <label class="w-full">
+          <span>Proms</span>
+          <input required class="input p-1 text-ce$" type="number" min="220"  name="proms">
+        </label>
+      </div>
+      <label class="w-full">
+        <span>Montant</span>
+        <input required class="input" type="number" min="0"  name="montant">
+      </label>
+      <label class="w-full">
+        <span>Libelle</span>
+        <input class="input" required type="text"  name="libelle">
+      </label>
+    </section>
+
+    {#if data.USER.pg.can_buy}
+      <div class="card-footer flex justify-center">
+        <button class="btn variant-filled-tertiary w-32 text-3xl">
+          <Icon icon="mdi:payment"/>
+        </button>
+      </div>
+    {:else}
+      <div class="card-footer flex justify-center ">
+        <div class="btn break-words text-wrap w-full variant-filled-warning">
+          Tu es trop en negats ou depuis trop longtemps.
+        </div>
+      </div>
+    {/if}
+    
   </form>
 </div>
 

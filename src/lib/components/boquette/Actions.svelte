@@ -1,38 +1,34 @@
 <script lang="ts">
   import type {boquettes, categories, pg, produits} from '@prisma/client';
-  import ToggleSectionCard from '../ToggleSectionCard.svelte';
-  import ExportFeuilleRhopses from './ExportFeuilleRhopses.svelte';
-  import ImportFeuilleRhopses from './ImportFeuilleRhopses.svelte';
-  import ExporterProduits from './ExporterProduits.svelte';
-
+  import { exporterProduits, generateExcel} from "$lib/components/boquette/ExportImportFeuilleRhopses";
+  import Icon from "@iconify/svelte";
+  import ImportFeuilleRhopses from "$lib/components/boquette/ImportFeuilleRhopses.svelte";
+  
   export let boquette:boquettes;
-  export let products:produits[];
+  export let produits:produits[];
   export let categories:categories[];
-  export let pgs:Partial<pg>[] | null;
+  export let pgs:Partial<pg>[]|null;
 </script>
 
 
-<ToggleSectionCard title="Actions" toggleClass="h-48">
-  <div class="flex flex-col gap-2 h-46 mt-5">
-    <div class="flex flex-wrap justify-around gap-5 h-full text-white">  
-
-      <ExportFeuilleRhopses {products}/>
-      {#if pgs}
-      <ImportFeuilleRhopses {pgs} id_boquette={boquette.id_boquette}/>
-      {/if}
-      <ExporterProduits {boquette} {categories} {products}/>
-      <button class="bg-blue-600 p-2 relative flex justify-center items-center w-2/5 rounded-md">
-        <a href="/boquette-{boquette.id_boquette}/consommations">consommations</a>
-      </button>
-
-      {#if boquette.nom == "K've"}
-      <button class="bg-blue-600 p-2 relative flex justify-center items-center w-2/5 rounded-md">
-        <a href="/boquette-{boquette.id_boquette}/editproducts">editer produits</a>
-      </button>
-      {/if}
-
-      <slot/>
-    </div>
-  </div>
-</ToggleSectionCard>
+<div class="btn-group self-center w-fit variant-filled-secondary divide-gray-400">
+  <button on:click={()=>generateExcel(produits)}>
+    <Icon icon="fluent-mdl2:generate"/>
+  </button>
+  {#if pgs != null}
+    <ImportFeuilleRhopses id_boquette={boquette.id_boquette} {pgs}/>
+  {/if}
+  <button on:click={()=>exporterProduits(boquette, produits, categories)}>
+    <Icon icon="mdi:export-variant"/>
+  </button>
+  {#if boquette.nom == "K've"}
+    <a href="/boquette-{boquette.id_boquette}/editproducts">
+      <Icon icon="mdi:edit"/>
+    </a>
+  {/if}
+  <a href="/boquette-{boquette.id_boquette}/consommations">
+    <Icon icon="mdi:event-note"/>
+  </a>
+  <slot/>
+</div>
 

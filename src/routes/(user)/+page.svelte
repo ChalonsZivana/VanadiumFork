@@ -34,12 +34,12 @@
 
 			
 				<div class="size-full flex flex-col justify-around items-center">
-					<button class="perspective-1000 w-80 aspect-video max-w-80" on:click={flip}>
+					<button class="perspective-1000 w-80 {flipped ? 'aspect-square':'aspect-video'} duration-1000 max-w-80" on:click={flip}>
 						<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
 								<!-- Front face -->
 								<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
-									<section class="p-4 relative">
-										<div class="flex flex-col items-start">
+									<section class="relative w-full h-full flex items-center">
+										<div class="flex flex-col items-start p-4">
 											<span>Prénom: {data.USER.pg.prenom}</span>
 											<span>Nom: {data.USER.pg.nom}</span>
 											<span>Bucque: {data.USER.pg.bucque}</span>

@@ -11,11 +11,15 @@ export const load = async ({params})=>{
   const id_pg = parseInt(params.id_pg);
   const user = await createUser(id_pg);
   if(user == null) throw error(404, 'User missing');
+
   
-  const consommations = prisma.consommations.findMany({
-    where:{type:{in:["pg_ext", "pg_boq", "pg_fams", "pg_pg"]},from:id_pg}, 
-    orderBy:{date_conso:'desc'}
-  });
+  
+  const consommations = Taferie.consommations([
+    {type:'pg_boq', from:id_pg},
+    {type:'pg_pg', from:id_pg},
+    {type:'pg_fams', from:id_pg},
+    {type:'pg_ext', from:id_pg},
+  ])
   return {
    user, consommations
   };

@@ -15,8 +15,7 @@
   const soldes = {"Fonds":user.pg?.solde, "Fonds Fams":user?.fams?.solde}
 </script>
 
-<SectionCard 
-title="Profil">
+<SectionCard title="Profil">
 <div class="text-white w-full flex flex-col ">    
     <p>Prénom: {user.pg.prenom}</p>
     <p>Nom: {user.pg.nom}</p>

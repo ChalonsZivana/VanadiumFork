@@ -1,15 +1,14 @@
 <script lang="ts">
   import Rhopse from "$lib/components/boquette/Rhopse.svelte";
   import Produits from "$lib/components/boquette/Produits.svelte";
-  import Actions from "$lib/components/boquette/Actions.svelte";
   import type { boquettes, pg } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
-  import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
-  import {importExcel, exporterProduits, generateExcel} from "$lib/components/boquette/ExportImportFeuilleRhopses";
-    import Icon from "@iconify/svelte";
+  import { exporterProduits, generateExcel} from "$lib/components/boquette/ExportImportFeuilleRhopses";
+  import Icon from "@iconify/svelte";
     import ImportFeuilleRhopses from "$lib/components/boquette/ImportFeuilleRhopses.svelte";
+    import Actions from "$lib/components/boquette/Actions.svelte";
   
   export let data;
   export let form:{success:boolean, message:string};
@@ -37,7 +36,6 @@
 
   const pgsPromise = async():Promise<Partial<pg>[]>=>{
     const cachedData = localStorage.getItem('cachedPgs');
-    console.log(cachedData);
     try {
       if (cachedData != null && cachedData !== 'undefined' && cachedData.length != 0) {
         console.log('loading cache')
@@ -87,26 +85,7 @@
   {#await pgsPromise()}
     Chargement des Rhopses
   {:then pgs}
-  <div class="btn-group self-center w-fit variant-filled-secondary divide-gray-400">
-    <button on:click={()=>generateExcel(data.produits)}>
-      <Icon icon="fluent-mdl2:generate"/>
-    </button>
-    <ImportFeuilleRhopses id_boquette={data.id_boquette} {pgs}/>
-    <button on:click={()=>exporterProduits(boquette, data.produits, data.categories)}>
-      <Icon icon="mdi:export-variant"/>
-    </button>
-    {#if boquette.nom == "K've"}
-      <a href="/boquette-{boquette.id_boquette}/editproducts">
-        <Icon icon="mdi:edit"/>
-      </a>
-    {/if}
-    <a href="/boquette-{boquette.id_boquette}/consommations">
-      <Icon icon="mdi:event-note"/>
-    </a>
-  </div>
-    <div class="card variant-filled-secondary">
-
-    </div>
+    <Actions {boquette} {pgs} categories={data.categories} produits={data.produits}/>   
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}
   

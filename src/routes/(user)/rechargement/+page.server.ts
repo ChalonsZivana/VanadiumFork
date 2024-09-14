@@ -4,7 +4,7 @@ import { LydiaManager } from "$lib/server/lydia";
 import {LYDIA_VENDOR_KEY} from "$env/static/private";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
-import { LydiaDemandFrontSchema } from "$lib/zodSchema";
+import { EnvoiBrouzoufsSchema, LydiaDemandFrontSchema } from "$lib/zodSchema";
 
 export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
@@ -53,5 +53,27 @@ export const actions = {
     if(a == null) throw error(400);
     const r = await LydiaManager.verifyLydiaDemand(a.id_rechargement, LYDIA_VENDOR_KEY, a.keylydia);
     return r;
-  }
+  },
+  envoiBrousoufs: async ({request, locals}) =>{
+    if(!locals.session.data.user) throw error(400);
+
+
+    const d = Object.fromEntries(await request.formData());
+    console.log(d);
+    const data = EnvoiBrouzoufsSchema.safeParse(d);
+
+    console.log(data)
+    if(!data.success) return {success:false, message:'an error occured'};
+
+    const pg = await prisma.pg.findFirst({where:{nums:data.data.nums, proms:data.data.proms}});
+    if(pg == null) throw error(400);
+    
+    return await Taferie.rhopse({
+      type:'pg_pg', 
+      from:locals.session.data.user.pg.id_pg,
+      to:pg.id_pg,
+      montant: -data.data.montant,
+      libelle:data.data.libelle,
+    });
+  },
 }

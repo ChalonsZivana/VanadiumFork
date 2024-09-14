@@ -46,6 +46,13 @@ async function getSolde(type:consommations_type, id:number){
 
 async function getLibelle(d:ext_ | pg_ext | _to | pg_boq){
   switch(d.type){
+    case "pg_pg":
+      const pg1 = await prisma.pg.findFirst({where:{id_pg:d.from}});
+      const pg2 = await prisma.pg.findFirst({where:{id_pg:d.to}});
+      if(pg1 == null || pg2 == null) return null;
+      return `Transfert (${pg1.nums}ch${pg1.proms}->${pg2.nums}ch${pg2.proms}) ${d.libelle}`;
+    case "ext_boq":
+    case "ext_fams":
     case "pg_ext":
       return `[Opération TAFerie] ${d.libelle}`;
     case "pg_boq":
@@ -59,56 +66,67 @@ async function getLibelle(d:ext_ | pg_ext | _to | pg_boq){
 }
 
 export class Taferie {
-  static async cancelConsommation(id_conso:number, cancel:boolean){
+
+  static async cancelConsommation(id_conso:number, cancel:boolean):Promise<{success:boolean, message:string}>{
     const conso = await prisma.consommations.findFirst({where:{id_conso:id_conso}});
 
-    if(!conso || conso.annule == cancel) return null;
+    if(!conso || conso.annule == cancel) return {success:false, message:'an error occured'};
     const factor = cancel ? 1 : -1;
 
-    switch(conso.type){
-      case "ext_boq":
-        new Boquette(conso.to!).addMoney(conso.montant * factor);
-        break;
-      case "ext_fams":
-        new Fams(conso.to!).addMoney(conso.montant * factor);
-        break;
-      case "pg_ext":
-        new Pg(conso.from!).removeMoney(conso.montant * factor);
-        break;
-      
-      case "pg_boq":
-        if(conso.to == BOQUETTES["Foy's"]){
-          let [hard, soft] = Math.abs(conso.montant).toFixed(3).split('.').map(e => Math.sign(conso.montant) * parseInt(e) / 100);
+    try {
+      return await prisma.$transaction(async(p)=>{
+        switch(conso.type){
+          case "ext_boq":
+            new Boquette(conso.to!).addMoney(conso.montant * factor, p);
+            break;
+          case "ext_fams":
+            new Fams(conso.to!).addMoney(conso.montant * factor, p);
+            break;
+          case "pg_ext":
+            new Pg(conso.from!).removeMoney(conso.montant * factor, p);
+            break;
           
-          await new Boquette(BOQUETTES["Foy's"]).addMoney(soft * factor);
-          await new Boquette(BOQUETTES["Satan"]).addMoney(hard * factor);
+          case "pg_boq":
+            if(conso.to == BOQUETTES["Foy's"]){
+              let [hard, soft] = Math.abs(conso.montant).toFixed(3).split('.').map(e => Math.sign(conso.montant) * parseInt(e) / 100);
+              
+              await new Boquette(BOQUETTES["Foy's"]).addMoney(soft * factor, p);
+              await new Boquette(BOQUETTES["Satan"]).addMoney(hard * factor, p);
+    
+              new Pg(conso.from!).removeMoney((soft + hard) * factor, p);
+            }  else {
+              new Boquette(conso.to!).addMoney(conso.montant * factor, p);
+              new Pg(conso.from!).removeMoney(conso.montant * factor, p);
+            }
+            break;
+          case "pg_fams":
+            new Pg(conso.from!).removeMoney(conso.montant * factor, p);
+            new Fams(conso.to!).addMoney(conso.montant * factor, p);
+            break;
+          case "pg_pg":
+            new Pg(conso.from!).removeMoney(conso.montant * factor, p);
+            const consoBis = await p.consommations.findFirst({where:{id_conso:conso.to!}});
+            if(!consoBis || consoBis.annule == true || conso.libelle != consoBis.libelle) throw new Error();
+            new Pg(consoBis.from!).addMoney(conso.montant * factor, p);
 
-          new Pg(conso.from!).removeMoney((soft + hard) * factor);
-        }  else {
-          new Boquette(conso.to!).addMoney(conso.montant * factor);
-          new Pg(conso.from!).removeMoney(conso.montant * factor);
+            await p.consommations.update({where:{id_conso:consoBis.id_conso},data:{annule:cancel}});
+            break;
         }
-        break;
-      case "pg_fams":
-        new Pg(conso.from!).removeMoney(conso.montant * factor);
-        new Fams(conso.to!).addMoney(conso.montant * factor);
-        break;
-      case "pg_pg":
-        new Pg(conso.from!).removeMoney(conso.montant * factor);
-        const consoBis = await prisma.consommations.findFirst({where:{id_conso:conso.to??0}});
-        if(!consoBis || consoBis.annule == true) return null;
-        new Pg(consoBis.from!).removeMoney(conso.montant * factor);
-        await prisma.consommations.update({where:{id_conso},data:{annule:cancel}});
-        break;
-    }
+    
+        await p.consommations.update({where:{id_conso},data:{annule:cancel}});
 
-    await prisma.consommations.update({where:{id_conso},data:{annule:cancel}});
+        return {success:true, message:`Consommation ${cancel ?'canceled':'uncanceled'}`};
+      });
+    } catch(e){
+      return {success:false, message:'an error occured'}
+    }
   }
 
-  static async rhopse(d:pg_ext | ext_ | _to | pg_boq){
+  static async rhopse(d:pg_ext | ext_ | _to | pg_boq):Promise<{success:boolean, message:string}>{
+    console.log(d)
     let libelle = await getLibelle(d);
 
-    if(libelle == null) return;
+    if(libelle == null) return {success:false, message:"an error occured"};
     let solde = await getSolde(d.type, 'from' in d ? d.from : d.to);
 
     let montant:number;
@@ -130,67 +148,94 @@ export class Taferie {
       const pg = await new Pg(d.from).pg();
       if(!pg.can_buy) return {success:false, message:`Ce pg ne peut pas acheter`}
     }
-
+    console.log(d, montant)
     const data:Prisma.consommationsCreateArgs['data'] = {
       type:d.type,
       from: "from" in d ? d.from : null,
       to: "to" in d ? d.to : null,
       libelle: libelle,
       montant: montant,
-      solde_apres:solde + montant,
+      solde_apres:-9999999999,
       date_conso:new Date(),
       solde_avant:solde,
       id_produit:d.type == "pg_boq" ? d.id_produit : null,
       quantite:d.type == "pg_boq" ? d.id_produit : null,
     }
 
-    const conso = await prisma.consommations.create({data});
+    try {
+      return await prisma.$transaction(async (p) => {
+        const conso = await p.consommations.create({data});
 
-    switch(d.type){
-      case "pg_pg":
-        const pg2 = await prisma.pg.findFirst({where:{id_pg:d.to}});
-        if(pg2 == null) return;
-        await new Pg(d.from).addMoney(data.montant);
-        await new Pg(pg2.id_pg).removeMoney(data.montant);
+        let solde_apres:number;
+        switch(d.type){
+          case "pg_pg":{
+            const pg2 = await p.pg.findFirst({where:{id_pg:d.to}});
+            if(pg2 == null) throw new Error();
+            
+            const data2 = JSON.parse(JSON.stringify(data)) as typeof data;
+            data2.from = pg2.id_pg;
+            data2.montant = -conso.montant;
+            data2.solde_avant = pg2.solde;
+            data2.solde_apres = pg2.solde - conso.montant;
+            const conso2 = await p.consommations.create({data:data2});
+            
 
-        data.from = d.to;
-        data.montant = -d.montant;
-        data.solde_apres = pg2.solde - d.montant;
-        const conso2 = await prisma.consommations.create({data});
-        await prisma.consommations.update({where:{id_conso:conso.id_conso}, data:{to:conso2.id_conso}});
-        await prisma.consommations.update({where:{id_conso:conso2.id_conso}, data:{to:conso.id_conso}});
+            const pg1_after = await new Pg(d.from).addMoney(data.montant, p);
+            const pg2_after = await new Pg(d.to).removeMoney(data.montant, p);
+            solde_apres = pg1_after.solde;
 
-        break;
-      case "ext_boq":
-        await new Boquette(d.to).removeMoney(data.montant);
-        break;
-      case "ext_fams":
-        await new Fams(d.to).removeMoney(data.montant);
-        break;
-      case "pg_boq":
-        // specific foys
-        if(d.to == BOQUETTES["Foy's"]){
-          let [hard, soft] = Math.abs(montant).toFixed(3).split('.').map(e => Math.sign(montant) * parseInt(e) / 100);
-
-          await new Boquette(BOQUETTES["Foy's"]).removeMoney(soft);
-          await new Boquette(BOQUETTES["Satan"]).removeMoney(hard);
-          await new Pg(d.from).addMoney(soft + hard);
-        }  else {
-          await new Boquette(d.to).removeMoney(data.montant);
-          await new Pg(d.from).addMoney(data.montant);
+            await p.consommations.update({where:{id_conso:conso.id_conso}, data:{to:conso2.id_conso}});
+            await p.consommations.update({where:{id_conso:conso2.id_conso}, data:{to:conso.id_conso, solde_apres:pg2_after.solde}});
+            break;
+          }
+          case "ext_boq":{
+            const boq_after = await new Boquette(d.to).removeMoney(data.montant, p);
+            solde_apres = boq_after.solde;
+            break;
+          }
+          case "ext_fams":{
+            const fams_after = await new Fams(d.to).removeMoney(data.montant, p);
+            solde_apres = fams_after.solde;
+            break;
+          }
+          case "pg_boq":{
+            // specific foys
+            if(d.to == BOQUETTES["Foy's"]){
+              let [hard, soft] = Math.abs(montant).toFixed(3).split('.').map(e => Math.sign(montant) * parseInt(e) / 100);
+    
+              await new Boquette(BOQUETTES["Foy's"]).removeMoney(soft, p);
+              await new Boquette(BOQUETTES["Satan"]).removeMoney(hard, p);
+              const pg_after = await new Pg(d.from).addMoney(soft + hard, p);
+              solde_apres = pg_after.solde
+            }  else {
+              await new Boquette(d.to).removeMoney(data.montant, p);
+              const pg_after = await new Pg(d.from).addMoney(data.montant, p);
+              solde_apres = pg_after.solde
+            }
+  
+            break;    
+          }
+          case "pg_ext":{
+            const pg_after = await new Pg(d.from).addMoney(data.montant, p);
+            solde_apres = pg_after.solde
+            break;
+          }
+          case "pg_fams":{
+            const pg_after = await new Pg(d.from).addMoney(data.montant, p);
+            await new Fams(d.to).removeMoney(data.montant, p);
+            solde_apres = pg_after.solde;
+            break;
+          }
         }
+        await p.consommations.update({where:{id_conso:conso.id_conso}, data:{solde_apres}});
+        sendPush('Rhopse', `${libelle} - ${montant}`);
 
-        break;
-      case "pg_ext":
-        await new Pg(d.from).addMoney(data.montant);
-        break;
-      case "pg_fams":
-        await new Pg(d.from).addMoney(data.montant);
-        await new Fams(d.to).removeMoney(data.montant);
-        break;
+        return {success:true, message:`Rhopse effectuée: ${data.libelle}`}
+      });
+    } catch(e){
+      console.log(e)
+      return {success:false, message: 'Erreur'};
     }
-    sendPush('Rhopse', `${libelle} - ${montant}`);
-    return {success:true, message:`Rhopse effectuée: ${data.libelle}`}
   }
 
   static async consommations(types:({type:consommations_type, from:number}|{type:consommations_type, to:number})[]){

@@ -5,7 +5,7 @@
 </script>
 
 
-<div class="flex justify-center mt-20 w-full">  
+<div class="flex justify-center mt-20 w-full p-2">  
   {#if data.USER.pg.can_buy}
   <SectionCard title="Rhopses">
     <div class="p-3 rounded-md bg-amber-100">
@@ -21,8 +21,8 @@
   </SectionCard>
   {:else}
   <SectionCard title="Rhopses">
-    <div class="p-3 rounded-md bg-amber-100">
-      <p class="text-black">Tu es en negats depuis trop longtemps !</p>
+    <div class="p-3 rounded-md variant-filled-warning">
+      <p class="text-black text-center">Tu es trop en negats ou depuis trop longtemps.</p>
     </div>
   </SectionCard>
   {/if}

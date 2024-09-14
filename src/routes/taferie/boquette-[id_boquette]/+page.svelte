@@ -4,6 +4,7 @@
   import Actions from "$lib/components/boquette/Actions.svelte";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
+    import Icon from "@iconify/svelte";
 
   export let data;
   export let form:{search:typeof data.search, success:boolean, message:string};
@@ -21,10 +22,10 @@
     <GestionBrousouffs/>
   </BoquetteProfile>
 
-  <Actions boquette={data.boquette} categories={data.categories} products={data.produits} pgs={null}>
-    <button>
-      <a href="/taferie/boquette-{data.boquette.id_boquette}/editproducts">éditer produits</a>
-    </button>
+  <Actions boquette={data.boquette} categories={data.categories} produits={data.produits} pgs={null}>
+    <a href="/taferie/boquette-{data.boquette.id_boquette}/editproducts">
+      <Icon icon="mdi:edit"/>
+    </a>
   </Actions>
   
   {#await currData.consommations}

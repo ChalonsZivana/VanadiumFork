@@ -94,9 +94,9 @@
 
       
     </svelte:fragment>
-
+<!-- Vanadium, Petibom, Tartopum -->
     <section>
-      <a href="/" class="font-zagoth h1">Vanadium</a>
+      <a href="/" class="font-zagoth h1">Tartopum</a>
     </section>
 
 		<svelte:fragment slot="trail">

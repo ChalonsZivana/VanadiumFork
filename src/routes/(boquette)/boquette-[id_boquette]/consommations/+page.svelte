@@ -1,14 +1,15 @@
 <script lang="ts">
   import type { boquettes } from '@prisma/client'
   import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
+  import type{consommationsSearch} from '$lib/components/search/consommations/fullsearch.js'
 
   export let data;
 
-  export let form:{search:typeof data.search};
+  export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>};
 
-  let currData:typeof data.search;
-  $:currData = form ? form.search : data.search;  
-  $: nombrePages = Math.ceil(currData.totalCons / 100);
+  let currData:typeof form.search;
+  $:currData = form?.search ?? currData; 
+  $: nombrePages = currData ? Math.ceil(currData.totalCons / 100) : undefined;
 
   let boquette:boquettes;
   type boqSettingsText = {'Nom':string,'Nom Simple':string,'Nouveau Mot de passe':string,'Confirmation mot de passe :':string};
@@ -34,17 +35,17 @@
 </script>
 
 <div class="w-11/12 mt-5">
-  {#await currData.consommations}
+  {#await currData?.consommations}
     Chargement Historique Général
   {:then consommations} 
     <FullSearch 
     fromOption={true}
     cancelOption={true}
     title="< Historique Général >" 
-    totalCons={currData.totalCons}
+    totalCons={currData?.totalCons ??  undefined}
     nombrePages={nombrePages}
     consommations={consommations}
-    page={currData.page}
+    page={currData?.page}
     types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}/>
   {/await}
 </div>

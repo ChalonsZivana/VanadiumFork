@@ -32,6 +32,7 @@
         return 'PG';
     }
   }
+
   let headers = ['Date','De','Vers','Libellé','Montant'];
   if(cancelOption) headers.push('')
 
@@ -86,7 +87,9 @@
             </td>
             {#if cancelOption}
             <td class="flex justify-center items-center">
-              <AddRemoveConso id={conso.id_conso} annule={conso.annule}/>
+              {#key conso.id_conso}
+                <AddRemoveConso bind:id={conso.id_conso} bind:annule={conso.annule}/>
+              {/key}
             </td>
           {/if}
           </tr>

@@ -122,7 +122,7 @@ export class Taferie {
     }
   }
 
-  static async rhopse(d:pg_ext | ext_ | _to | pg_boq):Promise<{success:boolean, message:string}>{
+  static async rhopse(d:pg_ext | ext_ | _to | pg_boq, authorize_all=false):Promise<{success:boolean, message:string}>{
     console.log(d)
     let libelle = await getLibelle(d);
 
@@ -146,7 +146,7 @@ export class Taferie {
 
     if((d.type == "pg_ext" || d.type == "pg_fams" || d.type == "pg_boq" || d.type == "pg_pg") && montant < 0){
       const pg = await new Pg(d.from).pg();
-      if(!pg.can_buy) return {success:false, message:`Ce pg ne peut pas acheter`}
+      if(!pg.can_buy && !authorize_all) return {success:false, message:`Ce pg ne peut pas acheter`}
     }
     console.log(d, montant)
     const data:Prisma.consommationsCreateArgs['data'] = {

@@ -11,7 +11,7 @@
 
 <div class="w-11/12 pt-5">
     {#await currData.pgs}
-  Chargement PGs
+      Chargement PGs
     {:then pgs} 
       <FullSearch 
       title="< PGs >"       

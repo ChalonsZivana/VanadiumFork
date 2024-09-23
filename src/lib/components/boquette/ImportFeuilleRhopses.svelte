@@ -3,8 +3,8 @@
   import SubmitDialog from '../miscellaneous/SubmitDialog.svelte';
   import CustomTable from '../miscellaneous/CustomTable.svelte';
   import ToggleSectionCard from '../ToggleSectionCard.svelte';
-    import type { pg } from '@prisma/client';
-    import Icon from '@iconify/svelte';
+  import type { pg } from '@prisma/client';
+  import Icon from '@iconify/svelte';
 
   export let id_boquette:number;
   export let pgs:Partial<pg>[];

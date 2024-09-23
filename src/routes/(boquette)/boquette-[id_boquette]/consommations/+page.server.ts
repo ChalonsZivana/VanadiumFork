@@ -6,6 +6,7 @@ import type { consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 
 export const load = async ({params})=>{
+  console.log("load")
   const id_boquette = parseInt(params.id_boquette);
   if(isNaN(id_boquette)) throw error(404);
   
@@ -14,11 +15,7 @@ export const load = async ({params})=>{
     select:{nums:true,proms:true, bucque:true, id_pg:true}
   })
   return { 
-    pgs,
-    search:await consommationsSearch(
-      [{type:'ext_boq', to:id_boquette},{type:'pg_boq', to:id_boquette}], 
-      { consoType:'',consoYear:NaN,sortDir:'desc',sortType:'date',nums:NaN,proms:NaN, page:1}
-    )
+    pgs
   };
 }
 
@@ -41,14 +38,16 @@ export const actions = {
       )
     }
   },
-  cancel:async({request, params})=>{
+  cancel:async({request, params, url})=>{
+    console.log(url.searchParams)
+    
     const id_boquette = parseInt(params.id_boquette);
     if(isNaN(id_boquette)) throw error(400);
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
-    await new Boquette(id_boquette).cancelConsommation(id, true);
+    //await new Boquette(id_boquette).cancelConsommation(id, true);
   },
   uncancel:async({request, params})=>{
     const id_boquette = parseInt(params.id_boquette);

@@ -4,15 +4,16 @@
   import Actions from "$lib/components/boquette/Actions.svelte";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
-    import Icon from "@iconify/svelte";
+  import Icon from "@iconify/svelte";
+  import type{consommationsSearch} from '$lib/components/search/consommations/fullsearch.js'
 
   export let data;
-  export let form:{search:typeof data.search, success:boolean, message:string};
-  
+  export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>, success:boolean, message:string};
 
-  let currData:typeof data.search;
-  $:currData = form ? form.search : data.search;  
-  $: nombrePages = Math.ceil(currData.totalCons / 100);
+
+  let currData:typeof form.search | null;
+  $:currData = form ? form.search : null;  
+  $: nombrePages = currData ? Math.ceil(currData.totalCons / 100):NaN;
 </script>
 
 <Popup bind:form={form}/>
@@ -27,18 +28,20 @@
       <Icon icon="mdi:edit"/>
     </a>
   </Actions>
+
+    {#await currData?.consommations}
+      Chargement Historique Général
+    {:then consommations} 
+      <FullSearch 
+      fromOption={true}
+      cancelOption={true}
+      title="< Historique Général >" 
+      totalCons={currData?.totalCons ?? undefined}
+      nombrePages={nombrePages}
+      consommations={consommations}
+      page={currData?.page}
+      types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}/>
+    {/await}
   
-  {#await currData.consommations}
-    Chargement Historique Général
-  {:then consommations} 
-    <FullSearch 
-    fromOption={true}
-    cancelOption={true}
-    title="< Historique Général >" 
-    totalCons={currData.totalCons}
-    nombrePages={nombrePages}
-    consommations={consommations}
-    page={currData.page}
-    types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}/>
-  {/await}
+ 
 </div>

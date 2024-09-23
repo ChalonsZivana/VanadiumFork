@@ -89,8 +89,6 @@
       </div>
     {:else}
     <ConsoTable {fromOption} consommations={consommations} cancelOption={cancelOption}/>
-
     {/if}
-    
   </div>
 </SectionCard>

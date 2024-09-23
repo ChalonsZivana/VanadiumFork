@@ -1,12 +1,11 @@
 <script lang="ts">
   import {enhance} from "$app/forms"
     import Icon from "@iconify/svelte";
-  import AddSquare from "../svgs/add-square.svelte";
-  import MinusSquare from "../svgs/minus-square.svelte";
   export let id:number;
   export let annule:boolean|null|number;
-
   let myId = id;
+
+
 </script>
 
 

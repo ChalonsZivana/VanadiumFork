@@ -13,7 +13,7 @@
 
   let currData:typeof form.search | null;
   $:currData = form ? form.search: null;  
-  $: nombrePages =  Math.ceil((currData?.totalCons ?? 0) / 100);
+  $: nombrePages = currData ? Math.ceil(currData.totalCons / 100) : undefined;
 
 
   function copyEmail(email:string){
@@ -54,22 +54,23 @@
 </div>
 
 <div class="w-11/12 mt-5">
-  {#await currData?.consommations}
-    Chargement Historique Général
-  {:then consommations} 
-    <FullSearch 
-    fromOption={true}
-    cancelOption={false}
-    title="< Historique Général >" 
-    totalCons={currData?.totalCons ?? 0}
-    nombrePages={nombrePages}
-    consommations={consommations ?? []}
-    page={currData?.page ?? 1}
-    types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}>
-    <svelte:fragment slot="proms">
-        <input type="hidden" name="proms" value={data.proms}>
-        <input disabled class="w-32" type="number" value={data.proms}>
-    </svelte:fragment>
-  </FullSearch>
-  {/await}
+    {#await currData?.consommations}
+      Chargement Historique Général
+    {:then consommations} 
+      <FullSearch 
+      fromOption={true}
+      cancelOption={false}
+      title="< Historique Général >" 
+      totalCons={currData?.totalCons ?? undefined}
+      nombrePages={nombrePages}
+      consommations={consommations ?? []}
+      page={currData?.page ?? 1}
+      types={{"Opérations PG":"pg_boq", "Opérations Taferie":"ext_boq"}}>
+      <svelte:fragment slot="proms">
+          <input type="hidden" name="proms" value={data.proms}>
+          <input disabled class="w-32" type="number" value={data.proms}>
+      </svelte:fragment>
+    </FullSearch>
+    {/await}
+
 </div>

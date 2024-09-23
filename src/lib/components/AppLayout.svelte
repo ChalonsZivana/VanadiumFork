@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { AppBar } from "@skeletonlabs/skeleton";
-	import Icon from "@iconify/svelte";
+	  import { AppBar } from "@skeletonlabs/skeleton";
+    import Icon from '@iconify/svelte';
     import { page } from '$app/stores';
     import { TabGroup, TabAnchor } from '@skeletonlabs/skeleton';
     import LogalSoce from "$lib/components/svgs/logal-soce.svelte";
@@ -47,6 +47,7 @@
     147:"mdi:home-off",
     193:"mdi:food",
     195:"mdi:pizza",
+    196:"mdi:egg",
     197:"mdi:salt"
   }
 

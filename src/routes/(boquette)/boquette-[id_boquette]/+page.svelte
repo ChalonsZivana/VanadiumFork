@@ -5,10 +5,7 @@
   import Logout from '$lib/components/svgs/logout.svelte';
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
-  import { exporterProduits, generateExcel} from "$lib/components/boquette/ExportImportFeuilleRhopses";
-  import Icon from "@iconify/svelte";
-    import ImportFeuilleRhopses from "$lib/components/boquette/ImportFeuilleRhopses.svelte";
-    import Actions from "$lib/components/boquette/Actions.svelte";
+  import Actions from "$lib/components/boquette/Actions.svelte";
   
   export let data;
   export let form:{success:boolean, message:string};

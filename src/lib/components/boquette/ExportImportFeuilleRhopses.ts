@@ -65,7 +65,7 @@ export async function generateExcel(products:produits[]) {
     error: "Ce n'est pas un produit valide.",
     errorTitle: 'Produit invalide',
 
-    formulae: ['Produits!A2:A9999'],
+    formulae: ['Produits!$A$2:$A$9999'],
     showErrorMessage: true,
     type: 'list',
   };

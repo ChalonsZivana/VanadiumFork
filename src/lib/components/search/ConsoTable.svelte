@@ -44,7 +44,7 @@
 </script>
 
 <!-- Responsive Container (recommended) -->
-<div class="table-container w-full flex-grow mb-20">
+<div class="table-container w-full flex-grow">
   <!-- Native Table Element -->
   <table class="table table-hover">
     <thead>

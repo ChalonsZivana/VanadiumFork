@@ -130,7 +130,7 @@
 					</Tab>
 
 					{#await data.consommations}
-						<p>test</p>
+						<p>Chargement...</p>
 					{:then consommations} 
 					<ConsoTable fromOption={false} cancelOption={false} {consommations}/>
 

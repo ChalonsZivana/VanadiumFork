@@ -8,6 +8,7 @@
   import UserProfile from "$lib/components/pg/UserProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
+    import ConsoTable from "$lib/components/search/ConsoTable.svelte";
 
   export let data;
   export let form:{success:boolean, message:string};
@@ -45,42 +46,15 @@
     </div>
   </UserProfile>
   {/key}
-  
 
-  <SectionCard title="Historique rhopses">
-    <div class="w-full h-96 overflow-x-hidden no-scrollbar overflow-y-scroll">
-      
-      {#await data.consommations}
-        Chargement consommations...
-      {:then consommations} 
-        <CustomTable
-        title=''
-        headers={['Date','Libellé','Montant','']}
-        elements={consommations}>
-        <svelte:fragment slot="tbody" let:e>
-          {#key e}
-          <tr class={e.annule ? 'line-through decoration-2 decoration-black':''}>
-            <td>
-              <p>{e.date_conso.toLocaleDateString()}</p>
-              <p>{e.date_conso.toLocaleTimeString()}</p>
-            </td>
-            <td class="text-wrap">{e.libelle}</td>
-            <td>
-              <p class="text-nowrap">AP. {e.solde_apres}€</p>
-              <MoneyColor auto={e.montant} className="text-sm font-bold"/>
-              <p>AV. {e.solde_avant}€</p>
-            </td>
-            <td>
-              <AddRemoveConso id={e.id_conso} annule={e.annule}/>
-            </td>
-          </tr>
-          {/key}
-        </svelte:fragment>
-      </CustomTable>
+  <div class="h-96 flex flex-col items-center variant-filled-primary p-1">
+    {#await data.consommations}
+      <p>Chargement...</p>
+    {:then consommations} 
+    <ConsoTable fromOption={false} cancelOption={true} {consommations}/>
+
     {/await}
-      
-    </div>
-  </SectionCard>
+  </div>
 </div>
 
 

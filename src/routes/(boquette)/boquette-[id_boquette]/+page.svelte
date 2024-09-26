@@ -9,6 +9,7 @@
   
   export let data;
   export let form:{success:boolean, message:string};
+  export let editDialog:HTMLDialogElement;
 
   let boquette:boquettes;
   type boqSettingsText = {'Nom':string,'Nom Simple':string,'Nouveau Mot de passe':string,'Confirmation mot de passe :':string};
@@ -22,6 +23,7 @@
     editInputCheck = {'Partie PG':boquette.partie_pg};     
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
+  
   function initPGEdit(boq:boquettes):boqSettingsText {
     return {
     'Nom':boq.nom ?? '',
@@ -86,7 +88,7 @@
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}
   
-  <Produits categories={data.categories} produits={data.produits}/>
+  <Produits editable={false} {editDialog} categories={data.categories} produits={data.produits}/>
 
     <!-- <CreerCategorieEtProduit categories={data.categories} id_boquette={data.id_boquette}/> -->
 </div>

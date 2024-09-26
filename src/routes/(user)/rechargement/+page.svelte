@@ -133,12 +133,12 @@
         </label>
         <label class="w-full">
           <span>Proms</span>
-          <input required class="input p-1 text-ce$" type="number" min="220"  name="proms">
+          <input required class="input p-1 text-center" type="number" min="220"  name="proms">
         </label>
       </div>
       <label class="w-full">
         <span>Montant</span>
-        <input required class="input" type="number" min="0"  name="montant">
+        <input required class="input" type="number" min="0" step="0.01"  name="montant">
       </label>
       <label class="w-full">
         <span>Libelle</span>

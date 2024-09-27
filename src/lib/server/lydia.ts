@@ -42,6 +42,7 @@ export class LydiaManager {
       keylydia:lydiaData.data.request_uuid,
       montant:varData.montant,
       date:new Date(),
+      status:0
     }
     await prisma.rechargements.create({data:createData});
     return {success:true, message: 'Demande envoyée, veuillez l\'accepter dans les 120s'};
@@ -68,16 +69,17 @@ export class LydiaManager {
         });
 
         const lydiaData = LydiaVerifyResponseSchema.safeParse(await response.json());
+        console.log(lydiaData.data)
 
         if(!lydiaData.success || lydiaData.data.state == "0") return {success:false, message:'En attente de payement...'}
-
+        console.log(lydiaData.data)
         if(lydiaData.data.state == '1'){
-          const d = await prisma.rechargements.update({where:{id_rechargement}, data:{status:1}});
+          const d = await prisma.rechargements.update({where:{id_rechargement, status:0}, data:{status:1}});
           await Taferie.rhopse({type:'pg_ext', from:d.id_pg, libelle:"Rechargement Lydia", montant:d.montant});
-          return {success:true, message:`${d.montant}€ ont été ajouté à votre sole.`}
+          return {success:true, message:`${d.montant}€ ont été ajouté à votre sole.`};
         } else {
           await prisma.rechargements.update({where:{id_rechargement}, data:{status:-1}});
-          return {success:false, message:'Vous avez refusé le payement.'}
+          return {success:false, message:'Vous avez refusé le payement.'};
         }
     } catch (error) {
         console.error('Error verifying Lydia demand:', error);

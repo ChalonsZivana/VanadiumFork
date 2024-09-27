@@ -24,6 +24,11 @@ export class LydiaManager {
       expire_time: '120'
   });
 
+  const test = await prisma.rechargements.findMany({where:{status:0, id_pg}});
+  if(test.length != 0){
+    return {'error':'Nous avons rencontré un problème, contactez un admin'}
+  }
+
   try {
     const response = await fetch('https://lydia-app.com/api/request/do.json', {
         method: 'POST',
@@ -58,7 +63,7 @@ export class LydiaManager {
         request_uuid: uuid,
         vendor_token: vendorKey
     });
-
+    console.log("yo")
     try {
         const response = await fetch('https://lydia-app.com/api/request/state.json', {
             method: 'POST',
@@ -69,16 +74,15 @@ export class LydiaManager {
         });
 
         const lydiaData = LydiaVerifyResponseSchema.safeParse(await response.json());
-        console.log(lydiaData.data)
 
         if(!lydiaData.success || lydiaData.data.state == "0") return {success:false, message:'En attente de payement...'}
-        console.log(lydiaData.data)
+
         if(lydiaData.data.state == '1'){
-          const d = await prisma.rechargements.update({where:{id_rechargement, status:0}, data:{status:1}});
+          const d = await prisma.rechargements.update({where:{id_rechargement,keylydia:uuid, status:0}, data:{status:1}});
           await Taferie.rhopse({type:'pg_ext', from:d.id_pg, libelle:"Rechargement Lydia", montant:d.montant});
           return {success:true, message:`${d.montant}€ ont été ajouté à votre sole.`};
         } else {
-          await prisma.rechargements.update({where:{id_rechargement}, data:{status:-1}});
+          await prisma.rechargements.update({where:{id_rechargement, status:0}, data:{status:-1}});
           return {success:false, message:'Vous avez refusé le payement.'};
         }
     } catch (error) {

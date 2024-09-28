@@ -41,6 +41,7 @@
     4:"mdi:whatshot",
     7:"healthicons:alcohol-cessation",
     8:"mdi:tshirt-crew",
+    14:"game-icons:tacos",
     17:"mdi:chips",
     20:"tabler:coin-euro",
     143:"mdi:glass-cocktail",

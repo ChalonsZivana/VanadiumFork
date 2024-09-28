@@ -5,6 +5,7 @@
   import ToggleSectionCard from '../ToggleSectionCard.svelte';
   import type { pg } from '@prisma/client';
   import Icon from '@iconify/svelte';
+    import { onMount } from 'svelte';
 
   export let id_boquette:number;
   export let pgs:Partial<pg>[];
@@ -17,6 +18,13 @@
   };
   let fileInputRhopse:HTMLInputElement;
   let rhopses: { [key: string]: number[] } = {};
+
+  onMount(()=>{
+    dialog.addEventListener("close",()=>{
+      errors = {fileError:null, rhopsesError:[]};
+      rhopses = {};
+    })
+  })
 
   const importExcel = async () => {
     const file = fileInputRhopse.files?.item(0);
@@ -41,7 +49,13 @@
       let [quantite, id_produit] = [parseInt(e[3]), parseInt(e[4])];
 
       quantite = isNaN(quantite) ? 1 : quantite
-      const pg = pgs.find(e => e.nums == nums && e.proms == proms);
+
+      let rhopsePourUnAncien = null;
+      let pg = pgs.find(e => e.nums == nums && e.proms == proms);
+      if(pg == undefined){
+        pg = pgs.filter(e => e.nums == nums)[0];
+        rhopsePourUnAncien = numsChproms;
+      }
 
       if(isNaN(id_produit) || quantite <= 0 || pg == null) {
         const err:[string, boolean][] = [
@@ -58,13 +72,15 @@
       if(aggregateKey in rhopses){
         rhopses[aggregateKey][2] += quantite;
       } else {
-        rhopses[aggregateKey] = [pg.id_pg, id_produit, quantite, numsChproms, produit]
+        rhopses[aggregateKey] = [pg.id_pg, id_produit, quantite, numsChproms, produit, rhopsePourUnAncien]
       }
     });
 
     errors = errors;
-    fileInputRhopse.value = ''
+    fileInputRhopse.value = '';
   }
+
+  
 </script>
 
 
@@ -80,7 +96,7 @@
 <SubmitDialog bind:dialog={dialog} formAction={`/boquette-${id_boquette}?/import_rhopse`} customEnhance={({formData, cancel})=>{
     if(errors.rhopsesError.length > 0) return cancel();
     
-    formData.set('produits', JSON.stringify(Object.values(rhopses).map(e => [e[0],e[1],e[2]])));
+    formData.set('produits', JSON.stringify(Object.values(rhopses).map(e => [e[0],e[1],e[2], e[5]])));
   }} title="Importer Rhopses"> 
     <div class="mt-5"></div>
     <div class="flex flex-col gap-5">

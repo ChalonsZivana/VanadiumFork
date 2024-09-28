@@ -112,6 +112,8 @@ model pg {
   refresh                    refresh[]
   consommationsFromPg   consommations[] @relation("consommation_from_pg", map: "consommation_from_pg")
   consommationsToPg     consommations[] @relation("consommation_to_pg", map: "consommation_to_pg")
+
+  @@unique([nums, tabagns, proms])
 }
 
 model photos {
@@ -127,6 +129,7 @@ model produits {
   nom          String 
   prix         Float  
   libreservice Boolean    @default(false)
+  prix2        Float      @default(0)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

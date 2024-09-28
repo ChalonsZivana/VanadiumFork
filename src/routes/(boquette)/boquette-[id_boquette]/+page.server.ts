@@ -19,16 +19,16 @@ export const actions = {
     const d = Object.fromEntries(await request.formData());
     const data = ImportRhopseSchema.safeParse(d);
     if(!data.success) return fail(400, {success:false, message:"Something went wrong"})
-
-    const results = [];
-    for(let [id_pg, id_produit, quantite] of data.data.produits){
+      console.log(data)
+    const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = [];
+    for(let [id_pg, id_produit, quantite, rhopsePourUnAncien] of data.data.produits){
       const conso = await Taferie.rhopse({
         type:'pg_boq',
         from:id_pg,
         to:id_boquette,
         id_produit:id_produit,
         quantite:quantite,
-        rhopse_ancien:null,
+        rhopse_ancien:rhopsePourUnAncien,
       }, true);
       results.push(conso);
     }

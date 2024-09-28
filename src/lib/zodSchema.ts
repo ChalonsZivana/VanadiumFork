@@ -26,7 +26,7 @@ export const RhopseSchema  = z.object({
 })
 
 export const ImportRhopseSchema  = z.object({
-  produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(), z.number(), z.number()])).safeParse(e).success),
+  produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(), z.number(), z.number(), z.union([z.string(),z.null()])])).safeParse(e).success),
 })
 
 
@@ -116,28 +116,18 @@ export const StatisticsSchema  = z.object({
 
 export const AddProductSchema = z.object({
   nom:z.string().min(1),
-  id_categorie:z.string(),
+  id_categorie:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
   nom_categorie:z.string().min(1).optional(),
-  prix:z.string()
-}).transform(
-  data => ({
-    ...data,
-    id_categorie: parseInt(data.id_categorie),
-    prix:parseFloat(data.prix)
-  })
-).refine(data => {
-  if('nom_categorie' in data){
-    return !isNaN(data.prix)
-  } else {
-    return !isNaN(data.prix) && !isNaN(data.id_categorie)
-  }
-})
+  prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0),
+  prix2:z.string().optional().default("0").transform(e => parseFloat(e)).refine(e => e >= 0),
+});
 
 export const EditProductSchema = z.object({
   id_categorie:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
   nom:z.string().min(1),
   id_produit:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
-  prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0)
+  prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0),
+  prix2:z.string().optional().default("0").transform(e => parseFloat(e)).refine(e => e >= 0),
 });
 
 export const DeleteProductSchema = z.object({

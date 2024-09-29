@@ -1,10 +1,7 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
-  import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
   import Accept from "$lib/components/svgs/accept.svelte";
   import {enhance} from '$app/forms'
-  import SubmitDialog from "$lib/components/miscellaneous/SubmitDialog.svelte";
-  import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
     import Produits from "$lib/components/boquette/Produits.svelte";
 
   export let data;
@@ -37,12 +34,17 @@
         <p class="text-3xl font-zagoth">Prix</p>
         <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.01" min="0" name="prix">
       </label>
-      
+      {#if data.boquette.id_boquette == 7}
+        <label>
+          <p class="text-3xl font-zagoth">Prix2</p>
+          <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.01" min="0" name="prix2">
+        </label>
+      {/if}
       <button class="rounded-md bg-blue-600 self-center">
         <Accept className="size-10"/>
       </button>
     </form>
   </SectionCard>
 
-  <Produits categories={data.categories} produits={data.produits} editable={true} {editDialog}/>
+  <Produits id_boquette={data.boquette.id_boquette} categories={data.categories} produits={data.produits} editable={true} {editDialog}/>
 </div>

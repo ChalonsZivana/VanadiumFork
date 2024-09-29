@@ -88,7 +88,7 @@
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}
   
-  <Produits editable={false} {editDialog} categories={data.categories} produits={data.produits}/>
+  <Produits id_boquette={data.id_boquette} editable={false} {editDialog} categories={data.categories} produits={data.produits}/>
 
     <!-- <CreerCategorieEtProduit categories={data.categories} id_boquette={data.id_boquette}/> -->
 </div>

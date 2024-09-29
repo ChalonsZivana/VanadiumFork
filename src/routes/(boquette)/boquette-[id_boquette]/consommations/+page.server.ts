@@ -6,7 +6,6 @@ import type { consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 
 export const load = async ({params})=>{
-  console.log("load")
   const id_boquette = parseInt(params.id_boquette);
   if(isNaN(id_boquette)) throw error(404);
   
@@ -38,9 +37,7 @@ export const actions = {
       )
     }
   },
-  cancel:async({request, params, url})=>{
-    console.log(url.searchParams)
-    
+  cancel:async({request, params, url})=>{    
     const id_boquette = parseInt(params.id_boquette);
     if(isNaN(id_boquette)) throw error(400);
     const data = await request.formData();

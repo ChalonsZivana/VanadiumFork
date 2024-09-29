@@ -120,12 +120,14 @@ export class Boquette extends HasMoney {
       });
 
       await prisma.produits.create({
-        data:{nom:data.nom, id_categorie:cat.id_categorie, prix:data.prix, id_boquette:this.ID}
+        data:{
+          nom:data.nom, id_categorie:cat.id_categorie, prix:data.prix, id_boquette:this.ID, prix2:data.prix2 
+        }
       });
     } else {
       
       await prisma.produits.create({
-        data:{nom:data.nom, id_categorie:data.id_categorie, prix:data.prix, id_boquette:this.ID}
+        data:{nom:data.nom, id_categorie:data.id_categorie, prix:data.prix, id_boquette:this.ID, prix2:data.prix2}
       });
     }
   }
@@ -133,7 +135,7 @@ export class Boquette extends HasMoney {
   async editProduct(data:z.infer<typeof EditProductSchema>){
     await prisma.produits.updateMany({
       where:{id_produit:data.id_produit, id_boquette:this.ID},
-      data:{nom:data.nom, prix:data.prix, id_categorie:data.id_categorie}
+      data:{nom:data.nom, prix:data.prix, id_categorie:data.id_categorie, prix2:data.prix2}
     })
   }
 

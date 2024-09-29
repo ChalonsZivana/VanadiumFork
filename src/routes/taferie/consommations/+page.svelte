@@ -6,7 +6,7 @@
 
   let currData:typeof form.search | null;
   $:currData = form ? form.search: null;  
-  $: nombrePages = form && currData ? Math.ceil(currData.totalCons / 20) : undefined;
+  $: nombrePages = currData ? Math.ceil(currData.totalCons / 20) : undefined;
 
 </script>
 
@@ -21,7 +21,7 @@
   totalCons={currData?.totalCons ?? undefined}
   nombrePages={nombrePages}
   consommations={consos}
-  page={form.search.page}
+  page={form?.search.page}
   types={
     {"PG → Boquette":"pg_boq", 
     "EXT → Boq":"ext_boq",

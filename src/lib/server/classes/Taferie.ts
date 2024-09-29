@@ -1,4 +1,5 @@
 import prisma from "$lib/prisma";
+import { unescape } from "querystring";
 import { sendPush } from "../onesignal";
 import { Boquette, BOQUETTES } from "./Boquette";
 import { Fams } from "./Fams";
@@ -88,12 +89,12 @@ export class Taferie {
           
           case "pg_boq":
             if(conso.to == BOQUETTES["Foy's"]){
-              let [hard, soft] = Math.abs(conso.montant).toFixed(3).split('.').map(e => Math.sign(conso.montant) * parseInt(e) / 100);
-              
-              await new Boquette(BOQUETTES["Foy's"]).addMoney(soft * factor, p);
-              await new Boquette(BOQUETTES["Satan"]).addMoney(hard * factor, p);
+              const data = conso.data as {prix:number, prix2:number} | null;
+              if(data == null || !data.prix || !data.prix2) throw new Error('old consommation')
+              await new Boquette(BOQUETTES["Foy's"]).addMoney(data.prix * factor, p);
+              await new Boquette(BOQUETTES["Satan"]).addMoney(data.prix2 * factor, p);
     
-              new Pg(conso.from!).removeMoney((soft + hard) * factor, p);
+              new Pg(conso.from!).removeMoney((data.prix + data.prix2) * factor, p);
             }  else {
               new Boquette(conso.to!).addMoney(conso.montant * factor, p);
               new Pg(conso.from!).removeMoney(conso.montant * factor, p);
@@ -135,8 +136,10 @@ export class Taferie {
       if(prod == null) return {success:false, message:`erreur`}; 
       d.to = prod.id_boquette!;
       
-      if(Math.abs(d.quantite) > 100_000)return {success:false, message:`Quantité trop élevée`}
-      montant = -d.quantite * prod.prix;
+      if(Math.abs(d.quantite) > 100_000) return {success:false, message:`Quantité trop élevée`}
+
+      
+      montant = -d.quantite * (prod.prix + prod.prix2);
     } else {
       montant = d.montant;
     }
@@ -163,7 +166,7 @@ export class Taferie {
     }
 
     try {
-      return await prisma.$transaction(async (p) => {
+      const transaction = await prisma.$transaction(async (p) => {
         const conso = await p.consommations.create({data});
 
         let solde_apres:number;
@@ -199,20 +202,23 @@ export class Taferie {
             break;
           }
           case "pg_boq":{
+            const prod = await prisma.produits.findFirst({where:{id_produit:d.id_produit}});
+            if(prod == null) return {success:false, message:`erreur`}; 
             // specific foys
-            if(d.to == BOQUETTES["Foy's"]){
-              let [hard, soft] = Math.abs(montant).toFixed(3).split('.').map(e => Math.sign(montant) * parseInt(e) / 100);
-    
-              await new Boquette(BOQUETTES["Foy's"]).removeMoney(soft, p);
-              await new Boquette(BOQUETTES["Satan"]).removeMoney(hard, p);
-              const pg_after = await new Pg(d.from).addMoney(soft + hard, p);
+            if(d.to == BOQUETTES["Foy's"]){    
+              console.log(-(prod.prix + prod.prix2)*d.quantite);
+              await new Boquette(BOQUETTES["Foy's"]).removeMoney(-prod.prix*d.quantite, p);
+              await new Boquette(BOQUETTES["Satan"]).removeMoney(-prod.prix2*d.quantite, p);
+              const pg_after = await new Pg(d.from).addMoney(montant, p);
               solde_apres = pg_after.solde
+
+              await p.consommations.update({where:{id_conso:conso.id_conso}, data:{data:{prix:-prod.prix * d.quantite,prix2:-prod.prix2*d.quantite}}})
             }  else {
               await new Boquette(d.to).removeMoney(data.montant, p);
               const pg_after = await new Pg(d.from).addMoney(data.montant, p);
               solde_apres = pg_after.solde
             }
-  
+            
             break;    
           }
           case "pg_ext":{
@@ -229,9 +235,9 @@ export class Taferie {
         }
         await p.consommations.update({where:{id_conso:conso.id_conso}, data:{solde_apres}});
         sendPush('Rhopse', `${libelle} - ${montant}`);
-
-        return {success:true, message:`Rhopse effectuée: ${data.libelle}`}
       });
+
+      return {success:true, message:`Rhopse effectuée: ${data.libelle}`};
     } catch(e){
       return {success:false, message: 'Erreur'};
     }

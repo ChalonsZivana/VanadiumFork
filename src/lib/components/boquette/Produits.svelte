@@ -6,16 +6,17 @@
     import ValidationButton from "../miscellaneous/ValidationButton.svelte";
     import SubmitDialog from "../miscellaneous/SubmitDialog.svelte";
   
+  export let id_boquette:number;
   export let categories:categories[];
   export let produits:produits[];
   export let editDialog:HTMLDialogElement;
   export let editable:boolean;
 
+
+  
   const categories_id = categories.map(e=>e.id_categorie);
   
   
-  $: sansCategories = produits.filter(e=>!categories_id.includes(e.id_categorie));
-
   function getProducts(id_categorie:number){
     return produits.filter(e=>e.id_categorie==id_categorie);
   }
@@ -36,7 +37,6 @@
   }
 
   let productToEdit:typeof produits[0] | null = null;
-  let id_categorie:null|number = null;
 </script>
 
 
@@ -56,9 +56,11 @@
                   <td class="h-10">
                     <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.nom}</button>
                   </td>
-                  <td class="flex items-center w-20 h-10">
-                    <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€</button>
+                  <td class="flex items-center h-10">
+                    <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€  + {e.prix2}€ = {e.prix + e.prix2}€</button>
+                    
                   </td>
+                  
                 </tr>
             </svelte:fragment>
           </CustomTable>
@@ -71,6 +73,7 @@
 
 
 <SubmitDialog customEnhance={()=>{return ({update})=>update({reset:false})}} onsubmit={()=>toggleAnimate(productToEdit?.id_produit??0)} bind:dialog={editDialog} buttonText="Editer" formAction="?/editProduct" title="Edition Produit">
+  {#key productToEdit}
   {#if productToEdit}
 
   <div class="flex flex-col h-96 justify-around">
@@ -91,9 +94,16 @@
         <p class="text-2xl font-zagoth text-white">Prix du produit:</p>
         <input class="pl-2 h-10 w-full" type="number" step="0.01" min="0" name="prix" value={productToEdit.prix}>
       </label>
+      {#if id_boquette == 7}
+        <label>
+          <p class="text-2xl font-zagoth text-white">Prix2 du produit:</p>
+          <input class="pl-2 h-10 w-full" type="number" step="0.01" min="0" name="prix2" value={productToEdit.prix2}>
+        </label>
+      {/if}
 
       <ValidationButton formaction="?/deleteProduct" text="Supprimer produit"/>
   </div>
 
   {/if}
+  {/key}
 </SubmitDialog>

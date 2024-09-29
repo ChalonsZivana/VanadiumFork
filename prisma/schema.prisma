@@ -69,6 +69,7 @@ model consommations {
   libelle     String                 
   date_conso  DateTime               
   annule      Boolean                @default(false)
+  data        Json?
 
   from_pg        pg?                    @relation(fields: [from], references: [id_pg], map: "consommation_from_pg", name:"consommation_from_pg")
   to_pg          pg?                    @relation(fields: [to], references: [id_pg], map: "consommation_to_pg", name:"consommation_to_pg")

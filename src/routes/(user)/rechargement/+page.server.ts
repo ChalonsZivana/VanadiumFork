@@ -49,8 +49,10 @@ export const actions = {
   },
   verifyLydiaDemand: async({locals}) => {
     if(!locals.session.data.user) throw error(400);
-    const a = await prisma.rechargements.findFirst({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
-    if(a == null) throw error(400);
+    const rechargements = await prisma.rechargements.findMany({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
+    
+    if(rechargements.length != 1) return {'error':'Contactez un administrateur'};
+    const a = rechargements[0];
     const r = await LydiaManager.verifyLydiaDemand(a.id_rechargement, LYDIA_VENDOR_KEY, a.keylydia);
     return r;
   },
@@ -59,10 +61,8 @@ export const actions = {
 
 
     const d = Object.fromEntries(await request.formData());
-    console.log(d);
     const data = EnvoiBrouzoufsSchema.safeParse(d);
 
-    console.log(data)
     if(!data.success) return {success:false, message:'an error occured'};
 
     const pg = await prisma.pg.findFirst({where:{nums:data.data.nums, proms:data.data.proms}});

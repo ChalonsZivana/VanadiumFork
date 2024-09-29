@@ -44,7 +44,7 @@
           {#each selectedProducts as product, i}
             <div class="animate-scale-up p-1 bg-red-100 rounded-3xl overflow-clip">
               <p class="bg-red-100 text-center font-bold">
-                {product.nom}     ({product.prix}€)
+                {product.nom}     ({product.prix + product.prix2}€)
               </p>
               <div class="flex justify-center gap-1">
                 <button on:click={()=>increment(product.id_produit,-1)} class="w-10"><MinusSquare /></button>
@@ -68,7 +68,7 @@
       {#each products as product, i}
         <div>
           <p class="bg-red-100 p-1 text-center font-bold">
-            {product.nom}     ({product.prix}€)
+            {product.nom}     ({product.prix + product.prix2}€)
           </p>
           <div class="flex justify-center gap-1 bg-red-100">
             <button on:click={()=>increment(product.id_produit,-1)} class="w-10"><MinusSquare /></button>
@@ -89,7 +89,7 @@
         <div class="animate-scale-up divide-y-2 divide-black ">
           <div>
             <p class="bg-gray-300 text-center font-bold">
-              {product.nom}     ({product.prix}€)
+              {product.nom}     ({product.prix + product.prix2}€)
             </p>
             <div class="flex bg-slate-200 justify-center gap-1">
               {quantités[product.id_produit]}

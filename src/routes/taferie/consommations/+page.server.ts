@@ -25,7 +25,7 @@ export let actions = {
 
     if(data.data.consoType != 'Tout' && !(data.data.consoType in consommations_type)) throw error(400);
     const consoType = data.data.consoType as consommations_type | 'Tout';
-
+    console.log("data:",data)
     return {
       search:await consommationsSearch(
         consoType == 'Tout' ? null : [{type:consoType}], data.data

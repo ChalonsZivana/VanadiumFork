@@ -14,7 +14,7 @@
     wsProducts.getCell(1, 2).value = 'Prix';
     for(let [i,prod] of products.entries()){
       wsProducts.getCell(2 + i, 1).value = prod.nom;
-      wsProducts.getCell(2 + i, 2).value = prod.prix;
+      wsProducts.getCell(2 + i, 2).value = prod.prix + prod.prix2;
       wsProducts.getCell(2 + i, 3).value = prod.id_produit;
     }
 

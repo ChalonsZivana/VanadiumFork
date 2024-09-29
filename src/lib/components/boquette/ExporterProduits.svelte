@@ -18,7 +18,7 @@
       const prods = products.filter(e => e.id_categorie == cat.id_categorie);
       for(let prod of prods){
         wsProducts.getCell(i,j).value = prod.nom;
-        wsProducts.getCell(i,j+1).value = prod.prix;
+        wsProducts.getCell(i,j+1).value = prod.prix + prod.prix2;
         i += 1;
       }
     });

@@ -49,7 +49,8 @@
     193:"mdi:food",
     195:"mdi:pizza",
     196:"mdi:egg",
-    197:"mdi:salt"
+    197:"mdi:salt",
+    223:"noto:castle"
   }
 
   let boquettes_panel:HTMLElement;

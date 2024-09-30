@@ -116,10 +116,15 @@ export const StatisticsSchema  = z.object({
 
 export const AddProductSchema = z.object({
   nom:z.string().min(1),
-  id_categorie:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e)),
+  id_categorie:z.string().transform(e => parseInt(e)),
   nom_categorie:z.string().min(1).optional(),
   prix:z.string().transform(e => parseFloat(e)).refine(e => e > 0),
   prix2:z.string().optional().default("0").transform(e => parseFloat(e)).refine(e => e >= 0),
+}).refine((e)=>{
+  if(!e.nom_categorie){
+    return !isNaN(e.id_categorie)
+  }
+  return true;
 });
 
 export const EditProductSchema = z.object({

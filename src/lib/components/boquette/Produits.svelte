@@ -14,7 +14,7 @@
 
 
   
-  const categories_id = categories.map(e=>e.id_categorie);
+  $: categories_id = categories.map(e=>e.id_categorie);
   
   
   function getProducts(id_categorie:number){
@@ -44,7 +44,7 @@
   <div class="flex flex-col font-bold gap-2 w-full">
     {#each prodsByCategorie as prodcat}
         <p class="text-center text-3xl">{prodcat.categorie.nom!=''?prodcat.categorie.nom:'catégorie sans nom'}</p>
-        {#if prodcat.products.length == 0}
+        {#if prodcat.products.length == 0 && !isNaN(prodcat.categorie.id_categorie)}
           <form  use:enhance method="post">
             <input type="hidden" name="id_categorie" value={prodcat.categorie.id_categorie}>
             <ValidationButton formaction="?/deleteCategory" text="Supprimer catégorie"/>
@@ -58,9 +58,7 @@
                   </td>
                   <td class="flex items-center h-10">
                     <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€  + {e.prix2}€ = {e.prix + e.prix2}€</button>
-                    
                   </td>
-                  
                 </tr>
             </svelte:fragment>
           </CustomTable>

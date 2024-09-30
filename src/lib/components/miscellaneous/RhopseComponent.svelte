@@ -8,7 +8,7 @@
   import type { SubmitFunction } from "@sveltejs/kit";
 
   export let rhopseUrl:string;
-  export let pg:pg;
+  export let pg:Partial<pg>;
   export let produits:produits[];
   export let categories:categories[];
   
@@ -17,7 +17,7 @@
 
   const quantités = Object.fromEntries(produits.map(e=>[e.id_produit, 0]))
   let categorie = categories[0];
-  $: products = getProducts(categorie.id_categorie)
+  $: products = categorie ? getProducts(categorie.id_categorie) : [];
   $: selectedProducts = produits.filter(e=>quantités[e.id_produit]>0)
 
   function getProducts(id_categorie:number){

@@ -57,7 +57,14 @@
                     <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.nom}</button>
                   </td>
                   <td class="flex items-center h-10">
-                    <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.prix}€  + {e.prix2}€ = {e.prix + e.prix2}€</button>
+                    
+                    <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>
+                      {#if id_boquette == 7}
+                        {e.prix}€  + {e.prix2}€ = {e.prix + e.prix2}€
+                      {:else}
+                        {e.prix}€
+                      {/if}
+                    </button>
                   </td>
                 </tr>
             </svelte:fragment>

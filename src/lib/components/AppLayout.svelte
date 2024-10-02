@@ -29,7 +29,7 @@
     const sections =  [
         {icon:"mdi:event-note", href:'/rhopses'},
         {icon:"mdi:bar-chart", href:'/stats'},
-        {icon:"custom:LogalSoce", href:''},
+        {icon:"custom:LogalSoce", href:'/'},
         {icon:"mdi:anvil", href:'/usins'},
         {icon:"mdi:payment", href:'/rechargement'},
     ];

@@ -4,4 +4,4 @@
   export let className = "";
 </script>
 
-<Icon class={className} icon="fluent-mdl2:accept-medium"/>
+<Icon class={className} icon="el:ok"/>

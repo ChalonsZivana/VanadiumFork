@@ -29,6 +29,9 @@
   <a href="/boquette-{boquette.id_boquette}/consommations">
     <Icon icon="mdi:event-note"/>
   </a>
+  <a href="/boquette-{boquette.id_boquette}/commandes">
+    <Icon icon="mdi:truck-delivery-outline"/>
+  </a>
   <slot/>
 </div>
 

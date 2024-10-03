@@ -11,8 +11,8 @@
     {text}
   </button>
   <div class="flex text-white {toggle?'h-10 scale-y-100':'h-0 scale-y-0'} origin-top duration-300">
-    <button formaction={formaction} type="submit" class="bg-green-600 w-full flex justify-center" on:click={()=>toggle=false}>
-      <Accept className="w-10 p-1"/>
+    <button formaction={formaction} type="submit" class="bg-green-600 w-full flex justify-center items-center" on:click={()=>toggle=false}>
+      <Accept className="text-3xl"/>
     </button>
   </div>
 </div>

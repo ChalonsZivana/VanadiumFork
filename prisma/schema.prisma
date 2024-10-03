@@ -85,6 +85,16 @@ model fams {
   consommations              consommations[] @relation(map: "consommation_fams")
 }
 
+model commandes {
+  id          Int @id @default(autoincrement())
+  type        consommations_type @map("type_")
+  from        Int? @map("from_")
+  to          Int? @map("to_")  
+  libelle     String
+  statut      Int @default(-1)
+  date        DateTime @default(now())
+}
+
 model kve {
   id         Int    @id @default(autoincrement())
   name       String 

@@ -21,9 +21,17 @@ export const CreateProductSchema  = z.object({
 
 
 export const RhopseSchema  = z.object({
-  produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(),z.number()])).safeParse(e).success),
+  produits:z.string().transform(
+    e => {
+      try{
+        return JSON.parse(e)
+      } catch {
+        return null;
+      }
+    }
+  ).pipe(z.array(z.tuple([z.number(),z.number()]))),
   rhopse_ancien:z.optional(z.union([z.null(), z.string()]))
-})
+}) 
 
 export const ImportRhopseSchema  = z.object({
   produits:z.string().transform(e => JSON.parse(e)).refine(e => z.array(z.tuple([z.number(), z.number(), z.number(), z.union([z.string(),z.null()])])).safeParse(e).success),

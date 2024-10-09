@@ -158,6 +158,11 @@ export const topNegatsSchema = z.object({
 export const EnvoiBrouzoufsSchema = z.object({
   nums:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e) && e>0),
   proms:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e) && e>220),
-  montant:z.string().transform(e => parseInt(e)).refine(e => !isNaN(e) && e>0),
+  montant:z.string().transform(e => parseFloat(e)).refine(e => !isNaN(e) && e>0),
+  libelle:z.string()
+});
+
+export const RechargementFamsSchema = z.object({
+  montant:z.string().transform(e => parseFloat(e)).refine(e => !isNaN(e) && e>0),
   libelle:z.string()
 });

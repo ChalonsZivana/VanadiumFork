@@ -4,7 +4,7 @@ import { LydiaManager } from "$lib/server/lydia";
 import {LYDIA_VENDOR_KEY} from "$env/static/private";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
-import { EnvoiBrouzoufsSchema, LydiaDemandFrontSchema } from "$lib/zodSchema";
+import { EnvoiBrouzoufsSchema, LydiaDemandFrontSchema, RechargementFamsSchema } from "$lib/zodSchema";
 
 export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
@@ -33,18 +33,20 @@ export const actions = {
     return r;
   },
   rechargementFams: async ({request, locals}) =>{
-    const a = await request.formData()
-    const montant = parseFloat(a.get('montant')?.toString()??'');
-    const libelle = a.get('libelle')?.toString()??'';
-    if(isNaN(montant) || montant <= 0 || locals.session.data.user == null) throw error(400);
-    
+    if(!locals.session.data.user) throw error(400);
+
+
+    const d = Object.fromEntries(await request.formData());
+    const data = RechargementFamsSchema.safeParse(d);
+
+    if(!data.success) return {success:false, message:'an error occured'};
     
     return await Taferie.rhopse({
       type:'pg_fams', 
       from:locals.session.data.user.pg.id_pg,
       to:locals.session.data.user.fams.nums,
-      montant: -montant,
-      libelle
+      montant: -data.data.montant,
+      libelle: data.data.libelle
     });
   },
   verifyLydiaDemand: async({locals}) => {

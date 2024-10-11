@@ -71,6 +71,8 @@ model consommations {
   annule      Boolean                @default(false)
   data        Json?
 
+  produit    produits? @relation(fields: [id_produit], references: [id_produit])
+
   from_pg        pg?                    @relation(fields: [from], references: [id_pg], map: "consommation_from_pg", name:"consommation_from_pg")
   to_pg          pg?                    @relation(fields: [to], references: [id_pg], map: "consommation_to_pg", name:"consommation_to_pg")
   
@@ -141,6 +143,8 @@ model produits {
   prix         Float  
   libreservice Boolean    @default(false)
   prix2        Float      @default(0)
+
+  consommations consommations[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

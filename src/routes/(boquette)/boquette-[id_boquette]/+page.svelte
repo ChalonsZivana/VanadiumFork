@@ -6,6 +6,8 @@
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
+    import SectionCard from "$lib/components/SectionCard.svelte";
+    import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
   
   export let data;
   export let form:{success:boolean, message:string};
@@ -87,6 +89,20 @@
     <Actions {boquette} {pgs} categories={data.categories} produits={data.produits}/>   
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}
+
+  <SectionCard title='Stats du jour'>
+    <CustomTable elements={data.consommations_count} headers={['Produit','Total']}>
+      <svelte:fragment slot="tbody" let:e>
+        <tr id="produit-{e.id_produit}" class="w-full">
+          <td class="h-10">{data.produits.find(e => e.id_produit == e.id_produit)?.nom}
+          </td>
+          <td class="flex items-center justify-center h-10">
+            {e._count}
+          </td>
+        </tr>
+    </svelte:fragment>
+    </CustomTable>
+  </SectionCard>
   
   <Produits id_boquette={data.id_boquette} editable={false} {editDialog} categories={data.categories} produits={data.produits}/>
 

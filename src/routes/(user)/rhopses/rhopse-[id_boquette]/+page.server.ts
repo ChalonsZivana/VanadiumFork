@@ -40,7 +40,7 @@ export const actions = {
 
     const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = []
     for(let [id_produit, quantite] of data.produits){
-      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:id_boquette, id_produit, quantite});
+      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:id_boquette, id_produit, quantite,rhopse_ancien:null});
       results.push(r);
     }
     return results[0]

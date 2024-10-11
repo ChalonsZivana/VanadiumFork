@@ -1,7 +1,29 @@
 import { Boquette } from '$lib/server/classes/Boquette.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
-import { EditBoquetteSchema, ImportRhopseSchema, RhopseSchema } from '$lib/zodSchema.js';
+import { EditBoquetteSchema, ImportRhopseSchema } from '$lib/zodSchema.js';
 import { error, fail } from '@sveltejs/kit';
+import prisma from '$lib/prisma';
+
+export const load = async ({params})=>{
+  const id_boquette = parseInt(params.id_boquette);
+  if(isNaN(id_boquette)) throw error(404);
+
+
+   // Get the current date
+   const today = new Date();
+   const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+   const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+  
+  const consommations_count = await prisma.consommations.groupBy({
+    by:'id_produit',
+    where:{type:'pg_boq', to:id_boquette, date_conso:{gte:startOfDay, lte:endOfDay}},
+    _count:true,
+  });
+  
+  return { 
+    consommations_count
+  };
+}
 
 export const actions = {
   editBoquette:async({request, params})=>{

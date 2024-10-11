@@ -50,10 +50,10 @@ export const actions = {
     });
   },
   verifyLydiaDemand: async({locals}) => {
-    if(!locals.session.data.user) throw error(400);
+    if(!locals.session.data.user) return fail(400);
     const rechargements = await prisma.rechargements.findMany({where:{id_pg:locals.session.data.user.pg.id_pg, status:0}});
-    
-    if(rechargements.length != 1) return {'error':'Contactez un administrateur'};
+
+    if(rechargements.length == 0) return {message:'Contactez un administrateur'};
     const a = rechargements[0];
     const r = await LydiaManager.verifyLydiaDemand(a.id_rechargement, LYDIA_VENDOR_KEY, a.keylydia);
     return r;

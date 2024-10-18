@@ -8,11 +8,26 @@
   import Actions from "$lib/components/boquette/Actions.svelte";
     import SectionCard from "$lib/components/SectionCard.svelte";
     import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
-  
+    import { DatePicker } from "@svelte-plugins/datepicker";
+    import {format} from 'date-fns';
+    import Icon from "@iconify/svelte";
+    import { enhance } from "$app/forms";
+
+  let startDate = new Date();
+  let dateFormat = 'dd/MM/yy';
+  let isOpen = false;
+  const formatDate = (dateString:Date) => {
+    return dateString && format(new Date(dateString), dateFormat) || '';
+  };
+  $: formattedStartDate = formatDate(startDate);
+
+  type ConsommationsCount = {_count:number, id_produit:number}[];
   export let data;
-  export let form:{success:boolean, message:string};
+  export let form:{success:boolean, message:string}|{consommations_count:ConsommationsCount};
   export let editDialog:HTMLDialogElement;
 
+  let consommations_count:ConsommationsCount = [];
+  $: consommations_count = form && 'consommations_count'in form ? form.consommations_count : consommations_count;
   let boquette:boquettes;
   type boqSettingsText = {'Nom':string,'Nom Simple':string,'Nouveau Mot de passe':string,'Confirmation mot de passe :':string};
   type boqSettingsCheck = {'Partie PG':boolean};
@@ -25,6 +40,8 @@
     editInputCheck = {'Partie PG':boquette.partie_pg};     
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
+
+  
   
   function initPGEdit(boq:boquettes):boqSettingsText {
     return {
@@ -91,17 +108,36 @@
   {/await}
 
   <SectionCard title='Stats du jour'>
-    <CustomTable elements={data.consommations_count} headers={['Produit','Total']}>
-      <svelte:fragment slot="tbody" let:e>
-        <tr id="produit-{e.id_produit}" class="w-full">
-          <td class="h-10">{data.produits.find(e => e.id_produit == e.id_produit)?.nom}
-          </td>
-          <td class="flex items-center justify-center h-10">
-            {e._count}
-          </td>
-        </tr>
-    </svelte:fragment>
-    </CustomTable>
+
+      <form use:enhance action="?/getDaysStat" method="post">
+        {#key form}
+        <DatePicker bind:isOpen bind:startDate>
+          <div class="flex gap-5 items-center bg-white rounded-xl p-2">
+            <button type="button" class="flex gap-5 items-center" on:click={() => (isOpen = !isOpen)} >
+              <Icon icon="mdi:calendar" class="text-black text-3xl"/>
+              <p class="text-black">{formattedStartDate}</p>
+              <input type="hidden" name="date" bind:value={startDate} id="">
+            </button>
+            <button class="btn variant-filled-primary">
+              <Icon icon="formkit:submit"/>
+            </button>
+          </div>
+        </DatePicker>
+        {/key}
+      </form>
+      {#if form && 'consommations_count' in form}
+        <CustomTable elements={consommations_count} headers={['Produit','Total']}>
+          <svelte:fragment slot="tbody" let:e>
+            <tr id="produit-{e.id_produit}" class="w-full">
+              <td class="h-10">{data.produits.find(i => i.id_produit == e.id_produit)?.nom}
+              </td>
+              <td class="flex items-center justify-center h-10">
+                {e._count}
+              </td>
+            </tr>
+        </svelte:fragment>
+        </CustomTable>
+      {/if}
   </SectionCard>
   
   <Produits id_boquette={data.id_boquette} editable={false} {editDialog} categories={data.categories} produits={data.produits}/>

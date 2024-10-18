@@ -23,8 +23,7 @@
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // Your data here
-        key: 'value',
+        ids:commandesNonTraitées.map(e=>e.id)
       }),
     });
 
@@ -32,14 +31,36 @@
     for(let e of result.commandes){
       e.date = new Date(e.date as any as string)
     }
-    commandesNonTraitées = result.commandes;
+    const new_commandes = [...commandesNonTraitées, ...result.commandes].sort((a,b) => a.date.getMilliseconds() - b.date.getMilliseconds());
+    commandesNonTraitées = new_commandes;
   }
 
   function getStatut(statut:number){
     return ["Non Traité","En cours","Livré"][statut+1]
   }
 
-  
+  function emitDring(): void {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    const context = new AudioContext();
+
+    // Create an oscillator for the "dring" sound
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+
+    oscillator.type = 'triangle'; // "triangle" or "sine" waveform can sound bell-like
+    oscillator.frequency.setValueAtTime(800, context.currentTime); // Start frequency
+
+    // Fade out the sound (like a bell ringing out)
+    gainNode.gain.setValueAtTime(1, context.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 1.5); // Fade out over 1.5 seconds
+
+    // Connect the oscillator to the gain node, and the gain node to the output (speakers)
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    oscillator.start();
+    oscillator.stop(context.currentTime + 1.5); // Stop after 1.5 seconds
+  }
 </script>
 
 <div class="h-full w-full flex flex-col justify-center items-center p-2 gap-4">
@@ -161,17 +182,8 @@
       {#if selectedCommande.statut != 1}
         <ValidationButton formaction="?/setStatus1" text="Fini"/>
       {/if}
-      
-      
-      <!-- <button formaction="?/setStatus-1" class="btn variant-filled-primary">Non Traité</button>
-      <button formaction="?/setStatus0" class="btn variant-filled-primary">En cours</button>
-      <button formaction="?/setStatus1" class="btn variant-filled-primary">Livré</button> -->
     </div>
   {/if}
-    
-
-    
-
     <svelte:fragment slot="submitButton">
       <div></div>
     </svelte:fragment>

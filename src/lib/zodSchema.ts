@@ -19,6 +19,9 @@ export const CreateProductSchema  = z.object({
   "libre_service": z.union([z.literal('on'), z.undefined()])
 })
 
+export const OnlyDateSchema = z.object({
+  date:z.string().transform(e=>new Date(parseInt(e))).pipe(z.date())
+})
 
 export const RhopseSchema  = z.object({
   produits:z.string().transform(

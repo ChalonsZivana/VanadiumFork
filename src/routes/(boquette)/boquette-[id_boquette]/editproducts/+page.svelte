@@ -36,7 +36,7 @@
       </label>
       {#if data.boquette.id_boquette == 7}
         <label>
-          <p class="text-3xl font-zagoth">Prix2</p>
+          <p class="text-3xl font-zagoth">Hard</p>
           <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.01" min="0" name="prix2">
         </label>
       {/if}

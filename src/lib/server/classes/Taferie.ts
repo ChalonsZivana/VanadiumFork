@@ -211,7 +211,7 @@ export class Taferie {
               await new Boquette(BOQUETTES["Satan"]).removeMoney(-prod.prix2*d.quantite, p);
               const pg_after = await new Pg(d.from).addMoney(montant, p);
               solde_apres = pg_after.solde
-
+              
               await p.consommations.update({where:{id_conso:conso.id_conso}, data:{data:{prix:-prod.prix * d.quantite,prix2:-prod.prix2*d.quantite}}})
             }  else {
               await new Boquette(d.to).removeMoney(data.montant, p);

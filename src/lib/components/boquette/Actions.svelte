@@ -21,7 +21,7 @@
   <button on:click={()=>exporterProduits(boquette, produits, categories)}>
     <Icon icon="mdi:export-variant"/>
   </button>
-  {#if boquette.nom == "K've" || boquette.nom == "Auberge"}
+  {#if boquette.nom == "K've" || boquette.nom == "Auberge" || boquette.nom == "Foy's"}
     <a href="/boquette-{boquette.id_boquette}/editproducts">
       <Icon icon="mdi:edit"/>
     </a>

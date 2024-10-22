@@ -1,5 +1,4 @@
 import prisma from "$lib/prisma";
-import { unescape } from "querystring";
 import { sendPush } from "../onesignal";
 import { Boquette, BOQUETTES } from "./Boquette";
 import { Fams } from "./Fams";
@@ -68,7 +67,7 @@ async function getLibelle(d:ext_ | pg_ext | _to | pg_boq){
 
 export class Taferie {
 
-  static async cancelConsommation(id_conso:number, cancel:boolean):Promise<{success:boolean, message:string}>{
+  static async cancelConsommation(id_conso:number, cancel:boolean):Promise<{success:boolean, message:string}|consommations>{
     const conso = await prisma.consommations.findFirst({where:{id_conso:id_conso}});
 
     if(!conso || conso.annule == cancel) return {success:false, message:'an error occured'};
@@ -90,10 +89,11 @@ export class Taferie {
           case "pg_boq":
             if(conso.to == BOQUETTES["Foy's"]){
               const data = conso.data as {prix:number, prix2:number} | null;
-              if(data == null || !data.prix || !data.prix2) throw new Error('old consommation')
-              await new Boquette(BOQUETTES["Foy's"]).addMoney(data.prix * factor, p);
+              if(data == null || !('prix' in data) || !('prix2' in data)) throw new Error('old consommation')
+              
+                await new Boquette(BOQUETTES["Foy's"]).addMoney(data.prix * factor, p);
               await new Boquette(BOQUETTES["Satan"]).addMoney(data.prix2 * factor, p);
-    
+
               new Pg(conso.from!).removeMoney((data.prix + data.prix2) * factor, p);
             }  else {
               new Boquette(conso.to!).addMoney(conso.montant * factor, p);
@@ -113,12 +113,12 @@ export class Taferie {
             await p.consommations.update({where:{id_conso:consoBis.id_conso},data:{annule:cancel}});
             break;
         }
-    
+        console.log('test')
         await p.consommations.update({where:{id_conso},data:{annule:cancel}});
-
-        return {success:true, message:`Consommation ${cancel ?'canceled':'uncanceled'}`};
+        return {success:true, message:'rhopse annulée'}
       });
     } catch(e){
+      console.log(e)
       return {success:false, message:'an error occured'}
     }
   }
@@ -206,7 +206,6 @@ export class Taferie {
             if(prod == null) return {success:false, message:`erreur`}; 
             // specific foys
             if(d.to == BOQUETTES["Foy's"]){    
-              console.log(-(prod.prix + prod.prix2)*d.quantite);
               await new Boquette(BOQUETTES["Foy's"]).removeMoney(-prod.prix*d.quantite, p);
               await new Boquette(BOQUETTES["Satan"]).removeMoney(-prod.prix2*d.quantite, p);
               const pg_after = await new Pg(d.from).addMoney(montant, p);

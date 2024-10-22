@@ -6,12 +6,13 @@
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
-    import SectionCard from "$lib/components/SectionCard.svelte";
-    import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
-    import { DatePicker } from "@svelte-plugins/datepicker";
-    import {format} from 'date-fns';
-    import Icon from "@iconify/svelte";
-    import { enhance } from "$app/forms";
+  import SectionCard from "$lib/components/SectionCard.svelte";
+  import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
+  import { DatePicker } from "@svelte-plugins/datepicker";
+  import {format} from 'date-fns';
+  import Icon from "@iconify/svelte";
+  import { enhance } from "$app/forms";
+  import type {consommations} from '@prisma/client';
 
   let startDate = new Date();
   let dateFormat = 'dd/MM/yy';
@@ -23,7 +24,7 @@
 
   type ConsommationsCount = {_count:number, id_produit:number}[];
   export let data;
-  export let form:{success:boolean, message:string}|{consommations_count:ConsommationsCount};
+  export let form:{success:boolean, message:string}|{consommations_count:ConsommationsCount}|consommations;
   export let editDialog:HTMLDialogElement;
 
   let consommations_count:ConsommationsCount = [];
@@ -40,7 +41,6 @@
     editInputCheck = {'Partie PG':boquette.partie_pg};     
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
-
   
   
   function initPGEdit(boq:boquettes):boqSettingsText {

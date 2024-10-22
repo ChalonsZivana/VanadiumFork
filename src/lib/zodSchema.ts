@@ -81,13 +81,16 @@ export const EditPgSchema = z.object({
 
 
 export const ConsommationsSchema  = z.object({
-  page:z.string().transform(e => parseInt(e)).refine(e => e >= 1),
-  nums: z.string().transform(e => parseInt(e)),
-  proms: z.string().transform(e => parseInt(e)),
-  sortType: z.enum(['date','montant']),
-  sortDir: z.enum(['asc', 'desc']),
-  consoType:z.string().refine(e => Object.values(consommations_type).includes(e as any) || e == 'Tout'),
-  consoYear:z.string().transform(e => parseInt(e)).refine(e => isNaN(e) || (e >= 2017 && e <= new Date().getFullYear())),
+  page:z.string().default('1').transform(e => parseInt(e)).refine(e => e >= 1),
+  nums: z.string().default('NaN').transform(e => parseInt(e)),
+  proms: z.string().default('NaN').transform(e => parseInt(e)),
+  sortType: z.enum(['date','montant']).default('date'),
+  sortDir: z.enum(['asc', 'desc']).default('desc'),
+  consoType:z.string().default('Tout').refine(e => Object.values(consommations_type).includes(e as any) || e == 'Tout'),
+  consoYear:z.string().default('NaN').transform(e => {
+    const y = parseInt(e)
+    return isNaN(y) ? new Date().getFullYear() : y;
+  }).pipe(z.number().min(1806).max(new Date().getFullYear())),
 });
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>
 

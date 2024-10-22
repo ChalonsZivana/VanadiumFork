@@ -1,11 +1,10 @@
 <script lang="ts">
   import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
-  import type { consommationsSearch } from "$lib/components/search/consommations/fullsearch";
 
-  export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>};
+  export let data;
 
-  let currData:typeof form.search | null;
-  $:currData = form ? form.search: null;  
+  let currData:typeof data.search;
+  $:currData = data.search;
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 20) : undefined;
 
 </script>
@@ -21,7 +20,7 @@
   totalCons={currData?.totalCons ?? undefined}
   nombrePages={nombrePages}
   consommations={consos}
-  page={form?.search.page}
+  page={data.search.page}
   types={
     {"PG → Boquette":"pg_boq", 
     "EXT → Boq":"ext_boq",

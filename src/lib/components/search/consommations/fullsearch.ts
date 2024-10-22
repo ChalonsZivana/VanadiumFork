@@ -6,7 +6,6 @@ import { Prisma, consommations_type } from "@prisma/client";
 
 
 export async function consommationsSearch(types:({type:consommations_type, from:number}|{type:consommations_type, to:number}|{type:consommations_type})[] | null,data:ConsommationsSchemaType){
-  console.log("types:",types, data)
   const whereDate:Prisma.consommationsWhereInput = data.consoYear ? {
     date_conso:{ 
       gte: new Date(`${data.consoYear}-01-01`),

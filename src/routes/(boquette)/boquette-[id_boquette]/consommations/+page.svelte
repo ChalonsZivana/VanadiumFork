@@ -5,10 +5,9 @@
 
   export let data;
 
-  export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>};
 
-  let currData:typeof form.search;
-  $:currData = form?.search ?? currData; 
+  let currData:Awaited<ReturnType<typeof consommationsSearch>>;
+  $:currData = data.search; 
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 100) : undefined;
 
   let boquette:boquettes;

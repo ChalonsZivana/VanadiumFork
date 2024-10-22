@@ -18,12 +18,7 @@
 </script>
 
 <SectionCard title={title}>
-  <form use:enhance={
-    async ()=>{
-      consommations = [];
-      return async({update}) => update({reset:false});
-    }
-  } action="?/consommations" method="post" class="w-full flex flex-col gap-2">
+  <form action="?/consommations" method="get" class="w-full flex flex-col gap-2">
     <slot>
 
     </slot>
@@ -71,7 +66,7 @@
     <div class="flex gap-2 justify-center text-black">
       <button type="submit">
         {#if page > 1}
-          <button type="button" on:click={()=>page-=1} class="bg-white p-2 h-10 rounded-lg">précédent</button>
+          <button type="button" on:click={()=>{page-=1}} class="bg-white p-2 h-10 rounded-lg">précédent</button>
           <button type="button" on:click={()=>page=1} class="bg-white p-2 size-10 rounded-lg">1</button>
         {/if}
         <button type="button" class="bg-red-500 p-2 w-10 rounded-lg">{page}</button>

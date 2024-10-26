@@ -79,6 +79,9 @@
               <!-- Foys -->
               {#if conso.type=='pg_boq' && conso.to==7} 
                 <MoneyColor auto={transformMontant(conso.montant)} className="text-xs font-bold text-xxs"/>
+              {:else if conso.type=='ext_fams' || conso.type=='pg_fams'}
+                <MoneyColor auto={-conso.montant} className="text-xs font-bold text-xxs"/>
+
               {:else}
                 <MoneyColor auto={conso.montant} className="text-xs font-bold text-xxs"/>
               {/if}

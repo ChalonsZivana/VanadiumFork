@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { redirect } from "@sveltejs/kit";
 import { Pg } from '$lib/server/classes/PG.js';
-import { getRandomTop, getTop } from '$lib/server/db_connection.js';
+import { getHistoriqueFams, getRandomTop, getTop } from '$lib/server/db_connection.js';
 import { Database } from '$lib/server/classes/Database.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
 
@@ -27,7 +27,11 @@ export const load = async ({ locals }) => {
       {type:'pg_pg', from:pg.ID},
       {type:'pg_fams', from:pg.ID},
       {type:'pg_ext', from:pg.ID},
-    ])
+    ]),
+    historique_fams:Taferie.consommations([
+      {type:'ext_fams', to:locals.session.data.user.fams.nums},
+      {type:'pg_fams', to:locals.session.data.user.fams.nums},
+    ]),
   }
 }
 

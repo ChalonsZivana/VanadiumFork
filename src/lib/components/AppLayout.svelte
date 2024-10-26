@@ -98,7 +98,7 @@
       
     </svelte:fragment>
 <!-- Vanadium, Petibom, Tartopum -->
-    <section>
+    <section class="flex justify-center">
       <a href="/" class="font-zagoth h1">Tartopum</a>
     </section>
 

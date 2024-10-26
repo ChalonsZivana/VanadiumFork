@@ -26,48 +26,47 @@
 	}
 </script>
 
-<div class="h-full flex flex-col">
+<div class="h-full flex flex-col overflow-y-hidden">
 	<TabGroup class="size-full" regionPanel="size-full">
 		<svelte:fragment slot="panel">
 			{#if tabSet === 0}
-			 
-
-			
-				<div class="size-full flex flex-col justify-around items-center">
-					<button class="perspective-1000 w-80 {flipped ? 'aspect-square':'aspect-video'} duration-1000 max-w-80" on:click={flip}>
-						<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
-								<!-- Front face -->
-								<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
-									<section class="relative w-full h-full flex items-center">
-										<div class="flex flex-col items-start p-4">
-											<span>Prénom: {data.USER.pg.prenom}</span>
-											<span>Nom: {data.USER.pg.nom}</span>
-											<span>Bucque: {data.USER.pg.bucque}</span>
-											<span>Proms: {data.USER.pg.proms}</span>
-											<span>Email: {data.USER.pg.email}</span>
-										</div>
-						
-										<div class="absolute font-zagoth opacity-50 right-0 top-0 text-9xl h-full flex justify-center items-center">
-											<span>{data.USER.pg.nums}</span>
-										</div>
-									</section>
-		
-									{#if data.USER.pg.ddp}
-										<a href="ddp" class="absolute w-10 top-3 right-3">
-											<div class="p-1 border-1 border-white rounded-xl">
-												DDP
+				<div class="size-full flex flex-col gap-4 pb-4 justify-around items-center">
+					<div class="size-full flex justify-center items-center">
+						<button class="perspective-1000 {flipped ? 'aspect-square h-full max-w-80 max-h-80':'aspect-video w-80'} duration-1000" on:click={flip}>
+							<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
+									<!-- Front face -->
+									<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
+										<section class="relative w-full h-full flex items-center">
+											<div class="flex flex-col items-start p-4">
+												<span>Prénom: {data.USER.pg.prenom}</span>
+												<span>Nom: {data.USER.pg.nom}</span>
+												<span>Bucque: {data.USER.pg.bucque}</span>
+												<span>Proms: {data.USER.pg.proms}</span>
+												<span>Email: {data.USER.pg.email}</span>
 											</div>
-										</a>
-									{/if}
-								</div>
-								<!-- Back face -->
-								<div class="absolute card p-1 w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
-									<img class="h-full w-full object-cover" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
-							</div>					
-						</div>
-				</button>
+							
+											<div class="absolute font-zagoth opacity-50 right-0 top-0 text-9xl h-full flex justify-center items-center">
+												<span>{data.USER.pg.nums}</span>
+											</div>
+										</section>
 			
-					<div class="gap-10 flex flex-col w-80">
+										{#if data.USER.pg.ddp}
+											<a href="ddp" class="absolute w-10 top-3 right-3">
+												<div class="p-1 border-1 border-white rounded-xl">
+													DDP
+												</div>
+											</a>
+										{/if}
+									</div>
+									<!-- Back face -->
+									<div class="absolute card p-1 w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
+										<img class="h-full w-full object-cover" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
+								</div>					
+							</div>
+						</button>
+					</div>
+			
+					<div class="gap-6 flex flex-col w-80 flex-grow">
 						<!-- Fonds -->
 						<div class="card overflow-clip flex">
 							<div class="flex justify-center items-center p-2 text-3xl">
@@ -101,20 +100,28 @@
 			
 							</section>
 						</div>
-			
-			
-						<div class="grid grid-cols-2 gap-4">
-							<Tab class="w-full"  bind:group={tabSet} name="tab_stats" value={2}>
-								<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
-									<span><Icon icon="mdi:bar-chart" /></span>
-									<span>Stats</span>
-								</div>
-							</Tab>
-			
-							<Tab  bind:group={tabSet} name="tab_consos" value={1}>
+					</div>
+
+					<div class="grid grid-cols-2 flex-grow">
+						<Tab class="w-full"  bind:group={tabSet} name="tab_stats" value={3}>
+							<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+								<span><Icon icon="mdi:bar-chart" /></span>
+								<span>Stats</span>
+							</div>
+						</Tab>
+
+						<Tab  bind:group={tabSet} name="tab_consos" value={1}>
+							<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+								<span><Icon icon="mdi:event-note" /></span>
+								<span>Consos</span>
+							</div>
+						</Tab>
+
+						<div class="col-span-2">
+							<Tab  bind:group={tabSet} name="tab_consos" value={2}>
 								<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 									<span><Icon icon="mdi:event-note" /></span>
-									<span>Consos</span>
+									<span>Historique Fams</span>
 								</div>
 							</Tab>
 						</div>
@@ -137,9 +144,24 @@
 					{/await}
 						
 				</div>
-
 			{:else if tabSet === 2}
-			<div class="size-full flex flex-col items-center w-80 gap-4">
+			<div class="size-full flex flex-col items-center">
+				<Tab  bind:group={tabSet} name="tab_main" value={0}>
+					<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+						<span><Icon icon="mdi:event-note" /></span>
+						<span>Historique Fams</span>
+					</div>
+				</Tab>
+
+				{#await data.historique_fams}
+					<p>Chargement...</p>
+				{:then histo_fams} 
+				<ConsoTable fromOption={false} cancelOption={false} consommations={histo_fams}/>
+				{/await}
+					
+			</div>
+			{:else if tabSet === 3}
+			<div class="size-full flex flex-col items-center gap-4">
 				<Tab  bind:group={tabSet} name="tab_main" value={0}>
 					<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 						<span><Icon icon="mdi:bar-chart" /></span>

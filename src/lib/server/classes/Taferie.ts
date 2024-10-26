@@ -257,6 +257,8 @@ export class Taferie {
     })
   }
 
+  
+
   static async deletePG(id_pg:number){
     return prisma.pg.delete({where:{id_pg}})
   }

@@ -39,8 +39,8 @@
       {/each}
     </select>
     <input bind:value={searchText} class="p-2 outline-none bg-red-100 w-full border-2 border-black placeholder-gray-500" type="text" placeholder="texte: {selected}">
-    <input bind:value={searchNums} class="p-1 outline-none text-black text-xs bg-red-100 w-11 border-2 border-black placeholder-gray-500" type="number" placeholder="nums">
-    <input bind:value={searchProms} class="p-1 outline-none text-black text-xs bg-red-100 w-11 border-2 border-black placeholder-gray-500" type="number" placeholder="proms">
+    <input bind:value={searchNums} class="p-1 outline-none text-black text-xs bg-red-100 w-16 border-2 border-black placeholder-gray-500" type="number" placeholder="nums">
+    <input bind:value={searchProms} class="p-1 outline-none text-black text-xs bg-red-100 w-16 border-2 border-black placeholder-gray-500" type="number" placeholder="proms">
   </div>
   {#await dataToSort}
     Chargement...

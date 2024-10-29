@@ -64,7 +64,7 @@ export const actions = {
 async function deleteFile(photoSrc:string) {
   // Validate and sanitize the photoSrc input
   const sanitizedPhotoSrc = path.basename(photoSrc); // Remove directory paths
-  const filePath = path.join('static', 'uploads', sanitizedPhotoSrc);
+  const filePath = path.join('static', 'uploadedPhotos', sanitizedPhotoSrc);
 
   try {
       // Check if the file exists before attempting to delete

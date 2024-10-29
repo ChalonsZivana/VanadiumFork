@@ -31,8 +31,6 @@
 		<svelte:fragment slot="panel">
 			{#if tabSet === 0}
 				<!-- svelte-ignore a11y-media-has-caption -->
-				
-
 				<div class="size-full flex flex-col gap-4 pb-4 justify-around items-center">
 					<div class="size-full flex justify-center items-center">
 						<button class="perspective-1000 {flipped && false ? 'aspect-square h-full max-w-80 max-h-80':'aspect-video w-80'} duration-1000" on:click={flip}>
@@ -64,7 +62,7 @@
 									<!-- Back face -->
 									<div class="absolute card p-1 w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
 										{#if data.USER.pg.proms == 223}
-											<video autoplay muted preload="metadata" width="100%">
+											<video controls controlslist="nodownload noplaybackrate noremoteplayback" loop autoplay muted preload="metadata" width="100%">
 												<source src="videos/slander_usins.mp4" type="video/mp4"/>
 												Your browser does not support the video tag
 											</video>

@@ -30,7 +30,7 @@
         {icon:"mdi:event-note", href:'/rhopses'},
         {icon:"mdi:bar-chart", href:'/stats'},
         {icon:"custom:LogalSoce", href:'/'},
-        {icon:"mdi:anvil", href:'/usins'},
+        {icon:"mdi:picture-360-outline", href:'/photos'},
         {icon:"mdi:payment", href:'/rechargement'},
     ];
     

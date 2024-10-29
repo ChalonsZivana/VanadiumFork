@@ -1,7 +1,7 @@
 import type { PageServerLoad } from "../$types";
 import { error, fail } from "@sveltejs/kit";
 import path from "path";
-import { writeFile, readdir, unlink, access } from "fs/promises";
+import { writeFile, readdir, unlink, access, stat } from "fs/promises";
 import { fileURLToPath } from 'url';
 
 
@@ -11,6 +11,8 @@ const __dirname = path.dirname(__filename);
 
 export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
+
+  logDirectoryTree("../")
   
   const files = await readdir('static/uploadedPhotos');
 
@@ -81,4 +83,26 @@ async function deleteFile(photoSrc:string) {
         }
     }
   }
+}
+
+async function logDirectoryTree(dirPath: string, level: number = 0): Promise<void> {
+  const files = await readdir(dirPath); // Read all items in the directory
+
+  files.forEach(async file => {
+    const filePath = path.join(dirPath, file);
+    const stats = await stat(filePath);
+
+    if([".svelte-kit",".vscode","node_modules"].includes(file)){
+      return;
+    }
+    // Log the file or directory with indentation based on level
+    if(!stats.isFile()){
+      console.log(`${' '.repeat(level * 2)}${file}`);
+    }
+    
+    // If the item is a directory, recurse into it
+    if (stats.isDirectory()) {
+      logDirectoryTree(filePath, level + 1);
+    }
+  });
 }

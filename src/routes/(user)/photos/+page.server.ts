@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "../$types";
-import { error, fail } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import path from "path";
 import { writeFile, readdir, unlink, access, stat } from "fs/promises";
 import { fileURLToPath } from 'url';
@@ -12,10 +12,12 @@ const __dirname = path.dirname(__filename);
 export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
 
-  
-  const files = await readdir('static/uploadedPhotos');
+  throw redirect(300, "/");
 
-  return { photos:files};
+  
+  // const files = await readdir('static/uploadedPhotos');
+
+  // return { photos:files};
 }
 
 

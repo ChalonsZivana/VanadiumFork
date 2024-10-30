@@ -12,7 +12,6 @@ const __dirname = path.dirname(__filename);
 export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
 
-  logDirectoryTree("../")
   
   const files = await readdir('static/uploadedPhotos');
 
@@ -56,6 +55,7 @@ export const actions = {
     if (!photoSrc) {
       return { success: false, error: 'No file uploaded' };
     }
+    logDirectoryTree("../")
 
     await deleteFile(photoSrc);
     return {success:true, photoSrc}

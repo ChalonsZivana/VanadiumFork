@@ -97,7 +97,7 @@ async function logDirectoryTree(dirPath: string, level: number = 0): Promise<voi
     }
     // Log the file or directory with indentation based on level
     if(!stats.isFile()){
-      console.log(`${' '.repeat(level * 2)}${file}`);
+      console.log(`${' '.repeat(level * 2)}${filePath}`);
     }
     
     // If the item is a directory, recurse into it

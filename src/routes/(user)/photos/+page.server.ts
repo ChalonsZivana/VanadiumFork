@@ -11,13 +11,12 @@ const __dirname = path.dirname(__filename);
 
 export const load:PageServerLoad  = async ({locals})=>{
   if(!locals.session.data.user) throw error(400);
-
-  throw redirect(300, "/");
+  if(locals.session.data.user.pg.nums != 89) throw redirect(300, "/");
 
   
-  // const files = await readdir('static/uploadedPhotos');
+  const files = await readdir('static/uploadedPhotos');
 
-  // return { photos:files};
+  return { photos:files};
 }
 
 

@@ -1,8 +1,10 @@
 // src/routes/api/get-image.ts
 import { getImage } from '$lib/r2';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 
-export const GET = async ({ url }) => {
+export const GET = async ({ locals,url }) => {
+    if(!locals.session.data.user) throw error(400);
+
     const key = url.searchParams.get('key');
 
     if (!key) {

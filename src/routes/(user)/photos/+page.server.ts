@@ -35,7 +35,7 @@ export const actions = {
 
     // Generate a unique filename and save path
     const filename = `${Date.now()}_${locals.session.data.user?.pg.nums}ch${locals.session.data.user?.pg.proms}_${photo.name}`;
-    const savePath = path.join('static/uploadedPhotos', filename);
+    const savePath = path.join('static/myimages', filename);
 
     // Convert the file into a buffer and save it
     const arrayBuffer = await photo.arrayBuffer();
@@ -67,7 +67,7 @@ export const actions = {
 async function deleteFile(photoSrc:string) {
   // Validate and sanitize the photoSrc input
   const sanitizedPhotoSrc = path.basename(photoSrc); // Remove directory paths
-  const filePath = path.join('static', 'uploadedPhotos', sanitizedPhotoSrc);
+  const filePath = path.join('static', 'myimages', sanitizedPhotoSrc);
 
   try {
       // Check if the file exists before attempting to delete

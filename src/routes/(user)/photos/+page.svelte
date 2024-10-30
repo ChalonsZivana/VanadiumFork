@@ -85,7 +85,13 @@
       
       <form class="relative" method="post" action="?/deletePhoto">
         <img 
-          src="uploadedPhotos/{photoSrc}" 
+          src="/uploadedPhotos/{photoSrc}" 
+          alt="File preview" 
+          class="max-w-40 max-h-40 h-auto duration-500 ease-in-out hover:max-w-80 focus:w-80 hover:max-h-full focus:max-h-full"
+          tabindex="0" 
+        />
+        <img 
+          src="/myimages/{photoSrc}" 
           alt="File preview" 
           class="max-w-40 max-h-40 h-auto duration-500 ease-in-out hover:max-w-80 focus:w-80 hover:max-h-full focus:max-h-full"
           tabindex="0" 

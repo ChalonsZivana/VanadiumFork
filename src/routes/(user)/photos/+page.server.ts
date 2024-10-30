@@ -1,33 +1,15 @@
 import type { PageServerLoad } from "../$types";
-import { error, fail, redirect } from "@sveltejs/kit";
-import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { env } from '$env/dynamic/private';
+import { error, fail } from "@sveltejs/kit";
+import { deleteImage, listImages, uploadImage } from "$lib/r2";
 
-const s3 = new S3Client({
-  region: 'auto',
-  endpoint: `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-  credentials: {
-     accessKeyId: env.R2_ACCESS_KEY,
-     secretAccessKey: env.R2_SECRET_KEY
-  }
-});
 
-export const load:PageServerLoad  = async ({locals})=>{
+
+export const load:PageServerLoad  = async ({locals, url})=>{
   if(!locals.session.data.user) throw error(400);
+  const images = await listImages();
 
-  const command = new ListObjectsV2Command({
-      Bucket: env.R2_BUCKET_NAME
-  });
-  const response = await s3.send(command);
-
-  const files = response.Contents?.map((item) => ({
-         key: item.Key,
-         lastModified: item.LastModified,
-         size: item.Size,
-         url: `${env.R2_PUBLIC_URL}/${item.Key}`
-      })) || [];
-
-  return { photos:files };
+  const urls = images.map(e => ({key:e.key, url:`${url.origin}/photos/getImage?key=${e.key}`}))
+  return { photos:urls };
 }
 
 
@@ -42,19 +24,10 @@ export const actions = {
     if (!file || !file.name) {
       return { success: false, error: 'No file uploaded' };
     }
-    const buffer = Buffer.from(await file.arrayBuffer());
+    
+    await uploadImage(file, locals.session.data.user);
 
-    const command = new PutObjectCommand({
-      Bucket: env.R2_BUCKET_NAME,
-      Key: `${Date.now()}_${locals.session.data.user.pg.nums}ch${locals.session.data.user.pg.proms}_${file.name}`,
-      Body: buffer,
-      ContentType: file.type
-   });
-
-   await s3.send(command);
-   const url = `${env.R2_PUBLIC_URL}/${file.name}`;
-
-   return { url };
+   return { success:true };
   },
   deletePhoto:async({request, locals})=>{
     //2625=89cH223
@@ -68,11 +41,7 @@ export const actions = {
       return { success: false, error: 'No file uploaded' };
     }
 
-    const command = new DeleteObjectCommand({
-      Bucket: env.R2_BUCKET_NAME,
-      Key: photoSrc,
-   });
-   await s3.send(command);
+    await deleteImage(photoSrc);
 
     return {success:true, photoSrc}
   }

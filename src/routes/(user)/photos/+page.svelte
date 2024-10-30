@@ -81,18 +81,18 @@
 
 <div class="w-full h-full flex flex-col flex-wrap items-center justify-center gap-2 p-2">
   <div bind:this={scrollContainer} class="flex flex-wrap justify-center items-center gap-4 h-5/6 overflow-y-scroll">
-    {#each data.photos as photoSrc}
+    {#each data.photos as photo}
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
       
-      <form class="relative" method="post" action="?/deletePhoto">
+      <form use:enhance class="relative" method="post" action="?/deletePhoto">
         <img 
-          src="https://pub-a6cbd352341e4a1db0d6cdab90fcaeea.r2.dev/{photoSrc.key}"
+          src="{photo.url}"
           alt="File preview" 
           class="max-w-40 max-h-40 h-auto duration-500 ease-in-out hover:max-w-80 focus:w-80 hover:max-h-full focus:max-h-full"
           tabindex="0" 
         />
         {#if data.USER.pg.id_pg==2625}
-          <input type="hidden" name="photoSrc" value={photoSrc.key}>
+          <input type="hidden" name="photoSrc" value={photo.key}>
           <button class="absolute top-0 right-0">
             <Icon class="text-3xl" icon="mdi:delete"/>
           </button>

@@ -73,6 +73,7 @@
 
   onMount(() => {
     scrollToBottom(); // Scroll to bottom when the component mounts
+    console.log(data.photos)
   });
 </script>
 
@@ -85,19 +86,13 @@
       
       <form class="relative" method="post" action="?/deletePhoto">
         <img 
-          src="/uploadedPhotos/{photoSrc}" 
-          alt="File preview" 
-          class="max-w-40 max-h-40 h-auto duration-500 ease-in-out hover:max-w-80 focus:w-80 hover:max-h-full focus:max-h-full"
-          tabindex="0" 
-        />
-        <img 
-          src="/myimages/{photoSrc}" 
+          src="https://pub-a6cbd352341e4a1db0d6cdab90fcaeea.r2.dev/{photoSrc.key}"
           alt="File preview" 
           class="max-w-40 max-h-40 h-auto duration-500 ease-in-out hover:max-w-80 focus:w-80 hover:max-h-full focus:max-h-full"
           tabindex="0" 
         />
         {#if data.USER.pg.id_pg==2625}
-          <input type="hidden" name="photoSrc" value={photoSrc}>
+          <input type="hidden" name="photoSrc" value={photoSrc.key}>
           <button class="absolute top-0 right-0">
             <Icon class="text-3xl" icon="mdi:delete"/>
           </button>
@@ -128,9 +123,11 @@
   <form use:enhance={
     async ({formData})=>formData.set('photo',files)
   } on:submit={()=>dialog.close()} action="?/uploadPhoto" method="post" enctype="multipart/form-data">
-    {#if previewUrl}
-      <img src="{previewUrl}" alt="Selected file preview" class="w-80 h-auto mt-4" />
-    {/if}
+    <div class="flex justify-center">
+      {#if previewUrl}
+        <img src="{previewUrl}" alt="Selected file preview" class="w-80 h-auto mt-4" />
+      {/if}
+    </div>
 
     <div class="flex justify-around gap-5 mt-5 text-white text-lg"> 
       <div class="flex justify-around gap-5 mt-5 text-white text-lg">

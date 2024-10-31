@@ -26,10 +26,14 @@
 	}
 </script>
 
+
+
+
 <div class="h-full flex flex-col overflow-y-hidden">
 	<TabGroup class="size-full" regionPanel="size-full">
 		<svelte:fragment slot="panel">
 			{#if tabSet === 0}
+
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<div class="size-full flex flex-col gap-4 pb-4 justify-around items-center">
 					<div class="size-full flex justify-center items-center">
@@ -60,9 +64,9 @@
 										{/if}
 									</div>
 									<!-- Back face -->
-									<div class="absolute card p-1 w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
+									<div class="absolute card p-1 w-full overflow-clip h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
 										{#if data.USER.pg.proms == 223}
-											<video controls controlslist="nodownload noplaybackrate noremoteplayback" loop autoplay muted preload="metadata" width="100%">
+											<video class="rounded-3xl" controls controlslist="nodownload noplaybackrate noremoteplayback" loop autoplay muted preload="metadata" width="95%">
 												<source src="videos/slander_usins.mp4" type="video/mp4"/>
 												Your browser does not support the video tag
 											</video>
@@ -112,14 +116,14 @@
 					</div>
 
 					<div class="grid grid-cols-2 flex-grow">
-						<Tab class="w-full"  bind:group={tabSet} name="tab_stats" value={3}>
+						<Tab hover="" class="w-full"  bind:group={tabSet} name="tab_stats" value={3}>
 							<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 								<span><Icon icon="mdi:bar-chart" /></span>
 								<span>Stats</span>
 							</div>
 						</Tab>
 
-						<Tab  bind:group={tabSet} name="tab_consos" value={1}>
+						<Tab hover=""  bind:group={tabSet} name="tab_consos" value={1}>
 							<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 								<span><Icon icon="mdi:event-note" /></span>
 								<span>Consos</span>
@@ -127,7 +131,7 @@
 						</Tab>
 
 						<div class="col-span-2">
-							<Tab  bind:group={tabSet} name="tab_consos" value={2}>
+							<Tab hover=""  bind:group={tabSet} name="tab_consos" value={2}>
 								<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 									<span><Icon icon="mdi:event-note" /></span>
 									<span>Historique Fams</span>
@@ -138,7 +142,7 @@
 				</div>
 			{:else if tabSet === 1}
 				<div class="size-full flex flex-col items-center">
-					<Tab  bind:group={tabSet} name="tab_main" value={0}>
+					<Tab hover=""  bind:group={tabSet} name="tab_main" value={0}>
 						<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 							<span><Icon icon="mdi:event-note" /></span>
 							<span>Consos</span>
@@ -155,7 +159,7 @@
 				</div>
 			{:else if tabSet === 2}
 			<div class="size-full flex flex-col items-center">
-				<Tab  bind:group={tabSet} name="tab_main" value={0}>
+				<Tab hover=""  bind:group={tabSet} name="tab_main" value={0}>
 					<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 						<span><Icon icon="mdi:event-note" /></span>
 						<span>Historique Fams</span>
@@ -171,7 +175,7 @@
 			</div>
 			{:else if tabSet === 3}
 			<div class="size-full flex flex-col items-center gap-4">
-				<Tab  bind:group={tabSet} name="tab_main" value={0}>
+				<Tab hover=""  bind:group={tabSet} name="tab_main" value={0}>
 					<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
 						<span><Icon icon="mdi:bar-chart" /></span>
 						<span>Statistics</span>

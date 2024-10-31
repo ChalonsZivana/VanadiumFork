@@ -56,13 +56,19 @@ export default {
           '100%': {
             textShadow: 'none',
           },
-        }
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+        },
       },
       animation: {
         "fade-in": 'fade-in-out 10s forwards',
         "scale-up": 'scale-up 0.5s forwards',
         "shine":"shine 2s infinite",
-        "background-shine":"background-shine 1s"
+        "background-shine":"background-shine 1s",
+        shake: 'shake 1s ease-in-out infinite',
       }
     },
   },
@@ -71,6 +77,16 @@ export default {
 			themes: {
 				custom: [
 					myCustomTheme
+				],
+        preset: [
+					{
+						name: 'crimson',
+						enhancements: true,
+					},
+					{
+						name: 'hamlindigo',
+						enhancements: true,
+					},
 				],
 			},
 		}),

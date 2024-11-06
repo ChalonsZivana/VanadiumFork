@@ -48,18 +48,18 @@ export type SearchItemsMap = { [K in SelectTypes]:
 
 let selected:SelectTypes='Tout';
 
-export function getSearch(searchText:string, searchNums:number, searchProms:number, dataToSort:DataToSort):SearchItemsMap{
+export function getSearch(searchText:string, searchNums:number|null, searchProms:number|null, dataToSort:DataToSort):SearchItemsMap{
   let searchItems:SearchItemsMap = {PG:[], Fams:[], Boquette:[], Tout:[]};
   const sT = searchText.toLowerCase().trimEnd();
   const l = sT.split(' ').length;
-  if(searchText == '' && isNaN(searchNums) && isNaN(searchProms)) return searchItems;
+  if(searchText == '' && searchNums == null && searchProms == null) return searchItems;
 
   switch(selected){
     case 'Tout':
     case 'PG':
       searchItems.PG = dataToSort.SearchPgs.filter(e => {
-        if(!isNaN(searchNums) && searchNums !== e.pg.nums) return false
-        if(!isNaN(searchProms) && searchProms !== e.pg.proms) return false
+        if(searchNums!=null && searchNums !== e.pg.nums) return false
+        if(searchProms!=null && searchProms !== e.pg.proms) return false
         
         if(searchText !== ''){
           const prenomMatch = sT.match(new RegExp(regexify(simplifyBucque(e.pg.prenom!.toLowerCase())), 'g'))?.filter(e=>e!='')

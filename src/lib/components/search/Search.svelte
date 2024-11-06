@@ -2,8 +2,8 @@
     import { getSearch, type DataToSort, type SelectTypes } from "./search";
 
     export let searchText:string;
-    export let searchNums:number;
-    export let searchProms:number;
+    export let searchNums:number|null;
+    export let searchProms:number|null;
     export let selected:SelectTypes ='Tout';
     export let dataToSort: DataToSort;
 

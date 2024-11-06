@@ -24,8 +24,9 @@
   }
   let selected:SelectTypes='Tout';
   let searchText:string='';
-  let searchNums:number=NaN;
-  let searchProms:number=NaN;
+  let searchNums:number|null;
+  let searchProms:number|null;
+  $:console.log("nums:",searchNums);
   const dataToSort = Promise.all([data.pgs, data.fams, data.boquettes]).then((value)=>{
     return createDataToSort({pgs:value[0], fams:value[1], boquettes:value[2]});
   });

@@ -180,7 +180,6 @@ export class Boquette extends HasMoney {
       default:
         return null;
     }
-    console.log('cancel 1')
     return Taferie.cancelConsommation(id_conso, cancel);
   }
 }

@@ -113,12 +113,10 @@ export class Taferie {
             await p.consommations.update({where:{id_conso:consoBis.id_conso},data:{annule:cancel}});
             break;
         }
-        console.log('test')
         await p.consommations.update({where:{id_conso},data:{annule:cancel}});
         return {success:true, message:'rhopse annulée'}
       });
     } catch(e){
-      console.log(e)
       return {success:false, message:'an error occured'}
     }
   }

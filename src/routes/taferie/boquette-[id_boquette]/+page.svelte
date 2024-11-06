@@ -11,8 +11,8 @@
   export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>, success:boolean, message:string};
 
 
-  let currData:typeof form.search | null;
-  $:currData = form ? form.search : null;  
+  let currData:typeof data.search;
+  $:currData = data.search;  
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 100):NaN;
 </script>
 

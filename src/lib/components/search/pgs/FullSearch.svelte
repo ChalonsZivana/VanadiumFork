@@ -18,7 +18,7 @@
     async ()=>{
       return async({update})=> update({reset:false});
     }
-  } action="?/pgs" method="post" class="w-full flex flex-col gap-2">
+  } method="get" class="w-full flex flex-col gap-2">
     <div class="text-black w-full flex flex-col gap-2">
       <p class="text-white">Total de {totalPgs} pg(s) sur {nombrePages} page(s). (20 par page)</p>
 

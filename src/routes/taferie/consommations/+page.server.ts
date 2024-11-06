@@ -1,6 +1,5 @@
 
 import { error, fail } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types.js";
 import { consommations_type } from "@prisma/client";
 import { Taferie } from "$lib/server/classes/Taferie";
 import { consommationsSearch } from "$lib/components/search/consommations/fullsearch";
@@ -25,14 +24,14 @@ export const load = async ({ url})=>{
 }
 
 export const actions = {
-  cancel:async({request, params, url})=>{
+  cancel:async({request})=>{
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});
 
     await Taferie.cancelConsommation(id, true)
   },
-  uncancel:async({request, params})=>{
+  uncancel:async({request})=>{
     const data = await request.formData();
     const id = parseInt(data.get("id")?.toString()??'');
     if(isNaN(id)) return fail(400, {});

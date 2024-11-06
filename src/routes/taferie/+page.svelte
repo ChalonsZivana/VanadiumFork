@@ -11,6 +11,7 @@
   import ToggleButton from '$lib/components/miscellaneous/ToggleButton.svelte';
   import { enhance } from '$app/forms';
   import type { getTopNegats } from "$lib/server/db_connection";
+  import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 
   export let data;
   export let form:{topNegats:Awaited<ReturnType<typeof getTopNegats>>}
@@ -32,15 +33,15 @@
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5">
-  <div class="flex rounded-md w-full">
-    <select bind:value={selected} class="p-2 bg-red-100 border-2 border-black">
+  <div class="flex rounded-md w-full child:outline-none child:rounded-none">
+    <select bind:value={selected} class="input w-24">
       {#each Object.keys(tableHeaders) as t}
         <option value={t}>{t}</option>
       {/each}
     </select>
-    <input bind:value={searchText} class="p-2 outline-none bg-red-100 w-full border-2 border-black placeholder-gray-500" type="text" placeholder="texte: {selected}">
-    <input bind:value={searchNums} class="p-1 outline-none text-black text-xs bg-red-100 w-16 border-2 border-black placeholder-gray-500" type="number" placeholder="nums">
-    <input bind:value={searchProms} class="p-1 outline-none text-black text-xs bg-red-100 w-16 border-2 border-black placeholder-gray-500" type="number" placeholder="proms">
+    <input bind:value={searchText} class="input p-2" type="text" placeholder="texte: {selected}">
+    <input bind:value={searchNums} class="input w-16 p-2" type="number" placeholder="nums">
+    <input bind:value={searchProms} class="input w-16 p-2" type="number" placeholder="proms">
   </div>
   {#await dataToSort}
     Chargement...
@@ -127,21 +128,21 @@
       </div>
     </SectionCard>  
 
-    <div>
-      <ToggleSectionCard title="Actions" toggleClass="h-72">
-        <div class="flex flex-col gap-2">
-          <button class="bg-red-700 p-2 flex h-fit justify-around items-center">
-            <a class="text-white text-2xl" href="/taferie/consommations">consommations</a>
-          </button>
-          <button class="bg-red-700 p-2 flex h-fit justify-around items-center">
-            <a class="text-white text-2xl" href="/taferie/pgs">PGs</a>
-          </button>
-          <button class="bg-red-700 p-2 flex h-fit justify-around  items-center">
-            <a class="text-white text-2xl" href="/taferie/inscription">inscription</a>
-          </button>
+    <div class="input-group flex p-2 child:text-center">
+      <a class="" href="/taferie/consommations">Consommations</a>
+      <a class="" href="/taferie/pgs">PGs</a>
+      <a class="" href="/taferie/inscription">Inscription</a>
+    </div>
+
+    <Accordion class="rounded-xl divide-y-2 divide-black variant-filled-surface bg-gradient-to-t from-primary-700 to-primary-500">
+      <AccordionItem open >
+        <svelte:fragment slot="lead"></svelte:fragment>
+        <svelte:fragment slot="summary">
+          <p class="text-center h3">Admin</p>
+        </svelte:fragment>
+        <svelte:fragment slot="content">
             {#key data.config}
-              <form class="bg-red-700 p-2 flex flex-col gap-2 justify-start w-full" action="">
-                <p class="text-white text-2xl text-center">admin</p>
+              <form class="p-2 flex flex-col gap-2 justify-start w-full" action="">
                 <form use:enhance on:change={(e)=>e.currentTarget.requestSubmit()} action="?/vanazocque" method="post">
                   <ToggleButton name="vanazocque" isChecked={data.config.vanazocque?.valeur=='1'}/>
                 </form>
@@ -150,31 +151,35 @@
                 </form>
               </form>
             {/key}
-      </ToggleSectionCard>
-    </div>
-
-    <div>
-      <ToggleSectionCard title="Boquettes" toggleClass="h-96">
-        <div class="h-full overflow-y-scroll">
-          {#await data.boquettes}
-          Chargement des boquettes...
-          {:then boquettes} 
-          <CustomTable elements={boquettes} headers={['Boquette','Solde']} title=''>
-            <tr on:click={()=>location.href=`/taferie/boquette-${e.id_boquette}`} slot="tbody" let:e class="cursor-pointer">
-              <th class="p-2">
-                <a class="h-full w-full" href="/taferie/boquette-{e.id_boquette}">
-                  {e.nom}
-                </a>
-              </th>
-              <td>{#key e}
-                  <MoneyColor auto={e.solde}/>
-              {/key}</td>
-            <tr/>
-          </CustomTable>
-          {/await}
-        </div>
-      </ToggleSectionCard>
-    </div>
+        </svelte:fragment>
+      </AccordionItem>
+      <AccordionItem>
+        <svelte:fragment slot="lead"></svelte:fragment>
+        <svelte:fragment slot="summary">
+          <p class="text-center h3">Boquettes</p>
+        </svelte:fragment>
+        <svelte:fragment slot="content">
+          <div class="h-96 overflow-y-scroll">
+            {#await data.boquettes}
+            Chargement des boquettes...
+            {:then boquettes} 
+            <CustomTable elements={boquettes} headers={['Boquette','Solde']} title=''>
+              <tr on:click={()=>location.href=`/taferie/boquette-${e.id_boquette}`} slot="tbody" let:e class="cursor-pointer">
+                <th class="p-2">
+                  <a class="h-full w-full" href="/taferie/boquette-{e.id_boquette}">
+                    {e.nom}
+                  </a>
+                </th>
+                <td>{#key e}
+                    <MoneyColor auto={e.solde}/>
+                {/key}</td>
+              <tr/>
+            </CustomTable>
+            {/await}
+          </div>
+        </svelte:fragment>
+      </AccordionItem>
+    </Accordion>
 
     <SectionCard title="TOP Négat's">
       <form method="post" action="?/topnegats" class="w-full">

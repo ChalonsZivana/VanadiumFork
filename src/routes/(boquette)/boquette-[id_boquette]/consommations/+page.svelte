@@ -1,12 +1,11 @@
 <script lang="ts">
   import type { boquettes } from '@prisma/client'
   import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
-  import type{consommationsSearch} from '$lib/components/search/consommations/fullsearch.js'
 
   export let data;
 
 
-  let currData:Awaited<ReturnType<typeof consommationsSearch>>;
+  let currData:typeof data.search;
   $:currData = data.search; 
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 100) : undefined;
 

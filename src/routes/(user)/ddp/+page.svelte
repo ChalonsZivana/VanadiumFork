@@ -4,15 +4,13 @@
   import Special from "$lib/components/miscellaneous/Special.svelte"
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte"
   import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
-    import type { consommationsSearch } from "$lib/components/search/consommations/fullsearch.js";
     import Negats from "$lib/components/pg/Negats.svelte";
 
   
   export let data;
-  export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>};
 
-  let currData:typeof form.search | null;
-  $:currData = form ? form.search: null;  
+  let currData:typeof data.search;
+  $:currData = data.search; 
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 100) : undefined;
 
 

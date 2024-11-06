@@ -6,38 +6,36 @@ import { ConsommationsSchema } from '$lib/zodSchema.js';
 import { consommations_type } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 
-export async function load({params}){
+export async function load({params, url}){
   const id_boquette = parseInt(params.id_boquette);
   if(isNaN(id_boquette)) throw error(404);
+
+  const queryParams = Object.fromEntries(url.searchParams.entries());
+
+
   const boquette =await prisma.boquettes.findFirst({where:{id_boquette}});
   if(boquette == null) throw error(404);
+
+  const data = ConsommationsSchema.safeParse(queryParams);
+  console.log(data)
+  if(!data.success) throw error(400);
+
+  if(!['Tout', 'pg_boq', 'ext_boq'].includes(data.data.consoType)) throw error(400);
+  const consoType = data.data.consoType as consommations_type | 'Tout';
 
   return {
     boquette,
     produits:await prisma.produits.findMany({where:{id_boquette}}),
     categories:await prisma.categories.findMany({where:{id_boquette}}),
+    search:await consommationsSearch(
+      consoType == 'Tout' ? [{type:'ext_boq', to:id_boquette},{type:'pg_boq', to:id_boquette}]: [{type:consoType, to:id_boquette}], 
+      data.data
+    )
   }
 }
 
 
 export let actions = {
-  consommations:  async ({ request,params }) => {
-    const id_boquette = parseInt(params.id_boquette);
-    if(!id_boquette) throw error(400);
-    const d = Object.fromEntries(await request.formData());
-    const data = ConsommationsSchema.safeParse(d);
-    if(!data.success) throw error(400);
-
-    if(!['Tout', 'pg_boq', 'ext_boq'].includes(data.data.consoType)) throw error(400);
-    const consoType = data.data.consoType as consommations_type | 'Tout';
-
-    return {
-      search:await consommationsSearch(
-        consoType == 'Tout' ? [{type:'ext_boq', to:id_boquette},{type:'pg_boq', to:id_boquette}]: [{type:consoType, to:id_boquette}], 
-        data.data
-      )
-    }
-  },
   produits:async({params}) =>{
     const id_boquette = parseInt(params.id_boquette);
     if(isNaN(id_boquette)) throw error(404);

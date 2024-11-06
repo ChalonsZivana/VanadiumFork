@@ -95,10 +95,10 @@ export const ConsommationsSchema  = z.object({
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>
 
 export const PgSearchSchema  = z.object({
-  page:z.string().transform(e => parseInt(e)),
-  proms: z.string().transform(e => parseInt(e)),
-  sortType: z.enum(['nums','solde']),
-  sortDir: z.enum(['asc', 'desc']),
+  page:z.string().default('1').transform(e => parseInt(e)).refine(e => e >= 1),
+  proms: z.string().default('NaN').transform(e => parseInt(e)),
+  sortType: z.enum(['nums','solde']).default('nums'),
+  sortDir: z.enum(['asc', 'desc']).default('desc'),
 });
 export type PgSearchSchemaType = z.infer<typeof PgSearchSchema>
 

@@ -18,7 +18,7 @@
 </script>
 
 <SectionCard title={title}>
-  <form action="?/consommations" method="get" class="w-full flex flex-col gap-2">
+  <form method="get" class="w-full flex flex-col gap-2">
     <slot>
 
     </slot>

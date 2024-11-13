@@ -94,7 +94,10 @@ export default {
     require('tailwindcss-gradients'),
     function ({ addVariant }) {
       addVariant('child', '& > *');
+      addVariant('child-active', '& > *:active');
       addVariant('child-hover', '& > *:hover');
+      addVariant('child-selection', '& > *:selection');
+      addVariant('child-focus', '& > *:focus');
     },
     plugin(function ({ addUtilities }) {
 			addUtilities({

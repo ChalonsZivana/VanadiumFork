@@ -65,14 +65,8 @@
 									</div>
 									<!-- Back face -->
 									<div class="absolute card p-1 w-full overflow-clip h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
-										{#if data.USER.pg.proms == 223}
-											<video class="rounded-3xl" controls controlslist="nodownload noplaybackrate noremoteplayback" loop autoplay muted preload="metadata" width="95%">
-												<source src="videos/slander_usins.mp4" type="video/mp4"/>
-												Your browser does not support the video tag
-											</video>
-										{:else}
+								
 											<img class="h-full w-full object-cover" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
-										{/if}
 										
 								</div>					
 							</div>

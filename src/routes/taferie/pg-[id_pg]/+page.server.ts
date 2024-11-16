@@ -33,7 +33,7 @@ export const actions = {
     const id_pg = parseInt(params.id_pg);
     if(isNaN(montant) || isNaN(id_pg) || !Pg.exists(id_pg)) throw error(400);
 
-    await Taferie.rhopse({type:"pg_ext", from:id_pg, montant:montant, libelle});
+    return await Taferie.rhopse({type:"pg_ext", from:id_pg, montant:montant, libelle});
   },
   cancel:async({request})=>{
     const data = await request.formData();

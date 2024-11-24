@@ -35,7 +35,9 @@
           </th>
           <td>{e.bucque}</td>
           <td>
-            <MoneyColor auto={e.solde} className="text-xs font-bold"/>
+            {#key e.solde}
+              <MoneyColor auto={e.solde} className="text-xs font-bold"/>
+            {/key}
           </td>
           <td>
             {#if  e.email != ''}

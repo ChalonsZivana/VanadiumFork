@@ -6,13 +6,14 @@
   import type { pg } from '@prisma/client';
   import Icon from '@iconify/svelte';
     import { onMount } from 'svelte';
+    import { number, string } from 'zod';
 
   export let id_boquette:number;
   export let pgs:Partial<pg>[];
   
   let dialog:HTMLDialogElement;
 
-  let errors:{fileError:string|null, rhopsesError:[string, boolean][][]} = {
+  let errors:{fileError:string|null, rhopsesError:[string|number|Partial<pg>, boolean][][]} = {
     fileError:null,
     rhopsesError:[]
   };
@@ -36,43 +37,40 @@
     const wsProds = workbook.getWorksheet('Produits')
     if(wsProms == null || wsProds == null) return errors.fileError = "La feuille 'Rhopses' ou 'Produits' est introuvable";
 
-    let extractedData = (wsProms.getSheetValues() as any[]).map((e,i) => [i, e[1]??'', e[2]??'', e[3]??'', e[6].result]);
-    extractedData = extractedData.filter(e => e[1] != ''  || e[2] != '');
+    let extractedData = (wsProms.getSheetValues() as any[]).map((e,i) => ({index:i, PG:e[1]??'', produit:e[2]??'', quantite:parseInt(e[3])||1,commentaire:e[5]??'', id_produit:parseInt(e[6].result)})) as {index:number, PG:string, produit:string, quantite:number, commentaire:number, id_produit:number}[];
+    
+    extractedData = extractedData.filter(e => e.PG != ''  || e.produit != '');
     extractedData.shift();
 
     if(extractedData.length == 0) return errors.fileError = "Le fichier ne contient pas de rhopses";
-    let lastKnown:string = extractedData[0][1];
+    let lastKnown:string = extractedData[0].PG;
     extractedData.forEach(e => {
-      const [ligne, numsChproms, produit, _, __] = e;
-      if(numsChproms != '' && numsChproms != undefined) lastKnown = numsChproms.toLowerCase();
+      if(e.PG != '' && e.PG != undefined) lastKnown = e.PG.toLowerCase();
       const [nums, proms] = lastKnown.split('ch').map(e => parseInt(e));
-      let [quantite, id_produit] = [parseInt(e[3]), parseInt(e[4])];
-
-      quantite = isNaN(quantite) ? 1 : quantite
 
       let rhopsePourUnAncien = null;
       let pg = pgs.find(e => e.nums == nums && e.proms == proms);
       if(pg == undefined){
         pg = pgs.filter(e => e.nums == nums)[0];
-        rhopsePourUnAncien = numsChproms;
+        rhopsePourUnAncien = e.PG;
       }
 
-      if(isNaN(id_produit) || quantite <= 0 || pg == null) {
-        const err:[string, boolean][] = [
-          [ligne, false],
+      if(isNaN(e.id_produit) || e.quantite <= 0 || pg == null) {
+        const err:[string|number|Partial<pg>, boolean][] = [
+          [e.index, false],
           [pg, isNaN(nums) || isNaN(proms)],
-          [produit, isNaN(id_produit)],
-          [quantite, quantite <= 0],
-          [id_produit, isNaN(id_produit)]
+          [e.produit, isNaN(e.id_produit)],
+          [e.quantite, e.quantite <= 0],
+          [e.id_produit, isNaN(e.id_produit)]
         ]
         errors.rhopsesError.push(err);
         return e;
       };
-      const aggregateKey = `${pg.id_pg}-${id_produit}`;
+      const aggregateKey = `${pg.id_pg}-${e.id_produit}`;
       if(aggregateKey in rhopses){
-        rhopses[aggregateKey][2] += quantite;
+        rhopses[aggregateKey][2] += e.quantite;
       } else {
-        rhopses[aggregateKey] = [pg.id_pg, id_produit, quantite, numsChproms, produit, rhopsePourUnAncien]
+        rhopses[aggregateKey] = [pg.id_pg, e.id_produit, e.quantite, e.PG, produit, rhopsePourUnAncien]
       }
     });
 

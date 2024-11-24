@@ -12,10 +12,10 @@
 
 {#if green}
   <p class='text-green-700 {className}'>
-    <slot/>+{green}€
+    <slot/>+{green.toFixed(2)}€
   </p>
 {:else if red}
   <p class="text-red-700 {className}">
-    <slot/>-{Math.abs(red)}€
+    <slot/>-{Math.abs(red).toFixed(3)}€
   </p>
 {/if}

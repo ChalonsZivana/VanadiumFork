@@ -18,7 +18,7 @@
   
   
   function getProducts(id_categorie:number){
-    return produits.filter(e=>e.id_categorie==id_categorie);
+    return produits.filter(e=>e.id_categorie==id_categorie).sort((a, b) => a.nom.localeCompare(b.nom));;
   }
 
 

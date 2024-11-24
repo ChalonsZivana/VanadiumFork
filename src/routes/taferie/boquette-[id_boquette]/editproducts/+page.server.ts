@@ -1,5 +1,5 @@
 import prisma from '$lib/prisma';
-import { BOQUETTES, Boquette } from '$lib/server/classes/Boquette.js';
+import { Boquette } from '$lib/server/classes/Boquette.js';
 import { AddProductSchema, DeleteCategorySchema, DeleteProductSchema, EditProductSchema } from '$lib/zodSchema.js';
 import { error } from '@sveltejs/kit';
 
@@ -9,7 +9,7 @@ export async function load({params}){
 
   const boquette =await prisma.boquettes.findFirst({where:{id_boquette}});
   if(boquette == null) throw error(404);
-
+  
   return {
     boquette,
     produits:await prisma.produits.findMany({where:{id_boquette}}),

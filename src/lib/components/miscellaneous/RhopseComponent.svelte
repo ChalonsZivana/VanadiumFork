@@ -31,7 +31,10 @@
     verifyPositivity(id_produit);
   }
   const customEnhance:SubmitFunction<Record<string, unknown> | undefined, Record<string, unknown> | undefined> = ({formData}) => {
-    formData.set('produits', JSON.stringify(selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])))
+    formData.set('produits', JSON.stringify(selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])));
+    for(let i of Object.keys(quantités)){
+      quantités[i] = 0;
+    }
   }
 </script>
 

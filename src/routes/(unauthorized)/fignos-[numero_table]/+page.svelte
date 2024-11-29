@@ -8,12 +8,14 @@
   import type { SubmitFunction } from "@sveltejs/kit";
   import Icon from '@iconify/svelte';
     import { onMount } from 'svelte';
+    import { Tab, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
 
 
   export let data;
   
 
   export let dialog:HTMLDialogElement;
+	let tabSet: number = 0;
 
   const quantités = Object.fromEntries(data.produits.map(e=>[e.id_produit, 0]))
   let categorie = data.categories[0];
@@ -32,6 +34,9 @@
   }
   const customEnhance:SubmitFunction<Record<string, unknown> | undefined, Record<string, unknown> | undefined> = ({formData}) => {
     formData.set('produits', JSON.stringify(selectedProducts.map(e=>[e.id_produit,quantités[e.id_produit]])))
+    for(let i of Object.keys(quantités)){
+      quantités[i] = 0;
+    }
   }
 
   onMount(()=>{
@@ -42,7 +47,7 @@
 </script>
 
 
-<div class="h-full w-full">
+<div class="h-full w-full p-8">
   <SectionCard title="Commandes - Table {data.numero_table}">
     {#if selectedProducts.length}
     <div class="w-full flex flex-col gap-2 text-black">
@@ -63,12 +68,12 @@
         <div class="flex justify-center"><MyButton value="COMMANDER" callback={()=>dialog.showModal()}/></div>
     </div>
     {/if}
-    {#if data.categories.length > 1}
-      <select class="text-black w-full  p-2 text-xl rounded-xl" bind:value={categorie}>
+    {#if data.categories.length > 1}      
+      <div class="flex gap-10">
         {#each data.categories as cat}
-          <option class="text-xs w-1/2" value={cat}>{cat.nom}</option>
+          <button class="btn text-base w-1/2 {cat==categorie?'variant-outline-surface':'variant-filled-surface'} border-2 rounded-none" on:click={()=>categorie = cat}>{cat.nom}</button>
         {/each}
-      </select>
+      </div>
     {/if}
     <div class="h-96 text-black w-full overflow-y-scroll flex flex-col bg-red-100 rounded-md">
       {#each products as product, i}

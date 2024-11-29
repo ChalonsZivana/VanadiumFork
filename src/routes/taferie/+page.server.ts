@@ -12,8 +12,8 @@ const currentProms = [221,222,223]
 export const load:PageServerLoad = async ()=>{
   return {
     topNegats:getTopNegats(NaN),
-    fondsProms: await Database.fondsProms(currentProms),
-    negatsProms: await Database.negatsProms(currentProms),
+    fondsProms: Database.fondsProms(currentProms),
+    negatsProms: Database.negatsProms(currentProms),
     boquettes:prisma.boquettes.findMany({select:{nom:true,nom_simple:true,id_boquette:true, solde:true}}),
     pgs:prisma.pg.findMany({select:{bucque:true, nums:true, proms:true, id_pg:true, solde:true, nom:true, prenom:true},orderBy:{proms:'desc'}}),
     fams:prisma.fams.findMany(),

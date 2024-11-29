@@ -33,7 +33,7 @@
   //<iconify-icon icon="material-symbols:person-add"></iconify-icon>
 </script>
 
-<div class="w-11/12 mt-5 flex flex-col gap-5">
+<div class="w-11/12 mt-5">
   <div class="flex rounded-md w-full child:outline-none child:rounded-none">
     <select bind:value={selected} class="input w-24">
       {#each Object.keys(tableHeaders) as t}
@@ -97,9 +97,8 @@
       </Search>
     </div>
   {/await}
- 
- 
 
+  <div class="grid grid-row gap-5 mt-5">
     <SectionCard title="Fonds | Negats">
       <form method="POST" action="/login?/logout">
         <input type="hidden" name="boquette" value={20}>
@@ -114,22 +113,26 @@
         </div>
           
         <div class="flex gap-5 justify-center text-black">
-          {#each [data.fondsProms, data.negatsProms] as fonds}
-            <div class="flex w-full flex-col p-2 bg-red-100 rounded-lg">
-              <p class="text-center font-bold">Fonds Proms</p>
-              {#each Object.entries(fonds) as [proms, solde]}
-                <div class="flex gap-3">
-                  <p>{proms}:</p>
-                  <MoneyColor auto={solde} className="ml-auto mr-0"/>
-                </div>  
-              {/each}
-            </div>
-          {/each}
+          {#await Promise.all([data.fondsProms, data.negatsProms])}
+              <p>chargement...</p>
+          {:then fondsList} 
+            {#each fondsList as fonds}
+              <div class="flex w-full flex-col p-2 bg-red-100 rounded-lg">
+                <p class="text-center font-bold">Fonds Proms</p>
+                {#each Object.entries(fonds) as [proms, solde]}
+                  <div class="flex gap-3">
+                    <p>{proms}:</p>
+                    <MoneyColor auto={solde} className="ml-auto mr-0"/>
+                  </div>  
+                {/each}
+              </div>
+            {/each}
+          {/await}
         </div>
       </div>
     </SectionCard>  
 
-    <div class="input-group flex p-2 child:text-center">
+    <div class="input-group flex p-2 child:text-center size-fit justify-self-center divide-x-1 divide-white">
       <a class="" href="/taferie/consommations">Consommations</a>
       <a class="" href="/taferie/pgs">PGs</a>
       <a class="" href="/taferie/inscription">Inscription</a>
@@ -164,6 +167,7 @@
             {#await data.boquettes}
             Chargement des boquettes...
             {:then boquettes} 
+            {@const _= boquettes.sort((a,b)=>(a.nom??'').localeCompare(b.nom??''))}
             <CustomTable elements={boquettes} headers={['Boquette','Solde']} title=''>
               <tr on:click={()=>location.href=`/taferie/boquette-${e.id_boquette}`} slot="tbody" let:e class="cursor-pointer">
                 <th class="p-2">
@@ -205,4 +209,5 @@
         </CustomTable>
       {/if}
     </SectionCard>
+  </div>
 </div>

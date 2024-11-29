@@ -20,6 +20,9 @@
                 appId:'8c47c8d7-2816-439b-8b07-59217c8431a6', autoResubscribe:true, allowLocalhostAsSecureOrigin:true})
     });
 
+
+    const title = "Babaorum"
+
     type BoquetteIconMap = {
       [key: number]: string;
     };
@@ -99,7 +102,7 @@
     </svelte:fragment>
 <!-- Vanadium, Petibom, Tartopum -->
     <section class="flex justify-center">
-      <a href="/" class="font-zagoth h1">Tartopum</a>
+      <a href="/" class="font-zagoth h1">{title}</a>
     </section>
 
 		<svelte:fragment slot="trail">

@@ -32,6 +32,18 @@
       e.date = new Date(e.date as any as string)
     }
     const new_commandes = [...commandesNonTraitées, ...result.commandes].sort((a,b) => a.date.getMilliseconds() - b.date.getMilliseconds());
+    if(commandesNonTraitées.length != new_commandes.length){
+      emitDring();
+      // let i = 0;
+      // let interval = setInterval(() => {
+      //   if(i > 3){
+      //     clearInterval(interval);
+      //   }
+      //   emitDring();
+      //   i+=1;
+
+      // }, 100);
+    }
     commandesNonTraitées = new_commandes;
   }
 
@@ -63,7 +75,7 @@
   }
 </script>
 
-<div class="h-full w-full flex flex-col justify-center items-center p-2 gap-4">
+<div class="h-full w-full flex flex-col justify-center items-center p-2 gap-4 {commandesNonTraitées.length?'bg-red-500':''}">
   <!-- Statut -1 -->
   {#if commandesNonTraitées.length > 0}
     <div class="table-container w-full flex-grow">
@@ -77,7 +89,7 @@
             <th class="text-xs">Statut</th>
           </tr>
         </thead>
-        <tbody class="divide-y-2 divide-white">
+        <tbody class="divide-y-2 divide-white text-black">
           {#each commandesNonTraitées as commande}
           {@const date = commande.date.toLocaleString().split(' ')}
 
@@ -106,7 +118,7 @@
           <th class="text-xs">Statut</th>
         </tr>
       </thead>
-      <tbody class="divide-y-2 divide-white">
+      <tbody class="divide-y-2 divide-white text-black">
         {#each commandesEnCours as commande}
         {@const date = commande.date.toLocaleString().split(' ')}
           <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
@@ -133,7 +145,7 @@
           <th class="text-xs">Statut</th>
         </tr>
       </thead>
-      <tbody class="divide-y-2 divide-white">
+      <tbody class="divide-y-2 divide-white text-black">
         {#each commandesFinies as commande}
         {@const date = commande.date.toLocaleString().split(' ')}
           <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">

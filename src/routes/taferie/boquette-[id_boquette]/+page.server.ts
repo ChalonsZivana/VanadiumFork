@@ -17,7 +17,6 @@ export async function load({params, url}){
   if(boquette == null) throw error(404);
 
   const data = ConsommationsSchema.safeParse(queryParams);
-  console.log(data)
   if(!data.success) throw error(400);
 
   if(!['Tout', 'pg_boq', 'ext_boq'].includes(data.data.consoType)) throw error(400);

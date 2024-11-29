@@ -2,7 +2,6 @@ import prisma from '$lib/prisma';
 import { RhopseSchema } from '$lib/zodSchema.js';
 import { error, fail } from '@sveltejs/kit';
 import Twilio from 'twilio';
-import { array } from 'zod';
 
 
 const accountSid = 'AC926d01b1dace4d670f34b2a617cf32d1';
@@ -11,12 +10,13 @@ const client = new Twilio.Twilio(accountSid, authToken)
 
 export async function load({params}){
   const numero_table = parseInt(params.numero_table);
+  if(isNaN(numero_table)) throw error(404);
+
+
   let categories = await prisma.categories.findMany({where:{id_boquette:223}, orderBy:{nom:'asc'}});
   let produits = await prisma.produits.findMany({where:{id_boquette:223}, orderBy:{nom:'asc'}});
-  
-
   return { 
-    produits,categories, numero_table 
+    produits,categories, numero_table
   };
 }
 
@@ -27,7 +27,7 @@ export const actions = {
 
     const t = Object.fromEntries(await request.formData());
     const parse = RhopseSchema.safeParse(t);
-    console.log(parse)
+
     if(!parse.success) return fail(400,{});
     const data = parse.data;
 
@@ -44,7 +44,6 @@ export const actions = {
         }
       })
     }
-    console.log(data)
   // client.messages
   //   .create({
   //               from: 'whatsapp:+14155238886',

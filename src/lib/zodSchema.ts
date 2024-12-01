@@ -87,10 +87,7 @@ export const ConsommationsSchema  = z.object({
   sortType: z.enum(['date','montant']).default('date'),
   sortDir: z.enum(['asc', 'desc']).default('desc'),
   consoType:z.string().default('Tout').refine(e => Object.values(consommations_type).includes(e as any) || e == 'Tout'),
-  consoYear:z.string().default('NaN').transform(e => {
-    const y = parseInt(e)
-    return isNaN(y) ? new Date().getFullYear() : y;
-  }).pipe(z.number().min(1806).max(new Date().getFullYear())),
+  consoYear:z.string().default('NaN').transform(e =>parseInt(e)).pipe(z.union([z.number().min(1806).max(new Date().getFullYear()),z.nan()])),
 });
 export type ConsommationsSchemaType = z.infer<typeof ConsommationsSchema>
 

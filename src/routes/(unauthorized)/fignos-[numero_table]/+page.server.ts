@@ -1,5 +1,5 @@
 import prisma from '$lib/prisma';
-import { RhopseSchema } from '$lib/zodSchema.js';
+import { RhopseSchema, RhopseSchemaFignos } from '$lib/zodSchema.js';
 import { error, fail } from '@sveltejs/kit';
 import Twilio from 'twilio';
 
@@ -26,7 +26,7 @@ export const actions = {
     if(isNaN(numero_table)) throw error(404);
 
     const t = Object.fromEntries(await request.formData());
-    const parse = RhopseSchema.safeParse(t);
+    const parse = RhopseSchemaFignos.safeParse(t);
 
     if(!parse.success) return fail(400,{});
     const data = parse.data;
@@ -40,7 +40,7 @@ export const actions = {
           type:'ext_boq',
           from:numero_table,
           to:223,
-          libelle:`Table ${numero_table}:${prod.nom}`
+          libelle:`Table ${numero_table}:${prod.nom} - Paiement ${data.mode_paiement}`
         }
       })
     }

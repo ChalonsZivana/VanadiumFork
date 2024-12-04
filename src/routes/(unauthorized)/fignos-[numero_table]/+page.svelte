@@ -4,11 +4,9 @@
   import SectionCard from '$lib/components/SectionCard.svelte';
   import SubmitDialog from '$lib/components/miscellaneous/SubmitDialog.svelte';
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
-  import type { categories, pg, produits } from '@prisma/client';
   import type { SubmitFunction } from "@sveltejs/kit";
   import Icon from '@iconify/svelte';
     import { onMount } from 'svelte';
-    import { Tab, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
 
 
   export let data;
@@ -110,4 +108,12 @@
         </div>
       {/each}
     </div>
+
+    <label class="font-zagoth text-3xl place-self-center w-80 text-center text-white">
+      Mode de paiement
+      <select required class="input font-serif" name="mode_paiement" id="" value="">
+        <option value="CB">carte bancaire</option>
+        <option value="LIQ">liquide</option>
+      </select>
+    </label>
 </SubmitDialog>

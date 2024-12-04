@@ -1,7 +1,9 @@
 <script lang="ts">
   import SubmitDialog from '$lib/components/miscellaneous/SubmitDialog.svelte';
     import ValidationButton from '$lib/components/miscellaneous/ValidationButton.svelte';
+    import Icon from '@iconify/svelte';
   import type { commandes } from '@prisma/client';
+    import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
 
   export let data;
@@ -11,12 +13,18 @@
   $:commandesEnCours = data.commandesEnCours;
   $:commandesFinies = data.commandesFinies;
 
+   
   let selectedCommande:commandes|null;
+
   onMount(()=>{
     let i = setInterval(updateData, 5000);
   });
 
+
+  
+
   async function updateData(){
+    console.log('update')
     const response = await fetch(window.location.pathname, {
       method: 'POST',
       headers: {
@@ -34,15 +42,6 @@
     const new_commandes = [...commandesNonTraitées, ...result.commandes].sort((a,b) => a.date.getMilliseconds() - b.date.getMilliseconds());
     if(commandesNonTraitées.length != new_commandes.length){
       emitDring();
-      // let i = 0;
-      // let interval = setInterval(() => {
-      //   if(i > 3){
-      //     clearInterval(interval);
-      //   }
-      //   emitDring();
-      //   i+=1;
-
-      // }, 100);
     }
     commandesNonTraitées = new_commandes;
   }
@@ -75,90 +74,114 @@
   }
 </script>
 
-<div class="h-full w-full flex flex-col justify-center items-center p-2 gap-4 {commandesNonTraitées.length?'bg-red-500':''}">
-  <!-- Statut -1 -->
-  {#if commandesNonTraitées.length > 0}
-    <div class="table-container w-full flex-grow">
-      <!-- Native Table Element -->
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="text-xs">Date</th>
-            <th class="text-xs">De</th>
-            <th class="text-xs">Libelle</th>
-            <th class="text-xs">Statut</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y-2 divide-white text-black">
-          {#each commandesNonTraitées as commande}
-          {@const date = commande.date.toLocaleString().split(' ')}
-
-            <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
-              <td>{date[0]}<br>{date[1]}</td>
-              <td>{commande.from}</td>
-              <td>{commande.libelle}</td>
-              <td>{getStatut(commande.statut)}</td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
-  {/if}
-
-  <!-- Statut 0 -->
- {#if commandesEnCours.length > 0}
-   <div class="table-container w-full flex-grow">
-    <!-- Native Table Element -->
-    <table class="table">
-      <thead>
-        <tr>
-          <th class="text-xs">Date</th>
-          <th class="text-xs">De</th>
-          <th class="text-xs">Libelle</th>
-          <th class="text-xs">Statut</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y-2 divide-white text-black">
-        {#each commandesEnCours as commande}
-        {@const date = commande.date.toLocaleString().split(' ')}
-          <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
-            <td>{date[0]}<br>{date[1]}</td>
-            <td>{commande.from}</td>
-            <td>{commande.libelle}</td>
-            <td>{getStatut(commande.statut)}</td>
-          </tr>
-          {/each}
-      </tbody>
-    </table>
-  </div>
- {/if}
-  <!-- Statut 1 -->
-  {#if commandesFinies.length > 0}
-  <div class="table-container w-full flex-grow">
-    <!-- Native Table Element -->
-    <table class="table">
-      <thead>
-        <tr>
-          <th class="text-xs">Date</th>
-          <th class="text-xs">De</th>
-          <th class="text-xs">Libelle</th>
-          <th class="text-xs">Statut</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y-2 divide-white text-black">
-        {#each commandesFinies as commande}
-        {@const date = commande.date.toLocaleString().split(' ')}
-          <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
-            <td>{date[0]}<br>{date[1]}</td>
-            <td>{commande.from}</td>
-            <td>{commande.libelle}</td>
-            <td>{getStatut(commande.statut)}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  </div>
-  {/if}
+<div class="h-full w-full flex flex-col justify-start items-start p-2 gap-4 {commandesNonTraitées.length?'':''}">
+  <Accordion autocollapse={true} >
+    <!-- Statut 1 -->
+    <AccordionItem open class="{commandesNonTraitées.length>0?'bg-red-600':''}">
+      <svelte:fragment slot="lead">
+        <Icon icon="mdi:alert-decagram"/>
+      </svelte:fragment>
+		  <svelte:fragment slot="summary">
+        <p class="text-xl">Commandes non traitées - {commandesNonTraitées.length}</p>
+      </svelte:fragment>
+		  <svelte:fragment slot="content">
+        <div class="table-container flex-grow">
+          <!-- Native Table Element -->
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th class="text-xs">Date</th>
+                <th class="text-xs">De</th>
+                <th class="text-xs">Libelle</th>
+                <th class="text-xs">Statut</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y-2 divide-white text-black">
+              {#each commandesNonTraitées as commande}
+              {@const date = commande.date.toLocaleString().split(' ')}
+    
+                <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
+                  <td>{date[0]}<br>{date[1]}</td>
+                  <td>{commande.from}</td>
+                  <td><p class="text-wrap">{commande.libelle}</p></td>
+                  <td>{getStatut(commande.statut)}</td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      </svelte:fragment>
+    </AccordionItem>
+    <!-- Statut 2 -->
+    <AccordionItem class="{commandesEnCours.length>0?'bg-red-400':''}">
+      <svelte:fragment slot="lead">
+        <Icon icon="mdi:counterclockwise-arrows"/>
+      </svelte:fragment>
+		  <svelte:fragment slot="summary">
+        <p class="text-xl">Commandes en cours - {commandesEnCours.length}</p>
+      </svelte:fragment>
+		  <svelte:fragment slot="content">
+          <div class="table-container w-full flex-grow">
+            <!-- Native Table Element -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="text-xs">Date</th>
+                  <th class="text-xs">De</th>
+                  <th class="text-xs">Libelle</th>
+                  <th class="text-xs">Statut</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y-2 divide-white text-black">
+                {#each commandesEnCours as commande}
+                {@const date = commande.date.toLocaleString().split(' ')}
+                  <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
+                    <td>{date[0]}<br>{date[1]}</td>
+                    <td>{commande.from}</td>
+                    <td><p class="text-wrap">{commande.libelle}</p></td>
+                    <td>{getStatut(commande.statut)}</td>
+                  </tr>
+                  {/each}
+              </tbody>
+            </table>
+          </div>
+      </svelte:fragment>
+    </AccordionItem>
+    <AccordionItem>
+      <svelte:fragment slot="lead">
+        <Icon icon="mdi:check-decagram"/>
+      </svelte:fragment>
+		  <svelte:fragment slot="summary">
+        <p class="text-xl">Commandes finies - {commandesFinies.length}</p>
+      </svelte:fragment>
+		  <svelte:fragment slot="content">
+          <div class="table-container w-full flex-grow">
+            <!-- Native Table Element -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="text-xs">Date</th>
+                  <th class="text-xs">De</th>
+                  <th class="text-xs">Libelle</th>
+                  <th class="text-xs">Statut</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y-2 divide-white text-black">
+                {#each commandesFinies as commande}
+                {@const date = commande.date.toLocaleString().split(' ')}
+                  <tr on:click={()=>{dialog.showModal();selectedCommande=commande}} class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][commande.statut + 1]}">
+                    <td>{date[0]}<br>{date[1]}</td>
+                    <td>{commande.from}</td>
+                    <td><p class="text-wrap">{commande.libelle}</p></td>
+                    <td>{getStatut(commande.statut)}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
+      </svelte:fragment>
+    </AccordionItem>
+  </Accordion>
 </div>
 
 
@@ -176,7 +199,7 @@
       <tbody class="divide-y-2 divide-white">
             <tr class="decoration-2 divide-x-2 {['child:bg-green-300','child:bg-orange-300','child:bg-red-300'][selectedCommande?.statut ?? 0 + 1]}">
               <td>{selectedCommande.from}</td>
-              <td>{selectedCommande.libelle}</td>
+              <td><p class="text-wrap">{selectedCommande.libelle}</p></td>
               <td>{getStatut(selectedCommande.statut)}</td>
             </tr>
       </tbody>

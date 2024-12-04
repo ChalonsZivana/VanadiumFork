@@ -23,6 +23,20 @@ export const OnlyDateSchema = z.object({
   date:z.string().transform(e=>new Date(parseInt(e))).pipe(z.date())
 })
 
+export const RhopseSchemaFignos  = z.object({
+  produits:z.string().transform(
+    e => {
+      try{
+        return JSON.parse(e)
+      } catch {
+        return null;
+      }
+    }
+  ).pipe(z.array(z.tuple([z.number(),z.number()]))),
+  rhopse_ancien:z.optional(z.union([z.null(), z.string()])),
+  mode_paiement:z.enum(['CB','LIQ']),
+}) 
+
 export const RhopseSchema  = z.object({
   produits:z.string().transform(
     e => {

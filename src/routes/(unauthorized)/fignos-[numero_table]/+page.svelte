@@ -109,7 +109,7 @@
       {/each}
     </div>
 
-    <label class="font-zagoth text-3xl place-self-center w-80 text-center text-white">
+    <label class="font-zagoth text-3xl place-self-center w-60 text-center text-white">
       Mode de paiement
       <select required class="input font-serif" name="mode_paiement" id="" value="">
         <option value="CB">carte bancaire</option>

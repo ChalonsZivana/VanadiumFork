@@ -32,7 +32,11 @@ export const actions = {
     if(!parse.success) return fail(400,{});
     const data = parse.data;
 
-    const produits = await Promise.all(data.produits.map(async e => prisma.produits.findFirst({where:{id_produit:e[0]}})));
+
+
+    const produits = await Promise.all(data.produits.map(async e => {
+      return {prod:await prisma.produits.findFirst({where:{id_produit:e[0]}}), q:e[1]}
+    }));
     if(!produits.every(e => e !== null)) return {success:false};
 
     for(let prod of produits){
@@ -41,7 +45,7 @@ export const actions = {
           type:'ext_boq',
           from:numero_table,
           to:223,
-          libelle:`Table ${numero_table}:${prod.nom} - Paiement ${data.mode_paiement}`
+          libelle:`Table ${numero_table}:${prod.prod?.nom} ${prod.q}    - Paiement ${data.mode_paiement}`
         }
       })
     }

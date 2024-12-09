@@ -68,6 +68,7 @@ export const InscriptionSchema = z.object({
   nums: parseInt(data.nums),
   proms: parseInt(data.proms),
   solde: parseFloat(data.solde),
+  bucque: data.bucque.length == 0 ? 'SQRT':data.bucque,
 })).refine((data) => {
   return !isNaN(data.nums) && !isNaN(data.proms) && !isNaN(data.solde);
 }, {

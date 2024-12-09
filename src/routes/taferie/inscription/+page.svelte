@@ -18,32 +18,32 @@
       <div class="text-black w-full flex flex-col gap-2 items-center">
         <label class="w-11/12">
           <p class="font-zagoth text-white text-xl">Adresse mail :</p>
-          <input type="email" name="email" class="w-full rounded-md p-1">
+          <input required type="email" name="email" class="w-full rounded-md p-1">
           
         </label>
         <label class="w-11/12">
           <p class="font-zagoth text-white">Nums :</p>
-          <input type="number" name="nums" class="w-full rounded-md p-1">
+          <input required type="number" name="nums" class="w-full rounded-md p-1">
         </label>
         <label class="w-11/12">
           <p class="font-zagoth text-white">Proms :</p>
-          <input type="number" name="proms" value={form?.proms ?? ''} class="w-full rounded-md p-1">
+          <input required type="number" name="proms" value={form?.proms ?? ''} class="w-full rounded-md p-1">
         </label>
         <label class="w-11/12">
           <p class="font-zagoth text-white">Montant sur le compte :</p>
-          <input type="number" name="solde" value={form?.solde ?? '' } class="w-full rounded-md p-1">
+          <input required type="number" name="solde" value={form?.solde ?? '' } class="w-full rounded-md p-1">
         </label>
         <label class="w-11/12">
           <p class="font-zagoth text-white">Prénom :</p>
-          <input type="text" name="prenom" class="w-full rounded-md p-1">
+          <input required type="text" name="prenom" class="w-full rounded-md p-1">
         </label>
         <label class="w-11/12">
           <p class="font-zagoth text-white">Nom :</p>
-          <input type="text" name="nom" class="w-full rounded-md p-1">
+          <input required type="text" name="nom" class="w-full rounded-md p-1">
         </label>
         <label class="w-11/12">
           <p class="font-zagoth text-white">Bucque :</p>
-          <input type="text" name="bucque" class="w-full rounded-md p-1">
+          <input type="text" name="bucque" class="w-full rounded-md p-1" placeholder="SQRT">
         </label>
       </div>
       

@@ -11,9 +11,9 @@ export const load = async ({params})=>{
     products:await prisma.produits.findMany({where:{id_boquette}, orderBy:{nom:'asc'}}),
     id_boquette,
     proms:{
-      221:await Database.getNumsInProms(221),
       222:await Database.getNumsInProms(222),
       223:await Database.getNumsInProms(223),
+      224:await Database.getNumsInProms(224),
     }
   };
 }

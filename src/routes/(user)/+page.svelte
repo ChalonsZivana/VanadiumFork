@@ -7,7 +7,6 @@
 
 	export let data;
 	
-	const negats = Object.entries(data.negats);
 
 	let tabSet: number = 0;
 	let flipped = true;
@@ -90,21 +89,6 @@
 									<p class="font-bold">Fam's</p>
 									<span>{data.USER.fams.solde}€</span>
 								</div>
-							</section>
-						</div>
-						<!-- Negats -->
-						<div class="card overflow-clip flex">
-							<div class="flex justify-center items-center p-2 text-3xl">
-								<Icon icon="tabler:coin-euro"/>
-							</div>
-							<section class="grid grid-cols-2 w-full divide-x-[1px] p-2">
-								{#each negats as [proms,negat]}
-									<div class="flex flex-col justify-center items-center">
-										<p class="font-bold">{proms}</p>
-										<span>{negat}€</span>
-									</div>
-								{/each}
-			
 							</section>
 						</div>
 					</div>

@@ -19,7 +19,6 @@ export const load = async ({ locals }) => {
 
   return {
     photos:Array(10).fill(0).map((_)=>getRandomPhoto(photosFolder)),
-    negats:await Database.negatsProms([222,223]),
     topGlobal,
     topDuJour,
     consommations: Taferie.consommations([

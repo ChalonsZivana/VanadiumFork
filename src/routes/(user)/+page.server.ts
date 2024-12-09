@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { redirect } from "@sveltejs/kit";
 import { Pg } from '$lib/server/classes/PG.js';
-import { getHistoriqueFams, getRandomTop, getTop } from '$lib/server/db_connection.js';
+import { getRandomTop, getTop } from '$lib/server/db_connection.js';
 import { Database } from '$lib/server/classes/Database.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
 

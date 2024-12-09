@@ -118,7 +118,6 @@ model pg {
   mot_de_passe               String     @default("91b1bb7c2d6d0ccbaa574c690930b317ad44ebb9") 
   actif                      Boolean       @default(true) 
   ddp                      Boolean        @default(false)
-  temps_negats            DateTime?        @default(now())
   can_buy                 Boolean         @default(true)
   anciens_autorises       String[]          @default([]) 
 

@@ -1,7 +1,5 @@
 import prisma from "$lib/prisma";
-import type { pg } from "@prisma/client";
 import { Fams } from "./classes/Fams";
-import { Pg } from "./classes/PG";
 import type { Top } from './db_structs';
 
 export async function getFams(nums:number) {

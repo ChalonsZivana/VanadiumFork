@@ -51,6 +51,7 @@ export const actions = {
     if(!data.success) return fail(400, {success:false, message:"Something went wrong"})
 
       const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = [];
+    console.log(data.data);
     for(let [id_pg, id_produit, quantite, rhopsePourUnAncien] of data.data.produits){
       const conso = await Taferie.rhopse({
         type:'pg_boq',

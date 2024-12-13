@@ -3,10 +3,9 @@
   import SubmitDialog from '../miscellaneous/SubmitDialog.svelte';
   import CustomTable from '../miscellaneous/CustomTable.svelte';
   import ToggleSectionCard from '../ToggleSectionCard.svelte';
-  import type { pg } from '@prisma/client';
+  import type { pg, produits } from '@prisma/client';
   import Icon from '@iconify/svelte';
-    import { onMount } from 'svelte';
-    import { number, string } from 'zod';
+  import { onMount } from 'svelte';
 
   export let id_boquette:number;
   export let pgs:Partial<pg>[];
@@ -18,7 +17,7 @@
     rhopsesError:[]
   };
   let fileInputRhopse:HTMLInputElement;
-  let rhopses: { [key: string]: number[] } = {};
+  let rhopses: { [key: string]: {id_pg:number,quantite:number, id_produit:number, rhopseAncien:string|null, produit:produits, pg:Partial<pg>} } = {};
 
   onMount(()=>{
     dialog.addEventListener("close",()=>{
@@ -34,9 +33,11 @@
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.load(await file.arrayBuffer());
     const wsProms = workbook.getWorksheet(`Rhopses`);
-    const wsProds = workbook.getWorksheet('Produits')
+    const wsProds = workbook.getWorksheet('Produits');
     if(wsProms == null || wsProds == null) return errors.fileError = "La feuille 'Rhopses' ou 'Produits' est introuvable";
 
+    let prods = Object.fromEntries((wsProds.getSheetValues() as any[]).map((e,i) => [e[3],e[1]]).slice(1));
+    delete prods['Produits'];
     let extractedData = (wsProms.getSheetValues() as any[]).map((e,i) => ({index:i, PG:e[1]??'', produit:e[2]??'', quantite:parseInt(e[3])||1,commentaire:e[5]??'', id_produit:parseInt(e[6].result)})) as {index:number, PG:string, produit:string, quantite:number, commentaire:number, id_produit:number}[];
     
     extractedData = extractedData.filter(e => e.PG != ''  || e.produit != '');
@@ -55,7 +56,7 @@
         rhopsePourUnAncien = e.PG;
       }
 
-      if(isNaN(e.id_produit) || e.quantite <= 0 || pg == null) {
+      if(isNaN(e.id_produit) || e.quantite <= 0 || pg == null || pg == undefined) {
         const err:[string|number|Partial<pg>, boolean][] = [
           [e.index, false],
           [pg, isNaN(nums) || isNaN(proms)],
@@ -68,9 +69,9 @@
       };
       const aggregateKey = `${pg.id_pg}-${e.id_produit}`;
       if(aggregateKey in rhopses){
-        rhopses[aggregateKey][2] += e.quantite;
+        rhopses[aggregateKey].quantite += e.quantite;
       } else {
-        rhopses[aggregateKey] = [pg.id_pg, e.id_produit, e.quantite, e.PG, produit, rhopsePourUnAncien]
+        rhopses[aggregateKey] = {id_pg:pg.id_pg!, id_produit:e.id_produit, quantite:e.quantite, rhopseAncien:rhopsePourUnAncien, pg:pg, produit:prods[e.id_produit]}
       }
     });
 
@@ -94,7 +95,7 @@
 <SubmitDialog bind:dialog={dialog} formAction={`/boquette-${id_boquette}?/import_rhopse`} customEnhance={({formData, cancel})=>{
     if(errors.rhopsesError.length > 0) return cancel();
     
-    formData.set('produits', JSON.stringify(Object.values(rhopses).map(e => [e[0],e[1],e[2], e[5]])));
+    formData.set('produits', JSON.stringify(Object.values(rhopses).map(e => [e.id_pg,e.id_produit,e.quantite, e.rhopseAncien])));
   }} title="Importer Rhopses"> 
     <div class="mt-5"></div>
     <div class="flex flex-col gap-5">
@@ -122,9 +123,9 @@
             <CustomTable elements={Object.values(rhopses)} headers={['PG','Produit', 'Quantité']}>
               <svelte:fragment slot="tbody" let:e>
                 <tr class="divide-x-2 divide-white ">
-                  <td>{e[3]}</td>
-                  <td>{e[4]}</td>
-                  <td>{e[2]}</td>
+                  <td>{e.pg.nums}ch{e.pg.proms}</td>
+                  <td>{e.produit}</td>
+                  <td>{e.quantite}</td>
                 </tr>
               </svelte:fragment>
             </CustomTable>

@@ -63,11 +63,9 @@
 										{/if}
 									</div>
 									<!-- Back face -->
-									<div class="absolute card p-1 w-full overflow-clip h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">
-								
+									<div class="absolute card p-1 w-full overflow-clip h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">								
 											<img class="h-full w-full object-cover" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
-										
-								</div>					
+								</div>
 							</div>
 						</button>
 					</div>

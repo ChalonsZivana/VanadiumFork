@@ -2,6 +2,8 @@
   import MoneyColor from '../miscellaneous/MoneyColor.svelte';
   import AddRemoveConso from '../miscellaneous/AddRemoveConso.svelte';
   import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
+    import type { consommations } from '@prisma/client';
+    import { number } from 'zod';
 
   export let fromOption:boolean;
   export let cancelOption:boolean;
@@ -36,11 +38,6 @@
   let headers = ['Date','De','Vers','Libellé','Montant'];
   if(cancelOption) headers.push('')
 
-  function transformMontant(montant:number){
-    const [hard, soft] = montant.toFixed(3).split('.').map(parseInt);
-
-    return Math.sign(montant) * (hard + soft);
-  }
 </script>
 
 <!-- Responsive Container (recommended) -->
@@ -79,7 +76,8 @@
               <!-- Foys -->
               {#key conso.montant}
                 {#if conso.type=='pg_boq' && conso.to==7} 
-                  <MoneyColor auto={transformMontant(conso.montant)} className="text-xs font-bold text-xxs"/>
+                  <MoneyColor auto={conso.montant} className="text-xs font-bold text-xxs"/>
+                 
                 {:else if conso.type=='ext_fams' || conso.type=='pg_fams'}
                   <MoneyColor auto={-conso.montant} className="text-xs font-bold text-xxs"/>
 

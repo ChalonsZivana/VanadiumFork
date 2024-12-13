@@ -16,6 +16,6 @@
   </p>
 {:else if red}
   <p class="text-red-700 {className}">
-    <slot/>-{Math.abs(red).toFixed(3)}€
+    <slot/>-{Math.abs(red).toFixed(2)}€
   </p>
 {/if}

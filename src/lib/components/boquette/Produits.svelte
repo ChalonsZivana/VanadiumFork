@@ -97,12 +97,12 @@
       </label>
       <label>
         <p class="text-2xl font-zagoth text-white">Prix du produit:</p>
-        <input class="pl-2 h-10 w-full" type="number" step="0.01" min="0" name="prix" value={productToEdit.prix}>
+        <input class="pl-2 h-10 w-full" type="number" step="0.001" min="0" name="prix" value={productToEdit.prix}>
       </label>
       {#if id_boquette == 7}
         <label>
           <p class="text-2xl font-zagoth text-white">Prix2 du produit:</p>
-          <input class="pl-2 h-10 w-full" type="number" step="0.01" min="0" name="prix2" value={productToEdit.prix2}>
+          <input class="pl-2 h-10 w-full" type="number" step="0.001" min="0" name="prix2" value={productToEdit.prix2}>
         </label>
       {/if}
 

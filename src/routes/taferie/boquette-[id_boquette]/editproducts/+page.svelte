@@ -32,12 +32,12 @@
       </label>
       <label>
         <p class="text-3xl font-zagoth">Prix</p>
-        <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.01" min="0" name="prix">
+        <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.001" min="0" name="prix">
       </label>
       {#if data.boquette.id_boquette == 7}
         <label>
           <p class="text-3xl font-zagoth">Prix2</p>
-          <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.01" min="0" name="prix2">
+          <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.001" min="0" name="prix2">
         </label>
       {/if}
       <button class="rounded-md bg-blue-600 self-center">

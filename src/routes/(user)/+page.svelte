@@ -36,7 +36,10 @@
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<div class="size-full flex flex-col gap-4 pb-4 justify-around items-center">
 					<div class="size-full flex justify-center items-center">
-						<button class="perspective-1000 {flipped && false ? 'aspect-square h-full max-w-80 max-h-80':'aspect-video w-80'} duration-1000" on:click={flip}>
+						<button class="perspective-1000 relative {flipped && false ? 'aspect-square h-full max-w-80 max-h-80':'aspect-video w-80'} duration-1000" on:click={flip}>
+							<img class="absolute pointer-events-none z-50 w-full scale-y-100 -translate-y-20 left-0" src="images/noel2.png" alt="" srcset="">
+
+
 							<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
 									<!-- Front face -->
 									<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
@@ -91,16 +94,18 @@
 						</div>
 					</div>
 
-					<div class="grid grid-cols-2 flex-grow">
+					<div class="grid grid-cols-2 flex-grow mb-10">
 						<Tab hover="" class="w-full"  bind:group={tabSet} name="tab_stats" value={3}>
-							<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+							<div class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+								<img class="absolute pointer-events-none scale-y-50 -top-8 left-0" src="images/noel1.png" alt="" srcset="">
 								<span><Icon icon="mdi:bar-chart" /></span>
 								<span>Stats</span>
 							</div>
 						</Tab>
 
 						<Tab hover=""  bind:group={tabSet} name="tab_consos" value={1}>
-							<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+							<div class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+								<img class="absolute pointer-events-none scale-y-50 -top-8 left-0" src="images/noel2.png" alt="" srcset="">
 								<span><Icon icon="mdi:event-note" /></span>
 								<span>Consos</span>
 							</div>
@@ -108,7 +113,8 @@
 
 						<div class="col-span-2">
 							<Tab hover=""  bind:group={tabSet} name="tab_consos" value={2}>
-								<div class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+								<div class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4">
+									<img class="absolute w-full h-24 scale-y-50 -top-8 left-0" src="images/noel2.png" alt="" srcset="">
 									<span><Icon icon="mdi:event-note" /></span>
 									<span>Historique Fams</span>
 								</div>

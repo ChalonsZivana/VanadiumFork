@@ -116,7 +116,9 @@
 
     {#key url}
         <div class="flex-1 overflow-y-scroll flex flex-col items-center" in:fly={{x:-200, duration:300, delay:300}} out:fly={{x:200, duration:300}}>
+          <img class="absolute pointer-events-none top-0 left-0 w-full h-full" src="images/neige-unspeed.gif" alt="" srcset="">
                 <slot/>
+          <img class="absolute pointer-events-none bottom-14 left-0 w-full" src="images/renne.png" alt="" srcset="">
         </div>
     {/key}
 

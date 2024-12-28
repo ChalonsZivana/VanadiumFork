@@ -9,6 +9,7 @@
     import {onMount} from 'svelte';
     import type { boquettes } from "@prisma/client";
     import type { User } from "$lib/server/auth";
+    import { fade } from 'svelte/transition';
 
     export let USER: User | null;
     export let BOQUETTES:boquettes[];
@@ -21,7 +22,7 @@
     });
 
 
-    const title = "Babaorum"
+    const title = "Ô Comtroipum"
 
     type BoquetteIconMap = {
       [key: number]: string;
@@ -65,11 +66,43 @@
     }
     
   }
+
+  function daysBeforeNewYear(): number {
+    const today = new Date()
+    const newYear = new Date(today.getFullYear() + 1, 0, 1); // 1er janvier de l'année suivante
+    const diffTime = newYear.getTime() - today.getTime(); // Différence en millisecondes
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Conversion en jours
+    return diffDays;
+  }
+
+  onMount(() => {
+    if(decompte == 0){
+      setInterval(generateFirework, 2000)
+    }
+  });
+
+  function generateFirework() {
+      const firework = document.createElement("img");
+      firework.src = "images/firework_gif.gif"; // Chemin de votre gif
+      firework.alt = "Firework";
+      firework.className = "firework absolute pointer-events-none opacity-70 -translate-x-1/2 -translate-y-1/2";
+      // Positionnement aléatoire
+      firework.style.left = Math.random() * window.innerWidth + "px";
+      firework.style.top = Math.random() * window.innerHeight  + "px";
+      firework.style.scale = (Math.random()).toString();
+      // Ajout du feu d'artifice à la page
+      myMainDiv.appendChild(firework);
+
+      // Supprimer le feu d'artifice après l'animation
+      setTimeout(() => firework.remove(), 2000);
+    }
+  $:decompte = daysBeforeNewYear();
+  let myMainDiv:HTMLElement;
 </script>
 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div on:click={handleClick} class="relative w-screen h-screen flex flex-col justify-between">
+<div bind:this={myMainDiv} on:click={handleClick} class="relative overflow-hidden w-screen h-screen flex flex-col justify-between">
   <AppBar background="" border="" gridColumns="grid-cols-3" slotTrail="place-content-end text-4xl">
 		<svelte:fragment slot="lead">
       <span class="flex items-end gap-4">
@@ -116,10 +149,17 @@
 
     {#key url}
         <div class="flex-1 overflow-y-scroll flex flex-col items-center" in:fly={{x:-200, duration:300, delay:300}} out:fly={{x:200, duration:300}}>
-          <img class="absolute pointer-events-none top-0 left-0 w-full h-full" src="images/neige-unspeed.gif" alt="" srcset="">
-                <slot/>
-          <img class="absolute pointer-events-none bottom-14 left-0 w-40" src="images/renne.png" alt="" srcset="">
-          <img class="absolute pointer-events-none bottom-14 right-0 h-40" src="images/pere_noel.png" alt="" srcset="">
+          <slot/>
+         
+          {#if decompte!=0}
+            <p class="absolute left-1/2 top-1/2 text-8xl -translate-x-1/2">J-{decompte}</p>
+            {#each [1,2,3,4] as a}
+              <img style="transform: translateY({a}00%);" class="absolute pointer-events-none top-0 -left-14 w-40" src="images/firework.webp" alt="" srcset="">
+            {/each}
+            {#each [1,2,3,4] as a}
+              <img style="transform: translateY({a}00%);" class="absolute pointer-events-none -scale-x-100 top-0 -right-14 w-40" src="images/firework.webp" alt="" srcset="">
+            {/each}
+          {/if}
         </div>
     {/key}
 

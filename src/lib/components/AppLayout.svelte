@@ -5,11 +5,10 @@
     import { TabGroup, TabAnchor } from '@skeletonlabs/skeleton';
     import LogalSoce from "$lib/components/svgs/logal-soce.svelte";
     import OneSignal from '@nolanx/svelte-onesignal';
-    import { fly } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     import {onMount} from 'svelte';
     import type { boquettes } from "@prisma/client";
     import type { User } from "$lib/server/auth";
-    import { fade } from 'svelte/transition';
 
     export let USER: User | null;
     export let BOQUETTES:boquettes[];
@@ -64,7 +63,6 @@
     if(showBoquettes && !boquettes_panel.contains(target)){
       showBoquettes = false;
     }
-    
   }
 
   function daysBeforeNewYear(): number {
@@ -75,29 +73,30 @@
     return diffDays;
   }
 
+  let fireworks:{id:number,x:number,y:number,scale:number,color:number}[] = []
+
   onMount(() => {
-    if(decompte == 0){
-      setInterval(generateFirework, 2000)
-    }
+    newFireworks();
+    setInterval(newFireworks, 3000)
   });
 
-  function generateFirework() {
-      const firework = document.createElement("img");
-      firework.src = "images/firework_gif.gif"; // Chemin de votre gif
-      firework.alt = "Firework";
-      firework.className = "firework absolute pointer-events-none opacity-70 -translate-x-1/2 -translate-y-1/2";
-      // Positionnement aléatoire
-      firework.style.left = Math.random() * window.innerWidth + "px";
-      firework.style.top = Math.random() * window.innerHeight  + "px";
-      firework.style.scale = (Math.random()).toString();
-      // Ajout du feu d'artifice à la page
-      myMainDiv.appendChild(firework);
-
-      // Supprimer le feu d'artifice après l'animation
-      setTimeout(() => firework.remove(), 2000);
-    }
   $:decompte = daysBeforeNewYear();
   let myMainDiv:HTMLElement;
+  
+
+  function fireworkEnded(fireworkId:number){
+    fireworks = fireworks.filter(firework => firework.id != fireworkId);
+  }
+
+  function newFireworks(){
+    fireworks = [
+        {id:1, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
+        {id:2, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
+        {id:3, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
+        {id:4, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
+        {id:5, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
+        ]
+  }
 </script>
 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -135,7 +134,7 @@
     </svelte:fragment>
 <!-- Vanadium, Petibom, Tartopum -->
     <section class="flex justify-center">
-      <a href="/" class="font-zagoth h1">{title}</a>
+      <a href="/" class="font-zagoth h1 whitespace-nowrap">{title}</a>
     </section>
 
 		<svelte:fragment slot="trail">
@@ -152,12 +151,16 @@
           <slot/>
          
           {#if decompte!=0}
-            <p class="absolute left-1/2 top-1/2 text-8xl -translate-x-1/2">J-{decompte}</p>
+            <p class="absolute left-1/2 top-1/2 text-8xl -translate-x-1/2 font-zagoth">J-{decompte}</p>
             {#each [1,2,3,4] as a}
               <img style="transform: translateY({a}00%);" class="absolute pointer-events-none top-0 -left-14 w-40" src="images/firework.webp" alt="" srcset="">
             {/each}
             {#each [1,2,3,4] as a}
               <img style="transform: translateY({a}00%);" class="absolute pointer-events-none -scale-x-100 top-0 -right-14 w-40" src="images/firework.webp" alt="" srcset="">
+            {/each}
+          {:else}
+            {#each fireworks as firework (firework.id)}
+              <img in:fade={{duration:1000}} out:fade={{duration:1000}} on:introend={()=>fireworkEnded(firework.id)} style="filter:hue-rotate({firework.color*360}deg); left:{firework.x}%; top:{firework.y}%; transform: scale({firework.scale});" class="absolute pointer-events-none top-0 -left-14 w-40 -translate-x-1/2 -translate-y-1/2" src="images/firework_gif.gif" alt="" srcset="">
             {/each}
           {/if}
         </div>

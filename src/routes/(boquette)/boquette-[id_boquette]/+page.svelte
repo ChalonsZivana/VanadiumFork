@@ -1,7 +1,7 @@
 <script lang="ts">
   import Rhopse from "$lib/components/boquette/Rhopse.svelte";
   import Produits from "$lib/components/boquette/Produits.svelte";
-  import type { boquettes, pg } from '@prisma/client'
+  import type { boquettes, categories, pg } from '@prisma/client'
   import Logout from '$lib/components/svgs/logout.svelte';
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
@@ -24,11 +24,15 @@
 
   type ConsommationsCount = {_count:number, id_produit:number}[];
   export let data;
-  export let form:{success:boolean, message:string}|{consommations_count:ConsommationsCount}|consommations;
+  export let form:{success:boolean, message:string}|{consommations_count:ConsommationsCount}|consommations|{inventory:(categories & {total:number})[]};
   export let editDialog:HTMLDialogElement;
 
   let consommations_count:ConsommationsCount = [];
   $: consommations_count = form && 'consommations_count'in form ? form.consommations_count : consommations_count;
+
+  let inventory:(categories & {total:number})[] = [];
+  $: inventory = form && 'inventory' in form ? form.inventory : inventory;
+
   let boquette:boquettes;
   type boqSettingsText = {'Nom':string,'Nom Simple':string,'Nouveau Mot de passe':string,'Confirmation mot de passe :':string};
   type boqSettingsCheck = {'Partie PG':boolean};
@@ -107,24 +111,40 @@
     <Rhopse {pgs} {boquette}></Rhopse>
   {/await}
 
-  <SectionCard title='Stats du jour'>
-
-      <form use:enhance action="?/getDaysStat" method="post">
-        {#key form}
-        <DatePicker bind:isOpen bind:startDate>
-          <div class="flex gap-5 items-center bg-white rounded-xl p-2">
-            <button type="button" class="flex gap-5 items-center" on:click={() => (isOpen = !isOpen)} >
-              <Icon icon="mdi:calendar" class="text-black text-3xl"/>
-              <p class="text-black">{formattedStartDate}</p>
-              <input type="hidden" name="date" bind:value={startDate} id="">
-            </button>
-            <button class="btn variant-filled-primary">
-              <Icon icon="formkit:submit"/>
-            </button>
-          </div>
-        </DatePicker>
-        {/key}
-      </form>
+  <SectionCard title='Stats'>
+      <div class="grid grid-cols-2 gap-5">
+        <form use:enhance action="?/getDaysStat" method="post">
+          {#key form}
+          <DatePicker bind:isOpen bind:startDate>
+            <div class="flex gap-5 items-center bg-white rounded-xl p-2">
+              <button type="button" class="flex gap-5 items-center" on:click={() => (isOpen = !isOpen)} >
+                <Icon icon="mdi:calendar" class="text-black text-3xl"/>
+                <p class="text-black">{formattedStartDate}</p>
+                <input type="hidden" name="date" bind:value={startDate} id="">
+              </button>
+              <button class="btn variant-filled-primary">
+                <Icon icon="formkit:submit"/>
+              </button>
+            </div>
+          </DatePicker>
+          {/key}
+        </form>
+        <form use:enhance action="?/doInventory" method="post">
+          {#key form}
+          <DatePicker bind:isOpen bind:startDate>
+            <div class="flex gap-5 items-center bg-white rounded-xl p-2">
+              <div class="flex gap-5 items-center">
+                <Icon icon="mingcute:inventory-line" class="text-black text-3xl"/>
+                <p class="text-black">inventaire</p>
+              </div>
+              <button class="btn variant-filled-primary">
+                <Icon icon="formkit:submit"/>
+              </button>
+            </div>
+          </DatePicker>
+          {/key}
+        </form>
+      </div>
       {#if form && 'consommations_count' in form}
         <CustomTable elements={consommations_count} headers={['Produit','Total']}>
           <svelte:fragment slot="tbody" let:e>
@@ -138,6 +158,21 @@
         </svelte:fragment>
         </CustomTable>
       {/if}
+      {#if form && 'inventory' in form}
+        <CustomTable elements={inventory} headers={['Produit','Total']}>
+          <svelte:fragment slot="tbody" let:e>
+            <tr id="produit-{e.id_categorie}" class="w-full">
+              <td class="h-10">{e.nom}
+              </td>
+              <td class="flex items-center justify-center h-10">
+                {e.total}€
+              </td>
+            </tr>
+        </svelte:fragment>
+        </CustomTable>
+
+        <p>Total: {inventory.reduce((a, b) => a + b.total, 0)}€</p>
+        {/if}
   </SectionCard>
   
   <Produits id_boquette={data.id_boquette} editable={false} {editDialog} categories={data.categories} produits={data.produits}/>

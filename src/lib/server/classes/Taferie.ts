@@ -87,6 +87,14 @@ export class Taferie {
             break;
           
           case "pg_boq":
+            if(conso.id_produit == null || conso.quantite == null) throw new Error('old consommation');
+
+            const prod = await prisma.produits.findFirst({where:{id_produit:conso.id_produit}});
+    
+            if(prod == null ||prod?.id_boquette != conso.to) throw new Error('old consommation');
+            if(prod.inventaire != null){
+              await p.produits.update({where:{id_produit:prod.id_produit}, data:{inventaire:prod.inventaire + conso.quantite}});
+            }
             if(conso.to == BOQUETTES["Foy's"]){
               const data = conso.data as {prix:number, prix2:number} | null;
               if(data == null || !('prix' in data) || !('prix2' in data)) throw new Error('old consommation')
@@ -160,7 +168,7 @@ export class Taferie {
       date_conso:new Date(),
       solde_avant:solde,
       id_produit:d.type == "pg_boq" ? d.id_produit : null,
-      quantite:d.type == "pg_boq" ? d.id_produit : null,
+      quantite:d.type == "pg_boq" ? d.quantite : null,
     }
 
     try {
@@ -201,7 +209,11 @@ export class Taferie {
           }
           case "pg_boq":{
             const prod = await prisma.produits.findFirst({where:{id_produit:d.id_produit}});
+            
             if(prod == null) return {success:false, message:`erreur`}; 
+            if(prod.inventaire != null){
+              await p.produits.update({where:{id_produit:prod.id_produit}, data:{inventaire:prod.inventaire - d.quantite}});
+            }
             // specific foys
             if(d.to == BOQUETTES["Foy's"]){    
               await new Boquette(BOQUETTES["Foy's"]).removeMoney(-prod.prix*d.quantite, p);

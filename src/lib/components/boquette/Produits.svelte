@@ -12,8 +12,8 @@
   export let editDialog:HTMLDialogElement;
   export let editable:boolean;
 
-
   
+  $:inventaireActif = produits.map(e=>e.inventaire).some(e=>e!=null) || editable;
   $: categories_id = categories.map(e=>e.id_categorie);
   
   
@@ -37,6 +37,13 @@
   }
 
   let productToEdit:typeof produits[0] | null = null;
+  $: headers = ['Produit','Prix'];
+  $:{
+    if(inventaireActif){
+      headers.push('Inventaire');
+      headers = headers;
+    }
+  }
 </script>
 
 
@@ -50,7 +57,7 @@
             <ValidationButton formaction="?/deleteCategory" text="Supprimer catégorie"/>
           </form>
         {:else}
-          <CustomTable elements={prodcat.products} headers={['Produit','Prix']}>
+          <CustomTable elements={prodcat.products} {headers}>
             <svelte:fragment slot="tbody" let:e>
                 <tr id="produit-{e.id_produit}" class="w-full" on:animationend={()=> toggleAnimate(e.id_produit)}>
                   <td class="h-10">
@@ -66,6 +73,11 @@
                       {/if}
                     </button>
                   </td>
+                  {#if inventaireActif}
+                    <td class="h-10">
+                      <button disabled={!editable} class="w-full h-full" on:click={()=>editProduct(e)}>{e.inventaire}</button>
+                    </td>
+                  {/if}
                 </tr>
             </svelte:fragment>
           </CustomTable>
@@ -105,6 +117,10 @@
           <input class="pl-2 h-10 w-full" type="number" step="0.001" min="0" name="prix2" value={productToEdit.prix2}>
         </label>
       {/if}
+      <label>
+        <p class="text-2xl font-zagoth text-white">Inventaire:</p>
+        <input class="pl-2 h-10 w-full" type="number" step="1" min="0" name="inventaire" value={productToEdit.inventaire}>
+      </label>
 
       <ValidationButton formaction="?/deleteProduct" text="Supprimer produit"/>
   </div>

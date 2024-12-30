@@ -3,6 +3,7 @@ import { Taferie } from '$lib/server/classes/Taferie.js';
 import { EditBoquetteSchema, ImportRhopseSchema, OnlyDateSchema } from '$lib/zodSchema.js';
 import { error, fail } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
+import type { categories } from '@prisma/client';
 
 export const load = async ({params})=>{
   const id_boquette = parseInt(params.id_boquette);
@@ -51,8 +52,8 @@ export const actions = {
     if(!data.success) return fail(400, {success:false, message:"Something went wrong"})
 
       const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = [];
-    console.log(data.data);
-    for(let [id_pg, id_produit, quantite, rhopsePourUnAncien] of data.data.produits){
+
+      for(let [id_pg, id_produit, quantite, rhopsePourUnAncien] of data.data.produits){
       const conso = await Taferie.rhopse({
         type:'pg_boq',
         from:id_pg,
@@ -65,6 +66,30 @@ export const actions = {
     }
     return {
       results
+    }
+  },
+  doInventory:async({request, params})=>{
+    const id_boquette = parseInt(params.id_boquette);
+    if(!id_boquette) throw error(400);
+    
+
+    const totalsByCategory: Record<number, number> = {}; // Pour stocker les totaux par catégorie
+
+    const categories = await prisma.categories.findMany({where:{id_boquette}});
+
+    const inventory:(categories & {total:number})[] = []
+    for(let cat of categories){
+      let total = 0;
+      const produits = await prisma.produits.findMany({where:{id_categorie:cat.id_categorie}});
+      for(let produit of produits){
+        if(produit.inventaire == null) continue;
+        total += produit.prix * produit.inventaire;
+      }
+      inventory.push({...cat, total});
+    }
+
+    return {
+      inventory
     }
   }
 }

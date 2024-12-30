@@ -2,12 +2,14 @@
   import MoneyColor from '../miscellaneous/MoneyColor.svelte';
   import AddRemoveConso from '../miscellaneous/AddRemoveConso.svelte';
   import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
-    import type { consommations } from '@prisma/client';
-    import { number } from 'zod';
 
   export let fromOption:boolean;
   export let cancelOption:boolean;
   export let consommations:ConsommationsIncludeType[];
+
+  function isLessThanAWeekOld(date:Date){
+    return (new Date().getTime() - date.getTime()) < 7*24*60*60*1000;
+  }
 
   function getFrom(e:ConsommationsIncludeType){
     if(e.type.startsWith('pg')){
@@ -88,7 +90,7 @@
               
               <p class=" text-xxs">AV. {conso.solde_avant.toFixed(2)}€</p>
             </td>
-            {#if cancelOption}
+            {#if cancelOption && isLessThanAWeekOld(conso.date_conso)}
             <td class="flex justify-center items-center">
               {#key conso.id_conso}
                 <AddRemoveConso bind:id={conso.id_conso} bind:annule={conso.annule}/>

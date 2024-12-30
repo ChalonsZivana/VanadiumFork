@@ -142,6 +142,7 @@ model produits {
   prix         Float  
   libreservice Boolean    @default(false)
   prix2        Float      @default(0)
+  inventaire   Int? 
 
   consommations consommations[]
 }

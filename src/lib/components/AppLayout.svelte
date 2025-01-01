@@ -66,11 +66,7 @@
   }
 
   function daysBeforeNewYear(): number {
-    const today = new Date()
-    const newYear = new Date(today.getFullYear() + 1, 0, 1); // 1er janvier de l'année suivante
-    const diffTime = newYear.getTime() - today.getTime(); // Différence en millisecondes
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Conversion en jours
-    return diffDays;
+    return 0;
   }
 
   let fireworks:{id:number,x:number,y:number,scale:number,color:number}[] = []

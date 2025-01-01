@@ -7,7 +7,8 @@ import { error } from '@sveltejs/kit';
 const authorized = [
   BOQUETTES["K've"],
   BOQUETTES["Auberge"],
-  BOQUETTES["Foy's"]
+  BOQUETTES["Foy's"],
+  BOQUETTES["Mafia"]
 ]
 
 export async function load({params}){

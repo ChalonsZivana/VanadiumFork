@@ -25,7 +25,8 @@ export default {
         'background-gradient': ['to bottom right', '#7E0200', '#000000'],
       },
       backgroundImage: {
-        'main-bg': "url('/background.jpg')"
+        'main-bg': "url('/background.jpg')",
+        'kave-bg': "url('/images/kve.jpeg')"
       },
       fontFamily: {
         'zagoth':["Zagoth"]

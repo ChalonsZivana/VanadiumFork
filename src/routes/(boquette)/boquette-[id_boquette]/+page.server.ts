@@ -1,13 +1,20 @@
 import { Boquette } from '$lib/server/classes/Boquette.js';
 import { Taferie } from '$lib/server/classes/Taferie.js';
 import { EditBoquetteSchema, ImportRhopseSchema, OnlyDateSchema } from '$lib/zodSchema.js';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
 import type { categories } from '@prisma/client';
 
-export const load = async ({params})=>{
+export const load = async ({params, locals})=>{
   const id_boquette = parseInt(params.id_boquette);
   if(isNaN(id_boquette)) throw error(404);
+
+  // proms motivs == 224, proms actuelle == 223
+  if(locals.session.data.user?.pg.proms === 224){
+    throw redirect(303, '/boquette-'+id_boquette+'/special/rhopses');
+  } else if(locals.session.data.user?.pg.proms !== 223){
+    throw error(400);
+  }
 }
 
 export const actions = {

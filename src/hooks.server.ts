@@ -57,7 +57,8 @@ export const handle = handleSession(
       }
     } 
     
-    
+    if(event.locals.session.data.user == undefined) throw redirect(303, "/login");
+    if(event.locals.session.data.user.pg.proms < 223) throw error(401);
     if(event.locals.session.data.boquettes == undefined) throw redirect(303, "/login");
     const boquettes = event.locals.session.data.boquettes;
 
@@ -76,7 +77,7 @@ export const handle = handleSession(
         if(!boquettes.map(e=>e.id_boquette).includes(20)) throw redirect(303,"/login");
       }
     } else if(routeId.startsWith('/(fast access)')){
-
+      
     }
     await event.locals.session.update(async (d)=>{
       const newBoquette = await new Boquette(id_boquette).boquette();

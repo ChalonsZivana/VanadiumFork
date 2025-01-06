@@ -4,7 +4,7 @@
   import Reset from '$lib/components/svgs/reset.svelte';
   import { enhance } from '$app/forms';
   import Popup from '$lib/components/miscellaneous/Popup.svelte';
-    import House from '$lib/components/svgs/house.svelte';
+  import Icon from '@iconify/svelte';
 
   export let data;
   export let form:{success:boolean, message:string};
@@ -32,9 +32,10 @@
 
 <Popup bind:form={form}/>
 
-<a href="/boquette-{data.id_boquette}" class="absolute top-3 left-3 w-8">
-  <House/>
+<a href={data.USER?.pg.proms == 223 ? "/boquette-{data.id_boquette}":'/'} class="absolute top-3 left-3 w-8">
+  <Icon icon="mdi:house" class="w-8 h-8"/>
 </a>
+
 
 <div class="h-full w-full flex flex-col  items-center p-1 text-white">
   <div class=" flex justify-center items-center">

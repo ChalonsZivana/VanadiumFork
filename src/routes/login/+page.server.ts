@@ -14,7 +14,7 @@ export const actions = {
 		if(!uid || !password){
 			return fail(400, { uid, missing: true });
 		}
-
+		
 		const encodedPswd = hashPassword(password);
 		const boq = await prisma.boquettes.findFirst({where:{nom_simple:uid},select:{nom_simple:true, mot_de_passe:true, id_boquette:true}})
 

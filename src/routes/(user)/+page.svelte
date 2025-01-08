@@ -36,7 +36,7 @@
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<div class="size-full flex flex-col gap-4 pb-4 justify-around items-center">
 					<div class="size-full flex justify-center items-center">
-						<button class="perspective-1000 relative {flipped && false ? 'aspect-square h-full max-w-80 max-h-80':'aspect-video w-80'} duration-1000" on:click={flip}>
+						<button class="perspective-1000 relative {flipped ? 'aspect-square h-full max-w-80 max-h-80':'aspect-video w-80'} duration-1000" on:click={flip}>
 							<div class={`relative size-full duration-1000 transform-style-3d ${flipped ? 'rotate-y-180' : 'rotate-y-0'}`}>
 									<!-- Front face -->
 									<div class="absolute card w-full h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center backface-hidden">
@@ -64,7 +64,7 @@
 									</div>
 									<!-- Back face -->
 									<div class="absolute card p-1 w-full overflow-clip h-full bg-gradient-to-t from-primary-500 to-primary-400 flex items-center justify-center text-2xl font-bold backface-hidden rotate-y-180">								
-											<img class="h-full w-full object-cover" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
+											<img class="h-full w-full object-cover rounded-3xl" src={data.photos[photosIndex]} alt="Hot girl in swim bath.">
 								</div>
 							</div>
 						</button>

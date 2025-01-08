@@ -65,39 +65,12 @@
     }
   }
 
-  function daysBeforeNewYear(): number {
-    return 0;
-  }
 
-  let fireworks:{id:number,x:number,y:number,scale:number,color:number}[] = []
-
-  onMount(() => {
-    newFireworks();
-    setInterval(newFireworks, 3000)
-  });
-
-  $:decompte = daysBeforeNewYear();
-  let myMainDiv:HTMLElement;
-  
-
-  function fireworkEnded(fireworkId:number){
-    fireworks = fireworks.filter(firework => firework.id != fireworkId);
-  }
-
-  function newFireworks(){
-    fireworks = [
-        {id:1, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
-        {id:2, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
-        {id:3, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
-        {id:4, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
-        {id:5, x:Math.random()*100, y:Math.random()*100, scale:Math.random()+1, color:Math.random()},
-        ]
-  }
 </script>
 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div bind:this={myMainDiv} on:click={handleClick} class="relative overflow-hidden w-screen h-screen flex flex-col justify-between">
+<div on:click={handleClick} class="relative overflow-hidden w-screen h-screen flex flex-col justify-between">
   <AppBar background="" border="" gridColumns="grid-cols-3" slotTrail="place-content-end text-4xl">
 		<svelte:fragment slot="lead">
       <span class="flex items-end gap-4">
@@ -145,20 +118,6 @@
     {#key url}
         <div class="flex-1 overflow-y-scroll flex flex-col items-center" in:fly={{x:-200, duration:300, delay:300}} out:fly={{x:200, duration:300}}>
           <slot/>
-         
-          {#if decompte!=0}
-            <p class="absolute left-1/2 top-1/2 text-8xl -translate-x-1/2 font-zagoth">J-{decompte}</p>
-            {#each [1,2,3,4] as a}
-              <img style="transform: translateY({a}00%);" class="absolute pointer-events-none top-0 -left-14 w-40" src="images/firework.webp" alt="" srcset="">
-            {/each}
-            {#each [1,2,3,4] as a}
-              <img style="transform: translateY({a}00%);" class="absolute pointer-events-none -scale-x-100 top-0 -right-14 w-40" src="images/firework.webp" alt="" srcset="">
-            {/each}
-          {:else}
-            {#each fireworks as firework (firework.id)}
-              <img in:fade={{duration:1000}} out:fade={{duration:1000}} on:introend={()=>fireworkEnded(firework.id)} style="filter:hue-rotate({firework.color*360}deg); left:{firework.x}%; top:{firework.y}%; transform: scale({firework.scale});" class="absolute pointer-events-none top-0 -left-14 w-40 -translate-x-1/2 -translate-y-1/2" src="images/firework_gif.gif" alt="" srcset="">
-            {/each}
-          {/if}
         </div>
     {/key}
 

@@ -20,7 +20,8 @@
     "photos garçons":"jolieF",
     "photos motos":"moto",
     "photos paysage":"paysage",
-    "photos voitures":"voiture"
+    "photos voitures":"voiture",
+    "photos katanas":"katanas",
   }
 
   let currentFolder = data.photosFolder;

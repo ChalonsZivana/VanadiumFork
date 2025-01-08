@@ -13,7 +13,8 @@ export const POST:RequestHandler = async({request,locals}) => {
     "photos garçons":"jolieF",
     "photos motos":"moto",
     "photos paysage":"paysage",
-    "photos voitures":"voiture"
+    "photos voitures":"voiture",
+    "photos katanas":"katanas",
   }
 
   if(Object.values(dossiersGifs).includes(folder)){
@@ -21,6 +22,7 @@ export const POST:RequestHandler = async({request,locals}) => {
       {where:{id_pg:locals.session.data.user.pg.id_pg}, data:{nom:folder}}
     );
   }
+  console.log('yo')
   
   return new Response('');
 }

@@ -72,6 +72,7 @@ export const handle = handleSession(
       id_boquette = parseInt(event.params['id_boquette']??'');
       if(isNaN(id_boquette)) id_boquette = parseInt(event.route.id?.match(regex)?.at(1)??'');
       if(isNaN(id_boquette)) throw error(404);
+
       if(!boquettes.map(e=>e.id_boquette).includes(id_boquette)) {
         // taferie: 20, la taferie a accès à tout
         if(!boquettes.map(e=>e.id_boquette).includes(20)) throw redirect(303,"/login");

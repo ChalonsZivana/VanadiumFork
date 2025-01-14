@@ -9,8 +9,8 @@
   export let pgs:Partial<pg>[];
   export let boquette:boquettes;
 
-  let searchNums = NaN;
-  let searchProms = NaN;
+  let searchNums:number|null = null;
+  let searchProms:number|null = null;
 
   const dataToSort = createDataToSort({pgs,boquettes:[],fams:[]});
 </script>

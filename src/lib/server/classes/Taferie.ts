@@ -99,8 +99,8 @@ export class Taferie {
               const data = conso.data as {prix:number, prix2:number} | null;
               if(data == null || !('prix' in data) || !('prix2' in data)) throw new Error('old consommation')
               
-                await new Boquette(BOQUETTES["Foy's"]).addMoney(data.prix * factor, p);
-              await new Boquette(BOQUETTES["Satan"]).addMoney(data.prix2 * factor, p);
+                await new Boquette(BOQUETTES["Foy's"]).addMoney(data.prix * factor, p); //prix : soft
+              await new Boquette(BOQUETTES["Satan"]).addMoney(data.prix2 * factor, p); //prix 2:hard
 
               new Pg(conso.from!).removeMoney((data.prix + data.prix2) * factor, p);
             }  else {

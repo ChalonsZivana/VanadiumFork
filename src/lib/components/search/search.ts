@@ -58,10 +58,11 @@ export function getSearch(searchText:string, searchNums:number|null, searchProms
     case 'Tout':
     case 'PG':
       searchItems.PG = dataToSort.SearchPgs.filter(e => {
-        if(searchNums!=null && searchNums !== e.pg.nums) return false
-        if(searchProms!=null && searchProms !== e.pg.proms) return false
+        if(searchNums!=null && searchNums !== e.pg.nums && !isNaN(searchNums)) return false
+        if(searchProms!=null && searchProms !== e.pg.proms && !isNaN(searchProms)) return false
         
         if(searchText !== ''){
+          console.log('ok')
           const prenomMatch = sT.match(new RegExp(regexify(simplifyBucque(e.pg.prenom!.toLowerCase())), 'g'))?.filter(e=>e!='')
           const nomMatch = sT.match(new RegExp(regexify(simplifyBucque(e.pg.nom!.toLowerCase())), 'g'))?.filter(e=>e!='')
           if((prenomMatch == null  || prenomMatch?.length == 0)  && (nomMatch == null  || nomMatch?.length == 0)){
@@ -95,6 +96,5 @@ export function getSearch(searchText:string, searchNums:number|null, searchProms
 
   }
   searchItems.Tout = [...searchItems.PG, ...searchItems.Boquette, ...searchItems.Fams] as any;
-
   return searchItems;
 }

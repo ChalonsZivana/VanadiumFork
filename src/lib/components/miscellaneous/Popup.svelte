@@ -7,10 +7,13 @@
 
 
   const isSuccessForm = (form: FormType): form is { success: boolean; message: string } => {
+    if(Array.isArray(form)){
+      return form.every(f => 'success' in f && 'message' in f)
+    }
     return form && 'success' in form && 'message' in form;
   };
   $:{
-    if(dialog && form && isSuccessForm(form)){
+    if(dialog && isSuccessForm(form)){
       dialog.show()
     }
   }
@@ -31,5 +34,5 @@ class="z-50 fixed w-11/12 bottom-14 bg-yellow-200 p-3 overflow-clip rounded-xl o
         {form.message}
       </p>
     {/if}
-  {/if}
+  {/if} 
 </dialog>

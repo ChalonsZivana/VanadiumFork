@@ -55,6 +55,7 @@
         <th class="text-xs">Vers</th>
         <th class="text-xs">Libelle</th>
         <th class="text-xs">Montant</th>
+        <th class="text-xs">Rhopseur</th>
         {#if cancelOption}
           <th></th>
         {/if}
@@ -90,6 +91,7 @@
               
               <p class=" text-xxs">AV. {conso.solde_avant.toFixed(2)}€</p>
             </td>
+            <td>{conso.rhopseur}</td>
             {#if cancelOption && isLessThanAWeekOld(conso.date_conso)}
             <td class="flex justify-center items-center">
               {#key conso.id_conso}

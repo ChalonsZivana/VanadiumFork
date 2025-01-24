@@ -6,19 +6,19 @@ import { Pg } from "./PG";
 import { consommations_type, type consommations, Prisma } from "@prisma/client";
 
 interface pg_ext extends Pick<consommations, "type" | "from" | "montant" | "libelle"> {
-  type:"pg_ext",
-  from:number
+  type:"pg_ext";
+  from:number;
 }
-interface ext_ extends Pick<consommations, "type" | "to" | "montant" | "libelle"> {
-  type:"ext_fams"|"ext_boq",
-  to:number
+interface ext_ extends Pick<consommations, "type" | "to" | "montant" | "libelle"> {	
+  type:"ext_fams"|"ext_boq";
+  to:number;
 }
 interface _to extends Pick<consommations, "type" | "from" | "to" | "montant" | "libelle"> {
-  type:"pg_pg" | "pg_fams"
-  from:number,
-  to:number
+  type:"pg_pg" | "pg_fams";
+  from:number;
+  to:number;
 }
-interface pg_boq extends Pick<consommations, "type" | "from" | "to" | "id_produit" | "quantite"> {
+interface pg_boq extends Pick<consommations, "type" | "from" | "to" | "id_produit" | "quantite" | "rhopseur"> {
   type: "pg_boq";
   from:number,
   to:number;
@@ -144,7 +144,6 @@ export class Taferie {
       
       if(Math.abs(d.quantite) > 100_000) return {success:false, message:`Quantité trop élevée`}
 
-      
       montant = -d.quantite * (prod.prix + prod.prix2);
     } else {
       montant = d.montant;
@@ -169,6 +168,7 @@ export class Taferie {
       solde_avant:solde,
       id_produit:d.type == "pg_boq" ? d.id_produit : null,
       quantite:d.type == "pg_boq" ? d.quantite : null,
+      rhopseur:"rhopseur" in d ? d.rhopseur : null
     }
 
     try {

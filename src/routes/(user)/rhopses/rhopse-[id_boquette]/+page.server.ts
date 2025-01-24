@@ -29,7 +29,10 @@ export const load = async ({params}) => {
 export const actions = {
   'rhopse':async({request, locals, params})=>{
     const id_boquette = parseInt(params.id_boquette);
+    const rhopseur = locals.session.data.user;
     if(isNaN(id_boquette) || !Object.values(BOQUETTES).includes(id_boquette)) throw error(404);
+    if(!rhopseur) throw error(400);
+    const rhopseur_string = `${rhopseur.pg.nums}ch${rhopseur.pg.proms}`;
     const t  = Object.fromEntries(await request.formData());
     const parse = RhopseSchema.safeParse(t);
 
@@ -40,7 +43,7 @@ export const actions = {
 
     const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = []
     for(let [id_produit, quantite] of data.produits){
-      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:id_boquette, id_produit, quantite,rhopse_ancien:null});
+      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:id_boquette, id_produit, quantite,rhopse_ancien:null, rhopseur:rhopseur_string});
       results.push(r);
     }
     return results[0]

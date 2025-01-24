@@ -15,11 +15,13 @@ export const load = async ({params})=>{
 
 
 export const actions = {
-  'rhopse':async({request, params})=>{
+  'rhopse':async({request, params, locals})=>{
     const id_boquette = parseInt(params.id_boquette);
-    if(!id_boquette) throw error(400);
     const id_pg = parseInt(params.id_pg);
-    if(!id_pg) throw error(400);
+    const rhopseur = locals.session.data.user;
+
+    if(!id_boquette || !id_pg || !rhopseur) throw error(400);
+    const rhopseur_string = `${rhopseur.pg.nums}ch${rhopseur.pg.proms}`;
     
     const t = Object.fromEntries(await request.formData());
     const parse = RhopseSchema.safeParse(t);
@@ -33,7 +35,7 @@ export const actions = {
 
     const results:Awaited<ReturnType<typeof Taferie.rhopse>>[] = []
     for(let [id_produit, quantite] of data.produits){
-      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite, rhopse_ancien:data.rhopse_ancien??null});
+      const r = await Taferie.rhopse({type:"pg_boq",from:id_pg, to:boq.ID, id_produit, quantite, rhopse_ancien:data.rhopse_ancien??null, rhopseur:rhopseur_string});
       results.push(r)
     }
     return results

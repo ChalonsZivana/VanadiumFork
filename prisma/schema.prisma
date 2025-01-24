@@ -70,6 +70,7 @@ model consommations {
   date_conso  DateTime               
   annule      Boolean                @default(false)
   data        Json?
+  rhopseur    String?
 
   produit    produits? @relation(fields: [id_produit], references: [id_produit])
 

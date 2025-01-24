@@ -46,7 +46,7 @@ export const actions = {
       from:locals.session.data.user.pg.id_pg,
       to:locals.session.data.user.fams.nums,
       montant: -data.data.montant,
-      libelle: data.data.libelle
+      libelle: data.data.libelle,
     });
   },
   verifyLydiaDemand: async({locals}) => {

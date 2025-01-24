@@ -51,9 +51,11 @@ export const actions = {
     
     new Boquette(id_boquette).editBoquette(data.data);
   },
-  import_rhopse:async({request,params})=>{
+  import_rhopse:async({request,params, locals})=>{
     const id_boquette = parseInt(params.id_boquette);
-    if(!id_boquette) throw error(400);
+    const rhopseur = locals.session.data.user;
+    if(!id_boquette || ! rhopseur) throw error(400);
+    const rhopseur_string = `${rhopseur.pg.nums}ch${rhopseur.pg.proms}`;
     const d = Object.fromEntries(await request.formData());
     const data = ImportRhopseSchema.safeParse(d);
     if(!data.success) return fail(400, {success:false, message:"Something went wrong"})
@@ -68,6 +70,7 @@ export const actions = {
         id_produit:id_produit,
         quantite:quantite,
         rhopse_ancien:rhopsePourUnAncien,
+        rhopseur:rhopseur_string
       }, true);
       results.push(conso);
     }

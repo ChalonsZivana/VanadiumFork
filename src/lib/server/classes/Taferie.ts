@@ -151,8 +151,14 @@ export class Taferie {
 
     if(Math.abs(montant) > 100_000) return {success:false, message:`Montant trop élevé`}
 
+    // on vérifie que le pg peut faoire la transaction 
     if((d.type == "pg_ext" || d.type == "pg_fams" || d.type == "pg_boq" || d.type == "pg_pg") && montant < 0){
       const pg = await new Pg(d.from).pg();
+
+      // on empêche les pg de se mettre en négatif pour une transaction vers le compte de fams
+      if(d.type == "pg_fams"){
+        if(pg.solde + montant < 0) return {success:false, message:`Solde insuffisant`}
+      }
 
       if(!pg.can_buy && !authorize_all) return {success:false, message:`Ce pg ne peut pas acheter`}
     }

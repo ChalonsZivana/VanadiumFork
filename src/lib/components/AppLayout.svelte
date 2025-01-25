@@ -21,7 +21,7 @@
     });
 
 
-    const title = "Ô Comtroipum"
+    const title = "Vanadium"
 
     type BoquetteIconMap = {
       [key: number]: string;

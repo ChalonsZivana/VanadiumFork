@@ -1,10 +1,8 @@
 <script lang="ts">
     import type { consommations_type } from "@prisma/client";
     import SectionCard from "../../SectionCard.svelte";
-    import SquareRightArrow from "../../svgs/square-right-arrow.svelte";
     import ConsoTable from "../ConsoTable.svelte";
     import type { ConsommationsIncludeType } from '$lib/server/classes/Taferie';
-    import { enhance } from "$app/forms";
     import Icon from "@iconify/svelte";
     
     export let title:string;
@@ -57,8 +55,8 @@
         <p class="text-white">Année de la consommation (vide pour toutes) :</p>
         <input name="consoYear" class="w-full p-1 rounded-md" type="number" min="2017" max={new Date().getFullYear()} placeholder="Année: 1989">
       </label>
-      <button class="self-center w-14">
-        <SquareRightArrow/>
+      <button class="self-center">
+        <Icon class="text-6xl text-white" icon="mdi:arrow-right-bold-box-outline"/>
       </button>
     </div>
 

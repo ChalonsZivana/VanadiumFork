@@ -1,9 +1,8 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { boquettes } from "@prisma/client";
-  import Settings from "../svgs/settings.svelte";
   import EditBoquetteDialog from "./EditBoquetteDialog.svelte";
-  import Bolt from "../svgs/bolt.svelte";
+  import Icon from "@iconify/svelte";
 
   export let boquette:boquettes;
   export let taferie = false;
@@ -36,11 +35,11 @@
       <div class="flex gap-3 absolute top-3 right-3">
         {#if specialRhopse != null}
           <a href={specialRhopse} class="w-8">
-            <Bolt/>
+            <Icon class="text-4xl" icon="mdi:lightning-bolt-circle"/>
           </a>
         {/if}
         <button on:click={()=>dialog.showModal()} class="w-8">
-          <Settings/>
+          <Icon class="text-4xl" icon="mdi:settings"/>
         </button>
       </div>
     

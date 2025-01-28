@@ -1,11 +1,10 @@
 import prisma from '$lib/prisma.js'
 import { BOQUETTES } from '$lib/server/classes/Boquette.js'
-import { error, redirect } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import zod from 'zod'
-import { download } from '$lib/components/boquette/ExportImportFeuilleRhopses.js'
 
 
-export const load  = async ({locals, parent,params})=>{
+export const load  = async ({params})=>{
   const nums = parseInt(params.nums_onscrit);
   if(isNaN(nums)) throw error(404);
   const onscrit = await prisma.suivi_onscrits.findFirst({where:{nums}});

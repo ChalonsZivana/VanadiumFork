@@ -1,10 +1,10 @@
 <script lang="ts">
-  import ToggleSectionCard from "$lib/components/ToggleSectionCard.svelte";
   import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
   import Special from "$lib/components/miscellaneous/Special.svelte"
   import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte"
   import FullSearch from "$lib/components/search/consommations/FullSearch.svelte";
     import Negats from "$lib/components/pg/Negats.svelte";
+    import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
 
   
   export let data;
@@ -23,34 +23,41 @@
   <Negats negats={data.negats}/>
 </div>
 
-<div class="w-11/12 mt-5 mb-5">
-  <ToggleSectionCard show={true} title="Proms {data.proms}" toggleClass="h-96">
-    <div class="w-full h-full overflow-y-scroll">
-      <CustomTable elements={data.pgs} headers={['PG','Bucque','Solde','Email']}>
-        <tr class="text-xxs" slot="tbody" let:e>
-          <th class="p-2">
-            <Special special={[11,89,111].includes(e.nums??-1)}>
-              {e.nums}Ch{e.proms}
-            </Special>
-          </th>
-          <td>{e.bucque}</td>
-          <td>
-            {#key e.solde}
-              <MoneyColor auto={e.solde} className="text-xs font-bold"/>
-            {/key}
-          </td>
-          <td>
-            {#if  e.email != ''}
-              <button on:click={()=>copyEmail(e.email)} class="p-2 bg-blue-500 active:bg-blue-400 text-white">copier email</button>
-            {:else}
-              <p>email absent</p>
-            {/if}
-          </td>
-          
-        <tr/>
-      </CustomTable>
-    </div>
-  </ToggleSectionCard>
+<div class="w-11/12 card m">
+  <Accordion >
+    <AccordionItem>
+      <svelte:fragment slot="summary">
+        <p class="font-zagoth text-center text-3xl">Proms {data.proms}</p>
+      </svelte:fragment>
+      <svelte:fragment slot="content">
+        <div class="h-96 overflow-y-scroll">
+          <CustomTable elements={data.pgs} headers={['PG','Bucque','Solde','Email']}>
+            <tr class="text-xxs" slot="tbody" let:e>
+              <th class="p-2">
+                <Special special={[11,89,111].includes(e.nums??-1)}>
+                  {e.nums}Ch{e.proms}
+                </Special>
+              </th>
+              <td>{e.bucque}</td>
+              <td>
+                {#key e.solde}
+                  <MoneyColor auto={e.solde} className="text-xs font-bold"/>
+                {/key}
+              </td>
+              <td>
+                {#if  e.email != ''}
+                  <button on:click={()=>copyEmail(e.email)} class="p-2 bg-blue-500 active:bg-blue-400 text-white">copier email</button>
+                {:else}
+                  <p>email absent</p>
+                {/if}
+              </td>
+              
+            <tr/>
+          </CustomTable>
+        </div>
+      </svelte:fragment>
+    </AccordionItem>
+  </Accordion>
 </div>
 
 <div class="w-11/12 mt-5">

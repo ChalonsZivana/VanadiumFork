@@ -1,9 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import SectionCard from '$lib/components/SectionCard.svelte'
   import Popup from '$lib/components/miscellaneous/Popup.svelte';
-  import EuroBill from '$lib/components/svgs/euro-bill.svelte';
-    import Icon from '@iconify/svelte';
+  import Icon from '@iconify/svelte';
   import { onMount } from 'svelte';
 
   export let data;

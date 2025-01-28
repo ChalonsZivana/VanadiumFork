@@ -1,11 +1,11 @@
 <script lang="ts">
   export let user:User;
-  import Settings from "$lib/components/svgs/settings.svelte";
 
   import SectionCard from "$lib/components/SectionCard.svelte";
   import type { User } from "$lib/server/auth";
-    import Special from "../miscellaneous/Special.svelte";
-    import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
+  import Special from "../miscellaneous/Special.svelte";
+  import EditPgDialog from "$lib/components/pg/EditPgDialog.svelte";
+  import Icon from "@iconify/svelte";
 
   export const title = 'Profil';
   export let taferie = false;
@@ -48,7 +48,7 @@
       {/if}
       {#if taferie}
         <button on:click={()=>dialogSettings.showModal()} class="w-8">
-          <Settings/>
+          <Icon class="text-4xl" icon="mdi:settings"/>
         </button>      
       {/if}
     </div>

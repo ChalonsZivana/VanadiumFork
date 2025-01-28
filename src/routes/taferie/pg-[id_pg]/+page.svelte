@@ -1,24 +1,13 @@
 <script lang="ts">
-  import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
-  import SectionCard from "$lib/components/SectionCard.svelte";
-  import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
-  import AddRemoveConso from "$lib/components/miscellaneous/AddRemoveConso.svelte";
   import { enhance } from "$app/forms";
   import GestionBrousouffs from "$lib/components/miscellaneous/GestionBrousouffs.svelte";
   import UserProfile from "$lib/components/pg/UserProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
-    import ConsoTable from "$lib/components/search/ConsoTable.svelte";
+  import ConsoTable from "$lib/components/search/ConsoTable.svelte";
 
   export let data;
   export let form:{success:boolean, message:string};
-
-
-  const editInputCheck = {
-    'Actif':data.user.pg.actif
-  } 
-  let activCheck:boolean;
-  $:editInputCheck.Actif = activCheck;
 </script>
 
 <Popup bind:form={form}/>

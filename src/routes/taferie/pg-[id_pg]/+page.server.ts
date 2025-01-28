@@ -3,7 +3,6 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
 import { Pg } from "$lib/server/classes/PG";
-import { Boquette } from "$lib/server/classes/Boquette";
 import { EditPgSchema } from "$lib/zodSchema.js";
 import { Fams } from "$lib/server/classes/Fams.js";
 

@@ -2,7 +2,6 @@
   import Rhopse from "$lib/components/boquette/Rhopse.svelte";
   import Produits from "$lib/components/boquette/Produits.svelte";
   import type { boquettes, categories, pg } from '@prisma/client'
-  import Logout from '$lib/components/svgs/logout.svelte';
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import Actions from "$lib/components/boquette/Actions.svelte";
@@ -99,8 +98,8 @@
   <BoquetteProfile {boquette}>
     <form method="POST" action="/login?/logout">
       <input type="hidden" name="boquette" value={data.id_boquette}>
-      <button class="w-8 absolute top-3 left-3">
-        <Logout />
+      <button class="absolute top-3 left-3">
+        <Icon class="-scale-100 text-4xl" icon="mdi:logout"/>
       </button>
     </form>
   </BoquetteProfile>

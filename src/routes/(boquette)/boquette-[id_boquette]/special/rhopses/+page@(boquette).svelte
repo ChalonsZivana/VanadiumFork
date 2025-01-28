@@ -1,7 +1,6 @@
 <script lang="ts">
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type{categories, produits} from '@prisma/client';
-  import Reset from '$lib/components/svgs/reset.svelte';
   import { enhance } from '$app/forms';
   import Popup from '$lib/components/miscellaneous/Popup.svelte';
   import Icon from '@iconify/svelte';
@@ -32,7 +31,7 @@
 
 <Popup bind:form={form}/>
 
-<a href={data.USER?.pg.proms == 223 ? "/boquette-{data.id_boquette}":'/'} class="absolute top-3 left-3 w-8">
+<a href={data.USER?.pg.proms == 223 ? `/boquette-${data.id_boquette}`:'/'} class="absolute top-3 left-3 w-8">
   <Icon icon="mdi:house" class="w-8 h-8"/>
 </a>
 
@@ -139,7 +138,7 @@
   {/if}
 
   <button type="button" class="w-14 mb-10" on:click={reset}>
-    <Reset/>
+    <Icon class="text-6xl" icon="mdi:circle-arrows"/>
   </button>
 </form>
 </div>

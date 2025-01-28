@@ -6,12 +6,12 @@ import { topNegatsSchema } from "$lib/zodSchema";
 import { error } from "@sveltejs/kit";
 
 
-const currentProms = [221,222,223]
+const currentProms = [221,222,223];
 
 
 export const load:PageServerLoad = async ()=>{
   return {
-    topNegats:getTopNegats(NaN),
+    topNegats: getTopNegats(NaN),
     fondsProms: Database.fondsProms(currentProms),
     negatsProms: Database.negatsProms(currentProms),
     boquettes:prisma.boquettes.findMany({select:{nom:true,nom_simple:true,id_boquette:true, solde:true}}),
@@ -41,5 +41,8 @@ export const actions = {
     return {
       topNegats:await getTopNegats(data.data.proms)
     }
+  },
+  specialAction:async({request})=>{
+    return 
   }
 }

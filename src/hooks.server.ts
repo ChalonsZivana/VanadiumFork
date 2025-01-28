@@ -61,7 +61,7 @@ export const handle = handleSession(
     if(event.locals.session.data.user.pg.proms < 223) throw error(401);
     if(event.locals.session.data.boquettes == undefined) throw redirect(303, "/login");
     const boquettes = event.locals.session.data.boquettes;
-
+    
     let id_boquette = 20;
     if(routeId.startsWith('/taferie')) {
       if(!boquettes.map(e=>e.id_boquette).includes(20)) throw redirect(303,"/login");

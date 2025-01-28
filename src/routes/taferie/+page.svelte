@@ -5,13 +5,12 @@
   import MoneyColor from '$lib/components/miscellaneous/MoneyColor.svelte';
   import Search from '$lib/components/search/Search.svelte';
   import { createDataToSort, type SelectTypes } from "$lib/components/search/search.js";
-  import ToggleSectionCard from '$lib/components/ToggleSectionCard.svelte';
   import Special from '$lib/components/miscellaneous/Special.svelte';
-  import Logout from '$lib/components/svgs/logout.svelte';
   import ToggleButton from '$lib/components/miscellaneous/ToggleButton.svelte';
   import { enhance } from '$app/forms';
   import type { getTopNegats } from "$lib/server/db_connection";
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
+  import Icon from '@iconify/svelte';
 
   export let data;
   export let form:{topNegats:Awaited<ReturnType<typeof getTopNegats>>}
@@ -103,7 +102,7 @@
       <form method="POST" action="/login?/logout">
         <input type="hidden" name="boquette" value={20}>
         <button class="w-8 absolute top-3 left-3">
-          <Logout />
+          <Icon class="-scale-100 text-4xl" icon="mdi:logout"/>
         </button>
       </form>
       <div class="flex flex-col gap-2">
@@ -133,9 +132,13 @@
     </SectionCard>  
 
     <div class="input-group flex p-2 child:text-center size-fit justify-self-center divide-x-1 divide-white">
-      <a class="" href="/taferie/consommations">Consommations</a>
+      <a href="/taferie/consommations">Consommations</a>
       <a class="" href="/taferie/pgs">PGs</a>
       <a class="" href="/taferie/inscription">Inscription</a>
+
+      <form action="?/specialAction" method="post">
+        <button>Action Spéciale</button>
+      </form>
     </div>
 
     <Accordion class="rounded-xl divide-y-2 divide-black variant-filled-surface bg-gradient-to-t from-primary-700 to-primary-500">

@@ -1,6 +1,5 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte"; 
-  import QuestionPerson from '$lib/components/svgs/question-person.svelte';
   import Icon from "@iconify/svelte";
   import seedrandom from 'seedrandom';
   import ExcelJS from "exceljs";
@@ -113,7 +112,7 @@
     <div class="flex flex-col gap-4">
         <SectionCard title='.onscrits'>
           <div class="w-24">
-            <QuestionPerson/>
+            <Icon class="text-8xl" icon="mdi:person-help"/>
           </div>
           <div class="h-40 flex justify-center items-center">
             <div  class="text-4xl flex flex-col items-center">
@@ -125,11 +124,11 @@
           </div>
         </SectionCard>
       
-      {#if data.BOQUETTES.find(e => e.id_boquette == 23) !== undefined}
+      <!-- {#if data.BOQUETTES.find(e => e.id_boquette == 23) !== undefined}
           <button on:click={exportOnscrits} class="btn variant-filled-secondary">
             <Icon icon="mdi:export"/>
           </button>
-      {/if}
+      {/if} -->
       
       <!-- <a class="" href="/usins/planning">
         <SectionCard title='Planning'>

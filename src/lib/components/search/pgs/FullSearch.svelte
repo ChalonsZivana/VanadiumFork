@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { pg } from "@prisma/client";
     import SectionCard from "../../SectionCard.svelte";
-    import SquareRightArrow from "../../svgs/square-right-arrow.svelte";
     import { enhance } from "$app/forms";
     import CustomTable from "$lib/components/miscellaneous/CustomTable.svelte";
     import MoneyColor from "$lib/components/miscellaneous/MoneyColor.svelte";
+    import Icon from "@iconify/svelte";
     
     export let title:string;
     export let page:number;
@@ -35,8 +35,8 @@
         <option value="asc">Croissant</option>
       </select>
       
-      <button class="self-center w-14">
-        <SquareRightArrow/>
+      <button class="self-center">
+        <Icon class="text-6xl text-white" icon="mdi:arrow-right-bold-box-outline"/>
       </button>
     </div>
 

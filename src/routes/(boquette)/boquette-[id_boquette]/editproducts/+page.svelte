@@ -1,8 +1,8 @@
 <script lang="ts">
   import SectionCard from "$lib/components/SectionCard.svelte";
-  import Accept from "$lib/components/svgs/accept.svelte";
   import {enhance} from '$app/forms'
-    import Produits from "$lib/components/boquette/Produits.svelte";
+  import Produits from "$lib/components/boquette/Produits.svelte";
+  import Icon from "@iconify/svelte";
 
   export let data;
   export let editDialog:HTMLDialogElement;
@@ -40,8 +40,8 @@
           <input required class="w-full text-xl pl-2 h-10 text-black" type="number" step="0.001" min="0" name="prix2">
         </label>
       {/if}
-      <button class="rounded-md bg-blue-600 self-center">
-        <Accept className="size-10"/>
+      <button class="btn self-center variant-filled-primary w-20">
+        <Icon class="text-3xl" icon="mdi:edit"/>
       </button>
     </form>
   </SectionCard>

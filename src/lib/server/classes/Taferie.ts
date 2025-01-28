@@ -142,7 +142,7 @@ export class Taferie {
       if(prod == null) return {success:false, message:`erreur`}; 
       d.to = prod.id_boquette!;
       
-      if(Math.abs(d.quantite) > 100_000) return {success:false, message:`Quantité trop élevée`}
+      if(Math.abs(d.quantite) > 89000) return {success:false, message:`Quantité trop élevée`}
 
       montant = -d.quantite * (prod.prix + prod.prix2);
     } else {
@@ -162,6 +162,8 @@ export class Taferie {
 
       if(!pg.can_buy && !authorize_all) return {success:false, message:`Ce pg ne peut pas acheter`}
     }
+
+  
 
     const data:Prisma.consommationsCreateArgs['data'] = {
       type:d.type,

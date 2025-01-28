@@ -5,7 +5,7 @@
     import { TabGroup, TabAnchor } from '@skeletonlabs/skeleton';
     import LogalSoce from "$lib/components/svgs/logal-soce.svelte";
     import OneSignal from '@nolanx/svelte-onesignal';
-    import { fade, fly } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     import {onMount} from 'svelte';
     import type { boquettes } from "@prisma/client";
     import type { User } from "$lib/server/auth";

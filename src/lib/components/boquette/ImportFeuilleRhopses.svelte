@@ -2,10 +2,10 @@
   import ExcelJS from 'exceljs';
   import SubmitDialog from '../miscellaneous/SubmitDialog.svelte';
   import CustomTable from '../miscellaneous/CustomTable.svelte';
-  import ToggleSectionCard from '../ToggleSectionCard.svelte';
   import type { pg, produits } from '@prisma/client';
   import Icon from '@iconify/svelte';
   import { onMount } from 'svelte';
+    import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 
   export let id_boquette:number;
   export let pgs:Partial<pg>[];
@@ -77,9 +77,7 @@
 
     errors = errors;
     fileInputRhopse.value = '';
-  }
-
-  
+  }  
 </script>
 
 
@@ -98,48 +96,59 @@
     formData.set('produits', JSON.stringify(Object.values(rhopses).map(e => [e.id_pg,e.id_produit,e.quantite, e.rhopseAncien])));
   }} title="Importer Rhopses"> 
     <div class="mt-5"></div>
-    <div class="flex flex-col gap-5">
-      {#if errors.fileError != null}
-        <p class="text-center text-white">{errors.fileError}</p>
-      {:else if errors.rhopsesError.length > 0}
-        <ToggleSectionCard title="Erreurs" show={true} toggleClass="h-96">
-          <div class="w-full h-full overflow-x-hidden no-scrollbar overflow-y-scroll">
-            <CustomTable elements={errors.rhopsesError} headers={['Ligne','PG','Produit','Quantite','Id Produit']}>
-              <svelte:fragment slot="tbody" let:e>
-                <tr class="divide-x-2 divide-white ">
-                  {#each e as [content, isWrong]}
-                    <td class="{isWrong ?'bg-red-400':'bg-green-400'}">{content}</td>
-                  {/each}
-                </tr>
-              </svelte:fragment>
-            </CustomTable>  
-            </div>
-        </ToggleSectionCard>
-      {/if}
+    <div class="card">
+      <Accordion>
+        {#if errors.fileError != null}
+          <p class="text-center text-white">{errors.fileError}</p>
+        {:else if errors.rhopsesError.length > 0}
+          <AccordionItem>
+            <svelte:fragment slot="summary">
+              <p class="font-zagoth text-center text-3xl">Erreurs</p>
+            </svelte:fragment>
+            <svelte:fragment slot="content">
+              <div class="w-full h-full overflow-x-hidden no-scrollbar overflow-y-scroll">
+                <CustomTable elements={errors.rhopsesError} headers={['Ligne','PG','Produit','Quantite','Id Produit']}>
+                  <svelte:fragment slot="tbody" let:e>
+                    <tr class="divide-x-2 divide-white ">
+                      {#each e as [content, isWrong]}
+                        <td class="{isWrong ?'bg-red-600':'bg-green-600'}">{content}</td>
+                      {/each}
+                    </tr>
+                  </svelte:fragment>
+                </CustomTable>  
+                </div>
+            </svelte:fragment>
+            </AccordionItem>
+        {/if}
 
-      {#if Object.keys(rhopses).length > 0}
-        <ToggleSectionCard title="Rhopses" toggleClass="h-96">
-          <div class="w-full h-full overflow-x-hidden no-scrollbar overflow-y-scroll">
-            <CustomTable elements={Object.values(rhopses)} headers={['PG','Produit', 'Quantité']}>
-              <svelte:fragment slot="tbody" let:e>
-                <tr class="divide-x-2 divide-white ">
-                  <td>{e.pg.nums}ch{e.pg.proms}</td>
-                  <td>{e.produit}</td>
-                  <td>{e.quantite}</td>
-                </tr>
-              </svelte:fragment>
-            </CustomTable>
-            </div>
-        </ToggleSectionCard>
-      {/if}
+        {#if Object.keys(rhopses).length > 0}
+          <AccordionItem>
+            <svelte:fragment slot="summary">
+              <p class="font-zagoth text-center text-3xl">Rhopses</p>
+            </svelte:fragment>
+            <svelte:fragment slot="content">
+              <div class="w-full h-full overflow-x-hidden no-scrollbar overflow-y-scroll">
+                <CustomTable elements={Object.values(rhopses)} headers={['PG','Produit', 'Quantité']}>
+                  <svelte:fragment slot="tbody" let:e>
+                    <tr class="divide-x-2 divide-white ">
+                      <td>{e.pg.nums}ch{e.pg.proms}</td>
+                      <td>{e.produit}</td>
+                      <td>{e.quantite}</td>
+                    </tr>
+                  </svelte:fragment>
+                </CustomTable>
+              </div>
+            </svelte:fragment>
+            </AccordionItem>
+        {/if}
+      </Accordion>
     </div>
     
     <svelte:fragment slot="submitButton">
       {#if errors.rhopsesError.length > 0 || errors.fileError != null}
       <div></div>
       {:else}
-      <button class="size-20 bg-blue-500 rounded-md">Rhopse</button>
+      <button class="btn variant-filled-success">Rhopse</button>
       {/if}
-
     </svelte:fragment>
   </SubmitDialog>

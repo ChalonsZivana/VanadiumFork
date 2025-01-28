@@ -3,9 +3,8 @@
   import SubmitDialog from '$lib/components/miscellaneous/SubmitDialog.svelte';
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type { categories, pg, produits } from '@prisma/client';
-  import AddSquare from '../svgs/add-square.svelte';
-  import MinusSquare from '../svgs/minus-square.svelte';
   import type { SubmitFunction } from "@sveltejs/kit";
+  import Icon from '@iconify/svelte';
 
   export let rhopseUrl:string;
   export let pg:Partial<pg>;
@@ -50,9 +49,13 @@
                 {product.nom}     ({product.prix + product.prix2}€)
               </p>
               <div class="flex justify-center gap-1">
-                <button on:click={()=>increment(product.id_produit,-1)} class="w-10"><MinusSquare /></button>
+                <button on:click={()=>increment(product.id_produit,-1)} class="w-10">
+                  <Icon class="text-4xl" icon="mdi:minus-box"/>
+                </button>
                 <input required on:change={()=>verifyPositivity(product.id_produit)} class="text-center rounded-lg w-20" type="number" min=0 bind:value={quantités[product.id_produit]}>
-                <button on:click={()=>increment(product.id_produit,1)} class="w-10"><AddSquare /></button>
+                <button on:click={()=>increment(product.id_produit,1)} class="w-10">
+                  <Icon class="text-4xl" icon="mdi:add-box"/>
+                </button>
               </div>
             </div>
           {/each}
@@ -74,9 +77,13 @@
             {product.nom}     ({product.prix + product.prix2}€)
           </p>
           <div class="flex justify-center gap-1 bg-red-100">
-            <button on:click={()=>increment(product.id_produit,-1)} class="w-10"><MinusSquare /></button>
+            <button on:click={()=>increment(product.id_produit,-1)} class="w-10">
+              <Icon class="text-4xl" icon="mdi:minus-box"/>
+            </button>
             <input required on:change={()=>verifyPositivity(product.id_produit)} class="text-center rounded-lg w-20" type="number" min=0 bind:value={quantités[product.id_produit]}>
-            <button on:click={()=>increment(product.id_produit,1)} class="w-10"><AddSquare /></button>
+            <button on:click={()=>increment(product.id_produit,1)} class="w-10">
+              <Icon class="text-4xl" icon="mdi:add-box"/>
+            </button>
           </div>
         </div>
       {/each}

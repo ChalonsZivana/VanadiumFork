@@ -24,7 +24,6 @@
   
 
   async function updateData(){
-    console.log('update')
     const response = await fetch(window.location.pathname, {
       method: 'POST',
       headers: {

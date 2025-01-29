@@ -7,7 +7,6 @@ export const popupStore = writable<PopupData>(null);
 
 
 export function triggerPopupForm(form:object){
-  console.log("test", form);
   const zodObject = z.object({success:z.boolean(), message:z.string()});
   const d = zodObject.safeParse(form);
   if(d.success) {

@@ -25,7 +25,6 @@ export const load = async ({params})=>{
 
 export const actions = {
   'rhopse':async({request, params, locals})=>{
-    console.log('rhopsing')
     const id_boquette = parseInt(params.id_boquette);
     const id_pg = 2625;//parseInt(params.id_pg);
     const rhopseur = locals.session.data.user;

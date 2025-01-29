@@ -4,6 +4,7 @@ import { Database } from "$lib/server/classes/Database";
 import { Taferie } from "$lib/server/classes/Taferie";
 import { RhopseSchema } from "$lib/zodSchema";
 import { error, fail } from "@sveltejs/kit";
+import { z } from "zod";
 
 export const load = async ({ params }) => {
   const id_boquette = parseInt(params.id_boquette);
@@ -30,14 +31,18 @@ export const load = async ({ params }) => {
 export const actions = {
   rhopse: async ({ request, params, locals }) => {
     const id_boquette = parseInt(params.id_boquette);
-    const id_pg = 2625; //parseInt(params.id_pg);
     const rhopseur = locals.session.data.user;
 
-    if (!id_boquette || !id_pg || !rhopseur) throw error(400);
+    if (!id_boquette || !rhopseur) throw error(400);
     const rhopseur_string = `${rhopseur.pg.nums}ch${rhopseur.pg.proms}`;
 
     const t = Object.fromEntries(await request.formData());
-    const parse = RhopseSchema.safeParse(t);
+    const id_pgSchema = z.object({id_pg:z.string()})
+    const newSchema = RhopseSchema.merge(id_pgSchema).transform(e =>({
+      id_pg:parseInt(e.id_pg), produits:e.produits, rhopse_ancien:e.rhopse_ancien}
+    )).refine(e => !isNaN(e.id_pg), {message:"id_pg must be a number"});;
+    
+    const parse = newSchema.safeParse(t);
 
     if (!parse.success) return fail(400, {});
     const data = parse.data;
@@ -50,7 +55,7 @@ export const actions = {
     for (let [id_produit, quantite] of data.produits) {
       const r = await Taferie.rhopse({
         type: "pg_boq",
-        from: id_pg,
+        from: parse.data.id_pg,
         to: boq.ID,
         id_produit,
         quantite,

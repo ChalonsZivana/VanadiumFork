@@ -125,7 +125,7 @@
     action={`?/rhopse`}
   >
     <!-- Validation -->
-    {#if product}
+    {#if product && pg !== null}
       <div hidden={product == null} class={choicesContainerClass}>
         <div class="text-4xl flex flex-col justify-center items-center gap-5">
           <p>Veux-tu rhopser</p>
@@ -170,6 +170,7 @@
               {/each}
             {/if}
           </select>
+          <input type="hidden" name="id_pg" value={`${pg.id_pg}`} />
           <MyButton bind:isLoading value="RHOPSER"></MyButton>
         </div>
       </div>

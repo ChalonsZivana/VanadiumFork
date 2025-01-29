@@ -19,9 +19,11 @@ export const load: PageServerLoad = async ({ locals }) => {
       from: locals.session.data.user.pg.id_pg,
       montant: { lt: 0 },
       to: { in: Object.values(BOQUETTES_TOPS) },
+      annule:false
     },
     _sum: { montant: true },
   });
+
   const consos = a.map((e) => {
     return { id_boquette: e.to!, montant: Math.abs(e._sum.montant!) };
   });

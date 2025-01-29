@@ -4,8 +4,8 @@
 
 {#if special}
   <div class="animate-shine">
-    <slot/>
+    <slot />
   </div>
 {:else}
-  <slot/>
+  <slot />
 {/if}

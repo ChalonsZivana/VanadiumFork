@@ -1,16 +1,15 @@
-
 export async function load() {
-  const response  = await fetchCalendarEvents("2024-09-16");
+  const response = await fetchCalendarEvents("2024-09-16");
 
   const unparsedEDT = await response.text(); // Get the response as text
 
   return {
-    unparsedEDT
-  }
+    unparsedEDT,
+  };
 }
 
 function fetchCalendarEvents(weekStartDate: string) {
-  const jidt = "j_idt119"
+  const jidt = "j_idt119";
   // Convert the start of the week to a Unix timestamp (in milliseconds)
   const startDate = new Date(weekStartDate).getTime();
 
@@ -18,13 +17,16 @@ function fetchCalendarEvents(weekStartDate: string) {
   const endDate = new Date(startDate + 6 * 24 * 60 * 60 * 1000).getTime();
 
   // Format the date for form:date_input (dd/MM/yyyy)
-  const formattedDate = new Intl.DateTimeFormat('fr-FR').format(new Date(startDate));
+  const formattedDate = new Intl.DateTimeFormat("fr-FR").format(
+    new Date(startDate),
+  );
 
   // Get the week number (ISO Week)
   const weekNumber = getWeekNumber(new Date(startDate));
 
-  console.log(startDate, endDate ,formattedDate, weekNumber)
-  const temoin = "javax.faces.partial.ajax=true&javax.faces.source=form%3Aj_idt119&javax.faces.partial.execute=form%3Aj_idt119&javax.faces.partial.render=form%3Aj_idt119&form%3Aj_idt119=form%3Aj_idt119&form%3Aj_idt119_start=1725228000000&form%3Aj_idt119_end=1725746400000&form=form&form%3AlargeurDivCenter=&form%3AidInit=webscolaapp.Planning_364238723742996202&form%3Adate_input=02%2F09%2F2024&form%3Aweek=36-2024&form%3Aj_idt119_view=agendaWeek&form%3AoffsetFuseauNavigateur=-7200000&form%3Aonglets_activeIndex=0&form%3Aonglets_scrollState=0&form%3Aj_idt245_focus=&form%3Aj_idt245_input=44323&javax.faces.ViewState=7495890746698720676%3A1112376055249351560"
+  console.log(startDate, endDate, formattedDate, weekNumber);
+  const temoin =
+    "javax.faces.partial.ajax=true&javax.faces.source=form%3Aj_idt119&javax.faces.partial.execute=form%3Aj_idt119&javax.faces.partial.render=form%3Aj_idt119&form%3Aj_idt119=form%3Aj_idt119&form%3Aj_idt119_start=1725228000000&form%3Aj_idt119_end=1725746400000&form=form&form%3AlargeurDivCenter=&form%3AidInit=webscolaapp.Planning_364238723742996202&form%3Adate_input=02%2F09%2F2024&form%3Aweek=36-2024&form%3Aj_idt119_view=agendaWeek&form%3AoffsetFuseauNavigateur=-7200000&form%3Aonglets_activeIndex=0&form%3Aonglets_scrollState=0&form%3Aj_idt245_focus=&form%3Aj_idt245_input=44323&javax.faces.ViewState=7495890746698720676%3A1112376055249351560";
   const body = `javax.faces.partial.ajax=true&javax.faces.source=form%3A${jidt}&javax.faces.partial.execute=form%3A${jidt}&javax.faces.partial.render=form%3A${jidt}&form%3A${jidt}=form%3A${jidt}&form%3A${jidt}_start=${startDate}&form%3A${jidt}_end=${endDate}&form%3Adate_input=${formattedDate}&form%3Aweek=${weekNumber}&form%3A${jidt}_view=agendaWeek&form%3AoffsetFuseauNavigateur=-7200000&javax.faces.ViewState=-1616752800171313021%3A-20613947683233818`;
   console.log(body);
   // Generate the POST request
@@ -39,17 +41,16 @@ function fetchCalendarEvents(weekStartDate: string) {
       "sec-fetch-mode": "cors",
       "sec-fetch-site": "same-origin",
       "x-requested-with": "XMLHttpRequest",
-      "cookie":"JSESSIONID=9DC80DBBC473CCC9EA88761025200E9D"
+      cookie: "JSESSIONID=9DC80DBBC473CCC9EA88761025200E9D",
     },
     referrer: "https://lise.ensam.eu/faces/Planning.xhtml",
     referrerPolicy: "strict-origin-when-cross-origin",
     body: temoin,
     method: "POST",
     mode: "cors",
-    credentials: "include"
+    credentials: "include",
   });
 }
-
 
 function getWeekNumber(date: Date): string {
   // Copy date to avoid modifying the original
@@ -80,5 +81,3 @@ function getWeekNumber(date: Date): string {
   // Return the week number and the year in ISO format
   return `${weekNumber}-${currentDate.getFullYear()}`;
 }
-
-

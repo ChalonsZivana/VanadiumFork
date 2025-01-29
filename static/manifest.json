@@ -1,8 +1,8 @@
 {
-  "name":"Vanadium",
-  "short_name":"Vanadium",
-  "start_url":"/",
-  "icons":[
+  "name": "Vanadium",
+  "short_name": "Vanadium",
+  "start_url": "/",
+  "icons": [
     {
       "src": "icon_sized.png",
       "sizes": "144x144",
@@ -10,9 +10,9 @@
       "purpose": ""
     }
   ],
-  "scope":"/",
-  "display":"standalone",
-  "background_color":"#1f1e1e",
-  "theme_color":"#1f1e1e",
-  "description":"Vanadium, don't you know what it is ??"
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1f1e1e",
+  "theme_color": "#1f1e1e",
+  "description": "Vanadium, don't you know what it is ??"
 }

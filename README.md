@@ -42,13 +42,14 @@ You can preview the production build with `npm run preview`.
 when changing the prisma schema you have to do multiple things:
 
 - FOR JOIN support
-  - add   `refresh  refresh[]` to `pg`
+
+  - add `refresh  refresh[]` to `pg`
   - add `pg pg @relation(fields: [id_pg], references:[id_pg])` to `refresh`
 
-  - add   `auberge  auberge[]` to `pg`
+  - add `auberge  auberge[]` to `pg`
   - add `pg pg @relation(fields: [id_pg], references:[id_pg])` to `auberge`
-- change every `Decimal` to `Float`
 
+- change every `Decimal` to `Float`
 
 SVG Repo
 https://www.svgrepo.com/collection/solar-linear-icons

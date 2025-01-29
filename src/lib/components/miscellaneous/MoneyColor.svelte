@@ -1,21 +1,21 @@
 <script lang="ts">
-  export let auto:number|null=null;
-  export let green:number|null=null;
-  export let red:number|null=null;
-  export let className:string='';
+  export let auto: number | null = null;
+  export let green: number | null = null;
+  export let red: number | null = null;
+  export let className: string = "";
 
-  if(auto){
-    if(auto >= 0) green = auto
-    else red = auto
+  if (auto) {
+    if (auto >= 0) green = auto;
+    else red = auto;
   }
 </script>
 
 {#if green}
-  <p class='text-green-700 {className}'>
-    <slot/>+{green.toFixed(2)}€
+  <p class="text-green-700 {className}">
+    <slot />+{green.toFixed(2)}€
   </p>
 {:else if red}
   <p class="text-red-700 {className}">
-    <slot/>-{Math.abs(red).toFixed(2)}€
+    <slot />-{Math.abs(red).toFixed(2)}€
   </p>
 {/if}

@@ -1,28 +1,25 @@
 <script lang="ts">
-  import {enhance} from "$app/forms"
-    import Icon from "@iconify/svelte";
-  export let id:number;
-  export let annule:boolean|null|number;
+  import { enhance } from "$app/forms";
+  import Icon from "@iconify/svelte";
+  export let id: number;
+  export let annule: boolean | null | number;
   let myId = id;
-
-
 </script>
 
-
-<form method="post" use:enhance={
-  async ()=>{
-    return async({update})=> update({reset:false});
-  }
-}>
-  <input type="hidden" name="id" value={myId}>
+<form
+  method="post"
+  use:enhance={async () => {
+    return async ({ update }) => update({ reset: false });
+  }}
+>
+  <input type="hidden" name="id" value={myId} />
   {#if annule == true || annule == 1}
-    <button formaction="?/uncancel"  class="rounded-lg w-6 text-xl">
-      <Icon icon="mdi:plus-box"/>
+    <button formaction="?/uncancel" class="rounded-lg w-6 text-xl">
+      <Icon icon="mdi:plus-box" />
     </button>
   {:else}
-    <button formaction="?/cancel"  class="rounded-lg w-6 text-xl">
-      <Icon icon="mdi:minus-box"/>
+    <button formaction="?/cancel" class="rounded-lg w-6 text-xl">
+      <Icon icon="mdi:minus-box" />
     </button>
   {/if}
 </form>
-

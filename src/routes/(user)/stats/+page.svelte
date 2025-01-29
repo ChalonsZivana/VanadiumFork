@@ -40,12 +40,9 @@
     data.boquettes.find((e) => e.id_boquette == id_boq)?.nom;
 
   async function getTop(id_boquette:number,nom:string) {
-    if(topsSaved[id_boquette].leaderboard.length != 0) return;
     const res = await fetch('/stats', {method:'POST', body:JSON.stringify({id_boquette,nom})});
-
-    topsSaved[id_boquette] = await res.json() as Top;
-    topsSaved = topsSaved;
-    console.log(topsSaved);
+    const top = await res.json() as Top;
+    return top;
   }
 
 </script>
@@ -97,13 +94,17 @@
       <Accordion>
         {#key topsSaved}
           {#each Object.entries(topsSaved) as [id_boquette, top] (id_boquette)}
-            <AccordionItem on:toggle={(e) => getTop(parseInt(id_boquette), top.name)} >
+            <AccordionItem>
               <svelte:fragment slot="lead"
                 ><Icon icon="mdi:rank" /></svelte:fragment
               >
               <svelte:fragment slot="summary"><p class="text-3xl">{top.name}</p></svelte:fragment>
               <svelte:fragment slot="content">
-                <Leaderboard bind:top/>
+                {#await getTop(parseInt(id_boquette), top.name) }
+                  <p>Loading...</p>
+                {:then top} 
+                  <Leaderboard top={top} />
+                {/await}
               </svelte:fragment>
             </AccordionItem>
           {/each}

@@ -145,9 +145,9 @@
           value={productToEdit.id_produit}
         />
         <label>
-          <p class="text-2xl font-zagoth text-white">Catégorie du produit:</p>
+          <p class="text-2xl font-zagoth ">Catégorie du produit:</p>
           <select
-            class="h-10 w-full"
+            class="h-10 w-full select"
             name="id_categorie"
             value={productToEdit.id_categorie}
           >
@@ -157,18 +157,18 @@
           </select>
         </label>
         <label>
-          <p class="text-2xl font-zagoth text-white">Nom du produit:</p>
+          <p class="text-2xl font-zagoth">Nom du produit:</p>
           <input
-            class="pl-2 h-10 w-full"
+            class="pl-2 h-10 w-full input"
             type="text"
             name="nom"
             value={productToEdit.nom}
           />
         </label>
         <label>
-          <p class="text-2xl font-zagoth text-white">Prix du produit:</p>
+          <p class="text-2xl font-zagoth ">Prix du produit:</p>
           <input
-            class="pl-2 h-10 w-full"
+            class="pl-2 h-10 w-full input"
             type="number"
             step="0.001"
             min="0"
@@ -178,9 +178,9 @@
         </label>
         {#if id_boquette == 7}
           <label>
-            <p class="text-2xl font-zagoth text-white">Prix2 du produit:</p>
+            <p class="text-2xl font-zagoth ">Prix2 du produit:</p>
             <input
-              class="pl-2 h-10 w-full"
+              class="pl-2 h-10 w-full input"
               type="number"
               step="0.001"
               min="0"
@@ -192,7 +192,7 @@
         <label>
           <p class="text-2xl font-zagoth text-white">Inventaire:</p>
           <input
-            class="pl-2 h-10 w-full"
+            class="pl-2 h-10 w-full input"
             type="number"
             step="1"
             min="0"

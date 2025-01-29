@@ -81,16 +81,16 @@ export const BOQUETTES_LIBRE_SERVICE = {
 
 export const BOQUETTES_ALCOOL = {
   "Foy's": BOQUETTES["Foy's"],
-  "Strass Choco": BOQUETTES["Strass Choco"],
-  Auberge: BOQUETTES["Auberge"],
+  "K've": BOQUETTES["K've"],
+  "Cock's": BOQUETTES["Cock's"],
   Mousse: BOQUETTES["Mousse"],
   ZMD: BOQUETTES["ZMD"],
   Koenettrie: BOQUETTES["Koenettrie"],
 };
 
 export const BOQUETTES_NOURRITURES = {
-  "K've": BOQUETTES["K've"],
-  "Cock's": BOQUETTES["Cock's"],
+  Auberge: BOQUETTES["Auberge"],
+  "Strass Choco": BOQUETTES["Strass Choco"],
   "Clac's": BOQUETTES["Clac's"],
   Copalerie: BOQUETTES["Copalerie"],
   "Mam'serie": BOQUETTES["Mam'serie"],

@@ -82,7 +82,7 @@
         {/each}
       </div>
       <div class="flex justify-center">
-        <button class="btn variant-filled-primary" on:click={dialog.showModal}
+        <button class="btn variant-filled-primary" on:click={()=>dialog.showModal()}
           >RHOPSER</button
         >
       </div>

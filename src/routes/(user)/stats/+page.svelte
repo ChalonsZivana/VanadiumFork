@@ -22,6 +22,10 @@
   );
   let totalNourriture = 0;
   let totalAlcool = 0;
+  let topsSaved:{
+    [k: string]: Top;
+  } = Object.fromEntries(Object.entries(data.boquettes_tops).map(([name,id_boquette]) => [id_boquette, {name, leaderboard:[]}]));
+
   onMount(() => {
     data.consos.forEach((e) => {
       if (Object.values(data.boquettes_nourritures).includes(e.id_boquette)) {
@@ -34,6 +38,16 @@
 
   const getBoqName = (id_boq: number | null) =>
     data.boquettes.find((e) => e.id_boquette == id_boq)?.nom;
+
+  async function getTop(id_boquette:number,nom:string) {
+    if(topsSaved[id_boquette].leaderboard.length != 0) return;
+    const res = await fetch('/stats', {method:'POST', body:JSON.stringify({id_boquette,nom})});
+
+    topsSaved[id_boquette] = await res.json() as Top;
+    topsSaved = topsSaved;
+    console.log(topsSaved);
+  }
+
 </script>
 
 <div class="flex flex-col items-center gap-4 w-full mt-5 mb-5 p-5">
@@ -73,6 +87,7 @@
       </SectionCard>
     </div>
 
+
     <!-- <SectionCard title="Ton top conso est sur la boquette {getBoqName(depensesMax.id_boquette)} avec un total de {depensesMax.montant?.toFixed(2)}€."/>
   <SectionCard title="Tu as dépensé {Math.round(Math.abs(totalAlcool))}€ en alcool et {Math.round(Math.abs(totalNourriture))}€ en nourriture.">
     <p class="text-xl text-center">{totalAlcool < totalNourriture?"On dirait que tu préfères boire plutôt que manger.":"On dirait que tu préfères manger plutôt que boire."}</p>
@@ -80,21 +95,19 @@
 
     <div class="w-full">
       <Accordion>
-        {#await data.tops}
-          Chargement tops...
-        {:then tops}
-          {#each tops as top, i}
-            <AccordionItem>
+        {#key topsSaved}
+          {#each Object.entries(topsSaved) as [id_boquette, top] (id_boquette)}
+            <AccordionItem on:toggle={(e) => getTop(parseInt(id_boquette), top.name)} >
               <svelte:fragment slot="lead"
                 ><Icon icon="mdi:rank" /></svelte:fragment
               >
               <svelte:fragment slot="summary"><p class="text-3xl">{top.name}</p></svelte:fragment>
-              <svelte:fragment slot="content"
-                ><Leaderboard bind:top /></svelte:fragment
-              >
+              <svelte:fragment slot="content">
+                <Leaderboard bind:top/>
+              </svelte:fragment>
             </AccordionItem>
           {/each}
-        {/await}
+        {/key}
       </Accordion>
     </div>
   {/if}

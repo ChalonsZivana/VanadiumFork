@@ -11,7 +11,6 @@ import { StatisticsSchema } from "$lib/zodSchema";
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (locals.session.data.user == null) throw error(400);
-  const tops = getTops();
   const a = await prisma.consommations.groupBy({
     by: ["to"],
     where: {
@@ -29,7 +28,6 @@ export const load: PageServerLoad = async ({ locals }) => {
   });
 
   return {
-    tops,
     boquettes: await prisma.boquettes.findMany({
       select: { id_boquette: true, nom: true },
     }),

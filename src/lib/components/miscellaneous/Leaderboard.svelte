@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Top } from "$lib/server/db_structs";
+
   export let top: Top;
 </script>
 

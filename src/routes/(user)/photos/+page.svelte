@@ -1,6 +1,7 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
     import Popup from '$lib/components/miscellaneous/Popup.svelte';
+    import { triggerPopupForm } from '$lib/stores/popupStore.js';
     import Icon from '@iconify/svelte';
     import { onMount } from 'svelte';
   
@@ -14,7 +15,6 @@
 
   let fileInput:HTMLInputElement;
   let dialog:HTMLDialogElement;
-  let scrollContainer:HTMLElement;
   $:previewUrl = "";
 
   
@@ -64,17 +64,9 @@
     }
 }
 
-
-  function scrollToBottom() {
-    if (scrollContainer) {
-      scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    }
-  }
   let orientations:{photo:typeof data.photos[0], mode:'landscape'|'portrait'|'square'}[] = [];
 
   onMount(() => {
-    scrollToBottom(); // Scroll to bottom when the component mounts
-
     orientations = data.photos.map(photo => {
       let image = new Image();
       image.src = photo.url;
@@ -89,10 +81,8 @@
     });
   });
 
-
+  $:triggerPopupForm(form);
 </script>
-
-<Popup bind:form={form}/>
 
 <div class="w-full h-full flex flex-col gap-2 p-2 place-items-center">
   <div class="flex-grow grid grid-flow-dense grid-cols-4 md:grid-cols-6 grid-rows-auto place-items-center place-content-center">

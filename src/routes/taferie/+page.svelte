@@ -11,6 +11,8 @@
   import type { getTopNegats } from "$lib/server/db_connection";
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
   import Icon from '@iconify/svelte';
+  import { triggerPopupForm } from '$lib/stores/popupStore.js';
+  
 
   export let data;
   export let form:{topNegats:Awaited<ReturnType<typeof getTopNegats>>}
@@ -29,7 +31,8 @@
   const dataToSort = Promise.all([data.pgs, data.fams, data.boquettes]).then((value)=>{
     return createDataToSort({pgs:value[0], fams:value[1], boquettes:value[2]});
   });
-  //<iconify-icon icon="material-symbols:person-add"></iconify-icon>
+
+  $:triggerPopupForm(form)
 </script>
 
 <div class="w-11/12 mt-5">
@@ -136,7 +139,7 @@
       <a class="" href="/taferie/pgs">PGs</a>
       <a class="" href="/taferie/inscription">Inscription</a>
 
-      <form action="?/specialAction" method="post">
+      <form use:enhance action="?/specialAction" method="post">
         <button>Action Spéciale</button>
       </form>
     </div>
@@ -198,7 +201,7 @@
         <MyButton value="Valider"/>
       </form>
 
-      {#if form}
+      {#if form && "topNegats" in form}
         <CustomTable headers={['Nums','Bucque','Solde']} elements={form.topNegats}>
           <tr on:click={()=>location.href=`/taferie/pg-${e.id_pg}`} slot="tbody" let:e class="cursor-pointer divide-x-2 divide-white">
             <th class="p-2">

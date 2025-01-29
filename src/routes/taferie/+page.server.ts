@@ -43,6 +43,6 @@ export const actions = {
     }
   },
   specialAction:async({request})=>{
-    return 
+    return {success:true, message:`Action spéciale`};
   }
 }

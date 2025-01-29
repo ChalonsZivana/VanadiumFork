@@ -5,12 +5,13 @@
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
   import ConsoTable from "$lib/components/search/ConsoTable.svelte";
+  import { triggerPopupForm } from "$lib/stores/popupStore.js";
 
   export let data;
   export let form:{success:boolean, message:string};
-</script>
 
-<Popup bind:form={form}/>
+  $:triggerPopupForm(form);
+</script>
 
 <div class="flex flex-col w-11/12 gap-2 pt-5">
   {#key data.user}

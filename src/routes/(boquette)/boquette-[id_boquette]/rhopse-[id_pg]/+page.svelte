@@ -1,13 +1,13 @@
 <script lang='ts'>
-    import Popup from "$lib/components/miscellaneous/Popup.svelte";
     import RhopseComponent from "$lib/components/miscellaneous/RhopseComponent.svelte";
+    import { triggerPopupForm } from "$lib/stores/popupStore.js";
     export let data;
     export let form:{success:boolean, message:string}[];
 
     export let dialog:HTMLDialogElement;
-</script>
 
-<Popup bind:form={form}/>
+    $:triggerPopupForm(form);
+</script>
 
 <div class="flex h-full items-center justify-center pt-5 w-11/12">
   {#if data.pg.can_buy}

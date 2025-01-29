@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import Popup from '$lib/components/miscellaneous/Popup.svelte';
+    import { triggerPopupForm } from '$lib/stores/popupStore.js';
   import Icon from '@iconify/svelte';
   import { onMount } from 'svelte';
 
@@ -23,9 +24,10 @@
 
     phoneNumber = localStorage.getItem('phoneNumber') ?? "";
   });
+
+  $:triggerPopupForm(form);
 </script>
 
-<Popup bind:form={form}/>
 
 <div class="w-full h-full flex flex-col items-center gap-5">
   {#if !data.verify}

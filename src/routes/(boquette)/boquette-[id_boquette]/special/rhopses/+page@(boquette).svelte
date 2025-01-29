@@ -2,8 +2,8 @@
   import MyButton from '$lib/components/miscellaneous/MyButton.svelte';
   import type{categories, produits} from '@prisma/client';
   import { enhance } from '$app/forms';
-  import Popup from '$lib/components/miscellaneous/Popup.svelte';
   import Icon from '@iconify/svelte';
+  import { triggerPopupForm } from '$lib/stores/popupStore.js';
 
   export let data;
   export let form:{success:boolean, message:string};
@@ -27,9 +27,9 @@
   const coloredClass = "p-3 bg-fuchsia-500 text-4xl rounded-md";
 
   let isLoading = false
-</script>
 
-<Popup bind:form={form}/>
+  $:triggerPopupForm(form);
+</script>
 
 <a href={data.USER?.pg.proms == 223 ? `/boquette-${data.id_boquette}`:'/'} class="absolute top-3 left-3 w-8">
   <Icon icon="mdi:house" class="w-8 h-8"/>
@@ -90,9 +90,9 @@
 
 <form use:enhance={({formData})=>{
     formData.set('produits', JSON.stringify([[product?.id_produit,1]]))
-    return ({})=>{reset()}
+    return async({update})=>{reset();await update()}
   }
-} on:submit={()=>isLoading = true} method="post" action={`/boquette-${data.id_boquette}/rhopse-${pg?.id_pg}?/rhopse`}>
+} on:submit={()=>isLoading = true} method="post" action={`?/rhopse`}>
   <!-- Validation -->
   {#if product}
   <div hidden={product==null} class={choicesContainerClass}>

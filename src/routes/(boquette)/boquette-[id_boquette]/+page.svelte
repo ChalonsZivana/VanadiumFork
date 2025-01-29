@@ -12,6 +12,7 @@
   import Icon from "@iconify/svelte";
   import { enhance } from "$app/forms";
   import type {consommations} from '@prisma/client';
+    import { triggerPopupForm } from "$lib/stores/popupStore.js";
 
   let startDate = new Date();
   let dateFormat = 'dd/MM/yy';
@@ -90,9 +91,9 @@
     );
     return fetchedPgs;
   };
-</script>
 
-<Popup bind:form={form}/>
+  $:triggerPopupForm(form);
+</script>
 
 <div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
   <BoquetteProfile {boquette}>

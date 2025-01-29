@@ -6,6 +6,7 @@
   import Popup from "$lib/components/miscellaneous/Popup.svelte";
   import Icon from "@iconify/svelte";
   import type{consommationsSearch} from '$lib/components/search/consommations/fullsearch.js'
+    import { triggerPopupForm } from "$lib/stores/popupStore.js";
 
   export let data;
   export let form:{search:Awaited<ReturnType<typeof consommationsSearch>>, success:boolean, message:string};
@@ -14,9 +15,9 @@
   let currData:typeof data.search;
   $:currData = data.search;  
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 100):NaN;
-</script>
 
-<Popup bind:form={form}/>
+  $:triggerPopupForm(form);
+</script>
 
 <div class="w-11/12 flex flex-col pt-5 gap-5">
   <BoquetteProfile boquette={data.boquette} taferie={true}>

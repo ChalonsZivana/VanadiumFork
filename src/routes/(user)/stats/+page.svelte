@@ -66,7 +66,7 @@
         )}€ en nourriture."
       >
         <span
-          >{totalAlcool < totalNourriture
+          >{totalAlcool > totalNourriture
             ? "On dirait que tu préfères boire plutôt que manger."
             : "On dirait que tu préfères manger plutôt que boire."}</span
         >
@@ -101,8 +101,8 @@
 
   <form
     use:enhance={() => {
-      return ({ update }) => {
-        update({ reset: false });
+      return async ({ update }) => {
+        await update({ reset: false });
       };
     }}
     action="?/stats"
@@ -145,7 +145,7 @@
   </form>
 
   {#if form}
-    <div class="card variant-filled-surface p-4">
+    <div class="card variant-filled-surface p-4 ">
       <Leaderboard top={form.top} />
     </div>
   {/if}

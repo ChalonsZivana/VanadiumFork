@@ -4,17 +4,17 @@
 </script>
 
 <div
-  class="flex flex-col place-items-center h-full justify-center items-center"
+  class="flex flex-col place-items-center justify-center items-center"
 >
-  <div class="flex w-fit justify-around items-end">
+  <div class="flex w-full justify-around items-end">
     {#each [2, 0, 1] as i}
       <div
         class="border-solid {['bg-yellow-600', 'bg-gray-500', 'bg-amber-900'][
           i
-        ]} w-24 border-2 flex flex-col items-center justify-center p-2 {[
-          'h-36',
-          'h-28',
-          'h-24',
+        ]} w-1/3 border-2 flex flex-col items-center justify-center p-2 {[
+          'aspect-[8/12]',//h-full
+          'aspect-[10/12]',//h-1/2
+          'aspect-[10/10]',//h-1/3
         ][i]}"
       >
         <p>#{i + 1}</p>
@@ -26,7 +26,7 @@
     {/each}
   </div>
 
-  <div class="flex flex-col">
+  <div class="flex flex-col mt-10">
     {#each top.leaderboard as pg, index}
       {#if index > 2}
         <p>

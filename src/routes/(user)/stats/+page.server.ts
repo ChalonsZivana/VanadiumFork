@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     _sum: { montant: true },
   });
   const consos = a.map((e) => {
-    return { id_boquette: e.to!, montant: e._sum.montant! };
+    return { id_boquette: e.to!, montant: Math.abs(e._sum.montant!) };
   });
 
   return {

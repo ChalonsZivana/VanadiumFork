@@ -3,9 +3,7 @@
     type ActiveElement,
     type ChartData,
     type ChartEvent,
-    type ChartTypeRegistry,
     type TooltipItem,
-    type TooltipModel,
   } from "chart.js/auto";
   import { onMount } from "svelte";
 
@@ -31,7 +29,7 @@
   onMount(() => {
     chart = createChart();
     chart.canvas.style.width = clientWidth + "px";
-    chart.canvas.style.height = clientHeight + "px";
+    chart.canvas.style.height = "120px";
   });
 
   function createChart(): Chart<"pie"> {

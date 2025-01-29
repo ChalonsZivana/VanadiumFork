@@ -84,7 +84,7 @@ export const getTopRefresh = async () => {
 export const getTop = async (
   name: string,
   id_boquette: number | null,
-  d = { jours: 365, take: 10 },
+  d = { jours: 14, take: 10 },
 ): Promise<Top> => {
   const twoWeeksAgo = new Date();
   twoWeeksAgo.setDate(twoWeeksAgo.getDate() - d.jours); //TODO 30 -> 14
@@ -98,6 +98,7 @@ export const getTop = async (
             from: { gt: 0 },
             date_conso: { gte: twoWeeksAgo.toISOString() },
             from_pg: { solde: { gte: 0 } },
+            annule:false
           }
         : {
             type: "pg_boq",
@@ -105,6 +106,7 @@ export const getTop = async (
             date_conso: { gte: twoWeeksAgo.toISOString() },
             from_pg: { solde: { gte: 0 } },
             to: id_boquette,
+            annule:false,
           },
     orderBy: { _sum: { montant: "asc" } },
     take: d.take,

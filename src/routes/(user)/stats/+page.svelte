@@ -17,7 +17,7 @@
   );
   const depensesMax = data.consos.reduce(
     (max, current) =>
-      (current.montant ?? 0) < (max.montant ?? 0) ? current : max,
+      (current.montant ?? 0) > (max.montant ?? 0) ? current : max,
     data.consos[0],
   );
   let totalNourriture = 0;
@@ -36,9 +36,9 @@
     data.boquettes.find((e) => e.id_boquette == id_boq)?.nom;
 </script>
 
-<div class="flex flex-col items-center gap-4 w-full mt-5 mb-5">
+<div class="flex flex-col items-center gap-4 w-full mt-5 mb-5 p-5">
   {#if data.consos.length != 0}
-    <div class="card w-80">
+    <div class="card w-full">
       <div class="card-header">
         <p class="font-zagoth h1 text-center">Statistiques</p>
       </div>
@@ -49,7 +49,7 @@
       </section>
     </div>
 
-    <div class="w-80">
+    <div class="w-full">
       <SectionCard
         title="Ton top conso est sur la boquette {getBoqName(
           depensesMax.id_boquette,
@@ -57,7 +57,7 @@
       />
     </div>
 
-    <div class="w-80">
+    <div class="w-full">
       <SectionCard
         title="Tu as dépensé {Math.round(
           Math.abs(totalAlcool),
@@ -78,7 +78,7 @@
     <p class="text-xl text-center">{totalAlcool < totalNourriture?"On dirait que tu préfères boire plutôt que manger.":"On dirait que tu préfères manger plutôt que boire."}</p>
   </SectionCard> -->
 
-    <div class="w-80">
+    <div class="w-full">
       <Accordion>
         {#await data.tops}
           Chargement tops...
@@ -88,7 +88,7 @@
               <svelte:fragment slot="lead"
                 ><Icon icon="mdi:rank" /></svelte:fragment
               >
-              <svelte:fragment slot="summary">{top.name}</svelte:fragment>
+              <svelte:fragment slot="summary"><p class="text-3xl">{top.name}</p></svelte:fragment>
               <svelte:fragment slot="content"
                 ><Leaderboard bind:top /></svelte:fragment
               >
@@ -107,7 +107,7 @@
     }}
     action="?/stats"
     method="post"
-    class="card p-4 w-80 variant-filled-surface flex flex-col text-2xl gap-5"
+    class="card p-4 sm:aspect-video variant-filled-surface flex flex-col text-2xl gap-5"
   >
     <label class="label">
       <span>Boquette</span>

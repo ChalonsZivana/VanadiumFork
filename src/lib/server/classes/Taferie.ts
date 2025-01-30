@@ -222,7 +222,7 @@ export class Taferie {
       }
 
       if (!pg.can_buy && !authorize_all)
-        return { success: false, message: `Ce pg ne peut pas acheter` };
+        return { success: false, message: `Solde Insuffisant: ${libelle}` };
     }
 
     const data: Prisma.consommationsCreateArgs["data"] = {

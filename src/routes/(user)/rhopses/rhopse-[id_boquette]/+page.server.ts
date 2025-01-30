@@ -71,6 +71,6 @@ export const actions = {
       });
       results.push(r);
     }
-    return results[0];
+    return results;
   },
 };

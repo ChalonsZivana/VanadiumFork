@@ -10,8 +10,50 @@
   let files: Blob;
 
   let fileInput: HTMLInputElement;
-  let dialog: HTMLDialogElement;
+  let addPhotoDialog: HTMLDialogElement;
+  let showPhotoDialog: HTMLDialogElement;
+
   $: previewUrl = "";
+
+  let imageElements: HTMLImageElement[] = [];
+  let observer:IntersectionObserver;
+  
+  let photosWithOrientations: {
+    photo: (typeof data.photos)[0];
+    mode: "landscape" | "portrait" | "square";
+  }[] = [];
+  let currentPhotoIndex: number | null = null;
+
+  onMount(() => {
+    photosWithOrientations = data.photos.map((photo) => {
+      let image = new Image();
+      image.src = photo.url;
+
+      let mode: (typeof photosWithOrientations)[0]["mode"] = "square";
+      if (image.naturalWidth > image.naturalHeight) {
+        mode = "landscape";
+      } else if (image.naturalWidth < image.naturalHeight) {
+        mode = "portrait";
+      }
+      return { photo, mode };
+    });
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const img = entry.target as HTMLImageElement;
+            img.src = img.dataset.src!; // Set the real image source
+            console.log('yo')
+            observer.unobserve(img); // Stop observing once loaded
+          }
+        }
+      },
+      { rootMargin: "100px" } // Preload images slightly before they appear
+    );
+
+  });
+  $:imageElements.forEach((img) => {observer.observe(img)});
 
   async function handleFileChange(event: Event) {
     const target = event.target as HTMLInputElement; // Type assertion for the target
@@ -63,30 +105,11 @@
       };
 
       reader.readAsDataURL(file); // Read the file as a data URL
-      dialog.showModal();
+      addPhotoDialog.showModal();
     }
   }
 
-  let orientations: {
-    photo: (typeof data.photos)[0];
-    mode: "landscape" | "portrait" | "square";
-  }[] = [];
-
-  onMount(() => {
-    orientations = data.photos.map((photo) => {
-      let image = new Image();
-      image.src = photo.url;
-
-      let mode: (typeof orientations)[0]["mode"] = "square";
-      if (image.naturalWidth > image.naturalHeight) {
-        mode = "landscape";
-      } else if (image.naturalWidth < image.naturalHeight) {
-        mode = "portrait";
-      }
-      return { photo, mode };
-    });
-  });
-
+  
   $: triggerPopupForm(form);
 </script>
 
@@ -94,32 +117,17 @@
   <div
     class="flex-grow grid grid-flow-dense grid-cols-4 md:grid-cols-6 grid-rows-auto place-items-center place-content-center"
   >
-    {#each orientations as photo}
-      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    {#each photosWithOrientations as photo, i}
       <button
-        class="relative size-full {photo.mode == 'landscape'
-          ? 'col-span-2'
-          : ''} focus:col-span-4 focus:row-span-2 flex place-items-center place-content-center transition-all duration-1000 border-black border-solid border-2"
+        on:click={()=>{currentPhotoIndex=i; showPhotoDialog.showModal()}} class="relative size-full {photo.mode == 'landscape' ? 'col-span-2' : ''} flex place-items-center place-content-center transition-all duration-1000 border-black border-solid border-2"
       >
         <img
-          class="w-full h-full object-contain"
-          src={photo.photo.url}
+          bind:this={imageElements[i]}
+          class="w-80 h-80 object-contain"
+          data-src={photo.photo.url} 
+          src="" 
           alt=""
-          srcset=""
         />
-        {#if data.USER.pg.id_pg == 2625}
-          <form
-            use:enhance
-            class="absolute top-0 right-0"
-            method="post"
-            action="?/deletePhoto"
-          >
-            <input type="hidden" name="photoSrc" value={photo.photo.key} />
-            <button class="">
-              <Icon class="text-3xl" icon="mdi:delete" />
-            </button>
-          </form>
-        {/if}
       </button>
     {/each}
   </div>
@@ -146,14 +154,14 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog
-  bind:this={dialog}
-  on:click|self={() => dialog.close()}
+  bind:this={addPhotoDialog}
+  on:click|self={() => addPhotoDialog.close()}
   class="w-full p-10 bg-red-800 backdrop:backdrop-blur-sm rounded-xl"
 >
   <p class="font-zagoth text-3xl text-center text-white">Envoyer Photo</p>
   <form
     use:enhance={async ({ formData }) => formData.set("photo", files)}
-    on:submit={() => dialog.close()}
+    on:submit={() => addPhotoDialog.close()}
     action="?/uploadPhoto"
     method="post"
     enctype="multipart/form-data"
@@ -176,9 +184,27 @@
         <button
           class="size-20 bg-red-500 rounded-md"
           type="button"
-          on:click={() => dialog.close()}>annuler</button
+          on:click={() => addPhotoDialog.close()}>annuler</button
         >
       </div>
     </div>
   </form>
+</dialog>
+
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<dialog bind:this={showPhotoDialog} on:click|self={()=>showPhotoDialog.close()} class="rounded-lg w-80 sm:w-1/2">
+  {#if currentPhotoIndex != null}
+  {@const curPhot = photosWithOrientations[currentPhotoIndex]}
+    <img src={`${curPhot.photo.url}`} alt="">
+    
+    <!-- LeMe -->
+    {#if data.USER.pg.id_pg == 2625}
+      <form use:enhance class="absolute top-0 right-0" method="post" action="?/deletePhoto">
+        <input type="hidden" name="photoSrc" value={photo.photo.key} />
+        <button><Icon class="text-3xl" icon="mdi:delete" /></button>
+      </form>
+    {/if}
+  {/if}
 </dialog>

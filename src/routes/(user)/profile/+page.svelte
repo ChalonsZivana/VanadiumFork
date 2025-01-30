@@ -21,6 +21,7 @@
     "photos paysage": "paysage",
     "photos voitures": "voiture",
     "photos katanas": "katanas",
+    "photos Vana": "vana",
   };
 
   let currentFolder = data.photosFolder;

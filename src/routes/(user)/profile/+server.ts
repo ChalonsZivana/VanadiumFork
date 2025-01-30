@@ -15,6 +15,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     "photos paysage": "paysage",
     "photos voitures": "voiture",
     "photos katanas": "katanas",
+    "photos Vana": "vana",
   };
 
   if (Object.values(dossiersGifs).includes(folder)) {
@@ -23,7 +24,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       data: { nom: folder },
     });
   }
-  console.log("yo");
 
   return new Response("");
 };

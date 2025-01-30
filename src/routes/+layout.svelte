@@ -11,10 +11,15 @@
   initializeStores();
   $: {
     if ($popupStore !== null) {
-      const t: ToastSettings = {
-        message: $popupStore?.message,
-      };
-      getToastStore().trigger(t);
+      for(let toast of $popupStore){
+        const t: ToastSettings = {
+          message: toast.message,
+          background: toast.success ? 'bg-green-500' : 'bg-red-500',
+        };
+        
+        getToastStore().trigger(t);
+      }
+      
     }
   }
 </script>

@@ -90,7 +90,7 @@
   {/if}
   {#if categories.length > 1}
     <div class="p-5">
-      <select
+      <select translate="no"
         class="text-black select variant-filled-secondary"
         bind:value={categorie}
       >

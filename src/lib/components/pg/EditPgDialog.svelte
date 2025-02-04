@@ -21,7 +21,7 @@
       required
       name="nom"
       value={pg.nom}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -31,7 +31,7 @@
       required
       name="prenom"
       value={pg.prenom}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -41,7 +41,7 @@
       required
       name="bucque"
       value={pg.bucque}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -51,7 +51,7 @@
       required
       name="email"
       value={pg.email}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -61,7 +61,7 @@
       required
       name="nums"
       value={pg.nums}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -70,7 +70,7 @@
     <select
       disabled
       name="tabagns"
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full select p-1 h-8 border-gray-300 border-1 rounded-md"
     >
       <option value="Ch">Ch</option>
       <!-- Erreur lors de l'import de pg_tabagns, de toute façon on est que de chalons -->
@@ -85,7 +85,7 @@
       required
       name="proms"
       value={pg.proms}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>

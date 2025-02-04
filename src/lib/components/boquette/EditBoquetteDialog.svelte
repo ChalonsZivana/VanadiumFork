@@ -20,7 +20,7 @@
     <input
       name="nom"
       value={boquette.nom}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -30,7 +30,7 @@
     <input
       name="nom_simple"
       value={boquette.nom_simple}
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -40,7 +40,7 @@
     <input
       name="password"
       value=""
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>
@@ -50,7 +50,7 @@
     <input
       name="password_confirmation"
       value=""
-      class="w-full p-1 h-8 border-gray-300 border-1 rounded-md"
+      class="w-full input p-1 h-8 border-gray-300 border-1 rounded-md"
       type="text"
     />
   </label>

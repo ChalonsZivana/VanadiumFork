@@ -35,71 +35,77 @@
           <p class="font-zagoth h2 text-center">Rechargement Lydia</p>
         </svelte:fragment>
         <svelte:fragment slot="content">
-          {#if !data.verify}
-            <form
-              class="p-4 flex flex-col gap-4 place-items-center place-content-center"
-              on:submit={() => localStorage.setItem("phoneNumber", phoneNumber)}
-              use:enhance
-              action="?/createLydiaDemand"
-              method="post"
-            >
-              <section class="flex flex-col gap-4 items-center">
-                <div class="card variant-filled-warning p-2">
-                  <p>
-                    Rentrez votre numéro de téléphone (associé à votre compte Lydia), si
-                    celui-ci n'est pas relié alors vous recevrez un SMS pour pouvoir
-                    payer en ligne. Sinon, acceptez le paiement sur la plateforme Lydia.
-                  </p>
-                </div>
-                <label>
-                  <span>Numéro de téléphone Lydia</span>
-                  <input required class="input" type="number" name="tel" />
-                </label>
-                <label>
-                  <span>Montant (minimum 15€)</span>
-                  <input required class="input" type="tel" name="montant" min="15" />
-                </label>
-              </section>
+          {#if !data.lydiazocque}
+            {#if !data.verify}
+              <form
+                class="p-4 flex flex-col gap-4 place-items-center place-content-center"
+                on:submit={() => localStorage.setItem("phoneNumber", phoneNumber)}
+                use:enhance
+                action="?/createLydiaDemand"
+                method="post"
+              >
+                <section class="flex flex-col gap-4 items-center">
+                  <div class="card variant-filled-warning p-2">
+                    <p>
+                      Rentrez votre numéro de téléphone (associé à votre compte Lydia), si
+                      celui-ci n'est pas relié alors vous recevrez un SMS pour pouvoir
+                      payer en ligne. Sinon, acceptez le paiement sur la plateforme Lydia.
+                    </p>
+                  </div>
+                  <label>
+                    <span>Numéro de téléphone Lydia</span>
+                    <input required class="input" type="number" name="tel" />
+                  </label>
+                  <label>
+                    <span>Montant (minimum 15€)</span>
+                    <input required class="input" type="tel" name="montant" min="15" />
+                  </label>
+                </section>
 
-              <div class="card-footer flex justify-center">
-                <button class="btn variant-filled-tertiary w-32 text-3xl">
-                  <Icon icon="mdi:payment" />
-                </button>
-              </div>
-            </form>
-          {:else}
-            <form
-              class="card p-4 variant-filled-surface flex flex-col gap-4"
-              on:submit={() => localStorage.setItem("phoneNumber", phoneNumber)}
-              use:enhance
-              action="?/verifyLydiaDemand"
-              method="post"
-            >
-              <p class="card-header text-3xl font-zagoth text-center">
-                Vérification Rechargement
-              </p>
-        
-              <section class="flex flex-col gap-4 items-center">
-                <div class="card variant-filled-warning p-2">
-                  <p class="text-center">
-                    Une demande de rechargement a été effectuée, appuyez sur le bouton.
-                  </p>
+                <div class="card-footer flex justify-center">
+                  <button class="btn variant-filled-tertiary w-32 text-3xl">
+                    <Icon icon="mdi:payment" />
+                  </button>
                 </div>
-                <p class="text-xl">
-                  Temps restant: <span class="font-bold">
-                    {#if timeout != null}
-                      {timeout}
-                    {/if}
-                  </span>
-                </p>
-              </section>
-        
-              <div class="card-footer flex justify-center">
-                <button class="btn variant-filled-tertiary text-xl">
-                  Vérifier le rechargement
-                </button>
-              </div>
-            </form>
+              </form>
+            {:else}
+              <form
+                class="card p-4 variant-filled-surface flex flex-col gap-4"
+                on:submit={() => localStorage.setItem("phoneNumber", phoneNumber)}
+                use:enhance
+                action="?/verifyLydiaDemand"
+                method="post"
+                >
+                  <p class="card-header text-3xl font-zagoth text-center">
+                    Vérification Rechargement
+                  </p>
+            
+                  <section class="flex flex-col gap-4 items-center">
+                    <div class="card variant-filled-warning p-2">
+                      <p class="text-center">
+                        Une demande de rechargement a été effectuée, appuyez sur le bouton.
+                      </p>
+                    </div>
+                    <p class="text-xl">
+                      Temps restant: <span class="font-bold">
+                        {#if timeout != null}
+                          {timeout}
+                        {/if}
+                      </span>
+                    </p>
+                  </section>
+            
+                  <div class="card-footer flex justify-center">
+                    <button class="btn variant-filled-tertiary text-xl">
+                      Vérifier le rechargement
+                    </button>
+                  </div>
+                </form>
+              {/if}
+          {:else}
+            <div class="card variant-filled-error p-2">
+              <p>Le rechargement Lydia est zocqué pour le moment. Les TAFs sont disponibles pour recharger via CV et Liquide.</p>
+            </div>
           {/if}
         </svelte:fragment>
       </AccordionItem>

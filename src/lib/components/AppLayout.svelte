@@ -43,6 +43,7 @@
     2: "mdi:beer-outline",
     3: "mdi:cheese",
     4: "mdi:whatshot",
+    5:"hugeicons:suit-01",
     7: "healthicons:alcohol-cessation",
     8: "mdi:tshirt-crew",
     14: "game-icons:tacos",

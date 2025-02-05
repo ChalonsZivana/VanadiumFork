@@ -103,6 +103,14 @@ export const InscriptionSchema = z
     },
   );
 
+
+  export const NuitDesCroutesSchema = z.object({
+    taille: z.enum(['']),
+    proms: z.string(),
+    montant: z.string(),
+    libelle: z.string(),
+  })
+
 export const EditPgSchema = z
   .object({
     nom: z.string().min(1),

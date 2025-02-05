@@ -139,14 +139,14 @@
   {/await}
 
   <SectionCard title="Stats">
-    <div class="grid grid-cols-2 gap-5">
+    <div class="flex">
       <form use:enhance action="?/getDaysStat" method="post">
         {#key form}
           <DatePicker bind:isOpen bind:startDate>
-            <div class="flex gap-5 items-center bg-white rounded-xl p-2">
+            <div class="flex justify-between w-full items-center bg-white rounded-xl p-2">
               <button
                 type="button"
-                class="flex gap-5 items-center"
+                class="flex items-center"
                 on:click={() => (isOpen = !isOpen)}
               >
                 <Icon icon="mdi:calendar" class="text-black text-3xl" />
@@ -163,8 +163,8 @@
       <form use:enhance action="?/doInventory" method="post">
         {#key form}
           <DatePicker bind:isOpen bind:startDate>
-            <div class="flex gap-5 items-center bg-white rounded-xl p-2">
-              <div class="flex gap-5 items-center">
+            <div class="flex justify-between w-full items-center bg-white rounded-xl p-2">
+              <div class="flew items-center">
                 <Icon
                   icon="mingcute:inventory-line"
                   class="text-black text-3xl"

@@ -90,7 +90,7 @@
     <p class="text-xl text-center">{totalAlcool < totalNourriture?"On dirait que tu préfères boire plutôt que manger.":"On dirait que tu préfères manger plutôt que boire."}</p>
   </SectionCard> -->
 
-    <div class="w-full">
+    <div class="w-full card">
       <Accordion>
         {#key topsSaved}
           {#each Object.entries(topsSaved) as [id_boquette, top] (id_boquette)}

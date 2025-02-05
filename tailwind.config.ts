@@ -1,7 +1,7 @@
 import { join } from "path";
 import type { Config } from "tailwindcss";
 import { skeleton } from "@skeletonlabs/tw-plugin";
-import { myCustomTheme } from "./src/theme";
+import { saintValentinTheme, defaultTheme } from "./src/theme";
 import plugin from "tailwindcss/plugin";
 
 export default {
@@ -83,7 +83,10 @@ export default {
   plugins: [
     skeleton({
       themes: {
-        custom: [myCustomTheme],
+        custom: [
+          defaultTheme,
+          saintValentinTheme
+        ],
         preset: [
           {
             name: "crimson",

@@ -5,12 +5,12 @@
 </script>
 
 <div
-  class="card relative variant-filled-surface bg-gradient-to-t from-primary-700 to-primary-500"
+  class="card relative bg-gradient-to-t from-primary-700 to-primary-500"
 >
   <div class="card-header flex justify-center">
     <span class="text-center h1 font-zagoth">
       <Special special={title == "Fams 11"}>
-        {title}
+        <p>{title}</p>
       </Special>
     </span>
   </div>

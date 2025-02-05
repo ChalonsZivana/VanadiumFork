@@ -74,9 +74,10 @@ export const BOQUETTES = {
 export const BOQUETTES_LIBRE_SERVICE = {
   Foys: BOQUETTES["Foy's"],
   Koenettrie: BOQUETTES["Koenettrie"],
-  "Strass Choco": BOQUETTES["Strass Choco"],
+  // "Strass Choco": BOQUETTES["Strass Choco"],
   "Z'Boiss": BOQUETTES["Z'boiss"],
   "Mam'serie": BOQUETTES["Mam'serie"],
+  "Auberge": BOQUETTES["Auberge"],
 };
 
 export const BOQUETTES_ALCOOL = {

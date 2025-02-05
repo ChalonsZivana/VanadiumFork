@@ -4,11 +4,11 @@
   export let data;
 </script>
 
-<div class="flex justify-center mt-20 w-full p-2">
+<div class="flex flex-col place-items-center gap-10 mt-20 w-full p-2">
   {#if data.USER.pg.can_buy}
     <SectionCard title="Rhopses">
       <div class="p-3 rounded-md bg-amber-100">
-        <p class="text-black">
+        <p class="">
           Tu peux te rhopser ici sur certains produits du Tabagn's !
         </p>
       </div>
@@ -25,9 +25,12 @@
     <SectionCard title="Rhopses">
       <div class="p-3 rounded-md variant-filled-warning">
         <p class="text-black text-center">
-          Tu es trop en negats ou depuis trop longtemps.
+          Vas recharger ton compte pour pouvoir consommer à nouveau !
         </p>
       </div>
     </SectionCard>
+
+    <a class="btn variant-filled-primary" href="/rechargement">recharger</a>
+
   {/if}
 </div>

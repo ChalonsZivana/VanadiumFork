@@ -17,13 +17,6 @@ export class Pg extends HasMoney {
     return (await prisma.pg.findFirst({ where: { id_pg: this.ID } })) as pg;
   }
 
-  async incrementRefresh() {
-    await prisma.refresh.updateMany({
-      where: { id_pg: this.ID },
-      data: { nombre: { increment: 1 } },
-    });
-  }
-
   async getPhotosFolder() {
     const photo = await prisma.photos.findFirst({ where: { id_pg: this.ID } });
     const pg = await this.pg();

@@ -2,7 +2,6 @@ import fs from "fs";
 import { redirect } from "@sveltejs/kit";
 import { Pg } from "$lib/server/classes/PG.js";
 import { getRandomTop, getTop } from "$lib/server/db_connection.js";
-import { Database } from "$lib/server/classes/Database.js";
 import { Taferie } from "$lib/server/classes/Taferie.js";
 import { listImages } from "$lib/r2";
 
@@ -10,7 +9,6 @@ export const load = async ({ locals, url }) => {
   if (!locals.session.data.user) throw redirect(300, "/login");
 
   const pg = new Pg(locals.session.data.user.pg.id_pg);
-  await pg.incrementRefresh();
 
   const topGlobal = getTop("Top Global", null);
   const topDuJour = getRandomTop();

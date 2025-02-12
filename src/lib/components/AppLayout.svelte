@@ -56,6 +56,7 @@
     196: "mdi:egg",
     197: "mdi:salt",
     223: "noto:castle",
+    1111:"game-icons:bowie-knife"
   };
 
   let boquettes_panel: HTMLElement;

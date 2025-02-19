@@ -5,18 +5,18 @@
     import { SlideToggle } from "@skeletonlabs/skeleton";
 
   export let data;
-  export let dialog: HTMLDialogElement;
   export let form: { success: boolean; message: string }[];
 
   $: triggerPopupForm(form);
 
   let fromage:string;
-  let saucisson:string;
+  let saucissons:string[] = [];
   let taille = 'croüte';
   let végé: boolean = false;
 
+  $:saucissonsJoined = saucissons.join('>');
 
-  $:commandeActive = fromage!==undefined && (saucisson!=undefined ||végé);
+  $:commandeActive = fromage!==undefined && (saucissons.length ||végé);
 </script>
 
 <div class="flex flex-col h-full w-11/12 place-items-center place-content-around">
@@ -26,7 +26,7 @@
       <p class="h2 text-center">Fromage</p>
     </div>
 
-    <section class="p-10 flex gap-2">
+    <section class="p-10 flex gap-2 w-80">
       {#each data.fromages as c}
         <button
           class="chip {fromage === c ? 'variant-filled-primary' : 'variant-filled-secondary'}"
@@ -40,9 +40,12 @@
     </section>
   </div>
 
-  <div class="card variant-filled-surface">
+  <div class="card variant-filled-surface w-80">
     <div class="card-header">
       <p class="h2 text-center">Saucisson</p>
+      <p class="h4 text-center">
+        (par ordre de préférence, pur porc par défaut)
+      </p>
     </div>
 
     <section class="p-10">
@@ -51,11 +54,14 @@
       <div  class="flex gap-2 {végé ? 'scale-y-0' : 'scale-y-100'} duration-500">
         {#each data.saucissons as c}
           <button
-            class="chip {saucisson === c ? 'variant-filled-primary' : 'variant-filled-secondary'}"
-            on:click={() => { saucisson = c; }}
+            class="chip {saucissons.includes(c) ? 'variant-filled-primary' : 'variant-filled-secondary'}"
+            on:click={() => { 
+              if(saucissons.includes(c)) saucissons = saucissons.filter(s => s !== c);
+              else saucissons = [...saucissons, c]; 
+            }}
             on:keypress
           >
-            {#if saucisson === c}<span><Icon icon="mdi:tick"/></span>{/if}
+            {#if saucissons.includes(c)}<span>{saucissons.indexOf(c)+1}</span>{/if}
             <span>{c}</span>
           </button>
         {/each}
@@ -63,7 +69,7 @@
     </section>
   </div>
 
-  <div class="card variant-filled-surface">
+  <div class="card variant-filled-surface w-80">
     <div class="card-header">
       <p class="h2 text-center">Taille</p>
     </div>
@@ -86,7 +92,7 @@
 
   <form action="?/commanderCroute" use:enhance method="post">
     <input type="hidden" name="fromage" bind:value={fromage} />
-    <input type="hidden" name="saucisson" bind:value={saucisson} />
+    <input type="hidden" name="saucissons" bind:value={saucissonsJoined} />
     <input type="hidden" name="vege" bind:value={végé} />
     <input type="hidden" name="taille" bind:value={taille} />
     <button disabled={!commandeActive} class="btn variant-filled-primary">

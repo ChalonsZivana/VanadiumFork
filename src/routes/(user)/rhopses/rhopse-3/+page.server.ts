@@ -5,9 +5,11 @@ import { z } from "zod";
 
 const fromage = z.enum(['tome noir','morbier','raclette']);
 const saucisson = z.enum(['pur porc','noix','sanglier']);
-const taille = z.enum(['croüte','demi-croüte','maxi-croüte']);
+const taille = z.enum(['demi-croüte','croüte','maxi-croüte']);
 const schema = z.object({
-  fromage, saucisson, taille,
+  fromage, 
+  saucissons:z.string().transform(e => e.split('>')).pipe(z.array(saucisson)), 
+  taille,
   vege: z.string().transform(e => e=='true')
 });
 
@@ -24,8 +26,9 @@ export const actions = {
   commanderCroute: async ({ request, locals }) => {
     if(!locals.session.data.user) throw error(401, "Non connecté");
     const data = Object.fromEntries(await request.formData());
+    console.log(data)
     const validated = schema.safeParse(data);
-
+    console.log(validated)
     if (!validated.success) throw error(400, "Données invalides");
 
     await prisma.commandes.create({
@@ -33,10 +36,9 @@ export const actions = {
         type: "pg_boq",
         from: locals.session.data.user.pg.id_pg,
         to: 3,
-        libelle: `${validated.data.taille} ${validated.data.fromage} ${validated.data.saucisson} ${validated.data.vege ? 'vege' : ''}`,
+        libelle: `${validated.data.taille} ${validated.data.fromage} ${validated.data.saucissons.join(' > ')} ${validated.data.vege ? 'vege' : ''}`,
       },
     });
-    console.log(data,validated)
     return {success:true, message: "Commande enregistrée"};
   }
 };

@@ -12,7 +12,7 @@
   let timeout: number | null = null;
   let phoneNumber: string;
   onMount(() => {
-    if (data.verify) {
+    if (data.paid_request) {
       let a = setInterval(() => {
         timeout = Math.floor(120 - (new Date().getTime() - originDate) / 1000);
         if (timeout < 0) {
@@ -36,7 +36,7 @@
         </svelte:fragment>
         <svelte:fragment slot="content">
           {#if !data.lydiazocque}
-            {#if !data.verify}
+            {#if !data.paid_request}
               <form
                 class="p-4 flex flex-col gap-4 place-items-center place-content-center"
                 on:submit={() => localStorage.setItem("phoneNumber", phoneNumber)}

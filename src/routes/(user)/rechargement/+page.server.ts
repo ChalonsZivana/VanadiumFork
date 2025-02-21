@@ -20,12 +20,12 @@ export const load: PageServerLoad = async ({ locals }) => {
     where: { nom: "lydiazocque" },
   });
 
-  return { verify: a != null, date: a?.date, lydiazocque: lydiazocque[0] };
+  return { paid_request: a, date: a?.date, lydiazocque: lydiazocque[0].valeur=='1' };
 };
 
 export const actions = {
   createLydiaDemand: async ({ request, locals }) => {
-    if (locals.session.data.user == null) throw error(400);
+    if (!locals.session.data.user) throw error(400);
 
     const lydiazocque = await prisma.config.findMany({
       where: { nom: "lydiazocque" },
@@ -60,17 +60,16 @@ export const actions = {
   },
   verifyLydiaDemand: async ({ locals }) => {
     if (!locals.session.data.user) return fail(400);
-    const rechargements = await prisma.rechargements.findMany({
+    const rechargement = await prisma.rechargements.findFirst({
       where: { id_pg: locals.session.data.user.pg.id_pg, status: 0 },
     });
 
-    if (rechargements.length == 0)
+    if (rechargement == null)
       return { message: "Contactez un administrateur" };
-    const a = rechargements[0];
     const r = await LydiaManager.verifyLydiaDemand(
-      a.id_rechargement,
+      rechargement.id_rechargement,
       LYDIA_VENDOR_KEY,
-      a.keylydia,
+      rechargement.keylydia,
     );
     return r;
   },

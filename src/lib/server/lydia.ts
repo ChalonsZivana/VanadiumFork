@@ -77,14 +77,10 @@ export class LydiaManager {
 
   static async verifyLydiaDemand(
     id_rechargement: number,
-    vendorKey: string,
-    uuid: string,
+    vendor_token: string,
+    request_uuid: string,
   ): Promise<any> {
-    const data = new URLSearchParams({
-      request_uuid: uuid,
-      vendor_token: vendorKey,
-    });
-    console.log("yo");
+    const data = new URLSearchParams({request_uuid,vendor_token});
     try {
       const response = await fetch(
         "https://lydia-app.com/api/request/state.json",
@@ -97,16 +93,15 @@ export class LydiaManager {
         },
       );
 
-      const lydiaData = LydiaVerifyResponseSchema.safeParse(
-        await response.json(),
-      );
+      const responseJson = await response.json();
 
+      const lydiaData = LydiaVerifyResponseSchema.safeParse(responseJson);
+      
       if (!lydiaData.success || lydiaData.data.state == "0")
         return { success: false, message: "En attente de payement..." };
-
       if (lydiaData.data.state == "1") {
         const d = await prisma.rechargements.update({
-          where: { id_rechargement, keylydia: uuid, status: 0 },
+          where: { id_rechargement, keylydia: request_uuid, status: 0 },
           data: { status: 1 },
         });
         await Taferie.rhopse({

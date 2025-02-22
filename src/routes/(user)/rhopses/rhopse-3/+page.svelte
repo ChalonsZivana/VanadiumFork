@@ -34,7 +34,7 @@
     <Tab bind:group={tabSet} name="tab1" value={0}>
       <span>Commander</span>
     </Tab>
-    <Tab bind:group={tabSet} name="tab2" value={1}>Mes commandes</Tab>
+    <Tab bind:group={tabSet} name="tab2" value={1}>Mes commandes ({data.mes_commandes.length})</Tab>
     <!-- Tab Panels --->
     <svelte:fragment slot="panel">
       {#if tabSet === 0}

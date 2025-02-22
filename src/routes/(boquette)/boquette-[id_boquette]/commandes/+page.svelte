@@ -42,7 +42,7 @@
       emitDring();
     }
     commandesNonTraitées = new_commandes.sort(
-      (a, b) => a.id - b.id,
+      (a, b) => a.date.getTime() - b.date.getTime(),
     );
   }
 

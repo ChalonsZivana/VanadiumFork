@@ -36,7 +36,7 @@ export const actions = {
     const id = parseInt(formData.get("id")?.toString() ?? "");
     if (isNaN(id)) return fail(400);
 
-    await prisma.commandes.update({
+    return await prisma.commandes.update({
       where: { id, to: id_boquette, type: { in: ["ext_boq", "pg_boq"] } },
       data: { statut: -1 },
       include: { from_pg: { select: { nums: true, proms:true } } },
@@ -50,7 +50,7 @@ export const actions = {
     const id = parseInt(formData.get("id")?.toString() ?? "");
     if (isNaN(id)) return fail(400);
 
-    await prisma.commandes.update({
+    return await prisma.commandes.update({
       where: { id, to: id_boquette, type: { in: ["ext_boq", "pg_boq"] } },
       data: { statut: 0 },
       include: { from_pg: { select: { nums: true, proms:true } } },
@@ -64,7 +64,7 @@ export const actions = {
     const id = parseInt(formData.get("id")?.toString() ?? "");
     if (isNaN(id)) return fail(400);
 
-    await prisma.commandes.update({
+    return await prisma.commandes.update({
       where: { id, to: id_boquette, type: { in: ["ext_boq", "pg_boq"] } },
       data: { statut: 1 },
       include: { from_pg: { select: { nums: true, proms:true } } },

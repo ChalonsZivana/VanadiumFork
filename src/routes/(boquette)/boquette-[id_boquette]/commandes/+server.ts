@@ -16,6 +16,7 @@ export async function POST({ url, params, request }) {
       to: id_boquette,
     },
     orderBy: { date: "desc" },
+    include: { from_pg: { select: { nums: true, proms: true } } },
   });
 
   return json({

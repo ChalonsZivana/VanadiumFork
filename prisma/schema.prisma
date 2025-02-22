@@ -72,6 +72,8 @@ model commandes {
   libelle     String
   statut      Int @default(-1)
   date        DateTime @default(now())
+
+  from_pg        pg?                    @relation(fields: [from], references: [id_pg], map: "commandes_from_pg", name:"commandes_from_pg")
 }
 
 model kve {
@@ -100,6 +102,7 @@ model pg {
 
   consommationsFromPg   consommations[] @relation("consommation_from_pg", map: "consommation_from_pg")
   consommationsToPg     consommations[] @relation("consommation_to_pg", map: "consommation_to_pg")
+  commandesFromPg       commandes[]     @relation("commandes_from_pg", map: "commandes_from_pg")
 
   @@unique([nums, tabagns, proms])
 }

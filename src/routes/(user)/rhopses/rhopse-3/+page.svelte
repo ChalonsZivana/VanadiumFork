@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-  import { triggerPopupForm } from "$lib/stores/popupStore.js";
+    import { triggerPopupForm } from "$lib/stores/popupStore.js";
+    import { oneShotEnhance } from "$lib/utils.js";
     import Icon from "@iconify/svelte";
     import { SlideToggle } from "@skeletonlabs/skeleton";
 
@@ -9,7 +9,7 @@
 
   $: triggerPopupForm(form);
 
-  let fromage:string;
+  let fromage:string | undefined;
   let saucissons:string[] = [];
   let taille = 'croüte';
   let végé: boolean = false;
@@ -26,7 +26,7 @@
       <p class="h2 text-center">Fromage</p>
     </div>
 
-    <section class="p-10 flex gap-2 w-80">
+    <section class="p-4 flex gap-2 w-80">
       {#each data.fromages as c}
         <button
           class="chip {fromage === c ? 'variant-filled-primary' : 'variant-filled-secondary'}"
@@ -48,11 +48,14 @@
       </p>
     </div>
 
-    <section class="p-10">
+    <section class="p-4">
       <SlideToggle name="slide" bind:checked={végé}>Végé</SlideToggle>
 
-      <div  class="flex gap-2 {végé ? 'scale-y-0' : 'scale-y-100'} duration-500">
-        {#each data.saucissons as c}
+      <fieldset>
+
+      </fieldset>
+      <div  class="flex flex-wrap gap-2 {végé ? 'hidden' : ''} duration-500">
+        {#each data.saucissons.filter(e=>!e.startsWith('halal')) as c}
           <button
             class="chip {saucissons.includes(c) ? 'variant-filled-primary' : 'variant-filled-secondary'}"
             on:click={() => { 
@@ -74,7 +77,7 @@
       <p class="h2 text-center">Taille</p>
     </div>
 
-    <section class="p-10">
+    <section class="p-4">
       <div  class="flex gap-2">
         {#each data.tailles as c}
           <button
@@ -90,11 +93,18 @@
     </section>
   </div>
 
-  <form action="?/commanderCroute" use:enhance method="post">
-    <input type="hidden" name="fromage" bind:value={fromage} />
-    <input type="hidden" name="saucissons" bind:value={saucissonsJoined} />
-    <input type="hidden" name="vege" bind:value={végé} />
-    <input type="hidden" name="taille" bind:value={taille} />
+  <form use:oneShotEnhance={({formElement, formData})=>{
+    formData.set('fromage', fromage??'');
+    formData.set('saucissons', saucissonsJoined);
+    formData.set('vege', végé.toString());
+    formData.set('taille', taille);
+
+    saucissons = [];
+    fromage = undefined;
+    végé = false;
+    taille = 'croüte';
+    return ({})=>{}
+  }} action="?/commanderCroute" method="post">
     <button disabled={!commandeActive} class="btn variant-filled-primary">
       {#if !commandeActive}
         <Icon class="ml-5 text-2xl" icon="mdi:lock" />

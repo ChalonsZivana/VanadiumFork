@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { invalidateAll } from "$app/navigation";
   import SubmitDialog from "$lib/components/miscellaneous/SubmitDialog.svelte";
   import ValidationButton from "$lib/components/miscellaneous/ValidationButton.svelte";
   import Icon from "@iconify/svelte";
@@ -30,7 +31,7 @@
       }),
     });
 
-    let result = (await response.json()) as { commandes: commandes[] };
+    let result = (await response.json()) as { commandes: typeof commandesNonTraitées };
     for (let e of result.commandes) {
       e.date = new Date(e.date as any as string);
     }
@@ -40,7 +41,9 @@
     if (commandesNonTraitées.length != new_commandes.length) {
       emitDring();
     }
-    commandesNonTraitées = new_commandes;
+    commandesNonTraitées = new_commandes.sort(
+      (a, b) => a.id - b.id,
+    );
   }
 
   function getStatut(statut: number) {
@@ -107,7 +110,7 @@
               </tr>
             </thead>
             <tbody class="divide-y-2 divide-white text-black">
-              {#each commandesNonTraitées as commande}
+              {#each commandesNonTraitées as commande (commande.id)}
                 {@const date = commande.date.toLocaleString().split(" ")}
 
                 <tr
@@ -122,7 +125,11 @@
                   ][commande.statut + 1]}"
                 >
                   <td>{date[0]}<br />{date[1]}</td>
-                  <td>{commande.from}</td>
+                  {#if commande.type == 'pg_boq'}
+                    <td>{commande.from_pg?.nums}ch{commande.from_pg?.proms}</td>
+                  {:else}
+                    <td>{commande.from}</td>
+                  {/if}
                   <td><p class="text-wrap">{commande.libelle}</p></td>
                   <td>{getStatut(commande.statut)}</td>
                 </tr>

@@ -69,7 +69,7 @@
             <SlideToggle name="slide" bind:checked={végé}>Végé</SlideToggle>
 
             <div  class="flex flex-wrap gap-2 {végé ? 'hidden' : ''} duration-500">
-              {#each data.saucissons.filter(e=>!e.startsWith('halal')) as c}
+              {#each data.saucissons as c}
                 <button
                   class="chip {saucissons.includes(c) ? 'variant-filled-primary' : 'variant-filled-secondary'}"
                   on:click={() => { 

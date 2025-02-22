@@ -174,7 +174,11 @@
                   ][commande.statut + 1]}"
                 >
                   <td>{date[0]}<br />{date[1]}</td>
-                  <td>{commande.from}</td>
+                  {#if commande.type == 'pg_boq'}
+                    <td>{commande.from_pg?.nums}ch{commande.from_pg?.proms}</td>
+                  {:else}
+                    <td>{commande.from}</td>
+                  {/if}
                   <td><p class="text-wrap">{commande.libelle}</p></td>
                   <td>{getStatut(commande.statut)}</td>
                 </tr>
@@ -218,7 +222,11 @@
                   ][commande.statut + 1]}"
                 >
                   <td>{date[0]}<br />{date[1]}</td>
-                  <td>{commande.from}</td>
+                  {#if commande.type == 'pg_boq'}
+                    <td>{commande.from_pg?.nums}ch{commande.from_pg?.proms}</td>
+                  {:else}
+                    <td>{commande.from}</td>
+                  {/if}
                   <td><p class="text-wrap">{commande.libelle}</p></td>
                   <td>{getStatut(commande.statut)}</td>
                 </tr>

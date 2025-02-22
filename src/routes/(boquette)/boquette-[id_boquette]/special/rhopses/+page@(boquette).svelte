@@ -4,6 +4,7 @@
   import { enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
   import { triggerPopupForm } from "$lib/stores/popupStore.js";
+    import { oneshotaction } from "$lib/utils.js";
 
   export let data;
   export let form: { success: boolean; message: string };
@@ -120,7 +121,6 @@
         await update();
       };
     }}
-    on:submit={() => (isLoading = true)}
     method="post"
     action={`?/rhopse`}
   >
@@ -171,7 +171,7 @@
             {/if}
           </select>
           <input type="hidden" name="id_pg" value={`${pg.id_pg}`} />
-          <MyButton bind:isLoading value="RHOPSER"></MyButton>
+          <button use:oneshotaction type="submit" class="btn variant-filled-secondary text-3xl text-white">RHOPSER</button>
         </div>
       </div>
     {/if}

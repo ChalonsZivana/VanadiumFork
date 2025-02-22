@@ -39,7 +39,7 @@
                   {e.nums}Ch{e.proms}
                 </Special>
               </th>
-              <td>{e.bucque}</td>
+              <td class="max-w-24">{e.bucque}</td>
               <td>
                 {#key e.solde}
                   <MoneyColor auto={e.solde} className="text-xs font-bold" />

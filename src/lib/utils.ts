@@ -31,12 +31,11 @@ export function oneShotEnhance(
   enhance(formElement, async ({ action, cancel, controller, formData, formElement, submitter }) => {
     const submitted = submitter as HTMLButtonElement;
     submitted.disabled = true; // Disable the button
-    requestAnimationFrame(()=>{})
-    console.log('submitted',submitted);
-
+    console.log("submitted", submitted);
     try {
       if (submit) {
-        await submit({ action, cancel, controller, formData, formElement, submitter });
+        const r = await submit({ action, cancel, controller, formData, formElement, submitter });
+        return r;
       }
     } finally {
       submitted.disabled = false; // Re-enable button after response

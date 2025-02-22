@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { enhance } from "$app/forms";
     import { triggerPopupForm } from "$lib/stores/popupStore.js";
-    import { oneShotEnhance } from "$lib/utils.js";
+    import { oneshotaction } from "$lib/utils.js";
     import Icon from "@iconify/svelte";
     import { SlideToggle } from "@skeletonlabs/skeleton";
 
@@ -93,19 +94,20 @@
     </section>
   </div>
 
-  <form use:oneShotEnhance={({formElement, formData})=>{
+  <form use:enhance={({formData})=>{
     formData.set('fromage', fromage??'');
     formData.set('saucissons', saucissonsJoined);
     formData.set('vege', végé.toString());
     formData.set('taille', taille);
-
-    saucissons = [];
+    
     fromage = undefined;
-    végé = false;
+    saucissons = [];
     taille = 'croüte';
-    return ({})=>{}
+    return ({})=>{
+
+    }
   }} action="?/commanderCroute" method="post">
-    <button disabled={!commandeActive} class="btn variant-filled-primary">
+    <button use:oneshotaction disabled={!commandeActive} class="btn variant-filled-primary">
       {#if !commandeActive}
         <Icon class="ml-5 text-2xl" icon="mdi:lock" />
       {/if}

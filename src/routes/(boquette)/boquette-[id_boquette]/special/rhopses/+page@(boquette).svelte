@@ -4,7 +4,7 @@
   import { enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
   import { triggerPopupForm } from "$lib/stores/popupStore.js";
-    import { oneshotaction } from "$lib/utils.js";
+  import { oneshotform } from "$lib/utils.js";
 
   export let data;
   export let form: { success: boolean; message: string };
@@ -114,6 +114,7 @@
   {/if}
 
   <form
+    use:oneshotform
     use:enhance={({ formData }) => {
       formData.set("produits", JSON.stringify([[product?.id_produit, 1]]));
       return async ({ update }) => {
@@ -171,7 +172,7 @@
             {/if}
           </select>
           <input type="hidden" name="id_pg" value={`${pg.id_pg}`} />
-          <button use:oneshotaction type="submit" class="btn variant-filled-secondary text-3xl text-white">RHOPSER</button>
+          <button type="submit" class="btn variant-filled-secondary text-3xl text-white">RHOPSER</button>
         </div>
       </div>
     {/if}

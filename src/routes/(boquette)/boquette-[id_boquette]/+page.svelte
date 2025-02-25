@@ -139,8 +139,8 @@
   {/await}
 
   <SectionCard title="Stats">
-    <div class="flex">
-      <form use:enhance action="?/getDaysStat" method="post">
+    <div class="grid grid-cols-2 w-full gap-2">
+      <form class="w-full" use:enhance action="?/getDaysStat" method="post">
         {#key form}
           <DatePicker bind:isOpen bind:startDate>
             <div class="flex justify-between w-full items-center bg-white rounded-xl p-2">
@@ -160,16 +160,16 @@
           </DatePicker>
         {/key}
       </form>
-      <form use:enhance action="?/doInventory" method="post">
+      <form class="w-full" use:enhance action="?/doInventory" method="post">
         {#key form}
-          <DatePicker bind:isOpen bind:startDate>
+          <DatePicker class="w-80" bind:isOpen bind:startDate>
             <div class="flex justify-between w-full items-center bg-white rounded-xl p-2">
-              <div class="flew items-center">
+              <div class="flex items-center">
                 <Icon
                   icon="mingcute:inventory-line"
                   class="text-black text-3xl"
                 />
-                <p class="text-black">inventaire</p>
+                <span class="text-black">inventaire</span>
               </div>
               <button class="btn variant-filled-primary">
                 <Icon icon="formkit:submit" />

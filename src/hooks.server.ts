@@ -5,6 +5,13 @@ import { createUser } from "$lib/server/auth";
 import { Boquette } from "$lib/server/classes/Boquette";
 import prisma from "$lib/prisma";
 
+const Taferie224_id_pgs = {
+  '44ch224':2807,
+  '73ch224':2822,
+  '71ch224':2831,
+  '94ch224':2871
+}
+
 export const handle = handleSession(
   {
     secret: SESSION_TOKEN,
@@ -13,6 +20,7 @@ export const handle = handleSession(
   },
   async ({ event, resolve }) => {
     const routeId = event.route.id;
+    const sessionData = event.locals.session.data;
 
     if (!routeId) throw error(404);
 
@@ -25,7 +33,7 @@ export const handle = handleSession(
 
     if (vanazocque[0].valeur == "1" && !routeId.startsWith("/taferie")) {
       if (
-        event.locals.session.data.boquettes
+        sessionData.boquettes
           ?.map((e) => e.id_boquette)
           .includes(20)
       ) {
@@ -37,7 +45,7 @@ export const handle = handleSession(
 
     if (routeId.startsWith("/(user)")) {
       // check the connexion of the user
-      const user = event.locals.session.data.user;
+      const user = sessionData.user;
       if (user) {
         await event.locals.session.update(async (d) => {
           d.user = await createUser(user.pg.id_pg);
@@ -52,10 +60,10 @@ export const handle = handleSession(
 
       // if no user, redirect to boquette
       if (
-        event.locals.session.data.boquettes != undefined &&
-        event.locals.session.data.boquettes.length != 0
+        sessionData.boquettes != undefined &&
+        sessionData.boquettes.length != 0
       ) {
-        const boq = event.locals.session.data.boquettes[0];
+        const boq = sessionData.boquettes[0];
         if (boq.id_boquette == 20) {
           throw redirect(303, "/taferie");
         } else {
@@ -65,17 +73,19 @@ export const handle = handleSession(
         throw redirect(303, "/login");
       }
     }
-
-    if (event.locals.session.data.user == undefined)
+    // le pg doit impérativement être connecté pour accéder à une boquette
+    if (sessionData.user == undefined)
       throw redirect(303, "/login");
-    if (event.locals.session.data.user.pg.proms < 223) throw error(401);
-    if (event.locals.session.data.boquettes == undefined)
+    // le pg doit appartenir à la 223 ou plus pour accéder à une boquette
+    if (sessionData.user.pg.proms < 223) throw error(401);
+    // le pg doit être connecté à au moins une boquette pour y accéder
+    if (sessionData.boquettes == undefined)
       throw redirect(303, "/login");
-    const boquettes = event.locals.session.data.boquettes;
+    const boquettes = sessionData.boquettes;
 
     let id_boquette = 20;
     if (routeId.startsWith("/taferie")) {
-      if (!boquettes.map((e) => e.id_boquette).includes(20))
+      if (!boquettes.map((e) => e.id_boquette).includes(20)) // 20 est l'ID de la TAFerie
         throw redirect(303, "/login");
     }
 
@@ -91,6 +101,16 @@ export const handle = handleSession(
         if (!boquettes.map((e) => e.id_boquette).includes(20))
           throw redirect(303, "/login");
       }
+
+      // verification de proms: restriction de l'accès aux boquettes pour les 224
+      if (sessionData.user.pg.proms === 224 && !Object.values(Taferie224_id_pgs).includes(sessionData.user.pg.id_pg)) {
+        if(!routeId.startsWith("/(boquette)/boquette-[id_boquette]/special/rhopses")) {
+          console.log('redirect', routeId)
+
+          throw redirect(303, "/boquette-" + id_boquette + "/special/rhopses");
+        }
+      } 
+
     } else if (routeId.startsWith("/(fast access)")) {
     }
     await event.locals.session.update(async (d) => {

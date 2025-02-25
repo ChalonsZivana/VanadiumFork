@@ -9,16 +9,11 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { categories } from "@prisma/client";
 
-export const load = async ({ params, locals }) => {
+
+
+export const load = async ({ params }) => {
   const id_boquette = parseInt(params.id_boquette);
   if (isNaN(id_boquette)) throw error(404);
-
-  // proms motivs == 224, proms actuelle == 223
-  if (locals.session.data.user?.pg.proms === 224) {
-    throw redirect(303, "/boquette-" + id_boquette + "/special/rhopses");
-  } else if (locals.session.data.user?.pg.proms !== 223) {
-    throw error(400);
-  }
 };
 
 export const actions = {

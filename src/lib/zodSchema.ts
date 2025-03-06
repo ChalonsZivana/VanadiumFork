@@ -44,6 +44,11 @@ export const RhopseSchemaFignos = z.object({
   mode_paiement: z.enum(["CB", "LIQ"]),
 });
 
+export const AjouterMembreSchema = z.object({
+  nums: z.string().transform((e) => parseInt(e)).refine((e) => !isNaN(e)),
+  proms:z.string().transform((e) => parseInt(e)).refine((e) => !isNaN(e)),
+});
+
 export const RhopseSchema = z.object({
   produits: z
     .string()

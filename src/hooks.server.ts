@@ -31,12 +31,12 @@ export const handle = handleSession(
       where: { nom: "vanazocque" },
     });
 
+    // si vanazocque, redirige vers TAFerie si possible
     if (vanazocque[0].valeur == "1" && !routeId.startsWith("/taferie")) {
-      if (
-        sessionData.boquettes
-          ?.map((e) => e.id_boquette)
-          .includes(20)
-      ) {
+      const isInTaferie = await prisma.appartenance_boquettes.findFirst({
+        where: {id_boquette:20, id_pg:sessionData.user?.pg.id_pg}
+      })
+      if (isInTaferie) {
         throw redirect(307, "/taferie");
       }
 
@@ -51,56 +51,40 @@ export const handle = handleSession(
           d.user = await createUser(user.pg.id_pg);
           return d;
         });
-
+        // verifie si DDP
         if (routeId.startsWith("/(user)/ddp") && user.pg.ddp == false) {
           throw error(401);
         }
         return resolve(event);
       }
-
-      // if no user, redirect to boquette
-      if (
-        sessionData.boquettes != undefined &&
-        sessionData.boquettes.length != 0
-      ) {
-        const boq = sessionData.boquettes[0];
-        if (boq.id_boquette == 20) {
-          throw redirect(303, "/taferie");
-        } else {
-          throw redirect(303, `boquette-${boq.id_boquette}`);
-        }
-      } else {
-        throw redirect(303, "/login");
-      }
     }
     // le pg doit impérativement être connecté pour accéder à une boquette
-    if (sessionData.user == undefined)
-      throw redirect(303, "/login");
+    if (sessionData.user == undefined) throw redirect(303, "/login");
+
     // le pg doit appartenir à la 223 ou plus pour accéder à une boquette
     if (sessionData.user.pg.proms < 223) throw error(401);
-    // le pg doit être connecté à au moins une boquette pour y accéder
-    if (sessionData.boquettes == undefined)
-      throw redirect(303, "/login");
-    const boquettes = sessionData.boquettes;
 
-    let id_boquette = 20;
-    if (routeId.startsWith("/taferie")) {
-      if (!boquettes.map((e) => e.id_boquette).includes(20)) // 20 est l'ID de la TAFerie
-        throw redirect(303, "/login");
+
+    const isInTaferie = await prisma.appartenance_boquettes.findFirst({
+      where: {id_boquette:20, id_pg:sessionData.user?.pg.id_pg}
+    })// 20 est l'ID de la TAFerie
+
+    if (routeId.startsWith("/taferie") && !isInTaferie) {
+      throw redirect(303, "/");
     }
 
-    if (routeId.startsWith("/(boquette)")) {
+    // le but est de vérifier que la personne a le droit 
+    if (routeId.startsWith("/(boquette)") && !isInTaferie) {
       const regex = /\(boquette\)\/boquette-(\d+)/;
-      id_boquette = parseInt(event.params["id_boquette"] ?? "");
+      let id_boquette = parseInt(event.params["id_boquette"] ?? "");
       if (isNaN(id_boquette))
         id_boquette = parseInt(event.route.id?.match(regex)?.at(1) ?? "");
       if (isNaN(id_boquette)) throw error(404);
 
-      if (!boquettes.map((e) => e.id_boquette).includes(id_boquette)) {
-        // taferie: 20, la taferie a accès à tout
-        if (!boquettes.map((e) => e.id_boquette).includes(20))
-          throw redirect(303, "/login");
-      }
+      const isInBoquette = await prisma.appartenance_boquettes.findFirst({
+        where: {id_boquette, id_pg:sessionData.user?.pg.id_pg}
+      });
+      if (!isInBoquette)  throw redirect(303, "/");
 
       // verification de proms: restriction de l'accès aux boquettes pour les 224
       if (sessionData.user.pg.proms === 224 && !Object.values(Taferie224_id_pgs).includes(sessionData.user.pg.id_pg)) {
@@ -110,16 +94,7 @@ export const handle = handleSession(
           throw redirect(303, "/boquette-" + id_boquette + "/special/rhopses");
         }
       } 
-
-    } else if (routeId.startsWith("/(fast access)")) {
-    }
-    await event.locals.session.update(async (d) => {
-      const newBoquette = await new Boquette(id_boquette).boquette();
-      d.boquettes = d.boquettes.map((e) =>
-        e.id_boquette == id_boquette ? newBoquette : e,
-      );
-      return d;
-    });
+    } 
 
     return resolve(event);
   },

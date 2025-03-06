@@ -8,7 +8,6 @@
   $: currData = data.search;
   $: nombrePages = currData ? Math.ceil(currData.totalCons / 100) : undefined;
 
-  let boquette: boquettes;
   type boqSettingsText = {
     Nom: string;
     "Nom Simple": string;
@@ -19,12 +18,10 @@
   let editInputText: boqSettingsText;
   let editInputCheck: boqSettingsCheck;
   let editDataKeys: (keyof typeof editInputText)[];
-  $: boquette =
-    data.BOQUETTES.find((e) => e.id_boquette == data.id_boquette) ??
-    data.BOQUETTES[0];
+ 
   $: {
-    editInputText = initPGEdit(boquette);
-    editInputCheck = { "Partie PG": boquette.partie_pg };
+    editInputText = initPGEdit(data.boquette);
+    editInputCheck = { "Partie PG": data.boquette.partie_pg };
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
 

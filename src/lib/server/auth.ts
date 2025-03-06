@@ -9,7 +9,6 @@ export interface User {
 
 export type SessionData = {
   user: User | null;
-  boquettes: boquettes[];
 };
 
 export async function createUser(id_pg: number): Promise<User | null> {

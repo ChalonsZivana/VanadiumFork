@@ -32,7 +32,7 @@ export async function getImage(key: string): Promise<Buffer | null> {
       for await (const chunk of Body) {
         chunks.push(Buffer.from(chunk));
       }
-      return Buffer.concat(chunks);
+      return Buffer.concat(chunks as any);
     }
 
     return null;

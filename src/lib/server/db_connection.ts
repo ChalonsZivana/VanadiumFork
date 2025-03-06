@@ -59,27 +59,6 @@ const TopsBoquettes = {
   "K've": 2,
 };
 
-export const getTopRefresh = async () => {
-  const tr = await prisma.refresh.findMany({
-    select: {
-      nombre: true,
-      pg: { select: { nums: true, proms: true, bucque: true } },
-    },
-    orderBy: { nombre: "desc" },
-    take: 10,
-  });
-  return {
-    name: "Refresh",
-    leaderboard: tr.map((e) => {
-      return {
-        nombre: e.nombre,
-        nums: e.pg.nums,
-        proms: e.pg.proms,
-        bucque: e.pg.bucque,
-      };
-    }),
-  };
-};
 
 export const getTop = async (
   name: string,

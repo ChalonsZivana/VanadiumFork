@@ -24,6 +24,8 @@ export function oneshotform(formElement:HTMLFormElement){
   
 }
 
+export type WithRequiredOnly<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>;
+
 export function oneShotEnhance(
   formElement: HTMLFormElement,
   submit?: SubmitFunction<Record<string, unknown> | undefined, Record<string, unknown> | undefined>

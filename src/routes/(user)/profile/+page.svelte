@@ -43,7 +43,6 @@
   >
     <Profile user={data.USER}>
       <form method="post">
-        <input type="hidden" name="user" value="user" />
         <ValidationButton text="Se déconnecter" formaction="/login?/logout" />
       </form>
     </Profile>

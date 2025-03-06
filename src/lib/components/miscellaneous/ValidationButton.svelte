@@ -10,7 +10,7 @@
   <button
     type="button"
     on:click={() => (toggle = !toggle)}
-    class="bg-red-700 font-zagoth text-2xl p-2 w-full"
+    class="variant-filled-primary font-zagoth text-2xl p-2 w-full"
   >
     {text}
   </button>

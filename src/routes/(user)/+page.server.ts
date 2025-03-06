@@ -4,6 +4,7 @@ import { Pg } from "$lib/server/classes/PG.js";
 import { getRandomTop, getTop } from "$lib/server/db_connection.js";
 import { Taferie } from "$lib/server/classes/Taferie.js";
 import { listImages } from "$lib/r2";
+import prisma from "$lib/prisma.js";
 
 export const load = async ({ locals, url }) => {
   if (!locals.session.data.user) throw redirect(300, "/login");
@@ -25,6 +26,7 @@ export const load = async ({ locals, url }) => {
   const photos = photosFolder == 'vana' ? urls.map(e => e.url) : Array(10).fill(0)
   .map((_) => getRandomPhoto(photosFolder))
 
+  
   return {
     photos: photos,
     topGlobal,

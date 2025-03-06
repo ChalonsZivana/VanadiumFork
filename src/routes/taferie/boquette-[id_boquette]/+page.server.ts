@@ -2,7 +2,7 @@ import { consommationsSearch } from "$lib/components/search/consommations/fullse
 import prisma from "$lib/prisma";
 import { Boquette } from "$lib/server/classes/Boquette.js";
 import { Taferie } from "$lib/server/classes/Taferie.js";
-import { ConsommationsSchema } from "$lib/zodSchema.js";
+import { AjouterMembreSchema, ConsommationsSchema } from "$lib/zodSchema.js";
 import { consommations_type } from "@prisma/client";
 import { error, fail } from "@sveltejs/kit";
 
@@ -12,7 +12,10 @@ export async function load({ params, url }) {
 
   const queryParams = Object.fromEntries(url.searchParams.entries());
 
-  const boquette = await prisma.boquettes.findFirst({ where: { id_boquette } });
+  const boquette = await prisma.boquettes.findFirst({ 
+    where: { id_boquette }, 
+    include:{zident:true} 
+  });
   if (boquette == null) throw error(404);
 
   const data = ConsommationsSchema.safeParse(queryParams);
@@ -39,11 +42,6 @@ export async function load({ params, url }) {
 }
 
 export let actions = {
-  produits: async ({ params }) => {
-    const id_boquette = parseInt(params.id_boquette);
-    if (isNaN(id_boquette)) throw error(404);
-    return await prisma.produits.findMany({ where: { id_boquette } });
-  },
   transfert: async ({ request, params }) => {
     const data = await request.formData();
     const montant = parseFloat(data.get("montant")?.toString() ?? "");
@@ -58,22 +56,32 @@ export let actions = {
       libelle,
     });
   },
-  cancel: async ({ request, params }) => {
+  changer_zident: async ({ request, params }) => {
     const id_boquette = parseInt(params.id_boquette);
-    if (isNaN(id_boquette)) throw error(400);
-    const data = await request.formData();
-    const id = parseInt(data.get("id")?.toString() ?? "");
-    if (isNaN(id)) return fail(400, {});
+    if (isNaN(id_boquette)) return fail(400);
 
-    await new Boquette(id_boquette).cancelConsommation(id, true);
-  },
-  uncancel: async ({ request, params }) => {
-    const id_boquette = parseInt(params.id_boquette);
-    if (isNaN(id_boquette)) throw error(400);
-    const data = await request.formData();
-    const id = parseInt(data.get("id")?.toString() ?? "");
-    if (isNaN(id)) return fail(400, {});
+    const d = Object.fromEntries(await request.formData());
+    const data = AjouterMembreSchema.safeParse(d);
+    if (!data.success) throw error(400);
 
-    await new Boquette(id_boquette).cancelConsommation(id, false);
+    const pg = await prisma.pg.findFirst({
+      where: { nums:data.data.nums, proms:data.data.proms }
+      }
+    )
+    if(!pg) return fail(400);
+
+    await prisma.boquettes.update({
+      where:{id_boquette},
+      data:{id_zident:pg.id_pg}
+    });
+
+    const appartenance = await prisma.appartenance_boquettes.findMany({
+      where:{id_boquette,id_pg:pg.id_pg},
+    })
+    if(appartenance.length == 0){
+      await prisma.appartenance_boquettes.create({
+        data:{id_boquette,id_pg:pg.id_pg},
+      })
+    }
   },
 };

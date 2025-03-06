@@ -13,10 +13,15 @@ export const load = async ({ params }) => {
     where: { id_boquette: id_boquette },
     orderBy: { nom: "asc" },
   });
+  const boquette = await prisma.boquettes.findFirst({
+    where:{id_boquette}
+  })
+
+  if (!boquette) throw error(404);
 
   return {
     produits,
     categories,
-    id_boquette,
+    boquette
   };
 };

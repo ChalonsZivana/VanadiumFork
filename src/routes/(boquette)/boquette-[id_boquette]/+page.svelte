@@ -41,7 +41,6 @@
   let inventory: (categories & { total: number })[] = [];
   $: inventory = form && "inventory" in form ? form.inventory : inventory;
 
-  let boquette: boquettes;
   type boqSettingsText = {
     Nom: string;
     "Nom Simple": string;
@@ -52,12 +51,10 @@
   let editInputText: boqSettingsText;
   let editInputCheck: boqSettingsCheck;
   let editDataKeys: (keyof typeof editInputText)[];
-  $: boquette =
-    data.BOQUETTES.find((e) => e.id_boquette == data.id_boquette) ??
-    data.BOQUETTES[0];
+
   $: {
-    editInputText = initPGEdit(boquette);
-    editInputCheck = { "Partie PG": boquette.partie_pg };
+    editInputText = initPGEdit(data.boquette);
+    editInputCheck = { "Partie PG": data.boquette.partie_pg };
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
 
@@ -97,7 +94,7 @@
     console.log("fetching pgs");
     const updateKey = localStorage.getItem("update_key");
     const response = await fetch(
-      `/boquette-${boquette.id_boquette}/boquettePgs?update_key=` + updateKey,
+      `/boquette-${data.boquette.id_boquette}/boquettePgs?update_key=` + updateKey,
       { method: "get" },
     );
     const { pgs: fetchedPgs } = await response.json();
@@ -118,24 +115,24 @@
 </script>
 
 <div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
-  <BoquetteProfile {boquette}>
-    <form method="POST" action="/login?/logout">
-      <input type="hidden" name="boquette" value={data.id_boquette} />
-      <button class="absolute top-3 left-3">
-        <Icon class="-scale-100 text-4xl" icon="mdi:logout" />
-      </button>
-    </form>
+  <BoquetteProfile boquette={data.boquette}>
+    {#if data.boquette.id_zident == data.USER?.pg.id_pg}
+      <a class="absolute top-2 left-2" href="/boquette-{data.boquette.id_boquette}/gestion_membres">
+        <Icon class="text-3xl" icon="mdi:crown"/>
+      </a>
+    {/if}
+
   </BoquetteProfile>
   {#await pgsPromise()}
     Chargement des Rhopses
   {:then pgs}
     <Actions
-      {boquette}
+      boquette={data.boquette}
       {pgs}
       categories={data.categories}
       produits={data.produits}
     />
-    <Rhopse {pgs} {boquette}></Rhopse>
+    <Rhopse {pgs} boquette={data.boquette}></Rhopse>
   {/await}
 
   <SectionCard title="Stats">
@@ -213,7 +210,7 @@
   </SectionCard>
 
   <Produits
-    id_boquette={data.id_boquette}
+    id_boquette={data.boquette.id_boquette}
     editable={false}
     {editDialog}
     categories={data.categories}

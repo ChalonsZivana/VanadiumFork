@@ -13,9 +13,7 @@
   const listProms = Object.keys(data.proms)
     .map((e) => parseInt(e))
     .sort((a, b) => a - b);
-  $: boquette =
-    data.BOQUETTES.find((e) => e.id_boquette == data.id_boquette) ??
-    data.BOQUETTES[0];
+
 
   let pg: { nums: number; id_pg: number; anciens_autorises: string[] } | null =
     null;
@@ -48,7 +46,7 @@
 </script>
 
 <a
-  href={data.USER?.pg.proms == 223 ? `/boquette-${data.id_boquette}` : "/"}
+  href={data.USER?.pg.proms == 223 ? `/boquette-${data.boquette.id_boquette}` : "/"}
   class="absolute top-3 left-3 w-8"
 >
   <Icon icon="mdi:house" class="w-8 h-8" />
@@ -56,7 +54,7 @@
 
 <div class="h-full w-full flex flex-col items-center p-1 text-white">
   <div class=" flex justify-center items-center">
-    <p class="text-5xl font-zagoth mt-5">Rhopse {boquette.nom}</p>
+    <p class="text-5xl font-zagoth mt-5">Rhopse {data.boquette.nom}</p>
   </div>
 
   {#if proms == undefined}

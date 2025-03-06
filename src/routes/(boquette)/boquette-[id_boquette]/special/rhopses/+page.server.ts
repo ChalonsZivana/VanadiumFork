@@ -9,6 +9,10 @@ import { z } from "zod";
 export const load = async ({ params }) => {
   const id_boquette = parseInt(params.id_boquette);
   if (isNaN(id_boquette)) throw error(404);
+  const boquette = await prisma.boquettes.findFirst({
+    where:{id_boquette}
+  })
+  if (!boquette) throw error(404);
 
   return {
     categories: await prisma.categories.findMany({
@@ -19,7 +23,7 @@ export const load = async ({ params }) => {
       where: { id_boquette },
       orderBy: { nom: "asc" },
     }),
-    id_boquette,
+    boquette,
     proms: {
       222: await Database.getNumsInProms(222),
       223: await Database.getNumsInProms(223),

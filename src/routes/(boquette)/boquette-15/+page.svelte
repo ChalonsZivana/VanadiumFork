@@ -1,16 +1,11 @@
 <script lang="ts">
   import BoquetteProfile from "$lib/components/boquette/BoquetteProfile.svelte";
-  import type { boquettes } from "@prisma/client";
 
   export let data;
-  let boquette: boquettes;
-  $: boquette =
-    data.BOQUETTES.find((e) => e.id_boquette == data.id_boquette) ??
-    data.BOQUETTES[0];
 </script>
 
 <div class="w-11/12 mt-5 flex flex-col gap-5 justify-center items-center">
-  <BoquetteProfile {boquette} />
+  <BoquetteProfile boquette={data.boquette} />
 
   {#each data.discale as music}
     <div

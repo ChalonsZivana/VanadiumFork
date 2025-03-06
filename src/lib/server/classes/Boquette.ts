@@ -123,9 +123,6 @@ export class Boquette extends HasMoney {
     );
   }
 
-  async rhopseAuberge(data: Prisma.aubergeCreateArgs["data"]) {
-    await prisma.auberge.create({ data });
-  }
 
   async addProduct(data: z.infer<typeof AddProductSchema>) {
     if (data.nom_categorie) {

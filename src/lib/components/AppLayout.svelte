@@ -9,9 +9,10 @@
   import { onMount } from "svelte";
   import type { boquettes } from "@prisma/client";
   import type { User } from "$lib/server/auth";
+    import type { WithRequiredOnly } from "$lib/utils";
 
   export let USER: User | null;
-  export let BOQUETTES: boquettes[];
+  export let BOQUETTES: WithRequiredOnly<boquettes, 'id_boquette'>[];
   export let url: string | null;
 
   onMount(async () => {

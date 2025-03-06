@@ -1,6 +1,4 @@
 <script lang="ts">
-  export let data;
-
   let bouteilles = [
     { nom: "Bouteille 1", prix: 10 },
     { nom: "Bouteille 2", prix: 20 },

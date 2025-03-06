@@ -56,20 +56,4 @@ export class Database {
       },
     });
   }
-
-  static getAubergeOrders() {
-    return prisma.auberge.findMany({
-      select: {
-        id: true,
-        bandars: true,
-        commentaire: true,
-        pg: true,
-        fromage: true,
-        status: true,
-        telephone: true,
-        type: true,
-      },
-      orderBy: { id: "desc" },
-    });
-  }
 }

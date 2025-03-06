@@ -1,10 +1,15 @@
 import type { PageServerLoad } from "./$types";
 import prisma from "$lib/prisma";
-import { fail } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async () => {
+  const boquette = await prisma.boquettes.findFirst({
+    where:{id_boquette:15}
+  })
+
+  if (!boquette) throw error(404);
   return {
-    id_boquette: 15,
+    boquette,
     discale: await prisma.spotify.findMany({ orderBy: { id: "desc" } }),
   };
 };

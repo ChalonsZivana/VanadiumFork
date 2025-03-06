@@ -9,6 +9,8 @@
 
   let files: Blob;
 
+  let dialogOpen = false;
+
   let fileInput: HTMLInputElement;
   let addPhotoDialog: HTMLDialogElement;
   let showPhotoDialog: HTMLDialogElement;
@@ -44,7 +46,6 @@
           if (entry.isIntersecting) {
             const img = entry.target as HTMLImageElement;
             img.src = img.dataset.src!; // Set the real image source
-            console.log('yo')
             observer.unobserve(img); // Stop observing once loaded
           }
         }
@@ -119,11 +120,14 @@
   >
     {#each photosWithOrientations as photo, i}
       <button
-        on:click={()=>{currentPhotoIndex=i; showPhotoDialog.showModal()}} class="relative size-full {photo.mode == 'landscape' ? 'col-span-2' : ''} flex place-items-center place-content-center transition-all duration-1000 border-black border-solid border-2"
+        on:click={()=>{
+          currentPhotoIndex=i; 
+          dialogOpen = true;
+          }} class="relative size-full {photo.mode == 'landscape' ? 'col-span-2' : ''} flex place-items-center place-content-center transition-all duration-1000 border-black border-solid border-2"
       >
         <img
           bind:this={imageElements[i]}
-          class="w-80 h-80 object-contain"
+          class="w-80  object-contain"
           data-src={photo.photo.url} 
           src="" 
           alt=""
@@ -192,19 +196,23 @@
 </dialog>
 
 
+
+{#if dialogOpen && currentPhotoIndex}
+{@const curPhot = photosWithOrientations[currentPhotoIndex]}
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={showPhotoDialog} on:click|self={()=>showPhotoDialog.close()} class="rounded-lg w-80 sm:w-1/2">
-  {#if currentPhotoIndex != null}
-  {@const curPhot = photosWithOrientations[currentPhotoIndex]}
-    <img src={`${curPhot.photo.url}`} alt="">
-    
-    <!-- LeMe -->
-    {#if data.USER.pg.id_pg == 2625}
-      <form use:enhance class="absolute top-0 right-0" method="post" action="?/deletePhoto">
-        <input type="hidden" name="photoSrc" value={photo.photo.key} />
-        <button><Icon class="text-3xl" icon="mdi:delete" /></button>
-      </form>
-    {/if}
-  {/if}
-</dialog>
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div on:click|self={()=>dialogOpen=false} class="absolute h-full w-full flex place-items-center place-content-center">
+    <div class="relative w-80 rounded-lg sm:w-1/2 flex">
+      <img src={`${curPhot.photo.url}`} alt="">
+      
+      <!-- LeMe -->
+      {#if data.USER.pg.id_pg == 2625}
+        <form on:submit={()=>dialogOpen=false} use:enhance class="absolute top-0 right-0" method="post" action="?/deletePhoto">
+          <input type="hidden" name="photoSrc" value={curPhot.photo.key} />
+          <button><Icon class="text-3xl" icon="mdi:delete" /></button>
+        </form>
+      {/if}
+    </div>
+  </div>
+{/if}

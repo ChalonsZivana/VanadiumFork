@@ -4,6 +4,8 @@
   import SectionCard from "$lib/components/SectionCard.svelte";
   import Top from "$lib/components/miscellaneous/Leaderboard.svelte";
   import ConsoTable from "$lib/components/search/ConsoTable.svelte";
+    import { onMount } from "svelte";
+    import { soundButton } from "$lib/utils.js";
 
   export let data;
 
@@ -21,6 +23,8 @@
       flipped = !flipped;
     }
   }
+
+
 </script>
 
 <div class="h-full flex flex-col overflow-y-hidden">
@@ -104,31 +108,35 @@
           </div>
 
           <div class="grid grid-cols-2 flex-grow mb-10">
-            <Tab
-              hover=""
-              class="w-full"
-              bind:group={tabSet}
-              name="tab_stats"
-              value={3}
-            >
-              <div
-                class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
+            <button use:soundButton>
+              <Tab
+                hover=""
+                class="w-full"
+                bind:group={tabSet}
+                name="tab_stats"
+                value={3}
               >
-                <span><Icon icon="mdi:bar-chart" /></span>
-                <span>Stats</span>
-              </div>
-            </Tab>
+                <div
+                  class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
+                >
+                  <span><Icon icon="mdi:bar-chart" /></span>
+                  <span>Stats</span>
+                </div>
+              </Tab>
+            </button>
 
-            <Tab hover="" bind:group={tabSet} name="tab_consos" value={1}>
-              <div
-                class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
-              >
-                <span><Icon icon="mdi:event-note" /></span>
-                <span>Consos</span>
-              </div>
-            </Tab>
+            <button use:soundButton>
+              <Tab hover="" bind:group={tabSet} name="tab_consos" value={1}>
+                <div
+                  class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
+                >
+                  <span><Icon icon="mdi:event-note" /></span>
+                  <span>Consos</span>
+                </div>
+              </Tab>
+            </button>
 
-            <div class="col-span-2">
+            <button class="col-span-2" use:soundButton>
               <Tab hover="" bind:group={tabSet} name="tab_consos" value={2}>
                 <div
                   class="p-4 relative bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
@@ -137,19 +145,21 @@
                   <span>Historique Fams</span>
                 </div>
               </Tab>
-            </div>
+            </button>
           </div>
         </div>
       {:else if tabSet === 1}
         <div class="size-full flex flex-col items-center">
-          <Tab hover="" bind:group={tabSet} name="tab_main" value={0}>
-            <div
-              class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
-            >
-              <span><Icon icon="mdi:event-note" /></span>
-              <span>Consos</span>
-            </div>
-          </Tab>
+          <button use:soundButton>
+            <Tab hover="" bind:group={tabSet} name="tab_main" value={0}>
+              <div
+                class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
+              >
+                <span><Icon icon="mdi:event-note" /></span>
+                <span>Consos</span>
+              </div>
+            </Tab>
+          </button>
 
           {#await data.consommations}
             <p>Chargement...</p>
@@ -163,14 +173,16 @@
         </div>
       {:else if tabSet === 2}
         <div class="size-full flex flex-col items-center">
-          <Tab hover="" bind:group={tabSet} name="tab_main" value={0}>
-            <div
-              class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
-            >
-              <span><Icon icon="mdi:event-note" /></span>
-              <span>Historique Fams</span>
-            </div>
-          </Tab>
+          <button use:soundButton>
+            <Tab hover="" bind:group={tabSet} name="tab_main" value={0}>
+              <div
+                class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
+              >
+                <span><Icon icon="mdi:event-note" /></span>
+                <span>Historique Fams</span>
+              </div>
+            </Tab>
+          </button>
 
           {#await data.historique_fams}
             <p>Chargement...</p>
@@ -184,14 +196,16 @@
         </div>
       {:else if tabSet === 3}
         <div class="size-full flex flex-col items-center gap-4">
-          <Tab hover="" bind:group={tabSet} name="tab_main" value={0}>
-            <div
-              class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
-            >
-              <span><Icon icon="mdi:bar-chart" /></span>
-              <span>Statistics</span>
-            </div>
-          </Tab>
+          <button use:soundButton>
+            <Tab hover="" bind:group={tabSet} name="tab_main" value={0}>
+              <div
+                class="p-4 bg-secondary-hover-token card variant-filled-secondary flex justify-start items-center gap-4"
+              >
+                <span><Icon icon="mdi:bar-chart" /></span>
+                <span>Statistics</span>
+              </div>
+            </Tab>
+          </button>
 
           <SectionCard title="Top Global">
             {#await data.topGlobal}

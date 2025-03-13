@@ -59,3 +59,12 @@ export function oneshotaction(e:HTMLButtonElement){
     },1000);
   });
 }
+
+export function soundButton(e:HTMLButtonElement){
+    let audio = new Audio('/sounds/button.mp3'); // Ensure the file is in the static directory
+    audio.currentTime = 0; // Restart if already playing
+
+    e.addEventListener('click',(a)=>{
+      audio.play().catch((e) => console.error('Playback failed', e));
+    });
+}

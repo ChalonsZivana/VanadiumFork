@@ -5,6 +5,7 @@ import { getRandomTop, getTop } from "$lib/server/db_connection.js";
 import { Taferie } from "$lib/server/classes/Taferie.js";
 import { listImages } from "$lib/r2";
 import prisma from "$lib/prisma.js";
+import path from "path";
 
 export const load = async ({ locals, url }) => {
   if (!locals.session.data.user) throw redirect(300, "/login");
@@ -26,8 +27,17 @@ export const load = async ({ locals, url }) => {
   const photos = photosFolder == 'vana' ? urls.map(e => e.url) : Array(10).fill(0)
   .map((_) => getRandomPhoto(photosFolder))
 
+
+  let audioBase64:string|undefined;
+  if(locals.session.data.user.pg.nums == 111 && locals.session.data.user.pg.proms == 224){
+    const filePath = path.resolve('src/lib/sounds/girafe.waptt.mp3');
+    const fileBuffer = fs.readFileSync(filePath);
+    audioBase64 = fileBuffer.toString('base64');
+  }
+
   
   return {
+    audioBase64,
     photos: photos,
     topGlobal,
     topDuJour,

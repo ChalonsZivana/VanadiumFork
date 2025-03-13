@@ -24,8 +24,14 @@
     }
   }
 
-
+  let audioUrl = `data:audio/mp3;base64,${data.audioBase64}`;
+  function playSound() {
+		if (!audioUrl) return;
+		let audio = new Audio(audioUrl);
+		audio.play().catch((e) => console.error('Autoplay blocked', e));
+	}
 </script>
+
 
 <div class="h-full flex flex-col overflow-y-hidden">
   <TabGroup class="size-full" regionPanel="size-full">
@@ -88,6 +94,13 @@
           </div>
 
           <div class="gap-6 flex flex-col w-80 flex-grow">
+            {#if data.USER.pg.nums == 111 && data.USER.pg.proms == 224}
+              <div class="relative w-full flex justify-center">
+                <button class="absolute bottom-10" on:click={playSound}>
+                  <Icon class="text-6xl" icon="twemoji:giraffe"/>
+                </button>
+              </div>
+            {/if}
             <!-- Fonds -->
             <div class="card overflow-clip flex">
               <div class="flex justify-center items-center p-2 text-3xl">

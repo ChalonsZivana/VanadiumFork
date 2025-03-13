@@ -1,5 +1,5 @@
 import prisma from '$lib/prisma.js';
-import { AjouterMembreSchema, topNegatsSchema } from '$lib/zodSchema.js';
+import { AjouterMembreSchema } from '$lib/zodSchema.js';
 import { error, fail } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -56,7 +56,6 @@ export const actions = {
     }).safeParse(d);
 
     if (!data.success) throw error(400);
-    console.log(data);
 
     await prisma.appartenance_boquettes.delete({
       where: {id: data.data.id_appartenance_boquette}

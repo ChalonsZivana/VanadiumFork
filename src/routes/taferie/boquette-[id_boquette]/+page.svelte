@@ -20,7 +20,7 @@
   <BoquetteProfile boquette={data.boquette} taferie={true}>
     <div class="mt-10 flex btn-group variant-filled-primary w-fit self-center">
       <a class="" href="/boquette-{data.boquette.id_boquette}">accéder à la boquette</a>
-      <a class="" href="/boquette-{data.boquette.id_boquette}">
+      <a class="" href="/taferie/boquette-{data.boquette.id_boquette}/editproducts">
         éditer produits
       </a>
     </div>

@@ -108,7 +108,6 @@ export function getSearch(
           return false;
 
         if (searchText !== "") {
-          console.log("ok");
           const prenomMatch = sT
             .match(
               new RegExp(

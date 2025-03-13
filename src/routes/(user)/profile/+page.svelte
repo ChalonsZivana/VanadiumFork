@@ -139,28 +139,5 @@
         <MyButton value="ajouter" />
       </SectionCard>
     </form>
-
-    <div class="flex flex-col gap-5">
-      <SectionCard title="Ajouter boquette">
-        <a href="/login" class="bg-blue-600 p-2 rounded-md">Se connecter</a>
-      </SectionCard>
-      <!-- <SectionCard title="Notifications">
-        <form method="post" action="?/create_user">
-          <button class="p-2 bg-blue-600">Create user</button>
-        </form>
-        {#if areNotifsAllowed != null}
-          {#if areNotifsAllowed}
-            <button on:click={()=>{
-            }} class="bg-blue-600 p-2 rounded-md">se désabonner</button>
-          {:else}
-            <button on:click={async()=>{
-              const r = await Notification.requestPermission()
-              areNotifsAllowed = r == 'granted'
-              OneSignal.setConsentGiven(true);
-            }} class="bg-blue-600 p-2 rounded-md">s'abonner</button>
-          {/if}
-        {/if}
-      </SectionCard> -->
-    </div>
   </div>
 </div>

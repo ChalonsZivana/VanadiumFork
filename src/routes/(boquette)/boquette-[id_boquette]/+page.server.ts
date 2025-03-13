@@ -5,15 +5,23 @@ import {
   ImportRhopseSchema,
   OnlyDateSchema,
 } from "$lib/zodSchema.js";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
 import type { categories } from "@prisma/client";
 
 
 
-export const load = async ({ params }) => {
+export const load = async ({ params,locals }) => {
   const id_boquette = parseInt(params.id_boquette);
   if (isNaN(id_boquette)) throw error(404);
+
+  const isTaferie = await prisma.appartenance_boquettes.findFirst({
+    where:{id_boquette:20, id_pg:locals.session.data.user?.pg.id_pg}
+  });
+
+  return {
+    isTaferie:isTaferie!=null
+  }
 };
 
 export const actions = {

@@ -10,6 +10,7 @@ import { error } from "@sveltejs/kit";
 
 export async function load({ params }) {
   const id_boquette = parseInt(params.id_boquette);
+
   if (isNaN(id_boquette)) throw error(404);
 
   const boquette = await prisma.boquettes.findFirst({ where: { id_boquette } });

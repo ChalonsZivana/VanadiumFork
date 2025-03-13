@@ -13,7 +13,8 @@ const authorized = [
   BOQUETTES["Auberge"],
   BOQUETTES["Foy's"],
   BOQUETTES["Mafia"],
-  BOQUETTES["Clac's"]
+  BOQUETTES["Clac's"],
+  BOQUETTES["Cock's"]
 ];
 
 export async function load({ params }) {

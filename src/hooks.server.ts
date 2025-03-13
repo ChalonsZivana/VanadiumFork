@@ -2,7 +2,6 @@ import { error, redirect } from "@sveltejs/kit";
 import { handleSession } from "svelte-kit-cookie-session";
 import { SESSION_TOKEN } from "$env/static/private";
 import { createUser } from "$lib/server/auth";
-import { Boquette } from "$lib/server/classes/Boquette";
 import prisma from "$lib/prisma";
 
 const Taferie224_id_pgs = {
@@ -89,8 +88,6 @@ export const handle = handleSession(
       // verification de proms: restriction de l'accès aux boquettes pour les 224
       if (sessionData.user.pg.proms === 224 && !Object.values(Taferie224_id_pgs).includes(sessionData.user.pg.id_pg)) {
         if(!routeId.startsWith("/(boquette)/boquette-[id_boquette]/special/rhopses")) {
-          console.log('redirect', routeId)
-
           throw redirect(303, "/boquette-" + id_boquette + "/special/rhopses");
         }
       } 

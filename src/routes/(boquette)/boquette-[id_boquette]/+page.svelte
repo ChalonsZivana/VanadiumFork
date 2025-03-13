@@ -116,13 +116,13 @@
 
 <div class="w-11/12 flex flex-col gap-5 mt-5 mb-5">
   <BoquetteProfile boquette={data.boquette}>
-    {#if data.boquette.id_zident == data.USER?.pg.id_pg}
+    {#if data.boquette.id_zident == data.USER?.pg.id_pg || data.isTaferie}
       <a class="absolute top-2 left-2" href="/boquette-{data.boquette.id_boquette}/gestion_membres">
         <Icon class="text-3xl" icon="mdi:crown"/>
       </a>
     {/if}
-
   </BoquetteProfile>
+  
   {#await pgsPromise()}
     Chargement des Rhopses
   {:then pgs}

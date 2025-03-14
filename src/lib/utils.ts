@@ -50,13 +50,13 @@ export function oneShotEnhance(
 
 
 export function oneshotaction(e:HTMLButtonElement){
-  let clicked = false;
   e.addEventListener('click',(a)=>{
-    clicked = true;
-    e.disabled = true;
     setTimeout(()=>{
-      e.disabled = false;
-    },1000);
+      e.disabled = true;
+      setTimeout(()=>{
+        e.disabled = false;
+      },1000);
+    },100)
   });
 }
 

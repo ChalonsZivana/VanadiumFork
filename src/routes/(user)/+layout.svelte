@@ -1,6 +1,7 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
   import AppLayout from "$lib/components/AppLayout.svelte";
+    import { oneshotaction } from "$lib/utils.js";
   export let data;
 
   async function handleSubmit(event: Event) {
@@ -14,7 +15,7 @@
       return;
     }
 
-		fetch('/api/unlockaccount').then(e => invalidateAll());
+    fetch('/api/unlockaccount').then(e => invalidateAll());
 
 
 	}
@@ -27,10 +28,10 @@
       <p class="text-3xl text-center">Ton compte est bloqué, suis la procédure ci-dessous pour le débloquer.</p>
 
       <label class="flex flex-col gap-4 ">
-        Recopiez ce texte: "{data.requiredToUnlock}"
+        Ecris ce texte: "{data.requiredToUnlock}"
         <input required class="input text-center" type="text" name="content">
       </label>
-      <button class="btn variant-filled-primary text-wrap w-80">
+      <button use:oneshotaction class="btn variant-filled-primary text-wrap w-80">
         Je soussigné {data.USER.pg.nom} {data.USER.pg.prenom} certifie que je crois en ce que j'ai écris en âme et conscience
       </button>
     </div>

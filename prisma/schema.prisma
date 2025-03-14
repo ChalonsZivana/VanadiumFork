@@ -36,6 +36,14 @@ model categories {
   nom          String 
 }
 
+model fams11pine {
+  nums Int
+  proms Int
+  created_at DateTime @default(now())
+
+  @@id([nums, proms])
+}
+
 model config {
   id     Int    @id @default(autoincrement())
   nom    String 

@@ -6,7 +6,7 @@
   import LogalSoce from "$lib/components/svgs/logal-soce.svelte";
   import OneSignal from "@nolanx/svelte-onesignal";
   import { fly } from "svelte/transition";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import type { boquettes } from "@prisma/client";
   import type { User } from "$lib/server/auth";
     import type { WithRequiredOnly } from "$lib/utils";
@@ -68,6 +68,14 @@
       showBoquettes = false;
     }
   }
+
+  const unsubscribe = page.subscribe(($page) => {
+    const audio =  new Audio('/sounds/flipcard.mp3')
+    audio.currentTime = 0;
+    audio.play().catch((e) => console.error('Playback failed', e));
+  });
+
+  onDestroy(unsubscribe);
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

@@ -86,11 +86,11 @@ export const handle = handleSession(
       if (!isInBoquette)  throw redirect(303, "/");
 
       // verification de proms: restriction de l'accès aux boquettes pour les 224
-      if (sessionData.user.pg.proms === 224 && !Object.values(Taferie224_id_pgs).includes(sessionData.user.pg.id_pg)) {
-        if(!routeId.startsWith("/(boquette)/boquette-[id_boquette]/special/rhopses")) {
-          throw redirect(303, "/boquette-" + id_boquette + "/special/rhopses");
-        }
-      } 
+      // if (sessionData.user.pg.proms === 224 && !Object.values(Taferie224_id_pgs).includes(sessionData.user.pg.id_pg)) {
+      //   if(!routeId.startsWith("/(boquette)/boquette-[id_boquette]/special/rhopses")) {
+      //     throw redirect(303, "/boquette-" + id_boquette + "/special/rhopses");
+      //   }
+      // } 
     } 
 
     return resolve(event);

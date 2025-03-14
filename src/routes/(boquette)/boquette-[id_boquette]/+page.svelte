@@ -57,7 +57,7 @@
     editInputCheck = { "Partie PG": data.boquette.partie_pg };
     editDataKeys = Object.keys(editInputText) as (keyof typeof editInputText)[];
   }
-
+  
   function initPGEdit(boq: boquettes): boqSettingsText {
     return {
       Nom: boq.nom ?? "",

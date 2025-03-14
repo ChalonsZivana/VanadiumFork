@@ -1,6 +1,6 @@
 import prisma from "$lib/prisma";
 import { redirect } from "@sveltejs/kit";
-const requiredInput = "Y'a que la fam's 11 qui pine."
+const requiredInput = "Y a que la fams 11 qui pine."
 
 export const load = async ({ locals, url }) => {
   if (locals.session.data.user == null) throw redirect(300, "/login");

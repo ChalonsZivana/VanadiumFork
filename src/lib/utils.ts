@@ -56,7 +56,7 @@ export function oneshotaction(e:HTMLButtonElement){
       setTimeout(()=>{
         e.disabled = false;
       },1000);
-    },100)
+    },300)
   });
 }
 

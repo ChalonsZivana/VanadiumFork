@@ -14,10 +14,8 @@
     if(content != data.requiredToUnlock){
       return;
     }
-
+    
     fetch('/api/unlockaccount').then(e => invalidateAll());
-
-
 	}
 </script>
 

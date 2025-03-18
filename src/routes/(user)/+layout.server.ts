@@ -19,6 +19,6 @@ export const load = async ({ locals, url }) => {
     USER: locals.session.data.user,
     BOQUETTES,
     url: url.pathname,
-    requiredToUnlock: isAccountLocked==null ? requiredInput : null
+    requiredToUnlock: null//isAccountLocked==null ? requiredInput : null
   };
 };

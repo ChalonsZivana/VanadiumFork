@@ -8,7 +8,7 @@ export async function GET({locals}){
 
   if(!pg) throw error(400);
   const alreadyExists = await prisma.fams11pine.findFirst({where:{nums:pg.nums, proms:pg.proms}});
-  console.log(alreadyExists)
+
   if(alreadyExists == null){
     await prisma.fams11pine.create({
       data:{

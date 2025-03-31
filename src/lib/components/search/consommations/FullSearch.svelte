@@ -115,7 +115,7 @@
         <Icon class="text-8xl" icon="line-md:loading-loop" />
       </div>
     {:else}
-      <ConsoTable {fromOption} {consommations} {cancelOption} />
+        <ConsoTable {fromOption} {consommations} {cancelOption} />
     {/if}
   </div>
 </SectionCard>

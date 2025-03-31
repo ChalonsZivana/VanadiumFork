@@ -22,12 +22,14 @@
       allowLocalhostAsSecureOrigin: true,
     });
 
-    const unsubscribe = page.subscribe(($page) => {
-      const audio =  new Audio('/sounds/flipcard.mp3')
-      audio.currentTime = 0;
-      audio.play().catch((e) => console.error('Playback failed', e));
-    });
-    onDestroy(unsubscribe);
+    if(USER && USER.pg.solde < 0){
+      const unsubscribe = page.subscribe(($page) => {
+        const audio =  new Audio('/sounds/flipcard.mp3')
+        audio.currentTime = 0;
+        audio.play().catch((e) => console.error('Playback failed', e));
+      });
+      onDestroy(unsubscribe);
+    }
   });
 
   const title = "Vanadium";

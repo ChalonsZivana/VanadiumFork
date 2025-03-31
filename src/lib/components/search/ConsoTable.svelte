@@ -2,9 +2,12 @@
   import MoneyColor from "../miscellaneous/MoneyColor.svelte";
   import AddRemoveConso from "../miscellaneous/AddRemoveConso.svelte";
   import type { ConsommationsIncludeType } from "$lib/server/classes/Taferie";
-    import { fly } from "svelte/transition";
-    import { onMount } from "svelte";
+  import { fly } from "svelte/transition";
+  import { onMount } from "svelte";
+  import { page } from "$app/stores";
+    import type { boquettes } from "@prisma/client";
 
+  
   export let fromOption: boolean;
   export let cancelOption: boolean;
   export let consommations: ConsommationsIncludeType[];
@@ -38,6 +41,8 @@
         return "PG";
     }
   }
+
+  $: isTaferie = !($page.data.BOQUETTES as boquettes[]).every(e => e.nom_simple!="taferie");
 
   onMount(()=>{
     setTimeout(()=>{
@@ -116,7 +121,7 @@
           <p class=" text-xxs">AV. {conso.solde_avant.toFixed(2)}€</p>
         </td>
         <td>{conso.rhopseur}</td>
-        {#if cancelOption && isLessThanAMonthOld(conso.date_conso)}
+        {#if cancelOption && (isLessThanAMonthOld(conso.date_conso) || isTaferie)}
           <td class="flex justify-center items-center">
             {#key conso.id_conso}
               <AddRemoveConso

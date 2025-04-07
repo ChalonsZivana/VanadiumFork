@@ -5,7 +5,7 @@
   import { fly } from "svelte/transition";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-    import type { boquettes } from "@prisma/client";
+  import type { boquettes } from "@prisma/client";
 
   
   export let fromOption: boolean;
@@ -42,7 +42,7 @@
     }
   }
 
-  $: isTaferie = !($page.data.BOQUETTES as boquettes[]).every(e => e.nom_simple!="taferie");
+  $: isTaferie = !($page.data.BOQUETTES_IDS as boquettes[]).every(e => e.nom_simple!="taferie");
 
   onMount(()=>{
     setTimeout(()=>{

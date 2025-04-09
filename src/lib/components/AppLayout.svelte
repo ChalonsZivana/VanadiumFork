@@ -12,7 +12,7 @@
   import type { WithRequiredOnly } from "$lib/utils";
 
   export let USER: User | null;
-  export let BOQUETTES: WithRequiredOnly<boquettes, 'id_boquette'>[];
+  export let BOQUETTES_IDS: WithRequiredOnly<boquettes, 'id_boquette'>[];
   export let url: string | null;
 
   onMount(async () => {
@@ -94,8 +94,8 @@
   >
     <svelte:fragment slot="lead">
       <span class="flex items-end gap-4">
-        {#if BOQUETTES.length <= 2}
-          {#each BOQUETTES as boq}
+        {#if BOQUETTES_IDS.length <= 2}
+          {#each BOQUETTES_IDS as boq}
             <a class="text-3xl" href="/boquette-{boq.id_boquette}">
               <Icon
                 icon={boquettesIcons[boq.id_boquette] ?? "carbon:unknown"}
@@ -117,7 +117,7 @@
             </button>
 
             {#if showBoquettes}
-              {#each BOQUETTES as boq}
+              {#each BOQUETTES_IDS as boq}
                 <a class="text-3xl" href="/boquette-{boq.id_boquette}">
                   <Icon
                     icon={boquettesIcons[boq.id_boquette] ?? "carbon:unknown"}

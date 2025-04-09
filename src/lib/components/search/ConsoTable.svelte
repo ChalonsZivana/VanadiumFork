@@ -42,7 +42,11 @@
     }
   }
 
-  $: isTaferie = !($page.data.BOQUETTES_IDS as boquettes[]).every(e => e.nom_simple!="taferie");
+  let isTaferie:boolean=false;
+  $: {
+    console.log($page.data);
+    isTaferie = !($page.data.BOQUETTES_IDS as boquettes[]).every(e => e.nom_simple!="taferie");
+  }
 
   onMount(()=>{
     setTimeout(()=>{

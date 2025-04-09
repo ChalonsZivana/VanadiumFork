@@ -34,7 +34,6 @@ export const load = async ({ locals, url }) => {
     const fileBuffer = fs.readFileSync(filePath);
     audioBase64 = fileBuffer.toString('base64');
   }
-
   
   return {
     audioBase64,

@@ -5,7 +5,7 @@
   export let data;
 </script>
 
-<AppLayout bind:USER={data.USER} bind:BOQUETTES={data.BOQUETTES} url={null}>
+<AppLayout bind:USER={data.USER} bind:BOQUETTES_IDS={data.BOQUETTES_IDS} url={null}>
   {#if data.config.vanazocque?.valeur == "1"}
     <div
       class="w-full sticky top-0 z-50 variant-filled-warning flex items-center justify-around"

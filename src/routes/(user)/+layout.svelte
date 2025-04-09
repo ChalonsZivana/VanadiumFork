@@ -37,7 +37,7 @@
 {:else}
   <AppLayout
     bind:USER={data.USER}
-    bind:BOQUETTES={data.BOQUETTES}
+    bind:BOQUETTES_IDS={data.BOQUETTES_IDS}
     bind:url={data.url}
   >
     <slot />

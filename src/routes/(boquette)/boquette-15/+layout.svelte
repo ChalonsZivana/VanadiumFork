@@ -3,6 +3,6 @@
   export let data;
 </script>
 
-<AppLayout bind:USER={data.USER} bind:BOQUETTES={data.BOQUETTES_IDS} url={null}>
+<AppLayout bind:USER={data.USER} bind:BOQUETTES_IDS={data.BOQUETTES_IDS} url={null}>
   <slot />
 </AppLayout>

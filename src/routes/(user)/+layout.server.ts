@@ -8,16 +8,19 @@ export const load = async ({ locals, url }) => {
   const appartenance_boquettes = await prisma.appartenance_boquettes.findMany({
       where:{id_pg: locals.session.data.user.pg.id_pg} 
     })
-    const BOQUETTES = await prisma.boquettes.findMany({
-      where:{id_boquette: {in: appartenance_boquettes.map(e => e.id_boquette)}}
-    })
+
     const isAccountLocked = await prisma.fams11pine.findFirst({
       where:{nums:locals.session.data.user.pg.nums, proms:locals.session.data.user.pg.proms}
     })
 
+  const BOQUETTES_IDS = await prisma.boquettes.findMany({
+    where:{id_boquette: {in: appartenance_boquettes.map(e => e.id_boquette)}},
+    select:{id_boquette:true}
+  })
+
   return {
     USER: locals.session.data.user,
-    BOQUETTES,
+    BOQUETTES_IDS,
     url: url.pathname,
     requiredToUnlock: null//isAccountLocked==null ? requiredInput : null
   };

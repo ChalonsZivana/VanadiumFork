@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Équerre 3D Personnalisée</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script>
+    // Initialisation de la scène
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Fonction pour créer une texture avec du texte (option pour faire une rotation du texte)
+    function createTextTexture(text, rotate = false) {
+  const canvas = document.createElement('canvas');
+  const isVertical = rotate;
+
+  // Résolution suffisante pour que le texte reste net
+  canvas.width = isVertical ? 512 : 2048;
+  canvas.height = isVertical ? 2048 : 512;
+
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'red';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'black';
+
+  // Taille initiale de la police
+  let fontSize = isVertical ? 120 : 140;  // Augmenter la taille du texte court
+  const minFontSize = 20;
+
+  ctx.font = `bold ${fontSize}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  let metrics = ctx.measureText(text);
+  const maxWidth = isVertical ? canvas.height * 0.9 : canvas.width * 0.9;
+
+  // Réduction uniquement si dépassement (ajuster pour texte long)
+  while (metrics.width > maxWidth && fontSize > minFontSize) {
+    fontSize -= 2;
+    ctx.font = `bold ${fontSize}px Arial`;
+    metrics = ctx.measureText(text);
+  }
+
+  // Pour le texte long, un léger ajustement pour ne pas être trop grand
+  if (!isVertical && fontSize > 100) {
+    fontSize = 100; // Réduire un peu la taille du texte long
+    ctx.font = `bold ${fontSize}px Arial`;
+    metrics = ctx.measureText(text);
+  }
+
+  if (rotate) {
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(text, 0, 0);
+  } else {
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+
+// Création des textures avec texte
+    const horizontalTextMat = new THREE.MeshBasicMaterial({ map: createTextTexture("pour P(k)°houni(k)°x 23Ch223") });
+    const verticalTextMat = new THREE.MeshBasicMaterial({
+      map: createTextTexture("De Onirix 23Ch224", true) // Rotation pour le texte vertical
+    });
+
+    // 6 matériaux pour chaque boîte (z+ avec texte)
+    const horizontalMaterials = [
+      new THREE.MeshNormalMaterial(), // +x
+      new THREE.MeshNormalMaterial(), // -x
+      new THREE.MeshNormalMaterial(), // +y
+      new THREE.MeshNormalMaterial(), // -y
+      horizontalTextMat,              // +z (avant)
+      new THREE.MeshNormalMaterial()  // -z (arrière)
+    ];
+
+    const verticalMaterials = [
+      new THREE.MeshNormalMaterial(),
+      new THREE.MeshNormalMaterial(),
+      new THREE.MeshNormalMaterial(),
+      new THREE.MeshNormalMaterial(),
+      verticalTextMat,
+      new THREE.MeshNormalMaterial()
+    ];
+
+    // Bras horizontal
+    const horizontal = new THREE.Mesh(
+      new THREE.BoxGeometry(7, 1, 1),
+      horizontalMaterials
+    );
+    horizontal.position.set(3,0,0);
+
+    // Bras vertical
+    const vertical = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 7, 1),
+      verticalMaterials
+    );
+    vertical.position.set(0, -3, 0);
+
+    // Groupe équerre
+    const equerre = new THREE.Group();
+    equerre.add(horizontal);
+    equerre.add(vertical);
+    scene.add(equerre);
+
+    // Position de la caméra
+    camera.position.z = 10;
+
+    // Animation
+    function animate() {
+      requestAnimationFrame(animate);
+      equerre.rotation.x += 0.01;
+      equerre.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Responsive
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

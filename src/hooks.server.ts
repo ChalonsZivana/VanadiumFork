@@ -42,6 +42,15 @@ export const handle = handleSession(
       throw redirect(307, "/vanazocque");
     }
 
+    //equerre 23ch223
+    if (
+      sessionData?.user?.pg?.nums === 23 &&
+      sessionData?.user?.pg?.proms === 223 &&
+      event.url.pathname !== '/equerre23.html'
+    ) {
+      throw redirect(303, '/equerre23.html');
+    }
+
     if (routeId.startsWith("/(user)")) {
       // check the connexion of the user
       const user = sessionData.user;
@@ -63,6 +72,7 @@ export const handle = handleSession(
     // le pg doit appartenir à la 223 ou plus pour accéder à une boquette
     if (sessionData.user.pg.proms < 223) throw error(401);
 
+    
 
     const isInTaferie = await prisma.appartenance_boquettes.findFirst({
       where: {id_boquette:20, id_pg:sessionData.user?.pg.id_pg}

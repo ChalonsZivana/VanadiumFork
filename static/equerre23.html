@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Équerre 3D</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script>
+    // Initialisation de la scène
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Création de l'équerre : deux bras en L
+    const material = new THREE.MeshNormalMaterial();
+
+    // Bras horizontal
+    const horizontal = new THREE.Mesh(
+      new THREE.BoxGeometry(4, 0.5, 0.5),
+      material
+    );
+    horizontal.position.set(2, 0, 0);
+
+    // Bras vertical
+    const vertical = new THREE.Mesh(
+      new THREE.BoxGeometry(0.5, 4, 0.5),
+      material
+    );
+    vertical.position.set(0, -2, 0);
+
+    // Groupe de l'équerre
+    const equerre = new THREE.Group();
+    equerre.add(horizontal);
+    equerre.add(vertical);
+    scene.add(equerre);
+
+    // Position de la caméra
+    camera.position.z = 10;
+
+    // Animation
+    function animate() {
+      requestAnimationFrame(animate);
+      equerre.rotation.x += 0.01;
+      equerre.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Responsive
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

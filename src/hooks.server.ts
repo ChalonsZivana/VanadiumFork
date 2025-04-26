@@ -41,16 +41,7 @@ export const handle = handleSession(
 
       throw redirect(307, "/vanazocque");
     }
-
-    //equerre 23ch223
-    if (
-      sessionData?.user?.pg?.nums === 23 &&
-      sessionData?.user?.pg?.proms === 223 &&
-      event.url.pathname !== '/equerre23.html'
-    ) {
-      throw redirect(303, '/equerre23.html');
-    }
-
+    
     if (routeId.startsWith("/(user)")) {
       // check the connexion of the user
       const user = sessionData.user;

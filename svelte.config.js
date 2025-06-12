@@ -7,9 +7,6 @@ const config = {
   preprocess: vitePreprocess(),
 
   kit: {
-    env: {
-      dir: "./",
-    },
     csrf: {
       checkOrigin: false,
     },

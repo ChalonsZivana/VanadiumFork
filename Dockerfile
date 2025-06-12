@@ -1,24 +1,27 @@
 FROM node:23-alpine AS build
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
+# Copie les fichiers nécessaires
+COPY package.json package-lock.json* ./
+RUN npm ci
 
+# Copie tout le code source
 COPY . .
-RUN pnpm build
 
+# Build de l'application
+RUN npm run build
+
+# Étape finale : image plus légère pour exécuter l'app
 FROM node:23-alpine
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 WORKDIR /app
 
+# Copie les fichiers de build depuis l’étape précédente
 COPY --from=build /app /app
 
-RUN CI=1 pnpm install --prod --frozen-lockfile
+# Installation uniquement des dépendances de production
+RUN npm ci --omit=dev
 
 EXPOSE 3000
 

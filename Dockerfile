@@ -1,6 +1,8 @@
-FROM node:23-slim AS build
+FROM node:23-alpine AS build
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y openssl libssl1.1
 
 # Copie les fichiers nécessaires
 COPY package.json package-lock.json* ./

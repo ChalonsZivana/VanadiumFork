@@ -2,7 +2,9 @@ import type { RequestEvent } from "@sveltejs/kit";
 import { redirect, fail } from "@sveltejs/kit";
 import { getPGPassword } from "$lib/server/db_connection.js";
 import { createUser, hashPassword } from "$lib/server/auth.js";
-import { ZIVANA_MDP } from "$env/static/private";
+import { env } from "$env/dynamic/private";
+
+const {ZIVANA_MDP} = env;
 
 export const actions = {
   login: async ({ request, locals }: RequestEvent) => {
@@ -21,7 +23,7 @@ export const actions = {
 
     const [nums, proms] = uid.toLowerCase().split("ch") as string[];
     const userPswd = await getPGPassword(parseInt(nums), parseInt(proms));
-    console.log(userPswd)
+
     if (!userPswd) {
       return fail(400, { nums, proms, missing: true });
     }

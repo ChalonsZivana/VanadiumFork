@@ -1,8 +1,10 @@
 import { error, redirect } from "@sveltejs/kit";
 import { handleSession } from "svelte-kit-cookie-session";
-import { SESSION_TOKEN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { createUser } from "$lib/server/auth";
 import prisma from "$lib/prisma";
+
+const { SESSION_TOKEN } = env;
 
 const Taferie224_id_pgs = {
   '44ch224':2807,

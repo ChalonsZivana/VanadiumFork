@@ -1,7 +1,7 @@
 import type { PageServerLoad } from "../$types";
 import { error, fail } from "@sveltejs/kit";
 import { LydiaManager } from "$lib/server/lydia";
-import { LYDIA_VENDOR_KEY } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import prisma from "$lib/prisma";
 import { Taferie } from "$lib/server/classes/Taferie";
 import {
@@ -9,6 +9,8 @@ import {
   LydiaDemandFrontSchema,
   RechargementFamsSchema,
 } from "$lib/zodSchema";
+
+const {LYDIA_VENDOR_KEY} = env;
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (!locals.session.data.user) throw error(400);

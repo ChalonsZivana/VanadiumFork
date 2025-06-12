@@ -11,7 +11,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
-    "start": "node build"
+    "start": "node server.js"
   },
   "devDependencies": {
     "@iconify/svelte": "^4.0.2",
@@ -55,6 +55,7 @@
     "chart.js": "^3.9.1",
     "date-fns": "^4.1.0",
     "exceljs": "^4.4.0",
+    "express": "^5.1.0",
     "mysql2": "^3.9.1",
     "npm": "^10.5.1",
     "npx": "^10.2.2",

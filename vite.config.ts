@@ -9,4 +9,5 @@ export default defineConfig({
     purgeCss(),
     Icons({ autoInstall: true, compiler: "svelte" }),
   ],
+
 });

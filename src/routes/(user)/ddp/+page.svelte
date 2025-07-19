@@ -15,22 +15,10 @@
   function copyEmail(email: string) {
     navigator.clipboard.writeText(email);
   }
-
-  let promo = data.USER.pg.proms;
-
-	function telechargerExcel() {
-		const url = `/api/ddpSoldeProms/?promo=${encodeURIComponent(promo)}`;
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = `Solde_Promo_${promo}.xlsx`;
-		a.click();
-	}
-  
 </script>
 
 <div class="w-11/12 mt-5 mb-5">
   <Negats negats={data.negats} />
-  <button on:click={telechargerExcel} class="bg-red-600 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-full">Télécharger Excel</button>
 </div>
 
 <div class="w-11/12 card m">

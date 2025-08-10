@@ -16,13 +16,16 @@
     navigator.clipboard.writeText(email);
   }
 
-  let promo = data.USER.pg.proms;
+  /*Ajout Manip DDP*/
+  let promo = data.USER.pg.proms; /*Variable contenant la promo du DDP*/
 
 	function telechargerExcel() {
-		const url = `/api/ddpSoldeProms/?promo=${encodeURIComponent(promo)}`;
+		const url = `/api/ddpSoldeProms/?promo=${encodeURIComponent(promo)}`; /*Permet -à l'API pour télécharger l'excel- de récupérer la variable promo*/
+
+    /*Machin obligatoire, copié collé ChatGPT*/
 		const a = document.createElement('a');
-		a.href = url;
-		a.download = `Solde_Promo_${promo}.xlsx`;
+		a.href = url; /*Fait la liaison entre ce fichier et src/routes/api/ddpSoldeProms/+server.ts */
+		a.download = `Solde_Promo_${promo}.xlsx`; /*téléchargement du fichier avec le nom adapté*/
 		a.click();
 	}
   
@@ -30,7 +33,10 @@
 
 <div class="w-11/12 mt-5 mb-5">
   <Negats negats={data.negats} />
+
+  <!---Ajout Manip DDP-->
   <button on:click={telechargerExcel} class="bg-red-600 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-full">Télécharger Excel</button>
+  <!---Fin Manip DDP-->
 </div>
 
 <div class="w-11/12 card m">

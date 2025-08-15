@@ -13,7 +13,8 @@
   export let consommations: ConsommationsIncludeType[];
 
   function isLessThanAMonthOld(date: Date) {
-    return new Date().getTime() - date.getTime() < 30 * 24 * 60 * 60 * 1000;
+    /*Fonction pour avoir la possibilité d'annuler des rhopses récentes*/
+    return new Date().getTime() - date.getTime() < 365 * 24 * 60 * 60 * 1000;
   }
 
   function getFrom(e: ConsommationsIncludeType) {

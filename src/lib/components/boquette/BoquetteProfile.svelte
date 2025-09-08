@@ -9,7 +9,7 @@
 
   let specialRhopse: null | string;
   $: {
-    specialRhopse = `boquette-${boquette.id_boquette}/special/rhopses`;
+    specialRhopse = `/boquette-${boquette.id_boquette}/special/rhopses`;
   }
   let dialog: HTMLDialogElement;
 </script>

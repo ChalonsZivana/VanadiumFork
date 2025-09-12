@@ -56,6 +56,7 @@
     5:"hugeicons:suit-01",
     7: "healthicons:alcohol-cessation",
     8: "mdi:tshirt-crew",
+    10: "ri:beer-line",
     14: "game-icons:tacos",
     17: "mdi:chips",
     20: "tabler:coin-euro",

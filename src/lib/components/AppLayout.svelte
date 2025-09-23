@@ -67,7 +67,9 @@
     196: "mdi:egg",
     197: "mdi:salt",
     223: "noto:castle",
-    1111:"game-icons:bowie-knife"
+    1111:"game-icons:bowie-knife",
+    150:"mdi:cigar",
+    200:"game-icons:water-tank"
   };
 
   let boquettes_panel: HTMLElement;

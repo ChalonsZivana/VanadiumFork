@@ -69,7 +69,8 @@
     223: "noto:castle",
     1111:"game-icons:bowie-knife",
     150:"mdi:cigar",
-    200:"game-icons:water-tank"
+    200:"game-icons:water-tank",
+    149:"eos-icons:rotating-gear"
   };
 
   let boquettes_panel: HTMLElement;

@@ -32,13 +32,20 @@ export async function consommationsSearch(
     from_pg: { ...whereNums, ...whereProms },
   };
 
+ const whereLibelle: Prisma.consommationsWhereInput = data.libelle ? {
+    libelle: {contains: data.libelle, mode: 'insensitive'}
+  } : {}
+
   const whereType = types ? (types.length > 1 ? { OR: types } : types[0]) : {};
 
   const where: Prisma.consommationsWhereInput = {
     ...whereDate,
     ...wherePg,
     ...whereType,
+    ...whereLibelle
   };
+
+ 
 
   let orderBy:
     | { date_conso: "asc" | "desc" }

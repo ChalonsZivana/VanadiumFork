@@ -38,6 +38,12 @@
             ><input class="w-32" type="number" name="proms" /></slot
           >
         </label>
+        <label>
+          <p class="text-white">Libellé</p>
+          <slot name="libelle"
+            ><input class="w-32" type="string" name="libelle" /></slot
+          >
+        </label>
       </div>
       <select name="sortType" value="date">
         <option value="date">Date/Heure</option>

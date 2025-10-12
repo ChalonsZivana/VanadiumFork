@@ -163,6 +163,7 @@ export const ConsommationsSchema = z.object({
       (e) =>
         Object.values(consommations_type).includes(e as any) || e == "Tout",
     ),
+  libelle:z.string().optional(),
   consoYear: z
     .string()
     .default("NaN")

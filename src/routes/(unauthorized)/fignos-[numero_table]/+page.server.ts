@@ -1,21 +1,23 @@
 import prisma from "$lib/prisma";
-import { RhopseSchema, RhopseSchemaFignos } from "$lib/zodSchema.js";
+import { RhopseSchemaFignos } from "$lib/zodSchema.js";
 import { error, fail } from "@sveltejs/kit";
 import Twilio from "twilio";
 
 const accountSid = "AC926d01b1dace4d670f34b2a617cf32d1";
 const authToken = "92869824d3229f990e7da757f855da21";
-const client = new Twilio.Twilio(accountSid, authToken);
+const client = new Twilio(accountSid, authToken);
 
 export async function load({ params }) {
   const numero_table = parseInt(params.numero_table);
   if (isNaN(numero_table)) throw error(404);
 
-  let categories = await prisma.categories.findMany({
-    where: { id_boquette: 223, id_categorie: 132 },
+  // Récupération des deux catégories
+  const categories = await prisma.categories.findMany({
+    where: { id_boquette: 223, id_categorie: { in: [132, 169] } },
     orderBy: { nom: "asc" },
   });
-  let produits = await prisma.produits.findMany({
+
+  const produits = await prisma.produits.findMany({
     where: { id_boquette: 223 },
     orderBy: { nom: "asc" },
   });
@@ -48,6 +50,7 @@ export const actions = {
         };
       }),
     );
+
     if (!produits.every((e) => e !== null)) return { success: false };
 
     for (let prod of produits) {
@@ -56,18 +59,10 @@ export const actions = {
           type: "ext_boq",
           from: numero_table,
           to: 223,
-          libelle: `Table ${numero_table}:${prod.prod?.nom} ${prod.q}    - Paiement ${data.mode_paiement}`,
+          libelle: `Table ${numero_table}:${prod.prod?.nom} ${prod.q} - Paiement ${data.mode_paiement}`,
         },
       });
     }
-    // client.messages
-    //   .create({
-    //               from: 'whatsapp:+14155238886',
-    //       contentSid: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
-    //       contentVariables: '{"1":"12/1","2":"3pm"}',
-    //       to: 'whatsapp:+33768969314'
-    //   })
-    //   .then(message => console.log(message.sid, message.errorCode));
 
     return { success: true };
   },

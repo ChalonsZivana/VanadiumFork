@@ -1,8 +1,6 @@
 /*On importe le client pour pouvoir communiquer avec Prisma, ainsi que la bibliothèque JavaScript ExcelJS, pour pouvoir manipuler le fichier Excel à créer*/
-import { PrismaClient } from '@prisma/client';
-import ExcelJS from 'exceljs';
-
-const prisma = new PrismaClient();
+import prisma from "$lib/prisma";
+import ExcelJS from "exceljs";
 
 export async function GET({ url }) {  /*url est définit à la page src/routes/(user)/ddp/+page.svelte, c'est un paramètre de type URL qui peut-être utilisé dans la fonction GET*/
   try {

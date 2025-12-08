@@ -5,7 +5,7 @@ import { Database } from "$lib/server/classes/Database";
 import { topNegatsSchema } from "$lib/zodSchema";
 import { error } from "@sveltejs/kit";
 
-const currentProms = [222, 223, 224];
+const currentProms = [223, 224, 225];
 
 export const load: PageServerLoad = async () => {
   return {

@@ -25,9 +25,9 @@ export const load = async ({ params }) => {
     }),
     boquette,
     proms: {
-      222: await Database.getNumsInProms(222),
       223: await Database.getNumsInProms(223),
       224: await Database.getNumsInProms(224),
+      225: await Database.getNumsInProms(225),
     },
   };
 };

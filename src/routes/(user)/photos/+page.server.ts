@@ -31,7 +31,7 @@ export const actions = {
   },
   deletePhoto: async ({ request, locals }) => {
     //2625=89cH223
-    if (!locals.session.data.user || locals.session.data.user.pg.id_pg !== 2625)
+    if (!locals.session.data.user || locals.session.data.user.pg.id_pg !== 2777)
       return fail(400);
 
     const formData = await request.formData();

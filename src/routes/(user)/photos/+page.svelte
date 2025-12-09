@@ -207,7 +207,7 @@
       <img src={`${curPhot.photo.url}`} alt="">
       
       <!-- LeMe -->
-      {#if data.USER.pg.id_pg == 2625}
+      {#if data.USER.pg.id_pg == 2777}
         <form on:submit={()=>dialogOpen=false} use:enhance class="absolute top-0 right-0" method="post" action="?/deletePhoto">
           <input type="hidden" name="photoSrc" value={curPhot.photo.key} />
           <button><Icon class="text-3xl" icon="mdi:delete" /></button>

@@ -5,7 +5,7 @@ import Twilio from "twilio";
 
 const accountSid = "AC926d01b1dace4d670f34b2a617cf32d1";
 const authToken = "92869824d3229f990e7da757f855da21";
-const client = new Twilio(accountSid, authToken);
+const client = Twilio(accountSid, authToken);
 
 export async function load({ params }) {
   const numero_table = parseInt(params.numero_table);
@@ -59,7 +59,7 @@ export const actions = {
           type: "ext_boq",
           from: numero_table,
           to: 223,
-          libelle: `Table ${numero_table}:${prod.prod?.nom} ${prod.q} - Paiement ${data.mode_paiement}`,
+          libelle: `Table ${numero_table}:${prod.prod?.nom} X ${prod.q} - Paiement ${data.mode_paiement}`,
         },
       });
     }

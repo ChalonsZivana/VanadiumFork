@@ -3,7 +3,7 @@ import { error } from "@sveltejs/kit";
 import { z } from "zod";
 
 
-const fromage = z.enum(['tomme noir','morbier','raclette']);
+const fromage = z.enum(['tomme noir','morbier','raclette','sans fromage']);
 const saucisson = z.enum([
   'pur porc','noix','noisettte/noix','beaufort','canard','cèpes','sec','provençal','sanglier','bleu','piment','chorizo',
   'halal-chorizo','halal-olive','halal-nature'

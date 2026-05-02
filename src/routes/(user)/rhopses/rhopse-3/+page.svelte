@@ -43,7 +43,7 @@
             <p class="h2 text-center">Fromage</p>
           </div>
       
-          <section class="p-4 flex gap-2 w-80">
+          <section class="p-4 flex flex-wrap gap-2 w-80">
             {#each data.fromages as c}
               <button
                 class="chip {fromage === c ? 'variant-filled-primary' : 'variant-filled-secondary'}"

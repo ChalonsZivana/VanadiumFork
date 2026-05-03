@@ -197,7 +197,7 @@
 
 
 
-{#if dialogOpen && currentPhotoIndex}
+{#if dialogOpen && currentPhotoIndex !== null}
 {@const curPhot = photosWithOrientations[currentPhotoIndex]}
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->

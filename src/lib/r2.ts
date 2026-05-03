@@ -73,13 +73,12 @@ export async function listImages() {
   });
   const response = await s3.send(command);
 
-  const files =
-    response.Contents?.map((item) => ({
-      key: item.Key,
-      lastModified: item.LastModified,
-      size: item.Size,
-      url: `${R2_PUBLIC_URL}/${item.Key}`,
-    })) || [];
+  const files = response.Contents?.map((item) => ({
+    key: item.Key,
+    lastModified: item.LastModified,
+    size: item.Size,
+    url: `${R2_PUBLIC_URL}/${item.Key}`,
+  })).sort((a, b) => (b.key ?? "").localeCompare(a.key ?? "")) || [];
 
   return files;
 }

@@ -104,7 +104,7 @@
               {/if}
           {:else}
             <div class="card variant-filled-error p-2">
-              <p>Le rechargement Lydia est zocqué pour le moment. Les TAFs sont disponibles pour recharger via CV et Liquide.</p>
+              <p>01110000 01101000 01101111 01110100 01101111 00100000 01110110 01100001 01101110 01100001</p>
             </div>
           {/if}
         </svelte:fragment>

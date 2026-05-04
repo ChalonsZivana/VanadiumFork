@@ -11,7 +11,9 @@ declare global {
 const prisma =
   global.prisma ??
   new PrismaClient({
-    log: ["query", "info", "warn", "error"], // optionnel, utile en dev
+    log: process.env.NODE_ENV === "development"
+    ? ["warn", "error"]
+    : ["error"]
   });
 
 // On stocke l'instance globalement pour le hot reload en dev

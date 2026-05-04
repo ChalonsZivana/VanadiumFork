@@ -25,7 +25,7 @@ export const load = async ({ params }) => {
     }),
     boquette,
     proms: {
-      223: await Database.getNumsInProms(223),
+      223: await Database.getNumsInProms(223), //Numéros à changer pour pouvoir rhopser les prom's au Tabagn's
       224: await Database.getNumsInProms(224),
       225: await Database.getNumsInProms(225),
     },

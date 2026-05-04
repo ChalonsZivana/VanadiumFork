@@ -5,7 +5,7 @@ import { Database } from "$lib/server/classes/Database";
 import { topNegatsSchema } from "$lib/zodSchema";
 import { error } from "@sveltejs/kit";
 
-const currentProms = [223, 224, 225];
+const currentProms = [223, 224, 225]; // Numéros des promotions actuelles (à modifier à l'arrivée des nouvelles proms)
 
 export const load: PageServerLoad = async () => {
   return {

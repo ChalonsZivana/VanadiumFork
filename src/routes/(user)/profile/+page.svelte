@@ -11,7 +11,7 @@
   export let form;
 
   const dossiersGifs = {
-    "gifs filles": "gif",
+    "gifs fums": "gif",
     "gifs garçons": "gifF",
     "gifs mixte": "gifHF",
     "photos animaux": "animaux",

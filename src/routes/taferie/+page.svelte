@@ -132,7 +132,7 @@
               class="cursor-pointer"
             >
               <th class="p-2">
-                <Special special={[11, 89, 111].includes(e.pg.nums ?? -1)}>
+                <Special special={[27, 73, 127].includes(e.pg.nums ?? -1)}>
                   {e.pg.nums}Ch{e.pg.proms}
                 </Special>
               </th>
@@ -311,7 +311,7 @@
             class="cursor-pointer divide-x-2 divide-white"
           >
             <th class="p-2">
-              <Special special={[11, 89, 111].includes(e.nums ?? -1)}>
+              <Special special={[27, 73, 127].includes(e.nums ?? -1)}>
                 {e.nums}Ch{e.proms}
               </Special>
             </th>

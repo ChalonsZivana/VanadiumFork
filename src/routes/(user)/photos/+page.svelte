@@ -96,7 +96,7 @@
   <input
     type="text"
     bind:value={searchQuery}
-    placeholder="Rechercher par tag..."
+    placeholder="Rechercher par tag (nums, boquette, manip)..."
     class="input input-bordered w-full max-w-md rounded-lg px-3 py-2 border border-gray-400"
   />
 </div>
@@ -108,6 +108,7 @@
         on:click={() => {
           currentPhotoIndex = photosWithOrientations.indexOf(photo);
           dialogOpen = true;
+          newTagInput = "";
         }}
         class="relative size-full {photo.mode == 'landscape' ? 'col-span-2' : ''} flex place-items-center place-content-center transition-all duration-1000 border-black border-solid border-2"
       >
@@ -176,13 +177,13 @@
 
       <!-- Add tag -->
       <form use:enhance method="post" action="?/addTag" class="flex gap-2">
-        <input type="hidden" name="image_key" value={curPhot.photo.key} />
+        <input type="hidden" name="image_key" value={curPhot.photo.key}/>
         <input
           type="text"
           name="tag"
           bind:value={newTagInput}
-          placeholder="Ajouter un tag..."
-          class="border rounded px-2 py-1 text-sm flex-1"
+          placeholder="Ajouter un tag (nums, boquette, manip)..."
+          class="border rounded px-2 py-1 text-sm flex-1 text-black"
         />
         <button type="submit" class="bg-blue-500 text-white rounded px-3 py-1 text-sm">+</button>
       </form>

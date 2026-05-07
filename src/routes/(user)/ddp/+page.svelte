@@ -53,7 +53,7 @@
           >
             <tr class="text-xxs" slot="tbody" let:e>
               <th class="p-2">
-                <Special special={[11, 89, 111].includes(e.nums ?? -1)}>
+                <Special special={[27, 73, 127].includes(e.nums ?? -1)}>
                   {e.nums}Ch{e.proms}
                 </Special>
               </th>

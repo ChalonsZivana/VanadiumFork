@@ -46,7 +46,7 @@
       >
         <tr slot="tbody" let:e>
           <th class="p-2">
-            <Special special={[11, 89, 111].includes(e.pg.nums ?? -1)}>
+            <Special special={[27, 73, 127].includes(e.pg.nums ?? -1)}>
               {e.pg.nums}Ch{e.pg.proms}
             </Special>
           </th>

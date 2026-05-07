@@ -91,7 +91,7 @@
           type="number"
           min="2017"
           max={new Date().getFullYear()}
-          placeholder="Année: 1989"
+          placeholder="Année: 1973"
         />
       </label>
 

@@ -21,7 +21,7 @@
     <p>Nom: {user.pg.nom}</p>
     <p>Bucque: {user.pg.bucque}</p>
 
-    <Special special={[11, 89, 111].includes(user.pg.nums ?? -1)}>
+    <Special special={[27, 73, 127].includes(user.pg.nums ?? -1)}>
       <p>Nums: {user.pg.nums}</p>
     </Special>
     <p>Proms: {user.pg.proms}</p>

@@ -32,7 +32,7 @@
           class="w-full p-1 rounded-lg text-black"
           type="text"
           name="libelle"
-          placeholder="Y'a qu'la Fams 11 qui pine"
+          placeholder="pk tu fais ça??"
         />
       </label>
       <div class="flex justify-center w-full">

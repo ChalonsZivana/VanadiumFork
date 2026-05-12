@@ -38,6 +38,19 @@ export const actions = {
       data: { mot_de_passe: hashPassword(newPassword) },
     });
   },
+  change_bucque: async ({ locals, request }) => {
+    const data = await request.formData();
+    const bucque = data.get("bucque")?.toString();
+
+    if (!bucque || bucque.trim() === "") {
+      return fail(400, { bucque_missing: true });
+    }
+
+    await prisma.pg.update({
+      where: { id_pg: locals.session.data.user?.pg.id_pg },
+      data: { bucque: bucque.trim() },
+    });
+  },
   create_user: async ({ locals }) => {
     const pg = locals.session.data.user?.pg;
     if (!pg) return {};

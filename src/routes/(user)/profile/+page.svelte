@@ -42,7 +42,24 @@
     class="mt-5 h-full w-80 md:w-11/12 flex flex-col md:grid gap-5 grid-cols-2 grid-rows-2"
   >
     <Profile user={data.USER}>
-      <form method="post">
+      <form method="post" class="flex flex-col gap-2">
+        <div class="flex gap-2 items-center">
+          <input
+            name="bucque"
+            class="text-black rounded-md px-2 py-1 text-sm w-40"
+            type="text"
+            placeholder={data.USER.pg.bucque ?? "Pas de bucque"}
+          />
+          <button
+            formaction="?/change_bucque"
+            class="btn-sm variant-filled-primary rounded-md text-sm"
+          >
+            Changer bucque
+          </button>
+        </div>
+        {#if form?.bucque_missing}
+          <p class="text-red-500 text-sm">La bucque ne peut pas être rien</p>
+        {/if}
         <ValidationButton text="Se déconnecter" formaction="/login?/logout" />
       </form>
     </Profile>

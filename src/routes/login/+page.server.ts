@@ -16,6 +16,10 @@ function parseUsername(str: string): [string, string, string] | null {
   return [num1, word, num2];
 }
 
+function toEnumCase(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 export const actions = {
   login: async ({ request, locals }: RequestEvent) => {
     const data = await request.formData();
@@ -27,7 +31,8 @@ export const actions = {
     }
     const encodedPswd = hashPassword(password);
 
-    const [nums, tabagns, proms] = parseUsername(uid) as string[];
+    const [nums, tabagnsRaw, proms] = parseUsername(uid) as string[];
+    const tabagns = toEnumCase(tabagnsRaw)
 
     if (!Object.values(tabagnsEnum).includes(tabagns as tabagnsEnum)) {
       return fail(400, { uid, wrong: true });

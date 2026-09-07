@@ -3,8 +3,18 @@ import { redirect, fail } from "@sveltejs/kit";
 import { getPGPassword } from "$lib/server/db_connection.js";
 import { createUser, hashPassword } from "$lib/server/auth.js";
 import { env } from "$env/dynamic/private";
+import { tabagns as tabagnsEnum } from '@prisma/client'
 
 const {ZIVANA_MDP} = env;
+const liste_tabagns = ['ch', 'an', 'ai', 'cl', 'li', 'bo', 'me', 'ka', 'ext'];
+
+function parseUsername(str: string): [string, string, string] | null {
+  const word = liste_tabagns.find((w) => str.includes(w));
+  if (!word) return null;
+
+  const [num1, num2] = str.split(word);
+  return [num1, word, num2];
+}
 
 export const actions = {
   login: async ({ request, locals }: RequestEvent) => {
@@ -17,12 +27,13 @@ export const actions = {
     }
     const encodedPswd = hashPassword(password);
 
-    if(!uid.toLowerCase().includes('ch')){
+    const [nums, tabagns, proms] = parseUsername(uid) as string[];
+
+    if (!Object.values(tabagnsEnum).includes(tabagns as tabagnsEnum)) {
       return fail(400, { uid, wrong: true });
     }
 
-    const [nums, proms] = uid.toLowerCase().split("ch") as string[];
-    const userPswd = await getPGPassword(parseInt(nums), parseInt(proms));
+    const userPswd = await getPGPassword(parseInt(nums), tabagns as tabagnsEnum, parseInt(proms));
 
     if (!userPswd) {
       return fail(400, { nums, proms, missing: true });

@@ -11,7 +11,7 @@ export const actions = {
     if (!data.success) throw fail(400, data.error.format());
 
     const user = await prisma.pg.findFirst({
-      where: { nums: data.data.nums, proms: data.data.proms },
+      where: { nums: data.data.nums, tabagns: data.data.tabagns, proms: data.data.proms },
     });
 
     if (user)

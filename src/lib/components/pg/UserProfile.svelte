@@ -26,6 +26,8 @@
     </Special>
     <p>Proms: {user.pg.proms}</p>
     <p>Email: {user.pg.email}</p>
+    <p>Tabagns: {user.pg.tabagns}</p>
+    
 
     <div class="flex justify-around">
       {#each Object.entries(soldes) as [title, solde]}

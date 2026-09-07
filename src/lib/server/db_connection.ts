@@ -1,4 +1,5 @@
 import prisma from "$lib/prisma";
+import type { tabagns } from "@prisma/client";
 import { Fams } from "./classes/Fams";
 import type { Top } from "./db_structs";
 
@@ -7,10 +8,10 @@ export async function getFams(nums: number) {
   return prisma.fams.findFirst({ where: { nums: fams.ID } });
 }
 
-export const getPGPassword = async (nums: number, proms: number) => {
+export const getPGPassword = async (nums: number, tabagns: tabagns, proms: number) => {
   const data = await prisma.pg.findFirst({
     select: { id_pg: true, mot_de_passe: true },
-    where: { nums: nums, proms: proms },
+    where: { nums: nums, tabagns: tabagns, proms: proms },
   });
   return data;
 };

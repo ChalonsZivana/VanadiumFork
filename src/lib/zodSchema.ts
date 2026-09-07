@@ -1,5 +1,6 @@
-import { consommations_type } from "@prisma/client";
+import { consommations_type, tabagns } from "@prisma/client";
 import { number, z } from "zod";
+
 
 export const EditBoquetteSchema = z
   .object({
@@ -91,7 +92,7 @@ export const InscriptionSchema = z
     nom: z.string(),
     solde: z.string(),
     bucque: z.string(),
-    tabagns: z.string(),
+    tabagns: z.nativeEnum(tabagns),
   })
   .transform((data) => ({
     ...data,

@@ -85,6 +85,15 @@
             placeholder="SQRT"
           />
         </label>
+        <label class="w-11/12">
+          <p class="font-zagoth text-white">Tabagns :</p>
+          <input
+            type="text"
+            name="tabagns"
+            class="w-full rounded-md p-1"
+            placeholder="Ch"
+          />
+        </label>
       </div>
 
       <MyButton value="Créer le compte" callback={() => dialog.show()} />

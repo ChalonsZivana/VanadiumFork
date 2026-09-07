@@ -23,7 +23,6 @@ export const actions = {
     await prisma.pg.create({
       data: {
         ...data.data,
-        tabagns: "Ch",
         mot_de_passe: hashPassword(data.data.nums.toString()),
       },
     });

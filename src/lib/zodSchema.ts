@@ -91,6 +91,7 @@ export const InscriptionSchema = z
     nom: z.string(),
     solde: z.string(),
     bucque: z.string(),
+    tabagns: z.string(),
   })
   .transform((data) => ({
     ...data,
@@ -98,6 +99,8 @@ export const InscriptionSchema = z
     proms: parseInt(data.proms),
     solde: parseFloat(data.solde),
     bucque: data.bucque.length == 0 ? "SQRT" : data.bucque,
+    tabagns: data.tabagns.length == 0 ? "Ch" : data.tabagns,
+
   }))
   .refine(
     (data) => {

@@ -162,7 +162,7 @@ CREATE TABLE `pg` (
     `prenom` VARCHAR(35) NOT NULL,
     `bucque` VARCHAR(35) NOT NULL,
     `nums` INTEGER NOT NULL,
-    `tabagns` ENUM('Ch', 'An', 'Ai', 'Cl', 'Li', 'Bo', 'Me', 'Ka') NOT NULL,
+    `tabagns` ENUM('Ch', 'An', 'Ai', 'Cl', 'Li', 'Bo', 'Me', 'Ka','Ext') NOT NULL,
     `proms` INTEGER NOT NULL,
     `email` VARCHAR(200) NOT NULL,
     `solde` DOUBLE NOT NULL DEFAULT 0.00,

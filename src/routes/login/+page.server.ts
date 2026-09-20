@@ -9,10 +9,13 @@ const {ZIVANA_MDP} = env;
 const liste_tabagns = ['ch', 'an', 'ai', 'cl', 'li', 'bo', 'me', 'ka', 'ext'];
 
 function parseUsername(str: string): [string, string, string] | null {
-  const word = liste_tabagns.find((w) => str.includes(w));
+  const lower = str.toLowerCase();
+  const word = liste_tabagns.find((w) => lower.includes(w));
   if (!word) return null;
 
-  const [num1, num2] = str.split(word);
+  const idx = lower.indexOf(word);
+  const num1 = str.slice(0, idx);
+  const num2 = str.slice(idx + word.length);
   return [num1, word, num2];
 }
 

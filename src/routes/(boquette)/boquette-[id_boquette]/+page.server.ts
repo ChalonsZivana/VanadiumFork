@@ -73,6 +73,23 @@ export const actions = {
     if (!data.success)
       return fail(400, { success: false, message: "Something went wrong" });
 
+    // on vérifie que personne dans l'excel n'a un solde négatif avant de commencer
+    const idsPg = [...new Set(data.data.produits.map(([id_pg]) => id_pg))];
+    const pgs = await prisma.pg.findMany({
+      where: { id_pg: { in: idsPg } },
+      select: { id_pg: true, nums: true, proms: true, solde: true },
+    });
+
+    const negatifs = pgs.filter((p) => p.solde < 0);
+    if (negatifs.length > 0) {
+      return fail(400, {
+        success: false,
+        message:
+          `Import annulé, solde négatif pour :\n` +
+          negatifs.map((p) => `${p.nums}ch${p.proms} (${p.solde}€)`).join("\n"),
+      });
+    }
+
     const results: Awaited<ReturnType<typeof Taferie.rhopse>>[] = [];
 
     for (let [id_pg, id_produit, quantite, rhopsePourUnAncien] of data.data
@@ -95,6 +112,7 @@ export const actions = {
       results,
     };
   },
+  
   doInventory: async ({ request, params }) => {
     const id_boquette = parseInt(params.id_boquette);
     if (!id_boquette) throw error(400);

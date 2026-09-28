@@ -170,7 +170,7 @@ export class Taferie {
           data: { annule: cancel },
         });
         return { success: true, message: "rhopse annulée" };
-      });
+      }, { timeout: 15000 }); //timeout 15000 pcq par défaut 5000ms et ça marche pas en npm run dev
     } catch (e) {
       return { success: false, message: "an error occured" };
     }
@@ -221,7 +221,7 @@ export class Taferie {
           return { success: false, message: `Solde insuffisant` };
       }
 
-      if (!pg.can_buy && !authorize_all)
+      if ((!pg.can_buy && !authorize_all) || pg.solde < 0)
         return { success: false, message: `Solde Insuffisant: ${libelle}` };
     }
 
@@ -345,7 +345,7 @@ export class Taferie {
           data: { solde_apres },
         });
         sendPush("Rhopse", `${libelle} - ${montant}`);
-      });
+      }, { timeout: 15000 });
 
       return { success: true, message: `Rhopse effectuée: ${data.libelle}` };
     } catch (e) {

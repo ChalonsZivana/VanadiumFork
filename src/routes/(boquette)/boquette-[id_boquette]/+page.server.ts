@@ -74,20 +74,50 @@ export const actions = {
       return fail(400, { success: false, message: "Something went wrong" });
 
     // on vérifie que personne dans l'excel n'a un solde négatif avant de commencer
-    const idsPg = [...new Set(data.data.produits.map(([id_pg]) => id_pg))];
-    const pgs = await prisma.pg.findMany({
-      where: { id_pg: { in: idsPg } },
-      select: { id_pg: true, nums: true, proms: true, solde: true },
-    });
+    // toggle ON : personne dans l'excel ne doit finir en négatif, sinon on n'importe rien
+    if (await Taferie.negatsZocque()) {
+      const lignes = data.data.produits;
+      const idsPg = [...new Set(lignes.map(([id_pg]) => id_pg))];
+      const idsProduits = [...new Set(lignes.map(([, id_produit]) => id_produit))];
 
-    const negatifs = pgs.filter((p) => p.solde < 0);
-    if (negatifs.length > 0) {
-      return fail(400, {
-        success: false,
-        message:
-          `Import annulé, solde négatif pour :\n` +
-          negatifs.map((p) => `${p.nums}ch${p.proms} (${p.solde}€)`).join("\n"),
+      const pgs = await prisma.pg.findMany({
+        where: { id_pg: { in: idsPg } },
+        select: { id_pg: true, nums: true, proms: true, solde: true },
       });
+      const produits = await prisma.produits.findMany({
+        where: { id_produit: { in: idsProduits } },
+        select: { id_produit: true, prix: true, prix2: true },
+      });
+      const prixParProduit = new Map(
+        produits.map((p) => [p.id_produit, p.prix + p.prix2]),
+      );
+
+      // total dépensé par pg sur toutes ses lignes
+      const depense = new Map<number, number>();
+      for (const [id_pg, id_produit, quantite] of lignes) {
+        const prix = prixParProduit.get(id_produit);
+        if (prix == null) continue; // produit inconnu : Taferie.rhopse renverra l'erreur
+        depense.set(id_pg, (depense.get(id_pg) ?? 0) + quantite * prix);
+      }
+
+      const bloquants = pgs.filter((p) => {
+        const total = depense.get(p.id_pg) ?? 0;
+        return total > 0 && p.solde - total < 0;
+      });
+
+      if (bloquants.length > 0) {
+        return fail(400, {
+          success: false,
+          message:
+            `Import annulé, solde insuffisant pour : ` +
+            bloquants
+              .map((p) => {
+                const total = depense.get(p.id_pg) ?? 0;
+                return `${p.nums}ch${p.proms} (solde ${p.solde.toFixed(2)}€, total ${total.toFixed(2)}€)`;
+              })
+              .join(", "),
+        });
+      }
     }
 
     const results: Awaited<ReturnType<typeof Taferie.rhopse>>[] = [];

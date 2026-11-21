@@ -22,6 +22,9 @@ export const load = async ({ locals }) => {
       vanazocque: await prisma.config.findFirst({
         where: { nom: "vanazocque" },
       }),
+      rhopsenegatszocque: await prisma.config.findFirst({
+        where: { nom: "rhopsenegatszocque" },
+}),
     },
     USER: locals.session.data.user,
     BOQUETTES_IDS,

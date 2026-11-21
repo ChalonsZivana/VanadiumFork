@@ -59,6 +59,19 @@ export const actions = {
       topNegats: await getTopNegats(data.data.proms),
     };
   },
+  rhopsenegatszocque: async ({ request }) => {
+    const data = await request.formData();
+    const bool = (data.get("rhopsenegatszocque") ?? "") == "on" ? "1" : "0";
+
+    const r = await prisma.config.updateMany({
+      where: { nom: "rhopsenegatszocque" },
+      data: { valeur: bool },
+    });
+    if (r.count == 0)
+      await prisma.config.create({
+        data: { nom: "rhopsenegatszocque", valeur: bool },
+      });
+  },
   specialAction: async ({ request }) => {
     return { success: true, message: `Action spéciale` };
   },

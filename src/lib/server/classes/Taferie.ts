@@ -176,6 +176,14 @@ export class Taferie {
     }
   }
 
+  static async negatsZocque(): Promise<boolean> {
+    const cfg = await prisma.config.findFirst({
+      where: { nom: "rhopsenegatszocque" },
+    });
+    // zocqué par défaut (ligne absente ou valeur != "0")
+    return cfg?.valeur !== "0";
+  }
+
   static async rhopse(
     d: pg_ext | ext_ | _to | pg_boq,
     authorize_all = false,
@@ -205,7 +213,9 @@ export class Taferie {
     if (Math.abs(montant) > 100_000)
       return { success: false, message: `Montant trop élevé` };
 
-    // on vérifie que le pg peut faoire la transaction
+    let negatSolde: number | null = null; // set when the transaction puts the pg in the negat's
+
+    // on vérifie que le pg peut faire la transaction
     if (
       (d.type == "pg_ext" ||
         d.type == "pg_fams" ||
@@ -221,8 +231,20 @@ export class Taferie {
           return { success: false, message: `Solde insuffisant` };
       }
 
-      if ((!pg.can_buy && !authorize_all) || pg.solde < 0)
-        return { success: false, message: `Solde Insuffisant: ${libelle}` };
+      if (!pg.can_buy && !authorize_all)
+        return {
+          success: false,
+          message: `Solde Insuffisant (${pg.nums}ch${pg.proms}): ${libelle}`,
+        };
+
+      if (pg.solde + montant < 0) {
+        if (await Taferie.negatsZocque())
+          return {
+            success: false,
+            message: `Solde Insuffisant (${pg.nums}ch${pg.proms}): ${libelle}`,
+          };
+        negatSolde = pg.solde + montant;
+      }
     }
 
     const data: Prisma.consommationsCreateArgs["data"] = {
@@ -287,7 +309,7 @@ export class Taferie {
             break;
           }
           case "pg_boq": {
-            const prod = await prisma.produits.findFirst({
+            const prod = await p.produits.findFirst({
               where: { id_produit: d.id_produit },
             });
 
@@ -347,7 +369,14 @@ export class Taferie {
         sendPush("Rhopse", `${libelle} - ${montant}`);
       }, { timeout: 15000 });
 
-      return { success: true, message: `Rhopse effectuée: ${data.libelle}` };
+      return {
+        success: true,
+        message:
+          `Rhopse effectuée: ${data.libelle}` +
+          (negatSolde !== null
+            ? `Attention : le pg a été mis en négat's (${negatSolde.toFixed(2)})`
+            : ""),
+      };
     } catch (e) {
       return { success: false, message: "Erreur" };
     }

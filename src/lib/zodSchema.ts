@@ -73,7 +73,8 @@ export const ImportRhopseSchema = z.object({
         z
           .array(
             z.tuple([
-              z.number(),
+              // id_pg (nombre) ou fam's ("f27")
+              z.union([z.number(), z.string().regex(/^f\d+$/)]),
               z.number(),
               z.number(),
               z.union([z.string(), z.null()]),

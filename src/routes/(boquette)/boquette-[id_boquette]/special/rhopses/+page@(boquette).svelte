@@ -13,10 +13,14 @@
   const listProms = Object.keys(data.proms)
     .map((e) => parseInt(e))
     .sort((a, b) => a - b);
+  const listFams = Array.from({ length: 50 }, (_, i) => i + 1);
 
-
+  let fams: number | null = null;
   let pg: { nums: number; id_pg: number; anciens_autorises: string[] } | null =
     null;
+  // acheteur choisi : une fam's, ou un pg (proms + num)
+  $: ready = fams != null || (!!proms && !!pg);
+
   const listNums = () =>
     data.proms[proms as keyof typeof data.proms].sort(
       (a, b) => a.nums - b.nums,
@@ -32,6 +36,7 @@
   const reset = () => {
     pg = null;
     proms = null;
+    fams = null;
     product = null;
     (categorie = null), (isLoading = false);
   };
@@ -57,9 +62,11 @@
     <p class="text-5xl font-zagoth mt-5">Rhopse {data.boquette.nom}</p>
   </div>
 
-  {#if proms == undefined}
-    <p class="text-3xl font-zagoth mt-5">Choix Prom's</p>
-    <div class="mt-5 flex-grow w-full flex justify-around items-center">
+  {#if proms == undefined && fams == null}
+    <p class="text-3xl font-zagoth mt-5">
+      {data.famsBloque ? "Choix Prom's" : "Choix Prom's/Fam's"}
+    </p>
+    <div class="mt-5 w-full flex justify-around items-center">
       {#each listProms as p}
         <button
           on:click={() => (proms = p)}
@@ -67,10 +74,19 @@
         >
       {/each}
     </div>
+    {#if !data.famsBloque}
+      <div class="mt-5 flex-grow w-full grid gap-1 grid-cols-10">
+        {#each listFams as f}
+          <button
+            on:click={() => (fams = f)}
+            class="aspect-square rounded-md bg-fuchsia-700">{f}</button
+          >
+        {/each}
+      </div>
+    {/if}
   {/if}
 
   {#if proms && pg == undefined}
-    <!-- <p class="text-3xl font-zagoth mt-5">Choix Num's</p> -->
     <div class="mt-5 flex-grow w-full grid gap-1 grid-cols-10 grid-rows-[15]">
       {#each listNums() as n}
         {#if n.can_buy}
@@ -89,7 +105,7 @@
     </div>
   {/if}
 
-  {#if proms && pg && categorie == null}
+  {#if ready && categorie == null}
     <p class="text-3xl font-zagoth mt-5">Choix Categorie</p>
     <div class={choicesContainerClass}>
       {#each data.categories as cat}
@@ -100,7 +116,7 @@
     </div>
   {/if}
 
-  {#if proms && pg && categorie && product == null}
+  {#if ready && categorie && product == null}
     <p class="text-3xl font-zagoth mt-5">Choix Boisson</p>
     <div class={choicesContainerClass}>
       {#each getProducts as prod}
@@ -124,25 +140,36 @@
     action={`?/rhopse`}
   >
     <!-- Validation -->
-    {#if product && pg !== null}
+    {#if product && ready}
       <div hidden={product == null} class={choicesContainerClass}>
         <div class="text-4xl flex flex-col justify-center items-center gap-5">
           <p>Veux-tu rhopser</p>
-          <div class="flex justify-center items-center text-3xl">
-            {#key proms}
-              <select bind:value={pg} class={coloredClass}>
-                {#each listNums() as n}
-                  <option value={n}>{n.nums}</option>
+          {#if fams != null}
+            <div class="flex justify-center items-center text-3xl">
+              <p class="mr-2">la fam's</p>
+              <select bind:value={fams} class={coloredClass}>
+                {#each listFams as f}
+                  <option value={f}>{f}</option>
                 {/each}
               </select>
-            {/key}
-            <p class="mr-2 ml-2">ch</p>
-            <select bind:value={proms} class={coloredClass}>
-              {#each listProms as n}
-                <option value={n}>{n}</option>
-              {/each}
-            </select>
-          </div>
+            </div>
+          {:else}
+            <div class="flex justify-center items-center text-3xl">
+              {#key proms}
+                <select bind:value={pg} class={coloredClass}>
+                  {#each listNums() as n}
+                    <option value={n}>{n.nums}</option>
+                  {/each}
+                </select>
+              {/key}
+              <p class="mr-2 ml-2">ch</p>
+              <select bind:value={proms} class={coloredClass}>
+                {#each listProms as n}
+                  <option value={n}>{n}</option>
+                {/each}
+              </select>
+            </div>
+          {/if}
           <p>pour un</p>
           <select bind:value={product} class="{coloredClass} w-80 text-center">
             {#each getProducts as n}
@@ -158,18 +185,20 @@
               <option value={n}>{n.nom}</option>
             {/each}
           </select>
-          <select
-            bind:value={rhopse_ancien}
-            name="rhopse_ancien"
-            class="{coloredClass} w-80 text-center"
-          >
-            {#if pg != null}
+          {#if fams != null}
+            <input type="hidden" name="id_fams" value={`${fams}`} />
+          {:else if pg != null}
+            <select
+              bind:value={rhopse_ancien}
+              name="rhopse_ancien"
+              class="{coloredClass} w-80 text-center"
+            >
               {#each pg.anciens_autorises as n}
                 <option value={n}>{n}</option>
               {/each}
-            {/if}
-          </select>
-          <input type="hidden" name="id_pg" value={`${pg.id_pg}`} />
+            </select>
+            <input type="hidden" name="id_pg" value={`${pg.id_pg}`} />
+          {/if}
           <button type="submit" class="btn variant-filled-secondary text-3xl text-white">RHOPSER</button>
         </div>
       </div>

@@ -210,6 +210,7 @@ export class Boquette extends HasMoney {
         if (conso.to != this.ID) return null;
         break;
       case "pg_boq":
+      case "fams_boq":
         if (conso.to != this.ID) return null;
         break;
       default:

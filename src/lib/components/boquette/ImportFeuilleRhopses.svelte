@@ -22,12 +22,13 @@
   let fileInputRhopse: HTMLInputElement;
   let rhopses: {
     [key: string]: {
-      id_pg: number;
+      id_pg: number | null;
+      id_fams: number | null;
       quantite: number;
       id_produit: number;
       rhopseAncien: string | null;
       produit: produits;
-      pg: Partial<pg>;
+      pg: Partial<pg> | null;
     };
   } = {};
 
@@ -76,48 +77,83 @@
 
     if (extractedData.length == 0)
       return (errors.fileError = "Le fichier ne contient pas de rhopses");
-    let lastKnown: string = extractedData[0].PG;
-    extractedData.forEach((e) => {
-      if (e.PG != "" && e.PG != undefined) lastKnown = e.PG.toLowerCase();
-      const [nums, proms] = lastKnown.split("ch").map((e) => parseInt(e));
+      let lastKnown: string = String(extractedData[0].PG).toLowerCase().trim();
+      extractedData.forEach((e) => {
+        if (e.PG != "" && e.PG != undefined)
+          lastKnown = String(e.PG).toLowerCase().trim();
 
-      let rhopsePourUnAncien = null;
-      let pg = pgs.find((e) => e.nums == nums && e.proms == proms);
-      if (pg == undefined) {
-        pg = pgs.filter((e) => e.nums == nums)[0];
-        rhopsePourUnAncien = e.PG;
-      }
+        // fam's : "f27"
+        const famsMatch = /^f\s*(\d+)$/.exec(lastKnown);
+        if (famsMatch) {
+          const numFams = parseInt(famsMatch[1]);
+          const famsValide = numFams >= 1 && numFams <= 50;
+          if (isNaN(e.id_produit) || e.quantite <= 0 || !famsValide) {
+            errors.rhopsesError.push([
+              [e.index, false],
+              [lastKnown, !famsValide],
+              [e.produit, isNaN(e.id_produit)],
+              [e.quantite, e.quantite <= 0],
+              [e.id_produit, isNaN(e.id_produit)],
+            ]);
+            return;
+          }
+          const key = `f${numFams}-${e.id_produit}`;
+          if (key in rhopses) {
+            rhopses[key].quantite += e.quantite;
+          } else {
+            rhopses[key] = {
+              id_pg: null,
+              id_fams: numFams,
+              id_produit: e.id_produit,
+              quantite: e.quantite,
+              rhopseAncien: null,
+              pg: null,
+              produit: prods[e.id_produit],
+            };
+          }
+          return;
+        }
 
-      if (
-        isNaN(e.id_produit) ||
-        e.quantite <= 0 ||
-        pg == null ||
-        pg == undefined
-      ) {
-        const err: [string | number | Partial<pg>, boolean][] = [
-          [e.index, false],
-          [pg, isNaN(nums) || isNaN(proms)],
-          [e.produit, isNaN(e.id_produit)],
-          [e.quantite, e.quantite <= 0],
-          [e.id_produit, isNaN(e.id_produit)],
-        ];
-        errors.rhopsesError.push(err);
-        return e;
-      }
-      const aggregateKey = `${pg.id_pg}-${e.id_produit}`;
-      if (aggregateKey in rhopses) {
-        rhopses[aggregateKey].quantite += e.quantite;
-      } else {
-        rhopses[aggregateKey] = {
-          id_pg: pg.id_pg!,
-          id_produit: e.id_produit,
-          quantite: e.quantite,
-          rhopseAncien: rhopsePourUnAncien,
-          pg: pg,
-          produit: prods[e.id_produit],
-        };
-      }
-    });
+        const [nums, proms] = lastKnown.split("ch").map((e) => parseInt(e));
+
+        let rhopsePourUnAncien = null;
+        let pg = pgs.find((e) => e.nums == nums && e.proms == proms);
+        if (pg == undefined) {
+          pg = pgs.filter((e) => e.nums == nums)[0];
+          rhopsePourUnAncien = e.PG;
+        }
+
+        if (
+          isNaN(e.id_produit) ||
+          e.quantite <= 0 ||
+          pg == null ||
+          pg == undefined
+        ) {
+          const err: [string | number | Partial<pg>, boolean][] = [
+            [e.index, false],
+            [pg, isNaN(nums) || isNaN(proms)],
+            [e.produit, isNaN(e.id_produit)],
+            [e.quantite, e.quantite <= 0],
+            [e.id_produit, isNaN(e.id_produit)],
+          ];
+          errors.rhopsesError.push(err);
+          return e;
+        }
+        const aggregateKey = `${pg.id_pg}-${e.id_produit}`;
+        if (aggregateKey in rhopses) {
+          rhopses[aggregateKey].quantite += e.quantite;
+        } else {
+          rhopses[aggregateKey] = {
+            id_pg: pg.id_pg!,
+            id_fams: null,
+            id_produit: e.id_produit,
+            quantite: e.quantite,
+            rhopseAncien: rhopsePourUnAncien,
+            pg: pg,
+            produit: prods[e.id_produit],
+          };
+        }
+      });
 
     errors = errors;
     fileInputRhopse.value = "";
@@ -148,7 +184,7 @@
       "produits",
       JSON.stringify(
         Object.values(rhopses).map((e) => [
-          e.id_pg,
+          e.id_fams != null ? `f${e.id_fams}` : e.id_pg,
           e.id_produit,
           e.quantite,
           e.rhopseAncien,
@@ -206,7 +242,7 @@
               >
                 <svelte:fragment slot="tbody" let:e>
                   <tr class="divide-x-2 divide-white">
-                    <td>{e.pg.nums}ch{e.pg.proms}</td>
+                    <td>{e.id_fams != null ? `f${e.id_fams}` : `${e.pg?.nums}ch${e.pg?.proms}`}</td>
                     <td>{e.produit}</td>
                     <td>{e.quantite}</td>
                   </tr>

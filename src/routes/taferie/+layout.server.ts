@@ -24,7 +24,10 @@ export const load = async ({ locals }) => {
       }),
       rhopsenegatszocque: await prisma.config.findFirst({
         where: { nom: "rhopsenegatszocque" },
-}),
+      }),
+      famsrhopsezocque: await prisma.config.findFirst({
+        where: { nom: "famsrhopsezocque" },
+      }),
     },
     USER: locals.session.data.user,
     BOQUETTES_IDS,

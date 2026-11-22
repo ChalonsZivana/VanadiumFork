@@ -31,6 +31,11 @@ export const load: PageServerLoad = async () => {
   };
 };
 
+async function setConfig(nom: string, valeur: string) {
+  const r = await prisma.config.updateMany({ where: { nom }, data: { valeur } });
+  if (r.count == 0) await prisma.config.create({ data: { nom, valeur } });
+}
+
 export const actions = {
   lydiazocque: async ({ request }) => {
     const data = await request.formData();
@@ -50,6 +55,13 @@ export const actions = {
       data: { valeur: bool },
     });
   },
+
+  famsrhopsezocque: async ({ request }) => {
+    const data = await request.formData();
+    const bool = (data.get("famsrhopsezocque") ?? "") == "on" ? "1" : "0";
+    await setConfig("famsrhopsezocque", bool);
+  },
+
   topnegats: async ({ request }) => {
     const d = Object.fromEntries(await request.formData());
     const data = topNegatsSchema.safeParse(d);

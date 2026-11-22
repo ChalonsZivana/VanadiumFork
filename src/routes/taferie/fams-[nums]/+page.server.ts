@@ -10,7 +10,12 @@ export const load: PageServerLoad = async ({ params }) => {
   if (fams == null) throw error(404, "Fams missing");
 
   const historique_fams = await prisma.consommations.findMany({
-    where: { type: { in: ["ext_fams", "pg_fams"] }, to: nums },
+    where: {
+            OR: [
+              { type: { in: ["ext_fams", "pg_fams"] }, to: nums },
+              { type: "fams_boq", from: nums },
+            ],
+          },
     orderBy: { date_conso: "desc" },
   });
   return {

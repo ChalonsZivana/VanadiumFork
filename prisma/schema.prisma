@@ -181,6 +181,7 @@ enum consommations_type {
   pg_fams
   ext_fams
   pg_ext
+  fams_boq
 }
 
 

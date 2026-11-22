@@ -4,6 +4,16 @@ import { Boquette, BOQUETTES } from "./Boquette";
 import { Fams } from "./Fams";
 import { Pg } from "./PG";
 import { consommations_type, type consommations, Prisma } from "@prisma/client";
+import { HasMoney } from "../BasicClasses";
+
+interface fams_boq
+  extends Pick<consommations, "type" | "from" | "to" | "id_produit" | "quantite" | "rhopseur"> {
+  type: "fams_boq";
+  from: number; // numéro de fams (1-50)
+  to: number;
+  quantite: number;
+  id_produit: number;
+}
 
 interface pg_ext
   extends Pick<consommations, "type" | "from" | "montant" | "libelle"> {
@@ -39,6 +49,9 @@ async function getSolde(type: consommations_type, id: number) {
     case "pg_boq":
     case "pg_ext":
     case "pg_fams":
+    case "fams_boq":
+      const famsPayeur = await new Fams(id).fams();
+      return famsPayeur.solde;
     case "pg_pg":
       const pg = await new Pg(id).pg();
       return pg.solde;
@@ -74,6 +87,11 @@ async function getLibelle(d: ext_ | pg_ext | _to | pg_boq) {
       );
     default:
       return d.libelle;
+    case "fams_boq": {
+      const prod = await prisma.produits.findFirst({ where: { id_produit: d.id_produit } });
+      if (prod == null) return null;
+      return `Consommation fams ${d.from}: ${d.quantite} * ${prod.nom}`;
+}
   }
 }
 
@@ -103,7 +121,9 @@ export class Taferie {
             new Pg(conso.from!).removeMoney(conso.montant * factor, p);
             break;
 
-          case "pg_boq":
+          case "pg_boq": case "fams_boq":
+            const payer: HasMoney =
+              conso.type == "fams_boq" ? new Fams(conso.from!) : new Pg(conso.from!);
             if (conso.id_produit == null || conso.quantite == null)
               throw new Error("old consommation");
 
@@ -133,13 +153,10 @@ export class Taferie {
                 p,
               ); //prix 2:hard
 
-              new Pg(conso.from!).removeMoney(
-                (data.prix + data.prix2) * factor,
-                p,
-              );
+              await payer.removeMoney((data.prix + data.prix2) * factor, p);
             } else {
-              new Boquette(conso.to!).addMoney(conso.montant * factor, p);
-              new Pg(conso.from!).removeMoney(conso.montant * factor, p);
+              await new Boquette(conso.to!).addMoney(conso.montant * factor, p);
+              await payer.removeMoney(conso.montant * factor, p);
             }
             break;
           case "pg_fams":
@@ -184,6 +201,23 @@ export class Taferie {
     return cfg?.valeur !== "0";
   }
 
+  static async famsZocque(): Promise<boolean> {
+    const cfg = await prisma.config.findFirst({
+      where: { nom: "famsrhopsezocque" },
+    });
+    // zocqué par défaut (ligne absente ou valeur != "0")
+    return cfg?.valeur !== "0";
+  }
+
+  // admin = appartient à la TAFerie (boquette 20)
+  static async isTaferie(id_pg: number): Promise<boolean> {
+    return (
+      (await prisma.appartenance_boquettes.findFirst({
+        where: { id_boquette: BOQUETTES.TAFerie, id_pg },
+      })) != null
+    );
+  }
+
   static async rhopse(
     d: pg_ext | ext_ | _to | pg_boq,
     authorize_all = false,
@@ -195,7 +229,7 @@ export class Taferie {
 
     let montant: number;
 
-    if (d.type == "pg_boq") {
+    if (d.type == "pg_boq" || d.type == "fams_boq") {
       const prod = await prisma.produits.findFirst({
         where: { id_produit: d.id_produit },
       });
@@ -231,6 +265,18 @@ export class Taferie {
           return { success: false, message: `Solde insuffisant` };
       }
 
+      if (d.type == "fams_boq" && montant < 0) {
+        const fams = await new Fams(d.from).fams();
+        if (fams.solde + montant < 0) {
+          if (await Taferie.negatsZocque())
+            return {
+              success: false,
+              message: `Solde insuffisant (fams ${fams.nums}): ${libelle}`,
+            };
+          negatSolde = fams.solde + montant;
+        }
+      }
+
       if (!pg.can_buy && !authorize_all)
         return {
           success: false,
@@ -256,8 +302,8 @@ export class Taferie {
       solde_apres: -9999999999,
       date_conso: new Date(),
       solde_avant: solde,
-      id_produit: d.type == "pg_boq" ? d.id_produit : null,
-      quantite: d.type == "pg_boq" ? d.quantite : null,
+      id_produit: d.type == "pg_boq" || d.type == "fams_boq" ? d.id_produit : null,
+      quantite: d.type == "pg_boq" || d.type == "fams_boq" ? d.quantite : null,
       rhopseur: "rhopseur" in d ? d.rhopseur : null,
     };
 
@@ -308,6 +354,38 @@ export class Taferie {
             solde_apres = fams_after.solde;
             break;
           }
+
+          case "fams_boq": {
+            const prod = await p.produits.findFirst({ where: { id_produit: d.id_produit } });
+            if (prod == null) throw new Error();
+            if (prod.inventaire != null) {
+              await p.produits.update({
+                where: { id_produit: prod.id_produit },
+                data: { inventaire: prod.inventaire - d.quantite },
+              });
+            }
+            if (d.to == BOQUETTES["Foy's"]) {
+              await new Boquette(BOQUETTES["Foy's"]).removeMoney(-prod.prix * d.quantite, p);
+              await new Boquette(BOQUETTES["Satan"]).removeMoney(-prod.prix2 * d.quantite, p);
+              const fams_after = await new Fams(d.from).addMoney(montant, p);
+              solde_apres = fams_after.solde;
+              await p.consommations.update({
+                where: { id_conso: conso.id_conso },
+                data: {
+                  data: {
+                    prix: -prod.prix * d.quantite,
+                    prix2: -prod.prix2 * d.quantite,
+                  },
+                },
+              });
+            } else {
+              await new Boquette(d.to).removeMoney(data.montant, p);
+              const fams_after = await new Fams(d.from).addMoney(data.montant, p);
+              solde_apres = fams_after.solde;
+            }
+            break;
+          }
+
           case "pg_boq": {
             const prod = await p.produits.findFirst({
               where: { id_produit: d.id_produit },

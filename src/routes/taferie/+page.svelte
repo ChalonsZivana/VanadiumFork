@@ -228,6 +228,17 @@
               <form
                 use:enhance
                 on:change={(e) => e.currentTarget.requestSubmit()}
+                action="?/famsrhopsezocque"
+                method="post"
+              >
+                <ToggleButton
+                  name="famsrhopsezocque"
+                  isChecked={data.config.famsrhopsezocque?.valeur != "0"}
+                />
+              </form>
+              <form
+                use:enhance
+                on:change={(e) => e.currentTarget.requestSubmit()}
                 action="?/rhopsenegatszocque"
                 method="post"
               >

@@ -1,5 +1,6 @@
 import { Boquette } from "$lib/server/classes/Boquette.js";
 import { Taferie } from "$lib/server/classes/Taferie.js";
+import { Fams } from "$lib/server/classes/Fams";
 import {
   EditBoquetteSchema,
   ImportRhopseSchema,
@@ -73,17 +74,47 @@ export const actions = {
     if (!data.success)
       return fail(400, { success: false, message: "Something went wrong" });
 
-    // on vérifie que personne dans l'excel n'a un solde négatif avant de commencer
-    // toggle ON : personne dans l'excel ne doit finir en négatif, sinon on n'importe rien
-    if (await Taferie.negatsZocque()) {
-      const lignes = data.data.produits;
-      const idsPg = [...new Set(lignes.map(([id_pg]) => id_pg))];
-      const idsProduits = [...new Set(lignes.map(([, id_produit]) => id_produit))];
+    type Ligne = [number | string, number, number, string | null];
+    const lignes = data.data.produits as Ligne[];
 
-      const pgs = await prisma.pg.findMany({
-        where: { id_pg: { in: idsPg } },
-        select: { id_pg: true, nums: true, proms: true, solde: true },
+    // lignes pg : [id_pg, ...] / lignes fam's : ["f27", ...]
+    const lignesPg = lignes.filter(
+      (l): l is [number, number, number, string | null] => typeof l[0] === "number",
+    );
+    const lignesFams = lignes
+      .filter((l): l is [string, number, number, string | null] => typeof l[0] === "string")
+      .map(([f, id_produit, quantite]) => ({
+        nums: parseInt(f.slice(1)),
+        id_produit,
+        quantite,
+      }));
+
+    // fam's valides (1-50)
+    const invalides = lignesFams.filter((l) => l.nums < 1 || l.nums > 50);
+    if (invalides.length > 0)
+      return fail(400, {
+        success: false,
+        message:
+          `Import annulé, fam's invalide : ` +
+          [...new Set(invalides.map((l) => `f${l.nums}`))].join(", "),
       });
+
+    // les fam's sont-ils autorisés à rhopser ? (admin TAFerie : toujours)
+    if (
+      lignesFams.length > 0 &&
+      !(await Taferie.isTaferie(rhopseur.pg.id_pg)) &&
+      (await Taferie.famsZocque())
+    ) {
+      const noms = [...new Set(lignesFams.map((l) => `f${l.nums}`))].join(", ");
+      return fail(403, {
+        success: false,
+        message: `Import annulé, les rhopses de fam's sont désactivées (${noms})`,
+      });
+    }
+
+    // négat's zocqué : personne (pg ou fam's) ne doit finir en négatif
+    if (await Taferie.negatsZocque()) {
+      const idsProduits = [...new Set(lignes.map(([, id_produit]) => id_produit))];
       const produits = await prisma.produits.findMany({
         where: { id_produit: { in: idsProduits } },
         select: { id_produit: true, prix: true, prix2: true },
@@ -92,55 +123,86 @@ export const actions = {
         produits.map((p) => [p.id_produit, p.prix + p.prix2]),
       );
 
-      // total dépensé par pg sur toutes ses lignes
-      const depense = new Map<number, number>();
-      for (const [id_pg, id_produit, quantite] of lignes) {
+      const depensePg = new Map<number, number>();
+      for (const [id_pg, id_produit, quantite] of lignesPg) {
         const prix = prixParProduit.get(id_produit);
         if (prix == null) continue; // produit inconnu : Taferie.rhopse renverra l'erreur
-        depense.set(id_pg, (depense.get(id_pg) ?? 0) + quantite * prix);
+        depensePg.set(id_pg, (depensePg.get(id_pg) ?? 0) + quantite * prix);
       }
 
-      const bloquants = pgs.filter((p) => {
-        const total = depense.get(p.id_pg) ?? 0;
-        return total > 0 && p.solde - total < 0;
+      // new Fams(n).ID normalise (ex: 9 -> 8) pour regrouper les lignes
+      const depenseFams = new Map<number, number>();
+      for (const l of lignesFams) {
+        const prix = prixParProduit.get(l.id_produit);
+        if (prix == null) continue;
+        const id = new Fams(l.nums).ID;
+        depenseFams.set(id, (depenseFams.get(id) ?? 0) + l.quantite * prix);
+      }
+
+      const pgs = await prisma.pg.findMany({
+        where: { id_pg: { in: [...depensePg.keys()] } },
+        select: { id_pg: true, nums: true, proms: true, solde: true },
+      });
+      const famsRows = await prisma.fams.findMany({
+        where: { nums: { in: [...depenseFams.keys()] } },
       });
 
-      if (bloquants.length > 0) {
+      const bloquants: string[] = [];
+      for (const p of pgs) {
+        const total = depensePg.get(p.id_pg) ?? 0;
+        if (total > 0 && p.solde - total < 0)
+          bloquants.push(
+            `${p.nums}ch${p.proms} (solde ${p.solde.toFixed(2)}€, total ${total.toFixed(2)}€)`,
+          );
+      }
+      for (const f of famsRows) {
+        const total = depenseFams.get(f.nums) ?? 0;
+        if (total > 0 && f.solde - total < 0)
+          bloquants.push(
+            `f${f.nums} (solde ${f.solde.toFixed(2)}€, total ${total.toFixed(2)}€)`,
+          );
+      }
+
+      if (bloquants.length > 0)
         return fail(400, {
           success: false,
-          message:
-            `Import annulé, solde insuffisant pour : ` +
-            bloquants
-              .map((p) => {
-                const total = depense.get(p.id_pg) ?? 0;
-                return `${p.nums}ch${p.proms} (solde ${p.solde.toFixed(2)}€, total ${total.toFixed(2)}€)`;
-              })
-              .join(", "),
+          message: `Import annulé, solde insuffisant pour : ` + bloquants.join(", "),
         });
-      }
     }
 
     const results: Awaited<ReturnType<typeof Taferie.rhopse>>[] = [];
 
-    for (let [id_pg, id_produit, quantite, rhopsePourUnAncien] of data.data
-      .produits) {
-      const conso = await Taferie.rhopse(
-        {
-          type: "pg_boq",
-          from: id_pg,
-          to: id_boquette,
-          id_produit: id_produit,
-          quantite: quantite,
-          rhopse_ancien: rhopsePourUnAncien,
-          rhopseur: rhopseur_string,
-        },
-        true,
+    for (const [id_pg, id_produit, quantite, rhopsePourUnAncien] of lignesPg) {
+      results.push(
+        await Taferie.rhopse(
+          {
+            type: "pg_boq",
+            from: id_pg,
+            to: id_boquette,
+            id_produit,
+            quantite,
+            rhopse_ancien: rhopsePourUnAncien,
+            rhopseur: rhopseur_string,
+          },
+          true,
+        ),
       );
-      results.push(conso);
     }
-    return {
-      results,
-    };
+
+    for (const l of lignesFams) {
+      results.push(
+        await Taferie.rhopse({
+          type: "fams_boq",
+          from: new Fams(l.nums).ID,
+          to: id_boquette,
+          id_produit: l.id_produit,
+          quantite: l.quantite,
+          rhopseur: rhopseur_string,
+        }),
+      );
+    }
+
+    return { results };
   },
   
   doInventory: async ({ request, params }) => {
